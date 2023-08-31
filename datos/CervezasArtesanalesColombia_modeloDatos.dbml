@@ -1,0 +1,95 @@
+//Cervezas Artesanales Colombia
+
+table ubicaciones{
+  id int [pk, increment]
+  municipio varchar
+  departamento varchar
+}
+
+table cervecerias {
+  id int [pk, increment]
+  nombre varchar
+  ubicacionId int
+  sitioWeb varchar
+  instagram varchar
+}
+
+Ref:ubicaciones.id < cervecerias.ubicacionId
+
+table estilos {
+  id int [pk, increment]
+  nombre varchar
+}
+
+table rangosAbv {
+  id int [pk, increment]
+  nombre varchar
+  valorInicial float
+  valorFinal float
+}
+
+table rangosIbu {
+  id int [pk, increment]
+  nombre varchar
+  valorInicial float
+  valorFinal float
+}
+
+table cervezas {
+  id int [pk, increment]
+  nombre varchar
+  cerveceriaId int
+  estiloId int
+  ibu float
+  abv float
+}
+Ref:cervecerias.id < cervezas.cerveceriaId
+Ref:estilos.id < cervezas.estiloId
+
+
+table tiposIngredientes {
+  id int [pk, increment]
+  nombre varchar
+}
+
+table ingredientes {
+  id int [pk, increment]
+  tipoIngredienteId int
+  nombre varchar
+}
+
+Ref:tiposIngredientes.id < ingredientes.tipoIngredienteId
+
+table ingredientesCervezas {
+  cervezaId int
+  ingredienteId int
+
+  Indexes {
+    (cervezaId, ingredienteId) [pk]
+  }
+}
+
+Ref:cervezas.id < ingredientesCervezas.cervezaId
+Ref:ingredientes.id < ingredientesCervezas.ingredienteId
+
+table unidadesVolumen {
+  id int [pk, increment]
+  nombre varchar
+  abreviatura varchar  
+}
+
+table envasados {
+  id int [pk, increment]
+  nombre varchar
+}
+
+table envasadosCervezas {
+  cervezaId int
+  envasadoId int
+  unidadVolumenId int
+  volumen int
+}
+
+Ref:unidadesVolumen.id < envasadosCervezas.unidadVolumenId
+Ref:cervezas.id < envasadosCervezas.cervezaId
+Ref:envasados.id < envasadosCervezas.envasadoId
