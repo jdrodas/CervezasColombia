@@ -83,9 +83,9 @@ namespace CervezasColombia_CS_PoC_Consola
         /// <summary>
         /// Inserta un nuevo estilo de cerveza
         /// </summary>
-        /// <param name="unEstilo">El nombre del estilo</param>
+        /// <param name="unEstilo">El estilo al insertar</param>
         /// <returns>Verdadero si la inserción se hizo correctamente</returns>
-        public static bool InsertaEstiloCerveza(string unEstilo)
+        public static bool InsertaEstiloCerveza(Estilo unEstilo)
         {
             int cantidadFilas = 0;
             bool resultado = false;
@@ -95,7 +95,7 @@ namespace CervezasColombia_CS_PoC_Consola
             using (IDbConnection cxnDB = new SQLiteConnection(cadenaConexion))
             {
                 DynamicParameters parametrosSentencia = new DynamicParameters();
-                parametrosSentencia.Add("@nombre_estilo", unEstilo,
+                parametrosSentencia.Add("@nombre_estilo", unEstilo.Nombre,
                     DbType.String, ParameterDirection.Input);
 
                 //Preguntamos si ya existe un estilo con ese nombre
@@ -196,7 +196,7 @@ namespace CervezasColombia_CS_PoC_Consola
         /// </summary>
         /// <param name="nombreEstilo"></param>
         /// <returns>Verdadero si la eliminación se hizo correctamente</returns>
-        public static bool EliminaEstiloCerveza(string nombreEstilo, out string mensajeEliminacion)
+        public static bool EliminaEstiloCerveza(Estilo unEstilo, out string mensajeEliminacion)
         {
             mensajeEliminacion = string.Empty;
             int cantidadFilas = 0;
@@ -207,7 +207,7 @@ namespace CervezasColombia_CS_PoC_Consola
             using (IDbConnection cxnDB = new SQLiteConnection(cadenaConexion))
             {
                 DynamicParameters parametrosSentencia = new DynamicParameters();
-                parametrosSentencia.Add("@nombre_estilo", nombreEstilo,
+                parametrosSentencia.Add("@nombre_estilo", unEstilo.Nombre,
                     DbType.String, ParameterDirection.Input);
 
                 string consultaEstiloSql = "SELECT COUNT(id) total FROM estilos WHERE nombre = @nombre_estilo";
@@ -217,7 +217,7 @@ namespace CervezasColombia_CS_PoC_Consola
                 //Si no hay filas, no existe un estilo con ese nombre... no hay nada que eliminar.
                 if (cantidadFilas == 0)
                 {
-                    mensajeEliminacion = $"Eliminación Fallida. No existe un estilo con el nombre {nombreEstilo}.";
+                    mensajeEliminacion = $"Eliminación Fallida. No existe un estilo con el nombre {unEstilo.Nombre}.";
                     return false;
                 }
 
@@ -231,7 +231,7 @@ namespace CervezasColombia_CS_PoC_Consola
                 if (cantidadFilas > 0)
                 {
                     mensajeEliminacion = $"Eliminación Fallida. Existen {cantidadFilas} cervezas asociadas" +
-                        $" al estilo {nombreEstilo}.";
+                        $" al estilo {unEstilo.Nombre}.";
                     return false;
                 }
 

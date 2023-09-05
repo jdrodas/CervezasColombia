@@ -9,9 +9,11 @@
             string? cadenaConexion = AccesoDatos.ObtieneCadenaConexion();
             Console.WriteLine($"El string de conexión obtenido es : {cadenaConexion}");
 
-            //Aqui demostramos una consulta a una tabla devolviendo una lista de strings
-            Console.WriteLine("\n*** Sentencias de Consulta ***");
+            //R del CRUD - Consultas de registros existentes
             VisualizaNombresEstilosCerveza();
+
+            Console.Write("Presiona una tecla para continuar...");
+            Console.ReadKey();
 
             //Aqui demostramos la manipulación de una lista de objetos
             List<Estilo> losEstilos = AccesoDatos.ObtieneEstilosCerveza();
@@ -21,9 +23,11 @@
             foreach (Estilo unEstilo in losEstilos)
                 Console.WriteLine($"Id: {unEstilo.Id}, Nombre: {unEstilo.Nombre}");
 
-            //Aqui creamos un nuevo estilo y lo insertamos en la base de datos
-            string nuevoEstilo = "UchuvIPA";
-            Console.WriteLine($"\nRegistro de nuevo estilo de cerveza: {nuevoEstilo}:");
+            Console.ReadKey();
+
+            //C del CRUD - Creación de un nuevo registro
+            Estilo nuevoEstilo = new Estilo() { Nombre = "UchuvIPA"};
+            Console.WriteLine($"\nRegistro de nuevo estilo de cerveza: {nuevoEstilo.Nombre}:");
 
             bool resultadoInsercion = AccesoDatos.InsertaEstiloCerveza(nuevoEstilo);
 
@@ -34,18 +38,20 @@
                 Console.WriteLine($"Inserción exitosa! Este fue el estilo registrado");
 
                 //Obtenemos el estilo por nombre
-                Estilo unEstilo = AccesoDatos.ObtieneEstiloCerveza(nuevoEstilo);
-                Console.WriteLine($"Id: {unEstilo.Id}, Nombre: {unEstilo.Nombre}");
+                nuevoEstilo = AccesoDatos.ObtieneEstiloCerveza(nuevoEstilo.Nombre);
+                Console.WriteLine($"Id: {nuevoEstilo.Id}, Nombre: {nuevoEstilo.Nombre}");
             }
 
+            //U del CRUD - Actualización de un nuevo registro
             //Aqui hacemos una actualización basado en un objeto
             Estilo estiloActualizado = new Estilo() { Id=1, Nombre="MaracuyIPA" };
-            Console.WriteLine($"\n\nActualizando el estilo No. {estiloActualizado.Id} al nuevo nombre de {estiloActualizado.Nombre}...");
+            Console.WriteLine($"\n\nActualizando el estilo No. {estiloActualizado.Id} " +
+                $"al nuevo nombre de {estiloActualizado.Nombre}...");
 
             bool resultadoActualizacion = AccesoDatos.ActualizaEstiloCerveza(estiloActualizado);
 
             if (resultadoActualizacion == false)
-                Console.WriteLine($"Actualización fallida para el estilo {estiloActualizado}");
+                Console.WriteLine($"Actualización fallida para el estilo {estiloActualizado.Nombre}");
             else
             {
                 Console.WriteLine($"Actualización exitosa! Este fue el estilo actualizado");
@@ -55,8 +61,11 @@
                 Console.WriteLine($"Id: {unEstilo.Id}, Nombre: {unEstilo.Nombre}");
             }
 
+            Console.Write("Presiona una tecla para continuar...");
+            Console.ReadKey();
+
             //Aqui hacemos un borrado de un estilo buscándolo por nombre
-            Console.WriteLine($"\n\nBorrando el estilo {nuevoEstilo} ...");
+            Console.WriteLine($"\n\nBorrando el estilo {nuevoEstilo.Nombre} ...");
 
             string mensajeEliminacion;
             bool resultadoEliminacion = AccesoDatos.EliminaEstiloCerveza(nuevoEstilo, out mensajeEliminacion);
