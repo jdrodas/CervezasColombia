@@ -18,7 +18,7 @@ Por favor tenga presente:
 - Prueba de Concepto para validar funcionamiento del ORM Dapper, con base de datos SQLite. Aplicación de **consola** en C# con framework .NET 7.x
 
 ## API
-### [API_SQLite_Dapper](https://github.com/jdrodas/CervezasColombia/tree/main/API_SQLite_Dapper)
+### [CervezasColombia_CS_API_SQLite_Dapper](https://github.com/jdrodas/CervezasColombia/tree/main/CervezasColombia_CS_API_SQLite_Dapper)
 - WebAPI en .NET 7.x implementando *Patrón Repositorio* con capa de persistencia de datos en SQLite a través de Dapper
 
 
@@ -40,5 +40,5 @@ Please keep in mind:
 
 
 ## API
-### [API_SQLite_Dapper](https://github.com/jdrodas/CervezasColombia/tree/main/API_SQLite_Dapper)
+### [CervezasColombia_CS_API_SQLite_Dapper](https://github.com/jdrodas/CervezasColombia/tree/main/CervezasColombia_CS_API_SQLite_Dapper)
 - .NET 7.x WebAPI implementing *Repository Pattern* with infrastructure persistence layer in SQLite using Dapper
