@@ -2,12 +2,7 @@
 {
     public class Estilo
     {
-        public int Id { get; set; }
-        public string? Nombre { get; set; }
-        public Estilo()
-        {
-            Id = 0;
-            Nombre = string.Empty;
-        }
+        public int Id { get; set; } = 0;
+        public string? Nombre { get; set; } = String.Empty;
     }
 }

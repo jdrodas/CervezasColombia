@@ -31,7 +31,8 @@ namespace CervezasColombia_CS_PoC_Consola
 
             using (IDbConnection cxnDB = new SQLiteConnection(cadenaConexion))
             {
-                var resultadoEstilos = cxnDB.Query<string>("SELECT nombre FROM estilos ORDER BY nombre", new DynamicParameters());
+                string sentenciaSQL = "SELECT nombre FROM estilos ORDER BY nombre";
+                var resultadoEstilos = cxnDB.Query<string>(sentenciaSQL, new DynamicParameters());
 
                 return resultadoEstilos.AsList();
             }
@@ -47,7 +48,8 @@ namespace CervezasColombia_CS_PoC_Consola
 
             using (IDbConnection cxnDB = new SQLiteConnection(cadenaConexion))
             {
-                var resultadoEstilos = cxnDB.Query<Estilo>("SELECT id, nombre FROM estilos ORDER BY nombre", new DynamicParameters());
+                string sentenciaSQL = "SELECT id, nombre FROM estilos ORDER BY nombre";
+                var resultadoEstilos = cxnDB.Query<Estilo>(sentenciaSQL, new DynamicParameters());
 
                 return resultadoEstilos.AsList();
             }
@@ -56,8 +58,8 @@ namespace CervezasColombia_CS_PoC_Consola
         /// <summary>
         /// Obtiene un Estilo de Cerveza de acuerdo al nombre
         /// </summary>
-        /// <param name="nombreEstilo"></param>
-        /// <returns></returns>
+        /// <param name="nombreEstilo">Nombre del estilo a buscar</param>
+        /// <returns>El estilo identificado según el parámetro</returns>
         public static Estilo ObtieneEstiloCerveza(string nombreEstilo)
         {
             Estilo estiloResultado = new Estilo();
@@ -68,10 +70,43 @@ namespace CervezasColombia_CS_PoC_Consola
             {
                 DynamicParameters parametrosSentencia = new DynamicParameters();
                 parametrosSentencia.Add("@nombre_estilo", nombreEstilo,
-                    DbType.String, ParameterDirection.Input);
+                                        DbType.String, ParameterDirection.Input);
 
-                string? consultaEstiloSql = "SELECT id,nombre FROM estilos WHERE nombre = @nombre_estilo";
-                var salida = cxnDB.Query<Estilo>(consultaEstiloSql, parametrosSentencia);
+                string? sentenciaSQL =  "SELECT id,nombre " +
+                                        "FROM estilos " +
+                                        "WHERE nombre = @nombre_estilo";
+                
+                var salida = cxnDB.Query<Estilo>(sentenciaSQL, parametrosSentencia);
+
+                if (salida.ToArray().Length > 0)
+                    estiloResultado = salida.First();
+
+                return estiloResultado;
+            }
+        }
+
+        /// <summary>
+        /// Obtiene un Estilo de Cerveza de acuerdo al Id
+        /// </summary>
+        /// <param name="idEstilo">Id del estilo a buscar</param>
+        /// <returns>El estilo identificado según el parámetro</returns>
+        public static Estilo ObtieneEstiloCerveza(int idEstilo)
+        {
+            Estilo estiloResultado = new Estilo();
+            string? cadenaConexion = ObtieneCadenaConexion();
+
+            //Aqui buscamos el estilo asociado al nombre
+            using (IDbConnection cxnDB = new SQLiteConnection(cadenaConexion))
+            {
+                DynamicParameters parametrosSentencia = new DynamicParameters();
+                parametrosSentencia.Add("@id_estilo", idEstilo,
+                                        DbType.Int32, ParameterDirection.Input);
+
+                string? sentenciaSQL = "SELECT id,nombre " +
+                                        "FROM estilos " +
+                                        "WHERE id = @id_estilo";
+
+                var salida = cxnDB.Query<Estilo>(sentenciaSQL, parametrosSentencia);
 
                 if (salida.ToArray().Length > 0)
                     estiloResultado = salida.First();
@@ -87,11 +122,13 @@ namespace CervezasColombia_CS_PoC_Consola
         /// <returns>Verdadero si la inserción se hizo correctamente</returns>
         public static bool InsertaEstiloCerveza(Estilo unEstilo)
         {
+            //Validaciones previas: 
+            // - Que el estilo nuevo no exista previamente
+
             int cantidadFilas = 0;
             bool resultado = false;
             string? cadenaConexion = ObtieneCadenaConexion();
 
-            //Aqui validamos primero que el nombre del estilo de cerveza no exista
             using (IDbConnection cxnDB = new SQLiteConnection(cadenaConexion))
             {
                 DynamicParameters parametrosSentencia = new DynamicParameters();
@@ -99,28 +136,33 @@ namespace CervezasColombia_CS_PoC_Consola
                     DbType.String, ParameterDirection.Input);
 
                 //Preguntamos si ya existe un estilo con ese nombre
-                string consultaEstiloSql = "SELECT COUNT(id) total FROM estilos WHERE nombre = @nombre_estilo";
+                string consultaSQL = "SELECT COUNT(id) total " +
+                                           "FROM estilos " +
+                                           "WHERE LOWER(nombre) = LOWER(@nombre_estilo)";
 
-                cantidadFilas = cxnDB.Query<int>(consultaEstiloSql, parametrosSentencia).FirstOrDefault();
+                cantidadFilas = cxnDB.Query<int>(consultaSQL, parametrosSentencia).FirstOrDefault();
 
-                //Si no hay filas, se puede insertar nuevo registro
-                if (cantidadFilas == 0)
+                // Si hay filas, ya existe un estilo con ese nombre
+                if (cantidadFilas != 0)
+                    return false;
+
+                try
                 {
-                    try
-                    {
-                        string insertaEstiloSql = "INSERT INTO estilos (nombre) VALUES (@nombre_estilo)";
-                        cantidadFilas = cxnDB.Execute(insertaEstiloSql, parametrosSentencia);
-                    }
-                    catch (SQLiteException)
-                    {
-                        resultado = false;
-                        cantidadFilas = 0;
-                    }
-
-                    //Si la inserción fue correcta, devolvemos true
-                    if (cantidadFilas > 0)
-                        resultado = true;
+                    string insertaEstiloSQL = "INSERT INTO estilos (nombre) " +
+                                               "VALUES (@nombre_estilo)";
+                    
+                    cantidadFilas = cxnDB.Execute(insertaEstiloSQL, parametrosSentencia);
                 }
+                catch (SQLiteException)
+                {
+                    resultado = false;
+                    cantidadFilas = 0;
+                }
+
+                //Si la inserción fue correcta, se afectaron filas y podemos retornar true.
+                if (cantidadFilas > 0)
+                    resultado = true;
+
             }
 
             return resultado;
@@ -133,59 +175,67 @@ namespace CervezasColombia_CS_PoC_Consola
         /// <returns>Verdadero si la actualización se hizo correctamente</returns>
         public static bool ActualizaEstiloCerveza(Estilo estiloActualizado)
         {
+            //Validaciones previas: 
+            // - Que el estilo a actualizar exista - Busqueda por ID
+            // - Que el nombre nuevo no exista previamente
+
             int cantidadFilas = 0;
             bool resultado = false;
             string? cadenaConexion = ObtieneCadenaConexion();
 
-            //Aqui validamos primero que el Estilo previamente exists
+
             using (IDbConnection cxnDB = new SQLiteConnection(cadenaConexion))
             {
+                //Aqui validamos primero que el Estilo previamente existe
+
                 DynamicParameters parametrosSentencia = new DynamicParameters();
                 parametrosSentencia.Add("@estilo_id", estiloActualizado.Id,
-                    DbType.Int32, ParameterDirection.Input);
+                                        DbType.Int32, ParameterDirection.Input);
 
-                string consultaEstiloSql = "SELECT COUNT(id) total FROM estilos " +
-                    "WHERE id = @estilo_id";
+                string consultaSQL = "SELECT COUNT(id) total " +
+                                     "FROM estilos " +
+                                     "WHERE id = @estilo_id";
 
-                cantidadFilas = cxnDB.Query<int>(consultaEstiloSql, parametrosSentencia).FirstOrDefault();
+                cantidadFilas = cxnDB.Query<int>(consultaSQL, parametrosSentencia).FirstOrDefault();
 
-                //Si no hay filas, no existe departamento que actualizar
+                //Si no hay filas, no existe estilo que actualizar
                 if (cantidadFilas == 0)
                     return false;
-                else
+                
+                //Aqui validamos que no exista estilos con el nuevo nombre
+                parametrosSentencia = new DynamicParameters();
+                parametrosSentencia.Add("@estilo_nombre", estiloActualizado.Nombre,
+                                        DbType.String, ParameterDirection.Input);
+
+                //Validamos si el nuevo nombre no exista
+                consultaSQL = "SELECT COUNT(id) total " +
+                              "FROM estilos " +
+                              "WHERE nombre = @estilo_nombre";
+
+                cantidadFilas = cxnDB.Query<int>(consultaSQL, parametrosSentencia).FirstOrDefault();
+
+                //Si hay filas, el nuevo nombre a utilizar ya existe!
+                if (cantidadFilas != 0)
+                    return false;
+
+                //Terminadas las validaciones, realizamos el update
+                try
                 {
-                    parametrosSentencia = new DynamicParameters();
-                    parametrosSentencia.Add("@estilo_nombre", estiloActualizado.Nombre,
-                        DbType.String, ParameterDirection.Input);
+                    string actualizaEstiloSql = "UPDATE estilos SET nombre = @Nombre " +
+                        "WHERE id = @Id"; ;
 
-                    //Validamos si el nuevo nombre no exista
-                    consultaEstiloSql = "SELECT COUNT(id) total FROM estilos WHERE nombre = @estilo_nombre";
-
-                    cantidadFilas = cxnDB.Query<int>(consultaEstiloSql, parametrosSentencia).FirstOrDefault();
-
-                    //Si hay filas, el nuevo nombre a utilizar ya existe!
-                    if (cantidadFilas != 0)
-                        return false;
-                    else
-                    {
-                        try
-                        {
-                            string actualizaEstiloSql = "UPDATE estilos SET nombre = @Nombre " +
-                                "WHERE id = @Id"; ;
-
-                            cantidadFilas = cxnDB.Execute(actualizaEstiloSql, estiloActualizado);
-                        }
-                        catch (SQLiteException)
-                        {
-                            resultado = false;
-                            cantidadFilas = 0;
-                        }
-
-                        //Si la actualización fue correcta, devolvemos true
-                        if (cantidadFilas > 0)
-                            resultado = true;
-                    }
+                    //Aqui no usamos parámetros dinámicos, pasamos el objeto!!!
+                    cantidadFilas = cxnDB.Execute(actualizaEstiloSql, estiloActualizado);
                 }
+                catch (SQLiteException)
+                {
+                    resultado = false;
+                    cantidadFilas = 0;
+                }
+
+                //Si la actualización fue correcta, devolvemos true
+                if (cantidadFilas > 0)
+                    resultado = true;
             }
 
             return resultado;
@@ -198,21 +248,28 @@ namespace CervezasColombia_CS_PoC_Consola
         /// <returns>Verdadero si la eliminación se hizo correctamente</returns>
         public static bool EliminaEstiloCerveza(Estilo unEstilo, out string mensajeEliminacion)
         {
+            //Validaciones previas: 
+            // - Que el estilo a actualizar exista - Busqueda por ID
+            // - Que no tenga cervezas asociadas
+
             mensajeEliminacion = string.Empty;
             int cantidadFilas = 0;
             bool resultado = false;
             string? cadenaConexion = ObtieneCadenaConexion();
 
-            //Primero, identificamos si hay un estilo con este nombre
             using (IDbConnection cxnDB = new SQLiteConnection(cadenaConexion))
             {
+                //Primero, identificamos si hay un estilo con este nombre
+
                 DynamicParameters parametrosSentencia = new DynamicParameters();
                 parametrosSentencia.Add("@nombre_estilo", unEstilo.Nombre,
-                    DbType.String, ParameterDirection.Input);
+                                        DbType.String, ParameterDirection.Input);
 
-                string consultaEstiloSql = "SELECT COUNT(id) total FROM estilos WHERE nombre = @nombre_estilo";
+                string consultaSQL = "SELECT COUNT(id) total " +
+                                     "FROM estilos " +
+                                     "WHERE nombre = @nombre_estilo";
 
-                cantidadFilas = cxnDB.Query<int>(consultaEstiloSql, parametrosSentencia).FirstOrDefault();
+                cantidadFilas = cxnDB.Query<int>(consultaSQL, parametrosSentencia).FirstOrDefault();
 
                 //Si no hay filas, no existe un estilo con ese nombre... no hay nada que eliminar.
                 if (cantidadFilas == 0)
@@ -222,30 +279,29 @@ namespace CervezasColombia_CS_PoC_Consola
                 }
 
                 //Luego verificamos que el estilo no esté asociado a una cerveza
-                consultaEstiloSql = "SELECT COUNT(c.id) total_cervezas FROM cervezas c " +
-                    "JOIN estilos e ON c.estilo_id = e.id WHERE e.nombre = @nombre_estilo";
+                consultaSQL = "SELECT COUNT(c.id) total_cervezas " +
+                              "FROM cervezas c " +
+                              "JOIN estilos e ON c.estilo_id = e.id " +
+                              "WHERE e.nombre = @nombre_estilo";
 
-                cantidadFilas = cxnDB.Query<int>(consultaEstiloSql, parametrosSentencia).FirstOrDefault();
+                cantidadFilas = cxnDB.Query<int>(consultaSQL, parametrosSentencia).FirstOrDefault();
 
                 //Si hay filas, existen cervezas asociadas con ese estilo, no se puede eliminar
                 if (cantidadFilas > 0)
                 {
                     mensajeEliminacion = $"Eliminación Fallida. Existen {cantidadFilas} cervezas asociadas" +
-                        $" al estilo {unEstilo.Nombre}.";
+                                         $" al estilo {unEstilo.Nombre}.";
                     return false;
                 }
 
                 //Pasadas las validaciones, borramos el estilo
                 try
                 {
-                    string eliminaEstiloSql = "DELETE FROM estilos WHERE nombre = @nombre_estilo";
-                    cantidadFilas = cxnDB.Execute(eliminaEstiloSql, parametrosSentencia);
+                    string eliminaEstiloSQL = "DELETE FROM estilos " +
+                                              "WHERE nombre = @Nombre";
 
-                    if (cantidadFilas > 0)
-                    {
-                        resultado = true;
-                        mensajeEliminacion = "Eliminación Exitosa";
-                    }
+                    //Aqui no usamos parámetros dinámicos, pasamos el objeto!!!
+                    cantidadFilas = cxnDB.Execute(eliminaEstiloSQL, unEstilo);
                 }
                 catch (SQLiteException elError)
                 {
@@ -253,13 +309,18 @@ namespace CervezasColombia_CS_PoC_Consola
                     cantidadFilas = 0;
                     mensajeEliminacion = $"Error de borrado en la DB. {elError.Message}";
                 }
+
+                if (cantidadFilas > 0)
+                {
+                    resultado = true;
+                    mensajeEliminacion = $"Eliminación Exitosa. " +
+                        $"Se eliminó el estilo {unEstilo.Id} - {unEstilo.Nombre}";
+                }
             }
 
             return resultado;
         }
 
         #endregion Estilos
-
     }
 }
-
