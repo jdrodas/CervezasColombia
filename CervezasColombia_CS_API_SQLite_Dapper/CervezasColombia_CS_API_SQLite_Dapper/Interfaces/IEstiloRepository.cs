@@ -6,6 +6,6 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Interfaces
     {
         public Task<List<Estilo>> GetAllEstilosAsync();
 
-        public Task<Estilo> GetEstiloAsync(int id);
+        public Task<Estilo> GetEstiloByIdAsync(int id);
     }
 }

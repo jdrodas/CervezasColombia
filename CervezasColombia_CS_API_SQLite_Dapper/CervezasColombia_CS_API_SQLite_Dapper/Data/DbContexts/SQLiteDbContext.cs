@@ -12,8 +12,6 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Data.DbContexts
             conexionDB = new SqliteConnection(
                 unaConfiguracion.GetConnectionString("SQLite"));
         }
-
         public IDbConnection Conexion => conexionDB;
-
     }
 }

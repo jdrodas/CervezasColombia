@@ -16,7 +16,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
         }
 
         [HttpGet]
-        public async Task<List<Estilo>> GetAllIngredientes()
+        public async Task<List<Estilo>> GetAllEstilosAsync()
         {
             var losEstilos = await _estiloService
                 .GetAllEstilosAsync();
@@ -25,12 +25,12 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
         }
 
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<Estilo>> GetEstilo(int id)
+        public async Task<ActionResult<Estilo>> GetEstiloByIdAsync(int id)
         {
             var unEstilo = await _estiloService
-                .GetEstiloAsync(id);
+                .GetEstiloByIdAsync(id);
 
-            if (unEstilo is null)
+            if (unEstilo is null || unEstilo.Id==0)
                 return NotFound();
 
             return unEstilo;

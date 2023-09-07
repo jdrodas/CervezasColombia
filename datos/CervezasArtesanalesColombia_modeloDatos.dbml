@@ -9,12 +9,12 @@ table ubicaciones{
 table cervecerias {
   id int [pk, increment]
   nombre varchar
-  ubicacionId int
-  sitioWeb varchar
+  ubicacion_id int
+  sitio_web varchar
   instagram varchar
 }
 
-Ref:ubicaciones.id < cervecerias.ubicacionId
+Ref:ubicaciones.id < cervecerias.ubicacion_id
 
 table estilos {
   id int [pk, increment]
@@ -24,55 +24,55 @@ table estilos {
 table rangosAbv {
   id int [pk, increment]
   nombre varchar
-  valorInicial float
-  valorFinal float
+  valor_inicial float
+  valor_final float
 }
 
 table rangosIbu {
   id int [pk, increment]
   nombre varchar
-  valorInicial float
-  valorFinal float
+  valor_inicial float
+  valor_final float
 }
 
 table cervezas {
   id int [pk, increment]
   nombre varchar
-  cerveceriaId int
-  estiloId int
+  cerveceria_id int
+  estilo_id int
   ibu float
   abv float
 }
-Ref:cervecerias.id < cervezas.cerveceriaId
-Ref:estilos.id < cervezas.estiloId
+Ref:cervecerias.id < cervezas.cerveceria_id
+Ref:estilos.id < cervezas.estilo_id
 
 
-table tiposIngredientes {
+table tipos_ingredientes {
   id int [pk, increment]
   nombre varchar
 }
 
 table ingredientes {
   id int [pk, increment]
-  tipoIngredienteId int
+  tipo_ingrediente_id int
   nombre varchar
 }
 
-Ref:tiposIngredientes.id < ingredientes.tipoIngredienteId
+Ref:tipos_ingredientes.id < ingredientes.tipo_ingrediente_id
 
-table ingredientesCervezas {
-  cervezaId int
-  ingredienteId int
+table ingredientes_cervezas {
+  cerveza_id int
+  ingrediente_id int
 
   Indexes {
-    (cervezaId, ingredienteId) [pk]
+    (cerveza_id, ingrediente_id) [pk]
   }
 }
 
-Ref:cervezas.id < ingredientesCervezas.cervezaId
-Ref:ingredientes.id < ingredientesCervezas.ingredienteId
+Ref:cervezas.id < ingredientes_cervezas.cerveza_id
+Ref:ingredientes.id < ingredientes_cervezas.ingrediente_id
 
-table unidadesVolumen {
+table unidades_volumen {
   id int [pk, increment]
   nombre varchar
   abreviatura varchar  
@@ -83,13 +83,13 @@ table envasados {
   nombre varchar
 }
 
-table envasadosCervezas {
-  cervezaId int
-  envasadoId int
-  unidadVolumenId int
+table envasados_cervezas {
+  cerveza_id int
+  envasado_id int
+  unidad_volumen_id int
   volumen int
 }
 
-Ref:unidadesVolumen.id < envasadosCervezas.unidadVolumenId
-Ref:cervezas.id < envasadosCervezas.cervezaId
-Ref:envasados.id < envasadosCervezas.envasadoId
+Ref:unidades_volumen.id < envasados_cervezas.unidad_volumen_id
+Ref:cervezas.id < envasados_cervezas.cerveza_id
+Ref:envasados.id < envasados_cervezas.envasado_id
