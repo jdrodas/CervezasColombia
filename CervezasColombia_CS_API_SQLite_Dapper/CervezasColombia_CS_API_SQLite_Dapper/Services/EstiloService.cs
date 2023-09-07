@@ -11,14 +11,19 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
         {
             _estiloRepository = estiloRepository;
         }
-        public async Task<List<Estilo>> GetAllEstilosAsync()
+        public async Task<IEnumerable<Estilo>> GetAllAsync()
         {
-            return await _estiloRepository.GetAllEstilosAsync();
+            return await _estiloRepository.GetAllAsync();
         }
 
-        public async Task<Estilo> GetEstiloByIdAsync(int id)
+        public async Task<Estilo> GetByIdAsync(int id)
         {
-            return await _estiloRepository.GetEstiloByIdAsync(id);
+            var unEstilo = await _estiloRepository.GetByIdAsync(id);
+
+            if (unEstilo.Id ==0)
+                throw new KeyNotFoundException("Estilo no encontrado");
+
+            return unEstilo;
         }
     }
 }

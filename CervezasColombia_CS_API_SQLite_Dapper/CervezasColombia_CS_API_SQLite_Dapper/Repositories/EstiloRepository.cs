@@ -15,7 +15,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
             contextoDB = unContexto;
         }
 
-        public async Task<List<Estilo>> GetAllEstilosAsync()
+        public async Task<IEnumerable<Estilo>> GetAllAsync()
         {
             using (contextoDB.Conexion)
             {
@@ -26,11 +26,11 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
                 var resultadoEstilos = await contextoDB.Conexion.QueryAsync<Estilo>(sentenciaSQL, 
                                             new DynamicParameters());
 
-                return resultadoEstilos.AsList();
+                return resultadoEstilos;
             }
         }
 
-        public async Task<Estilo> GetEstiloByIdAsync(int id)
+        public async Task<Estilo> GetByIdAsync(int id)
         {
             Estilo unEstilo = new Estilo();
 
@@ -46,6 +46,31 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
                                       "ORDER BY nombre";
 
                 var resultado = await contextoDB.Conexion.QueryAsync<Estilo>(sentenciaSQL, 
+                                    parametrosSentencia);
+
+                if(resultado.ToArray().Length>0)
+                    unEstilo = resultado.First();
+            }
+
+            return unEstilo;
+        }
+
+        public async Task<Estilo> GetByNameAsync(string nombre)
+        {
+            Estilo unEstilo = new Estilo();
+
+            using (contextoDB.Conexion)
+            {
+                DynamicParameters parametrosSentencia = new DynamicParameters();
+                parametrosSentencia.Add("@estilo_nombre", nombre,
+                                        DbType.Int32, ParameterDirection.Input);
+
+                string sentenciaSQL = "SELECT id, nombre " +
+                                      "FROM estilos " +
+                                      "WHERE nombre = @estilo_nombre " +
+                                      "ORDER BY nombre";
+
+                var resultado = await contextoDB.Conexion.QueryAsync<Estilo>(sentenciaSQL,
                                     parametrosSentencia);
 
                 if (resultado.ToArray().Length > 0)

@@ -16,24 +16,27 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
         }
 
         [HttpGet]
-        public async Task<List<Estilo>> GetAllEstilosAsync()
+        public async Task<IActionResult> GetAllAsync()
         {
             var losEstilos = await _estiloService
-                .GetAllEstilosAsync();
+                .GetAllAsync();
 
-            return losEstilos;
+            return Ok(losEstilos);
         }
 
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<Estilo>> GetEstiloByIdAsync(int id)
+        public async Task<IActionResult> GetByIdAsync(int id)
         {
-            var unEstilo = await _estiloService
-                .GetEstiloByIdAsync(id);
-
-            if (unEstilo is null || unEstilo.Id==0)
-                return NotFound();
-
-            return unEstilo;
+            try
+            {
+                var unEstilo = await _estiloService
+                    .GetByIdAsync(id);
+                return Ok(unEstilo);
+            }
+            catch (KeyNotFoundException error)
+            {
+                return BadRequest(error.Message);
+            }
         }
     }
 }
