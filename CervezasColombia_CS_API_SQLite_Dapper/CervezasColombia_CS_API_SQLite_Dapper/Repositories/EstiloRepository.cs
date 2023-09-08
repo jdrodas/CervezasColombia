@@ -65,7 +65,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
             {
                 DynamicParameters parametrosSentencia = new DynamicParameters();
                 parametrosSentencia.Add("@estilo_nombre", nombre,
-                                        DbType.Int32, ParameterDirection.Input);
+                                        DbType.String, ParameterDirection.Input);
 
                 string sentenciaSQL = "SELECT id, nombre " +
                                       "FROM estilos " +
@@ -80,6 +80,25 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
             }
 
             return unEstilo;
+        }
+
+        public async Task<int> GetTotalBeersByStyle(int id)
+        {
+
+            DynamicParameters parametrosSentencia = new DynamicParameters();
+            parametrosSentencia.Add("@estilo_id", id,
+                                    DbType.Int32, ParameterDirection.Input);
+
+            string sentenciaSQL = "SELECT COUNT(id) totalCervezas " +
+                                  "FROM cervezas " +
+                                  "WHERE estilo_id = @estilo_id " +
+                                  "ORDER BY nombre";
+
+
+            var totalCervezas = await contextoDB.Conexion.QueryAsync<int>(sentenciaSQL,
+                                    parametrosSentencia);
+
+            return totalCervezas.First();
         }
 
         public async Task CreateAsync(Estilo unEstilo)

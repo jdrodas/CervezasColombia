@@ -34,7 +34,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
                     .GetByIdAsync(id);
                 return Ok(unEstilo);
             }
-            catch (KeyNotFoundException error)
+            catch (AppValidationException error)
             {
                 return BadRequest(error.Message);
             }
