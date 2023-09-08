@@ -9,5 +9,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Interfaces
         public Task<Estilo> GetByIdAsync(int id);
 
         public Task<Estilo> GetByNameAsync(string nombre);
+
+        public Task CreateAsync(Estilo unEstilo);
     }
 }

@@ -1,8 +1,10 @@
 ﻿using CervezasColombia_CS_API_SQLite_Dapper.Data.DbContexts;
 using CervezasColombia_CS_API_SQLite_Dapper.Data.Entities;
+using CervezasColombia_CS_API_SQLite_Dapper.Helpers;
 using CervezasColombia_CS_API_SQLite_Dapper.Interfaces;
 using Dapper;
 using System.Data;
+using Microsoft.Data.Sqlite;
 
 namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
 {
@@ -21,7 +23,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
             {
                 string sentenciaSQL = "SELECT id, nombre " +
                                       "FROM estilos " +
-                                      "ORDER BY nombre";
+                                      "ORDER BY id DESC";
 
                 var resultadoEstilos = await contextoDB.Conexion.QueryAsync<Estilo>(sentenciaSQL, 
                                             new DynamicParameters());
@@ -67,7 +69,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
 
                 string sentenciaSQL = "SELECT id, nombre " +
                                       "FROM estilos " +
-                                      "WHERE nombre = @estilo_nombre " +
+                                      "WHERE LOWER(nombre) = LOWER(@estilo_nombre) " +
                                       "ORDER BY nombre";
 
                 var resultado = await contextoDB.Conexion.QueryAsync<Estilo>(sentenciaSQL,
@@ -78,6 +80,24 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
             }
 
             return unEstilo;
+        }
+
+        public async Task CreateAsync(Estilo unEstilo)
+        {
+            try
+            {
+                using (contextoDB.Conexion) 
+                {
+                    string insertaEstiloSQL = "INSERT INTO estilos (nombre) " +
+                                              "VALUES (@Nombre)";
+
+                    await contextoDB.Conexion.ExecuteAsync(insertaEstiloSQL, unEstilo);
+                }
+            }
+            catch (SqliteException error)
+            {
+                throw new AppValidationException(error.Message);                
+            }
         }
     }
 }

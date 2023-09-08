@@ -1,4 +1,5 @@
 ﻿using CervezasColombia_CS_API_SQLite_Dapper.Data.Entities;
+using CervezasColombia_CS_API_SQLite_Dapper.Helpers;
 using CervezasColombia_CS_API_SQLite_Dapper.Interfaces;
 
 namespace CervezasColombia_CS_API_SQLite_Dapper.Services
@@ -24,6 +25,24 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
                 throw new KeyNotFoundException("Estilo no encontrado");
 
             return unEstilo;
+        }
+
+        public async Task CreateAsync(Estilo unEstilo)
+        {
+            // validamos que el estilo a crear no esté previamente creado
+            var estiloExistente = await _estiloRepository.GetByNameAsync(unEstilo.Nombre!);
+
+            if(estiloExistente.Id !=0)
+                throw new AppValidationException($"Ya existe un estilo con el nombre {unEstilo.Nombre}");
+
+            try
+            {
+                await _estiloRepository.CreateAsync(unEstilo);
+            }
+            catch (AppValidationException error)
+            {
+                throw error;
+            }            
         }
     }
 }

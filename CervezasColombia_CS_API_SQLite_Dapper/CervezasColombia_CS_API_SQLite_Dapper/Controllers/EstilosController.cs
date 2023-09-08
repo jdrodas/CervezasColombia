@@ -1,4 +1,5 @@
 ﻿using CervezasColombia_CS_API_SQLite_Dapper.Data.Entities;
+using CervezasColombia_CS_API_SQLite_Dapper.Helpers;
 using CervezasColombia_CS_API_SQLite_Dapper.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -34,6 +35,20 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
                 return Ok(unEstilo);
             }
             catch (KeyNotFoundException error)
+            {
+                return BadRequest(error.Message);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(Estilo unEstilo)
+        {
+            try
+            {
+                await _estiloService.CreateAsync(unEstilo);
+                return Ok(new { message = $"Estilo {unEstilo.Nombre} creado correctamente" });
+            }
+            catch (AppValidationException error)
             {
                 return BadRequest(error.Message);
             }
