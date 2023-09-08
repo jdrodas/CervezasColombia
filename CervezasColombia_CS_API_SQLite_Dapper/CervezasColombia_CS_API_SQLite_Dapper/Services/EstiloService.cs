@@ -28,6 +28,25 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
             return unEstilo;
         }
 
+        public async Task<IEnumerable<Cerveza>> GetBeersByStyleAsync(int id)
+        {
+            //Validamos que el estilo exista con ese Id
+            var unEstilo = await _estiloRepository.GetByIdAsync(id);
+
+            if (unEstilo.Id == 0)
+                throw new AppValidationException($"Estilo no encontrado con el id {id}");
+
+            //Si el estilo existe, validamos que tenga cervezas asociadas
+            // Validamos que el estilo no tenga asociadas cervezas
+            var cantidadCervezasAsociadas = await _estiloRepository.GetTotalBeersByStyleAsync(id);
+
+            if (cantidadCervezasAsociadas == 0)
+                throw new AppValidationException($"No Existen cervezas asociadas al estilo {unEstilo.Nombre}");
+
+            return await _estiloRepository.GetBeersByStyleAsync(id);
+        }
+
+
         public async Task CreateAsync(Estilo unEstilo)
         {
             // validamos que el estilo a crear no esté previamente creado
@@ -84,7 +103,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
                 throw new AppValidationException($"No existe un estilo con el Id {id} que se pueda eliminar");
 
             // Validamos que el estilo no tenga asociadas cervezas
-            var cantidadCervezasAsociadas = await _estiloRepository.GetTotalBeersByStyle(id);
+            var cantidadCervezasAsociadas = await _estiloRepository.GetTotalBeersByStyleAsync(id);
 
             if (cantidadCervezasAsociadas > 0)
                 throw new AppValidationException($"Existen {cantidadCervezasAsociadas} cervezas " +

@@ -82,7 +82,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
             return unEstilo;
         }
 
-        public async Task<int> GetTotalBeersByStyle(int id)
+        public async Task<int> GetTotalBeersByStyleAsync(int id)
         {
 
             DynamicParameters parametrosSentencia = new DynamicParameters();
@@ -99,6 +99,25 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
                                     parametrosSentencia);
 
             return totalCervezas.First();
+        }
+
+        public async Task<IEnumerable<Cerveza>> GetBeersByStyleAsync(int id)
+        {
+            using (contextoDB.Conexion)
+            {
+                DynamicParameters parametrosSentencia = new DynamicParameters();
+                parametrosSentencia.Add("@estilo_id", id,
+                                        DbType.Int32, ParameterDirection.Input);
+
+                string sentenciaSQL = "SELECT cerveza_id id, cerveza nombre, cerveceria, estilo, ibu, abv " +
+                      "FROM v_info_cervezas " +
+                      "WHERE estilo_id = @estilo_id " +
+                      "ORDER BY cerveceria, nombre";
+
+                var resultadoCervezas = await contextoDB.Conexion.QueryAsync<Cerveza>(sentenciaSQL, parametrosSentencia);
+
+                return resultadoCervezas;
+            }
         }
 
         public async Task CreateAsync(Estilo unEstilo)

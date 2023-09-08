@@ -40,6 +40,22 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
             }
         }
 
+        [HttpGet("{id:int}/Cervezas")]
+        public async Task<IActionResult> GetBeersByStyleAsync(int id)
+        {
+            try 
+            {
+                var lasCervezasPorEstilo = await _estiloService.
+                    GetBeersByStyleAsync(id);
+
+                return Ok(lasCervezasPorEstilo);
+            }
+            catch (AppValidationException error)
+            {
+                return BadRequest(error.Message);
+            }
+        }
+
         [HttpPost]
         public async Task<IActionResult> Create(Estilo unEstilo)
         {
