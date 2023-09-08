@@ -50,7 +50,50 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
             }
             catch (AppValidationException error)
             {
-                return BadRequest(error.Message);
+                return BadRequest($"Error de validación: {error.Message}");
+            }
+            catch (DbOperationException error)
+            {
+                return BadRequest($"Error de operacion en DB: {error.Message}");
+            }
+        }
+
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> UpdateAsync(int id, Estilo unEstilo)
+        {
+            try
+            {
+                await _estiloService.UpdateAsync(id, unEstilo);
+                return Ok(new { message = $"Estilo {unEstilo.Id} actualizado al nombre {unEstilo.Nombre}" });
+
+            }
+            catch (AppValidationException error)
+            {
+                return BadRequest($"Error de validación: {error.Message}");
+            }
+            catch (DbOperationException error)
+            {
+                return BadRequest($"Error de operacion en DB: {error.Message}");
+            }
+        }
+
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> DeleteAsync(int id)
+        {
+            try
+            {
+                var estiloEliminado = await _estiloService.DeleteAsync(id);
+                return Ok(new { message = $"Estilo {estiloEliminado.Id} " +
+                    $"con nombre {estiloEliminado.Nombre} fue eliminado" });
+
+            }
+            catch (AppValidationException error)
+            {
+                return BadRequest($"Error de validación: {error.Message}");
+            }
+            catch (DbOperationException error)
+            {
+                return BadRequest($"Error de operacion en DB: {error.Message}");
             }
         }
     }

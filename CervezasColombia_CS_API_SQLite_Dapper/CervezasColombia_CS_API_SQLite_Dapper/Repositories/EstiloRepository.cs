@@ -96,7 +96,46 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
             }
             catch (SqliteException error)
             {
-                throw new AppValidationException(error.Message);                
+                throw new DbOperationException(error.Message);                
+            }
+        }
+
+        public async Task UpdateAsync(Estilo unEstilo)
+        {
+            try
+            {
+                using (contextoDB.Conexion)
+                {
+                    string actualizaEstiloSQL = "UPDATE estilos SET nombre = @Nombre " +
+                                              "WHERE id = @Id";
+
+                    await contextoDB.Conexion.ExecuteAsync(actualizaEstiloSQL, unEstilo);
+                }
+            }
+            catch (SqliteException error)
+            {
+                throw new DbOperationException(error.Message);
+            }
+        }
+
+        public async Task DeleteAsync(int id)
+        {
+            try
+            {
+                using (contextoDB.Conexion)
+                {
+                    DynamicParameters parametrosSentencia = new DynamicParameters();
+                    parametrosSentencia.Add("@estilo_id", id,
+                                            DbType.Int32, ParameterDirection.Input);
+
+                    string eliminaEstiloSQL = "DELETE FROM estilos WHERE id = @estilo_id";
+
+                    await contextoDB.Conexion.ExecuteAsync(eliminaEstiloSQL, parametrosSentencia);
+                }
+            }
+            catch (SqliteException error)
+            {
+                throw new DbOperationException(error.Message);
             }
         }
     }
