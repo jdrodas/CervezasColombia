@@ -1,40 +1,49 @@
 cerveceria;cerveza;envasado;unidad_volumen;volumen
-20 Mission;Blonde;Botella;Mililitros;330
-20 Mission;IPA;Botella;Mililitros;330
-20 Mission;Pale Ale;Botella;Mililitros;330
-20 Mission;Porter;Botella;Mililitros;330
-20 Mission;Saison;Botella;Mililitros;330
-20 Mission;Witbier;Botella;Mililitros;330
 3 Cordilleras;Blanca;Botella;Mililitros;330
-3 Cordilleras;Mestiza;Botella;Mililitros;330
 3 Cordilleras;Mona;Botella;Mililitros;330
 3 Cordilleras;Mulata;Botella;Mililitros;330
+3 Cordilleras;Mestiza;Botella;Mililitros;330
 3 Cordilleras;Negra;Botella;Mililitros;330
 3 Cordilleras;Rose;Botella;Mililitros;330
-BBC;Bacatá;Botella;Mililitros;330
-BBC;Cajicá;Botella;Mililitros;330
-BBC;Chapinero;Botella;Mililitros;330
-BBC;Lager;Botella;Mililitros;330
-BBC;Macondo;Botella;Mililitros;330
-BBC;Monserrate;Botella;Mililitros;330
-BBC;Septimazo;Botella;Mililitros;330
-Bruder;Barley Wine;Botella;Mililitros;330
-Bruder;Café;Botella;Mililitros;330
-Bruder;Chocolate;Botella;Mililitros;330
-Bruder;Dog Lover;Botella;Mililitros;330
-Bruder;IPA Maracuyá;Botella;Mililitros;330
-Bruder;Imperial Strout;Botella;Mililitros;330
-Bruder;Maracuyá;Botella;Mililitros;330
-Bruder;Pueblito;Botella;Mililitros;330
-Bruder;Roja;Botella;Mililitros;330
-Bruder;Rubia;Botella;Mililitros;330
-Fierabrás;Dulcinea;Botella;Mililitros;330
-Fierabrás;Isabel la Católica;Botella;Mililitros;330
-Fierabrás;Juana de Arco;Botella;Mililitros;330
-Fierabrás;Maria Antonieta;Botella;Mililitros;330
+20 Mission;Blonde;Botella;Mililitros;330
+20 Mission;Witbier;Botella;Mililitros;330
+20 Mission;Pale Ale;Botella;Mililitros;330
+20 Mission;Porter;Botella;Mililitros;330
+20 Mission;IPA;Botella;Mililitros;330
+20 Mission;Saison;Botella;Mililitros;330
 Rincón del Mar;Açaí;Botella;Mililitros;330
 Rincón del Mar;Cacao;Botella;Mililitros;330
 Rincón del Mar;Canábica;Botella;Mililitros;330
-Rincón del Mar;Coca;Botella;Mililitros;330
 Rincón del Mar;Colorada;Botella;Mililitros;330
+Rincón del Mar;Coca;Botella;Mililitros;330
 Rincón del Mar;Gringa;Botella;Mililitros;330
+Bruder;IPA Maracuyá;Botella;Mililitros;330
+Bruder;Barley Wine;Botella;Mililitros;330
+Bruder;Dog Lover;Botella;Mililitros;330
+Bruder;Café;Botella;Mililitros;330
+Bruder;Pueblito;Botella;Mililitros;330
+Bruder;Maracuyá;Botella;Mililitros;330
+Bruder;Roja;Botella;Mililitros;330
+Bruder;Chocolate;Botella;Mililitros;330
+Bruder;Rubia;Botella;Mililitros;330
+Bruder;Imperial Strout;Botella;Mililitros;330
+BBC;Septimazo;Botella;Mililitros;330
+BBC;Macondo;Botella;Mililitros;330
+BBC;Monserrate;Botella;Mililitros;330
+BBC;Lager;Botella;Mililitros;330
+BBC;Bacatá;Botella;Mililitros;330
+BBC;Chapinero;Botella;Mililitros;330
+BBC;Cajicá;Botella;Mililitros;330
+Fierabrás;Isabel la Católica;Botella;Mililitros;330
+Fierabrás;Dulcinea;Botella;Mililitros;330
+Fierabrás;Juana de Arco;Botella;Mililitros;330
+Fierabrás;Maria Antonieta;Botella;Mililitros;330
+BBC;Rubia;Botella;Mililitros;330
+Cervezas Kalima;Alexa;Botella;Mililitros;330
+Cervezas Kalima;Más Música Local;Botella;Mililitros;330
+Nevada Cerveceria;Happy Ayu;Botella;Mililitros;330
+Nevada Cerveceria;Happy Tucán;Botella;Mililitros;330
+Nevada Cerveceria;Happy Nebbi;Botella;Mililitros;330
+Nevada Cerveceria;Happy Pava;Botella;Mililitros;330
+Nevada Cerveceria;Happy Garceta;Botella;Mililitros;330
+Nevada Cerveceria;Happy Trepadora;Botella;Mililitros;330

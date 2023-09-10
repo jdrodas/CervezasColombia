@@ -36,23 +36,23 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
             }
             catch (AppValidationException error)
             {
-                return BadRequest(error.Message);
+                return NotFound(error.Message);
             }
         }
 
         [HttpGet("{id:int}/Cervezas")]
-        public async Task<IActionResult> GetBeersByStyleAsync(int id)
+        public async Task<IActionResult> GetAssociatedBeersAsync(int id)
         {
             try 
             {
                 var lasCervezasPorEstilo = await _estiloService.
-                    GetBeersByStyleAsync(id);
+                    GetAssociatedBeersAsync(id);
 
                 return Ok(lasCervezasPorEstilo);
             }
             catch (AppValidationException error)
             {
-                return BadRequest(error.Message);
+                return NotFound(error.Message);
             }
         }
 
@@ -62,7 +62,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
             try
             {
                 await _estiloService.CreateAsync(unEstilo);
-                return Ok(new { message = $"Estilo {unEstilo.Nombre} creado correctamente" });
+                return Ok($"Estilo {unEstilo.Nombre} creado correctamente");
             }
             catch (AppValidationException error)
             {
@@ -80,7 +80,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
             try
             {
                 await _estiloService.UpdateAsync(id, unEstilo);
-                return Ok(new { message = $"Estilo {unEstilo.Id} actualizado al nombre {unEstilo.Nombre}" });
+                return Ok($"Estilo {unEstilo.Id} actualizado al nombre {unEstilo.Nombre}");
 
             }
             catch (AppValidationException error)
@@ -99,8 +99,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
             try
             {
                 var estiloEliminado = await _estiloService.DeleteAsync(id);
-                return Ok(new { message = $"Estilo {estiloEliminado.Id} " +
-                    $"con nombre {estiloEliminado.Nombre} fue eliminado" });
+                return Ok($"Estilo {estiloEliminado.Id} con nombre {estiloEliminado.Nombre} fue eliminado" );
 
             }
             catch (AppValidationException error)

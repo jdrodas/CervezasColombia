@@ -82,7 +82,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
             return unEstilo;
         }
 
-        public async Task<int> GetTotalBeersByStyleAsync(int id)
+        public async Task<int> GetTotalAssociatedBeersAsync(int id)
         {
 
             DynamicParameters parametrosSentencia = new DynamicParameters();
@@ -101,7 +101,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
             return totalCervezas.First();
         }
 
-        public async Task<IEnumerable<Cerveza>> GetBeersByStyleAsync(int id)
+        public async Task<IEnumerable<Cerveza>> GetAssociatedBeersAsync(int id)
         {
             using (contextoDB.Conexion)
             {
@@ -156,14 +156,14 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
             }
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(Estilo unEstilo)
         {
             try
             {
                 using (contextoDB.Conexion)
                 {
                     DynamicParameters parametrosSentencia = new DynamicParameters();
-                    parametrosSentencia.Add("@estilo_id", id,
+                    parametrosSentencia.Add("@estilo_id", unEstilo.Id,
                                             DbType.Int32, ParameterDirection.Input);
 
                     string eliminaEstiloSQL = "DELETE FROM estilos WHERE id = @estilo_id";
