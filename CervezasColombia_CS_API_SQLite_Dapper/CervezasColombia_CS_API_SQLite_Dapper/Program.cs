@@ -12,9 +12,11 @@ builder.Services.AddSingleton<SQLiteDbContext>();
 
 //Los repositorios
 builder.Services.AddScoped<IEstiloRepository, EstiloRepository>();
+builder.Services.AddScoped<IResumenRepository, ResumenRepository>();
 
 //Aqui agregamos los servicios asociados para cada EndPoint
 builder.Services.AddScoped<EstiloService>();
+builder.Services.AddScoped<ResumenService>();
 
 // Add services to the container.
 builder.Services.AddControllers()

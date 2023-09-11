@@ -13,7 +13,7 @@
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
-      "launchUrl": "api/Estilos",
+      "launchUrl": "api/Resumen",
       "applicationUrl": "https://localhost:7024",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
