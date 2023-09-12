@@ -1,4 +1,4 @@
-﻿namespace CervezasColombia_CS_API_SQLite_Dapper.Data.Entities
+﻿namespace CervezasColombia_CS_API_SQLite_Dapper.Models
 {
     public class Cerveza
     {

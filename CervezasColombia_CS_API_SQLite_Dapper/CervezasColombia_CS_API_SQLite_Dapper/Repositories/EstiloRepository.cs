@@ -1,10 +1,10 @@
-﻿using CervezasColombia_CS_API_SQLite_Dapper.Data.DbContexts;
-using CervezasColombia_CS_API_SQLite_Dapper.Data.Entities;
-using CervezasColombia_CS_API_SQLite_Dapper.Helpers;
-using CervezasColombia_CS_API_SQLite_Dapper.Interfaces;
-using Dapper;
+﻿using Dapper;
 using System.Data;
 using Microsoft.Data.Sqlite;
+using CervezasColombia_CS_API_SQLite_Dapper.DbContexts;
+using CervezasColombia_CS_API_SQLite_Dapper.Models;
+using CervezasColombia_CS_API_SQLite_Dapper.Helpers;
+using CervezasColombia_CS_API_SQLite_Dapper.Interfaces;
 
 namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
 {

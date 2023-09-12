@@ -1,7 +1,7 @@
 ﻿using System.Data;
 using Microsoft.Data.Sqlite;
 
-namespace CervezasColombia_CS_API_SQLite_Dapper.Data.DbContexts
+namespace CervezasColombia_CS_API_SQLite_Dapper.DbContexts
 {
     public class SQLiteDbContext
     {
