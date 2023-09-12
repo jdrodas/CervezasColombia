@@ -98,8 +98,8 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
         {
             try
             {
-                var estiloEliminado = await _estiloService.DeleteAsync(id);
-                return Ok($"Estilo {estiloEliminado.Id} con nombre {estiloEliminado.Nombre} fue eliminado" );
+                await _estiloService.DeleteAsync(id);
+                return Ok($"Estilo {id} fue eliminado" );
 
             }
             catch (AppValidationException error)

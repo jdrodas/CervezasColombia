@@ -61,7 +61,10 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
 
             try
             {
-                await _estiloRepository.CreateAsync(unEstilo);
+                bool resultadoAccion = await _estiloRepository.CreateAsync(unEstilo);
+
+                if (!resultadoAccion)
+                    throw new AppValidationException("Operación ejecutada pero generó cambios en la DB");
             }
             catch (DbOperationException error)
             {
@@ -93,7 +96,10 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
 
             try 
             {
-                await _estiloRepository.UpdateAsync(unEstilo);
+                bool resultadoAccion = await _estiloRepository.UpdateAsync(unEstilo);
+
+                if (!resultadoAccion)
+                    throw new AppValidationException("Operación ejecutada pero generó cambios en la DB");
             }
             catch (DbOperationException error)
             {
@@ -102,7 +108,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
 
         }
 
-        public async Task<Estilo> DeleteAsync(int id)
+        public async Task DeleteAsync(int id)
         {
             // validamos que el estilo a eliminar si exista con ese Id
             var estiloExistente = await _estiloRepository.GetByIdAsync(id);
@@ -120,9 +126,10 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
             //Si existe y no tiene cervezas asociadas, se puede eliminar
             try 
             {
-                await _estiloRepository.DeleteAsync(estiloExistente);
+                bool resultadoAccion = await _estiloRepository.DeleteAsync(estiloExistente);
 
-                return estiloExistente;
+                if (!resultadoAccion)
+                    throw new AppValidationException("Operación ejecutada pero generó cambios en la DB");
             }
             catch (DbOperationException error)
             {

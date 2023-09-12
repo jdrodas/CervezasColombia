@@ -120,8 +120,10 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
             }
         }
 
-        public async Task CreateAsync(Estilo unEstilo)
+        public async Task<bool> CreateAsync(Estilo unEstilo)
         {
+            bool resultadoAccion = false;
+            
             try
             {
                 using (contextoDB.Conexion) 
@@ -129,17 +131,24 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
                     string insertaEstiloSQL = "INSERT INTO estilos (nombre) " +
                                               "VALUES (@Nombre)";
 
-                    await contextoDB.Conexion.ExecuteAsync(insertaEstiloSQL, unEstilo);
+                    var filasAfectadas = await contextoDB.Conexion.ExecuteAsync(insertaEstiloSQL, unEstilo);
+
+                    if (filasAfectadas > 0)
+                        resultadoAccion = true;
                 }
             }
             catch (SqliteException error)
             {
                 throw new DbOperationException(error.Message);                
             }
+
+            return resultadoAccion;
         }
 
-        public async Task UpdateAsync(Estilo unEstilo)
+        public async Task<bool> UpdateAsync(Estilo unEstilo)
         {
+            bool resultadoAccion = false;
+
             try
             {
                 using (contextoDB.Conexion)
@@ -147,17 +156,25 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
                     string actualizaEstiloSQL = "UPDATE estilos SET nombre = @Nombre " +
                                               "WHERE id = @Id";
 
-                    await contextoDB.Conexion.ExecuteAsync(actualizaEstiloSQL, unEstilo);
+                    var filasAfectadas = await contextoDB.Conexion.ExecuteAsync(actualizaEstiloSQL, unEstilo);
+                    
+                    if (filasAfectadas > 0)
+                        resultadoAccion = true;
                 }
             }
             catch (SqliteException error)
             {
                 throw new DbOperationException(error.Message);
             }
+            
+            return resultadoAccion;
         }
 
-        public async Task DeleteAsync(Estilo unEstilo)
+
+        public async Task<bool> DeleteAsync(Estilo unEstilo)
         {
+            bool resultadoAccion = false;
+
             try
             {
                 using (contextoDB.Conexion)
@@ -168,13 +185,18 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
 
                     string eliminaEstiloSQL = "DELETE FROM estilos WHERE id = @estilo_id";
 
-                    await contextoDB.Conexion.ExecuteAsync(eliminaEstiloSQL, parametrosSentencia);
+                    var filasAfectadas = await contextoDB.Conexion.ExecuteAsync(eliminaEstiloSQL, parametrosSentencia);
+
+                    if (filasAfectadas > 0)
+                        resultadoAccion = true;
                 }
             }
             catch (SqliteException error)
             {
                 throw new DbOperationException(error.Message);
             }
+
+            return resultadoAccion;
         }
     }
 }
