@@ -5,6 +5,8 @@
 -- Proyecto: Cervezas Artesanales de Colombia
 -- Motor de Base de datos: SQLite
 
+-- Script de creación de tablas y vistas
+
 -- Tablas
 
 create table ubicaciones
@@ -40,8 +42,8 @@ create table cervezas
     nombre       text not null,
     estilo_id     integer not null constraint cerveza_estilo_fk references estilos,
     cerveceria_id integer not null constraint cerveza_cerveceria_fk references cervecerias,
-    ibu           integer not null,
-    abv           integer not null,
+    ibu           real not null,
+    abv           real not null,
 	constraint cervezas_uk unique (nombre,estilo_id,cerveceria_id)
 );
 
@@ -174,3 +176,93 @@ from ingredientes_cervezas ic
     join ingredientes i on i.id = ic.ingrediente_id
     join tipos_ingredientes ti on i.tipo_ingrediente_id = ti.id;	
 
+-- *****************************
+-- Orden de cargue de datos
+-- *****************************
+
+/*
+- rangos_abv
+- rango_ibu
+- estilos
+- ubicaciones
+- cervecerias
+- cervezas
+- envasados
+- unidades_volumen
+- envasados_cervezas
+- tipos_ingredientes
+- ingredientes
+- ingredientes_cervezas
+*/
+
+-- Tablas temporales
+-- TMP_CERVECERIAS
+create table tmp_cervecerias
+(nombre text, ubicacion text, sitio_web text, instagram text);
+
+insert into cervecerias(nombre, ubicacion_id, sitio_web, instagram)
+select tmp.nombre,
+       u.id ubicacion_id,
+       tmp.sitio_web,
+       tmp.instagram
+from tmp_cervecerias tmp
+ join ubicaciones u on (u.municipio || ', ' ||u.departamento) = tmp.ubicacion;
+
+ -- TMP_CERVEZAS
+ create table tmp_cervezas
+(nombre text, cerveceria text, estilo text, ibu real, abv real);
+
+insert into cervezas (nombre, estilo_id, cerveceria_id, ibu, abv)
+select
+    tmp.nombre,
+    e.id estilo_id,
+    cr.id cerveceria_id,
+    ibu,
+    abv
+from tmp_cervezas tmp
+    join cervecerias cr on tmp.cerveceria = cr.nombre
+    join estilos e on tmp.estilo = e.nombre;
+
+-- TMP_ENVASADOS_CERVEZAS
+create table tmp_envasados_cervezas
+(cerveceria text, cerveza text, envasado text, unidad_volumen text, volumen real);
+
+insert into envasados_cervezas (cerveza_id, envasados_id, unidad_volumen_id, volumen)
+select
+    c.id cerveza_id,
+    e.id envasado_id,
+    uv.id unidad_volumen_id,
+    tmp.volumen
+from tmp_envasados_cervezas tmp
+ join cervecerias cr on cr.nombre = tmp.cerveceria
+ join cervezas c on cr.id = c.cerveceria_id
+        and c.nombre = tmp.cerveza
+join envasados e on tmp.envasado = e.nombre
+join unidades_volumen uv on tmp.unidad_volumen = uv.nombre;
+
+-- TMP_INGREDIENTES
+create table tmp_ingredientes (ingrediente text, tipo_ingrediente text);
+
+insert into ingredientes (nombre, tipo_ingrediente_id)
+select
+    tmp.ingrediente,
+    ti.id  tipo_ingrediente_id
+from tmp_ingredientes tmp
+    join tipos_ingredientes ti on tmp.tipo_ingrediente = ti.nombre;
+
+
+-- TMP_INGREDIENTES_CERVEZAS
+create table tmp_ingredientes_cervezas
+(cerveceria text, cerveza text, tipo_ingrediente text, ingrediente text );
+
+insert into ingredientes_cervezas (cerveza_id, ingrediente_id) 
+select
+    c.id cerveza_id,
+    i.id ingrediente_id
+from tmp_ingredientes_cervezas tmp
+join cervecerias cr on tmp.cerveceria = cr.nombre
+join cervezas c on cr.id = c.cerveceria_id
+            and tmp.cerveza = c.nombre
+join tipos_ingredientes ti on ti.nombre = tmp.tipo_ingrediente
+join ingredientes i on ti.id = i.tipo_ingrediente_id
+    and tmp.ingrediente = i.nombre;

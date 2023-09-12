@@ -1,30 +1,31 @@
-nombre;tipoIngrediente
-Amber Malt; Maltas
-Belgian Special; Maltas
-Biscuit Malt; Maltas
-Black Barley; Maltas
-Black Patent; Maltas
-Brown Malt; Maltas
-Carafa Special; Maltas
-Caramel Malt; Maltas
-Carapils; Maltas
-CaraVienne; Maltas
-Chocolate Malt; Maltas
-Honey Malt; Maltas
-Munich Malt; Maltas
-Pale Malt; Maltas
-Peated Malt; Maltas
-Roasted Barley; Maltas
-Rye Malt; Maltas
-Special Roast; Maltas
-Victory Malt; Maltas
-Vienna Malt; Maltas
-Wheat Malt; Maltas
-Wiener; Maltas
-Café;Saborizantes
-Cacao; Saborizantes
-Açaí; Saborizantes
-Maracuyá; Saborizantes
-Ciruela; Saborizantes
-Coca; Estimulantes
-Cannabis; Estimulantes
+tipo_ingrediente;ingrediente
+Agua;Agua de Manantial
+Estimulantes;Cannabis
+Estimulantes;Coca
+Maltas;Amber Malt
+Maltas;Belgian Special
+Maltas;Biscuit Malt
+Maltas;Black Barley
+Maltas;Black Patent
+Maltas;Brown Malt
+Maltas;CaraVienne
+Maltas;Carafa Special
+Maltas;Caramel Malt
+Maltas;Carapils
+Maltas;Chocolate Malt
+Maltas;Honey Malt
+Maltas;Munich Malt
+Maltas;Pale Malt
+Maltas;Peated Malt
+Maltas;Roasted Barley
+Maltas;Rye Malt
+Maltas;Special Roast
+Maltas;Victory Malt
+Maltas;Vienna Malt
+Maltas;Wheat Malt
+Maltas;Wiener
+Saborizantes;Açaí
+Saborizantes;Cacao
+Saborizantes;Café
+Saborizantes;Ciruela
+Saborizantes;Maracuyá

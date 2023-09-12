@@ -6,7 +6,9 @@
         public string Nombre { get; set; } = string.Empty;
         public string Cerveceria { get; set; } = string.Empty;
         public string Estilo { get; set; } = string.Empty;
+        public string Rango_Ibu { get; set; } = string.Empty;
         public float Ibu { get; set; } = 0f;
+        public string Rango_Abv { get; set; } = string.Empty;
         public float Abv { get; set; } = 0f;
     }
 }
