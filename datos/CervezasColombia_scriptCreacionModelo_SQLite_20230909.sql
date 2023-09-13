@@ -184,14 +184,17 @@ from ingredientes_cervezas ic
 - rangos_abv
 - rango_ibu
 - estilos
-- ubicaciones
-- cervecerias
-- cervezas
 - envasados
 - unidades_volumen
-- envasados_cervezas
+- ubicaciones
+
 - tipos_ingredientes
 - ingredientes
+
+- cervecerias
+- cervezas
+
+- envasados_cervezas
 - ingredientes_cervezas
 */
 

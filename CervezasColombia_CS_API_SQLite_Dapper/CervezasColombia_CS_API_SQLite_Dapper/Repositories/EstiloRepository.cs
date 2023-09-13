@@ -44,8 +44,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
 
                 string sentenciaSQL = "SELECT id, nombre " +
                                       "FROM estilos " +
-                                      "WHERE id = @estilo_id " +
-                                      "ORDER BY nombre";
+                                      "WHERE id = @estilo_id ";
 
                 var resultado = await contextoDB.Conexion.QueryAsync<Estilo>(sentenciaSQL, 
                                     parametrosSentencia);
@@ -69,8 +68,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
 
                 string sentenciaSQL = "SELECT id, nombre " +
                                       "FROM estilos " +
-                                      "WHERE LOWER(nombre) = LOWER(@estilo_nombre) " +
-                                      "ORDER BY nombre";
+                                      "WHERE LOWER(nombre) = LOWER(@estilo_nombre) ";
 
                 var resultado = await contextoDB.Conexion.QueryAsync<Estilo>(sentenciaSQL,
                                     parametrosSentencia);
@@ -109,12 +107,14 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
                 parametrosSentencia.Add("@estilo_id", id,
                                         DbType.Int32, ParameterDirection.Input);
 
-                string sentenciaSQL = "SELECT cerveza_id id, cerveza nombre, cerveceria, estilo, ibu, abv, rango_ibu, rango_abv " +
-                      "FROM v_info_cervezas " +
-                      "WHERE estilo_id = @estilo_id " +
-                      "ORDER BY cerveceria, nombre";
+                string sentenciaSQL = "SELECT cerveza_id id, cerveza nombre, cerveceria, estilo, " +
+                    "ibu, abv, rango_ibu, rango_abv " +
+                    "FROM v_info_cervezas " +
+                    "WHERE estilo_id = @estilo_id " +
+                    "ORDER BY cerveceria, nombre";
 
-                var resultadoCervezas = await contextoDB.Conexion.QueryAsync<Cerveza>(sentenciaSQL, parametrosSentencia);
+                var resultadoCervezas = await contextoDB.Conexion.QueryAsync<Cerveza>(sentenciaSQL, 
+                                            parametrosSentencia);
 
                 return resultadoCervezas;
             }
@@ -128,10 +128,11 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
             {
                 using (contextoDB.Conexion) 
                 {
-                    string insertaEstiloSQL = "INSERT INTO estilos (nombre) " +
+                    string sentenciaSQL = "INSERT INTO estilos (nombre) " +
                                               "VALUES (@Nombre)";
 
-                    var filasAfectadas = await contextoDB.Conexion.ExecuteAsync(insertaEstiloSQL, unEstilo);
+                    int filasAfectadas = await contextoDB.Conexion.ExecuteAsync(sentenciaSQL, 
+                                            unEstilo);
 
                     if (filasAfectadas > 0)
                         resultadoAccion = true;
@@ -153,10 +154,11 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
             {
                 using (contextoDB.Conexion)
                 {
-                    string actualizaEstiloSQL = "UPDATE estilos SET nombre = @Nombre " +
+                    string sentenciaSQL = "UPDATE estilos SET nombre = @Nombre " +
                                               "WHERE id = @Id";
 
-                    var filasAfectadas = await contextoDB.Conexion.ExecuteAsync(actualizaEstiloSQL, unEstilo);
+                    int filasAfectadas = await contextoDB.Conexion.ExecuteAsync(sentenciaSQL,
+                                            unEstilo);
                     
                     if (filasAfectadas > 0)
                         resultadoAccion = true;
@@ -179,13 +181,10 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
             {
                 using (contextoDB.Conexion)
                 {
-                    DynamicParameters parametrosSentencia = new DynamicParameters();
-                    parametrosSentencia.Add("@estilo_id", unEstilo.Id,
-                                            DbType.Int32, ParameterDirection.Input);
+                    string sentenciaSQL = "DELETE FROM estilos WHERE id = @Id";
 
-                    string eliminaEstiloSQL = "DELETE FROM estilos WHERE id = @estilo_id";
-
-                    var filasAfectadas = await contextoDB.Conexion.ExecuteAsync(eliminaEstiloSQL, parametrosSentencia);
+                    int filasAfectadas = await contextoDB.Conexion.ExecuteAsync(sentenciaSQL, 
+                                            unEstilo);
 
                     if (filasAfectadas > 0)
                         resultadoAccion = true;

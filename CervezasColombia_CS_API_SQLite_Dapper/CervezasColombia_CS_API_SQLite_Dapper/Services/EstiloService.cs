@@ -64,7 +64,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
                 bool resultadoAccion = await _estiloRepository.CreateAsync(unEstilo);
 
                 if (!resultadoAccion)
-                    throw new AppValidationException("Operación ejecutada pero generó cambios en la DB");
+                    throw new AppValidationException("Operación ejecutada pero no generó cambios en la DB");
             }
             catch (DbOperationException error)
             {
@@ -99,13 +99,12 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
                 bool resultadoAccion = await _estiloRepository.UpdateAsync(unEstilo);
 
                 if (!resultadoAccion)
-                    throw new AppValidationException("Operación ejecutada pero generó cambios en la DB");
+                    throw new AppValidationException("Operación ejecutada pero no generó cambios en la DB");
             }
             catch (DbOperationException error)
             {
                 throw error;
             }
-
         }
 
         public async Task DeleteAsync(int id)
@@ -129,7 +128,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
                 bool resultadoAccion = await _estiloRepository.DeleteAsync(estiloExistente);
 
                 if (!resultadoAccion)
-                    throw new AppValidationException("Operación ejecutada pero generó cambios en la DB");
+                    throw new AppValidationException("Operación ejecutada pero no generó cambios en la DB");
             }
             catch (DbOperationException error)
             {
