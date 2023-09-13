@@ -55,5 +55,21 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
                 return NotFound(error.Message);
             }
         }
+
+        [HttpGet("{id:int}/Envasados")]
+        public async Task<IActionResult> GetAssociatedPackagingsAsync(int id)
+        {
+            try
+            {
+                var losEnvasadosPorCerveza = await _cervezaService.
+                    GetAssociatedPackagingsAsync(id);
+
+                return Ok(losEnvasadosPorCerveza);
+            }
+            catch (AppValidationException error)
+            {
+                return NotFound(error.Message);
+            }
+        }
     }
 }

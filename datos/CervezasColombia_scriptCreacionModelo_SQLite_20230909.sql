@@ -85,10 +85,10 @@ create table unidades_volumen
 create table envasados_cervezas
 (
     cerveza_id        integer not null constraint envasados_cervezas_cerveza_fk references cervezas,
-    envasados_id      integer not null constraint envasados_cervezas_envasado_fk references envasados,
+    envasado_id      integer not null constraint envasados_cervezas_envasado_fk references envasados,
     unidad_volumen_id integer not null constraint envasados_cervezas_unidad_volumen_fk references unidades_volumen,
     volumen           integer,
-    constraint envasados_cervezas_pk primary key (cerveza_id, envasados_id, unidad_volumen_id, volumen)
+    constraint envasados_cervezas_pk primary key (cerveza_id, envasado_id, unidad_volumen_id, volumen)
 );
 
 create table tipos_ingredientes
@@ -140,7 +140,7 @@ select
     cr.nombre cerveceria,
     ec.cerveza_id,
     c.nombre cerveza,
-    ec.envasados_id,
+    ec.envasado_id,
     e.nombre envasado,
     ec.unidad_volumen_id,
     uv.nombre unidad_volumen,
@@ -148,7 +148,7 @@ select
 from envasados_cervezas ec
     join cervezas c on ec.cerveza_id = c.id
     join cervecerias cr on c.cerveceria_id = cr.id
-    join envasados e on ec.envasados_id = e.id
+    join envasados e on ec.envasado_id = e.id
     join unidades_volumen uv on ec.unidad_volumen_id = uv.id;
 
 create view v_info_ingredientes as
@@ -230,7 +230,7 @@ from tmp_cervezas tmp
 create table tmp_envasados_cervezas
 (cerveceria text, cerveza text, envasado text, unidad_volumen text, volumen real);
 
-insert into envasados_cervezas (cerveza_id, envasados_id, unidad_volumen_id, volumen)
+insert into envasados_cervezas (cerveza_id, envasado_id, unidad_volumen_id, volumen)
 select
     c.id cerveza_id,
     e.id envasado_id,

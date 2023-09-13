@@ -64,7 +64,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
             parametrosSentencia.Add("@cerveza_id", id,
                                     DbType.Int32, ParameterDirection.Input);
 
-            string sentenciaSQL = "SELECT COUNT(ingrediente_id) totalIngrediente " +
+            string sentenciaSQL = "SELECT COUNT(ingrediente_id) totalIngredientes " +
                                   "FROM ingredientes_cervezas " +
                                   "WHERE cerveza_id = @cerveza_id";
 
@@ -89,6 +89,43 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
                       "ORDER BY tipo_ingrediente, nombre ";
 
                 var resultadoIngredientes = await contextoDB.Conexion.QueryAsync<Ingrediente>(sentenciaSQL, parametrosSentencia);
+
+                return resultadoIngredientes;
+            }
+        }
+
+        public async Task<int> GetTotalAssociatedPackagingsAsync(int id)
+        {
+
+            DynamicParameters parametrosSentencia = new DynamicParameters();
+            parametrosSentencia.Add("@cerveza_id", id,
+                                    DbType.Int32, ParameterDirection.Input);
+
+            string sentenciaSQL = "SELECT COUNT(envasado_id) totalEnvasados " +
+                                  "FROM envasados_cervezas " +
+                                  "WHERE cerveza_id = @cerveza_id";
+
+
+            var totalIngredientes = await contextoDB.Conexion.QueryAsync<int>(sentenciaSQL,
+                                    parametrosSentencia);
+
+            return totalIngredientes.First();
+        }
+
+        public async Task<IEnumerable<Envasado>> GetAssociatedPackagingsAsync(int id)
+        {
+            using (contextoDB.Conexion)
+            {
+                DynamicParameters parametrosSentencia = new DynamicParameters();
+                parametrosSentencia.Add("@cerveza_id", id,
+                                        DbType.Int32, ParameterDirection.Input);
+
+                string sentenciaSQL = "SELECT DISTINCT v.envasado_id id, v.envasado nombre, v.unidad_volumen, v.volumen " +
+                      "FROM v_info_envasados_cervezas v " +
+                      "WHERE cerveza_id = @cerveza_id " +
+                      "ORDER BY envasado, unidad_volumen, volumen ";
+
+                var resultadoIngredientes = await contextoDB.Conexion.QueryAsync<Envasado>(sentenciaSQL, parametrosSentencia);
 
                 return resultadoIngredientes;
             }

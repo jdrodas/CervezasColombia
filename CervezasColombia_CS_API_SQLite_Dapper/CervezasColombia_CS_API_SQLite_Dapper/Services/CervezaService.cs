@@ -45,5 +45,22 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
 
             return await _cervezaRepository.GetAssociatedIngredientsAsync(id);
         }
+
+        public async Task<IEnumerable<Envasado>> GetAssociatedPackagingsAsync(int id)
+        {
+            //Validamos que la cerveza exista con ese Id
+            var unaCerveza = await _cervezaRepository.GetByIdAsync(id);
+
+            if (unaCerveza.Id == 0)
+                throw new AppValidationException($"Cerveza no encontrada con el id {id}");
+
+            //Si la cerveza existe, validamos que tenga envasados asociados
+            var cantidadIngredientesAsociados = await _cervezaRepository.GetTotalAssociatedPackagingsAsync(id);
+
+            if (cantidadIngredientesAsociados == 0)
+                throw new AppValidationException($"No Existen envasados asociados a la cerveza {unaCerveza.Nombre}");
+
+            return await _cervezaRepository.GetAssociatedPackagingsAsync(id);
+        }
     }
 }
