@@ -1,11 +1,16 @@
 ﻿using Dapper;
 using Microsoft.Extensions.Configuration;
-using System.Data.SQLite;
+using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Npgsql;
 
 namespace CervezasColombia_CS_PoC_Consola
 {
-    public class AccesoDatos
+    public class AccesoDatosPgsql
     {
         public static string? ObtieneCadenaConexion()
         {
@@ -16,8 +21,9 @@ namespace CervezasColombia_CS_PoC_Consola
 
             IConfiguration miConfiguracion = builder.Build();
 
-            return miConfiguracion["ConnectionString:Sqlite"];
+            return miConfiguracion["ConnectionString:Pgsql"];
         }
+
 
         #region Estilos
 
@@ -29,7 +35,7 @@ namespace CervezasColombia_CS_PoC_Consola
         {
             string? cadenaConexion = ObtieneCadenaConexion();
 
-            using (IDbConnection cxnDB = new SQLiteConnection(cadenaConexion))
+            using (IDbConnection cxnDB = new NpgsqlConnection(cadenaConexion))
             {
                 string sentenciaSQL = "SELECT nombre FROM estilos ORDER BY nombre";
                 var resultadoEstilos = cxnDB.Query<string>(sentenciaSQL, new DynamicParameters());
@@ -46,7 +52,7 @@ namespace CervezasColombia_CS_PoC_Consola
         {
             string? cadenaConexion = ObtieneCadenaConexion();
 
-            using (IDbConnection cxnDB = new SQLiteConnection(cadenaConexion))
+            using (IDbConnection cxnDB = new NpgsqlConnection(cadenaConexion))
             {
                 string sentenciaSQL = "SELECT id, nombre FROM estilos ORDER BY nombre";
                 var resultadoEstilos = cxnDB.Query<Estilo>(sentenciaSQL, new DynamicParameters());
@@ -66,16 +72,16 @@ namespace CervezasColombia_CS_PoC_Consola
             string? cadenaConexion = ObtieneCadenaConexion();
 
             //Aqui buscamos el estilo asociado al nombre
-            using (IDbConnection cxnDB = new SQLiteConnection(cadenaConexion))
+            using (IDbConnection cxnDB = new NpgsqlConnection(cadenaConexion))
             {
                 DynamicParameters parametrosSentencia = new DynamicParameters();
                 parametrosSentencia.Add("@nombre_estilo", nombreEstilo,
                                         DbType.String, ParameterDirection.Input);
 
-                string? sentenciaSQL =  "SELECT id,nombre " +
+                string? sentenciaSQL = "SELECT id,nombre " +
                                         "FROM estilos " +
                                         "WHERE nombre = @nombre_estilo";
-                
+
                 var salida = cxnDB.Query<Estilo>(sentenciaSQL, parametrosSentencia);
 
                 if (salida.ToArray().Length > 0)
@@ -96,7 +102,7 @@ namespace CervezasColombia_CS_PoC_Consola
             string? cadenaConexion = ObtieneCadenaConexion();
 
             //Aqui buscamos el estilo asociado al nombre
-            using (IDbConnection cxnDB = new SQLiteConnection(cadenaConexion))
+            using (IDbConnection cxnDB = new NpgsqlConnection(cadenaConexion))
             {
                 DynamicParameters parametrosSentencia = new DynamicParameters();
                 parametrosSentencia.Add("@id_estilo", idEstilo,
@@ -129,7 +135,7 @@ namespace CervezasColombia_CS_PoC_Consola
             bool resultado = false;
             string? cadenaConexion = ObtieneCadenaConexion();
 
-            using (IDbConnection cxnDB = new SQLiteConnection(cadenaConexion))
+            using (IDbConnection cxnDB = new NpgsqlConnection(cadenaConexion))
             {
                 DynamicParameters parametrosSentencia = new DynamicParameters();
                 parametrosSentencia.Add("@nombre_estilo", unEstilo.Nombre,
@@ -150,10 +156,10 @@ namespace CervezasColombia_CS_PoC_Consola
                 {
                     string insertaEstiloSQL = "INSERT INTO estilos (nombre) " +
                                                "VALUES (@nombre_estilo)";
-                    
+
                     cantidadFilas = cxnDB.Execute(insertaEstiloSQL, parametrosSentencia);
                 }
-                catch (SQLiteException)
+                catch (NpgsqlException)
                 {
                     resultado = false;
                     cantidadFilas = 0;
@@ -184,7 +190,7 @@ namespace CervezasColombia_CS_PoC_Consola
             string? cadenaConexion = ObtieneCadenaConexion();
 
 
-            using (IDbConnection cxnDB = new SQLiteConnection(cadenaConexion))
+            using (IDbConnection cxnDB = new NpgsqlConnection(cadenaConexion))
             {
                 //Aqui validamos primero que el Estilo previamente existe
 
@@ -201,7 +207,7 @@ namespace CervezasColombia_CS_PoC_Consola
                 //Si no hay filas, no existe estilo que actualizar
                 if (cantidadFilas == 0)
                     return false;
-                
+
                 //Aqui validamos que no exista estilos con el nuevo nombre
                 parametrosSentencia = new DynamicParameters();
                 parametrosSentencia.Add("@estilo_nombre", estiloActualizado.Nombre,
@@ -227,7 +233,7 @@ namespace CervezasColombia_CS_PoC_Consola
                     //Aqui no usamos parámetros dinámicos, pasamos el objeto!!!
                     cantidadFilas = cxnDB.Execute(actualizaEstiloSql, estiloActualizado);
                 }
-                catch (SQLiteException)
+                catch (NpgsqlException)
                 {
                     resultado = false;
                     cantidadFilas = 0;
@@ -257,7 +263,7 @@ namespace CervezasColombia_CS_PoC_Consola
             bool resultado = false;
             string? cadenaConexion = ObtieneCadenaConexion();
 
-            using (IDbConnection cxnDB = new SQLiteConnection(cadenaConexion))
+            using (IDbConnection cxnDB = new NpgsqlConnection(cadenaConexion))
             {
                 //Primero, identificamos si hay un estilo con este nombre
 
@@ -303,7 +309,7 @@ namespace CervezasColombia_CS_PoC_Consola
                     //Aqui no usamos parámetros dinámicos, pasamos el objeto!!!
                     cantidadFilas = cxnDB.Execute(eliminaEstiloSQL, unEstilo);
                 }
-                catch (SQLiteException elError)
+                catch (NpgsqlException elError)
                 {
                     resultado = false;
                     cantidadFilas = 0;
