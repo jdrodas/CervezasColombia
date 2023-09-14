@@ -125,9 +125,9 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
                       "WHERE cerveza_id = @cerveza_id " +
                       "ORDER BY envasado, unidad_volumen, volumen ";
 
-                var resultadoIngredientes = await contextoDB.Conexion.QueryAsync<Envasado>(sentenciaSQL, parametrosSentencia);
+                var resultadoEnvasados = await contextoDB.Conexion.QueryAsync<Envasado>(sentenciaSQL, parametrosSentencia);
 
-                return resultadoIngredientes;
+                return resultadoEnvasados;
             }
         }
     }

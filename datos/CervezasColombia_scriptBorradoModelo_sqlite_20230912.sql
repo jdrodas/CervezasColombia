@@ -39,3 +39,11 @@ drop table estilos;
 drop table rangos_abv;
 drop table rangos_ibu;
 
+-- Borrado de tablas temporales
+delete from tmp_envasados_cervezas where cerveza is not null;
+delete from tmp_cervecerias where nombre is not null;
+delete from tmp_cervezas where nombre is not null;
+delete from tmp_envasados_cervezas where cerveza is not null;
+delete from tmp_ingredientes where ingrediente is not null;
+delete from tmp_ingredientes_cervezas where cerveza is not null;
+
