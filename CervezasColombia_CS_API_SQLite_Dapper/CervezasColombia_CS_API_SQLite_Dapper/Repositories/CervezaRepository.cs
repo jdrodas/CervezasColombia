@@ -23,7 +23,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
             {
                 string sentenciaSQL = "SELECT cerveza_id id, cerveza nombre, cerveceria, estilo, ibu, abv, rango_ibu, rango_abv " +
                       "FROM v_info_cervezas " +
-                      "ORDER BY cerveceria, nombre";
+                      "ORDER BY id DESC";
 
                 var resultadoCervezas = await contextoDB.Conexion.QueryAsync<Cerveza>(sentenciaSQL,
                                             new DynamicParameters());
@@ -129,6 +129,31 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
 
                 return resultadoEnvasados;
             }
+        }
+
+        public async Task<bool> CreateAsync(Cerveza unaCerveza)
+        {
+            bool resultadoAccion = false;
+
+            try
+            {
+                using (contextoDB.Conexion)
+                {
+                    string sentenciaSQL = "INSERT INTO cervezas (nombre, cerveceria_id, estilo_id, ibu, abv) " +
+                                              "VALUES (@Nombre, @Cerveceria_id, @Estilo_id, @Ibu, @Abv )";
+
+                    int filasAfectadas = await contextoDB.Conexion.ExecuteAsync(sentenciaSQL, unaCerveza);
+
+                    if (filasAfectadas > 0)
+                        resultadoAccion = true;
+                }
+            }
+            catch (SqliteException error)
+            {
+                throw new DbOperationException(error.Message);
+            }
+
+            return resultadoAccion;
         }
     }
 }

@@ -71,5 +71,23 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
                 return NotFound(error.Message);
             }
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(Cerveza unaCerveza)
+        {
+            try
+            {
+                await _cervezaService.CreateAsync(unaCerveza);
+                return Ok($"Cerveza {unaCerveza.Nombre} creada correctamente");
+            }
+            catch (AppValidationException error)
+            {
+                return BadRequest($"Error de validación: {error.Message}");
+            }
+            catch (DbOperationException error)
+            {
+                return BadRequest($"Error de operacion en DB: {error.Message}");
+            }
+        }
     }
 }

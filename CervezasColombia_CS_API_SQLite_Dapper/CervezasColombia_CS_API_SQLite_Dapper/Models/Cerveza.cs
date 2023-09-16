@@ -4,7 +4,9 @@
     {
         public int Id { get; set; } = 0;
         public string Nombre { get; set; } = string.Empty;
+        public int Cerveceria_id { get; set; } = 0;
         public string Cerveceria { get; set; } = string.Empty;
+        public int Estilo_id { get; set; } = 0;
         public string Estilo { get; set; } = string.Empty;
         public string Rango_Ibu { get; set; } = string.Empty;
         public float Ibu { get; set; } = 0f;
