@@ -1,7 +1,7 @@
 ﻿using Dapper;
 using Microsoft.Extensions.Configuration;
-using System.Data.SQLite;
 using System.Data;
+using System.Data.SQLite;
 
 namespace CervezasColombia_CS_PoC_Consola
 {

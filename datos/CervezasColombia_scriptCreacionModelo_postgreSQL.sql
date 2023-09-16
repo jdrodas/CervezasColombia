@@ -1,4 +1,4 @@
--- Scripts de clase - Septiembre 13 de 2023
+-- Scripts de clase - Septiembre 16 de 2023
 -- Curso de Tópicos Avanzados de base de datos - UPB 202320
 -- Juan Dario Rodas - juand.rodasm@upb.edu.co
 
@@ -13,7 +13,7 @@
 docker pull postgres:latest
 
 -- Crear el contenedor
-docker run --name postgres-tadb -e POSTGRES_PASSWORD=unaClav3 -d -p 5432:5432 postgres:latest
+docker run --name postgres-cervezas -e POSTGRES_PASSWORD=unaClav3 -d -p 5432:5432 postgres:latest
 
 -- ****************************************
 -- Creación de base de datos y usuarios
@@ -39,21 +39,6 @@ grant create on database cervezas_db to cervezas_app;
 grant create, usage on schema core to cervezas_app;
 alter user cervezas_app set search_path to core;
 
--- crear el usuario con el que se ejecutarán acciones CRUD
-create user cervezas_usr with encrypted password 'otraClav3';
-
--- asignación de privilegios para el usuario
-grant connect on database cervezas_db to cervezas_usr;
-grant usage on schema core to cervezas_usr;
-
--- Modificamos los privilegios predeterminados para el usuario cervezas_usr en esquema core
-alter default privileges in schema core grant select, insert, update, delete on tables to cervezas_usr;
-alter default privileges in schema core grant execute on routines to cervezas_usr;
-grant execute on all functions in schema core to cervezas_usr;
-grant execute on all routines in schema core to cervezas_usr;
-alter user cervezas_usr set search_path to core; 
-
-
 -- Script de creación de tablas y vistas
 
 -- -----------------------
@@ -77,9 +62,9 @@ comment on column core.ubicaciones.departamento is 'departamento de la ubicacion
 create table core.cervecerias (
   id            integer generated always as identity constraint cervecerias_pk primary key,
   nombre        varchar(100) not null constraint cerveceria_nombre_uk unique,
-  ubicacion_id  integer      not null constraint cerveceria_ubicacion_fk references core.ubicaciones
+  ubicacion_id  integer      not null constraint cerveceria_ubicacion_fk references core.ubicaciones,
   sitio_web     varchar(200) not null constraint cerveceria_sitio_web_uk unique,
-  instagram     varchar(100) not null constraint cerveceria_instagram_uk unique,
+  instagram     varchar(100) not null constraint cerveceria_instagram_uk unique
 );
 
 comment on table core.cervecerias is 'Las Cervecerias';
@@ -146,7 +131,8 @@ create table core.cervezas (
   estilo_id       integer      not null constraint cerveza_estilo_fk references core.estilos,  
   ibu             float        not null,
   abv             float        not null,
-  constraint cervezas_cerveceria_uk unique (nombre, cerveceria_id)
+  constraint cervezas_uk unique (nombre,estilo_id,cerveceria_id),
+  constraint cerveza_cerveceria_uk unique (nombre, cerveceria_id)
 );
 
 comment on table core.cervezas is 'Las Cervezas';

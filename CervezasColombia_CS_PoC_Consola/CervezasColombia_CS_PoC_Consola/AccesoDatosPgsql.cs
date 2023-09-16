@@ -1,11 +1,6 @@
 ﻿using Dapper;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Npgsql;
 
 namespace CervezasColombia_CS_PoC_Consola
@@ -37,10 +32,8 @@ namespace CervezasColombia_CS_PoC_Consola
 
             using (IDbConnection cxnDB = new NpgsqlConnection(cadenaConexion))
             {
-                var resultadoEstilos = cxnDB.Query<string>(
-                    "core.estilos_get_names", 
-                    new DynamicParameters(),
-                    commandType: CommandType.StoredProcedure);
+                string sentenciaSQL = "SELECT nombre FROM estilos ORDER BY nombre";
+                var resultadoEstilos = cxnDB.Query<string>(sentenciaSQL, new DynamicParameters());
 
                 return resultadoEstilos.AsList();
             }
