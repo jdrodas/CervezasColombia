@@ -37,8 +37,10 @@ namespace CervezasColombia_CS_PoC_Consola
 
             using (IDbConnection cxnDB = new NpgsqlConnection(cadenaConexion))
             {
-                string sentenciaSQL = "SELECT nombre FROM estilos ORDER BY nombre";
-                var resultadoEstilos = cxnDB.Query<string>(sentenciaSQL, new DynamicParameters());
+                var resultadoEstilos = cxnDB.Query<string>(
+                    "core.estilos_get_names", 
+                    new DynamicParameters(),
+                    commandType: CommandType.StoredProcedure);
 
                 return resultadoEstilos.AsList();
             }

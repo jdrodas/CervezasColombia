@@ -48,8 +48,9 @@ grant usage on schema core to cervezas_usr;
 
 -- Modificamos los privilegios predeterminados para el usuario cervezas_usr en esquema core
 alter default privileges in schema core grant select, insert, update, delete on tables to cervezas_usr;
---grant select, insert, update, delete on all tables in schema core to cervezas_usr;
+alter default privileges in schema core grant execute on routines to cervezas_usr;
 grant execute on all functions in schema core to cervezas_usr;
+grant execute on all routines in schema core to cervezas_usr;
 alter user cervezas_usr set search_path to core; 
 
 
@@ -126,7 +127,7 @@ create table core.rangos_ibu (
   nombre        varchar(50) not null constraint rangosIbu_nombre_uk unique,
   valor_inicial float not null,
   valor_final   float not null,
-  constraint rangosIBu_uk unique (valor_inicial, valor_final) 
+  constraint rangosIbu_uk unique (valor_inicial, valor_final) 
 );
 
 comment on table core.rangos_ibu is 'Rangos de Unidades Internacionales de Amargor para las cervezas';
@@ -144,7 +145,8 @@ create table core.cervezas (
   cerveceria_id   integer      not null constraint cerveza_cerveceria_fk references core.cervecerias,
   estilo_id       integer      not null constraint cerveza_estilo_fk references core.estilos,  
   ibu             float        not null,
-  abv             float        not null
+  abv             float        not null,
+  constraint cervezas_cerveceria_uk unique (nombre, cerveceria_id)
 );
 
 comment on table core.cervezas is 'Las Cervezas';
@@ -175,7 +177,8 @@ comment on column core.tipos_ingredientes.nombre is 'nombre del tipo de ingredie
 create table core.ingredientes (
   id                    integer generated always as identity constraint ingredientes_pk primary key,
   tipo_ingrediente_id   integer not null constraint ingrediente_tipo_ingrediente_fk references core.tipos_ingredientes,  
-  nombre                varchar(100)  not null constraint ingrediente_nombre_uk unique
+  nombre                varchar(100)  not null,
+  constraint ingrediente_tipo_ingrediente_uk unique (tipo_ingrediente_id, nombre)  
 );
 
 comment on table core.ingredientes is 'ingredientes que pueden tener de las cervezas';
@@ -425,6 +428,23 @@ join cervezas c on cr.id = c.cerveceria_id
 join tipos_ingredientes ti on ti.nombre = tmp.tipo_ingrediente
 join ingredientes i on ti.id = i.tipo_ingrediente_id
     and tmp.ingrediente = i.nombre;    
+
+
+-- Procedimientos
+
+-- -------------------------------------
+-- Procedimiento: p_estilos_get_names
+-- -------------------------------------
+
+create or replace procedure core.p_estilos_get_names(out p_nombres_estilos refcursor)
+language plpgsql as
+$$
+begin
+    open p_nombres_estilos for
+        select distinct nombre from estilos order by nombre;
+end;
+$$;
+
 
 -- privilegios
 

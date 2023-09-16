@@ -21,14 +21,14 @@ table estilos {
   nombre varchar
 }
 
-table rangosAbv {
+table rangos_abv {
   id int [pk, increment]
   nombre varchar
   valor_inicial float
   valor_final float
 }
 
-table rangosIbu {
+table rangos_ibu {
   id int [pk, increment]
   nombre varchar
   valor_inicial float
@@ -87,7 +87,7 @@ table envasados_cervezas {
   cerveza_id int
   envasado_id int
   unidad_volumen_id int
-  volumen int
+  volumen float
 }
 
 Ref:unidades_volumen.id < envasados_cervezas.unidad_volumen_id

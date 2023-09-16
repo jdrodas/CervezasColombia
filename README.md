@@ -6,20 +6,26 @@ Aplicaciones usando .NET framework para demostrar conectividad a SQLite, Postgre
 
 Por favor tenga presente:
 
-- Es un proyecto acadÈmico que pretende evolucionar el aprendizaje de conceptos relacionados con bases de datos. Esta no es una aplicaciÛn "lista para producciÛn".
+- Es un proyecto acad√©mico que pretende evolucionar el aprendizaje de conceptos relacionados con bases de datos. Esta no es una aplicaci√≥n "lista para producci√≥n".
 
-- Toda la informaciÛn almacenada en las tablas y colecciones de las bases de datos es informaciÛn p˙blica disponible en los sitios web de las cervecerÌas. No es 100% confiable y no pretende serlo.
+- Toda la informaci√≥n almacenada en las tablas y colecciones de las bases de datos es informaci√≥n p√∫blica disponible en los sitios web de las cervecer√≠as. No es 100% confiable y no pretende serlo.
 
-- Puede clonar el repositorio e inclusive proponer mejoras a travÈs de issues, pero no necesariamente ser·n implementadas en el tiempo asignado para el curso. Siempre ser· un trabajo en constante modificaciÛn
+- Puede clonar el repositorio e inclusive proponer mejoras a trav√©s de issues, pero no necesariamente ser√°n implementadas en el tiempo asignado para el curso. Siempre ser√° un trabajo en constante modificaci√≥n
 
 
 ## PoC
 ### [CervezasColombia_CS_PoC_Consola](https://github.com/jdrodas/CervezasColombia/tree/main/CervezasColombia_CS_PoC_Consola)
-- Prueba de Concepto para validar funcionamiento del ORM Dapper, con base de datos SQLite. AplicaciÛn de **consola** en C# con framework .NET 7.x
+- Prueba de Concepto para validar funcionamiento del ORM Dapper, con base de datos y PostgreSQL. Aplicaci√≥n de **consola** en C# con framework .NET 7.x
+
+- Para cada base de datos, se realizan las operaciones CRUD b√°sicas sobre una entidad espec√≠fica.
+  
+- Para SQLite, se realizan invocaciones simples a sentencias de SQL.
+
+- Para PostgeSQL, se realizan invocaciones utilizando l√≥gica almacenada.
 
 ## API
 ### [CervezasColombia_CS_API_SQLite_Dapper](https://github.com/jdrodas/CervezasColombia/tree/main/CervezasColombia_CS_API_SQLite_Dapper)
-- WebAPI en .NET 7.x implementando *PatrÛn Repositorio* con capa de persistencia de datos en SQLite a travÈs de Dapper
+- WebAPI en .NET 7.x implementando *Patr√≥n Repositorio* con capa de persistencia de datos en SQLite a trav√©s de Dapper
 
 
 # Craft Beers Colombia
@@ -36,7 +42,13 @@ Please keep in mind:
 
 ## PoC
 ### [CervezasColombia_CS_PoC_Consola](https://github.com/jdrodas/CervezasColombia/tree/main/CervezasColombia_CS_PoC_Consola)
-- Proof of Concept to learn how the Dapper ORM works, using SQLite as Database. **Console** application using .NET 7.x framework and C#
+- Proof of Concept to learn how the Dapper ORM works, using SQLite and PostgreSQL as Database. **Console** application using .NET 7.x framework and C#
+
+- For each database, basic CRUD operations are performed on a specific entity.
+  
+- For SQLite, simple invocations to SQL statements are made.
+
+- For PostgeSQL, invocations are made using stored procedures.
 
 
 ## API
