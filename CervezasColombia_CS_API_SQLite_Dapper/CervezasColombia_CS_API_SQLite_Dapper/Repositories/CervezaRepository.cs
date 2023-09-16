@@ -96,7 +96,6 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
 
         public async Task<int> GetTotalAssociatedPackagingsAsync(int id)
         {
-
             DynamicParameters parametrosSentencia = new DynamicParameters();
             parametrosSentencia.Add("@cerveza_id", id,
                                     DbType.Int32, ParameterDirection.Input);
@@ -154,6 +153,25 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
             }
 
             return resultadoAccion;
+        }
+
+        public async Task<int> GetTotalAssociatedBreweriesAsync(string nombre, string cerveceria)
+        {
+            DynamicParameters parametrosSentencia = new DynamicParameters();
+            parametrosSentencia.Add("@cerveza_nombre", nombre,
+                                    DbType.String, ParameterDirection.Input);
+            parametrosSentencia.Add("@cerveceria_nombre", cerveceria,
+                                    DbType.String, ParameterDirection.Input);
+
+            string sentenciaSQL = "SELECT COUNT(cerveceria_id) totalCervecerias " +
+                                    "FROM v_info_cervezas " +
+                                    "WHERE cerveza = @cerveza_nombre " +
+                                    "AND cerveceria = @cerveceria_nombre";
+
+            var totalCervecerias = await contextoDB.Conexion.QueryAsync<int>(sentenciaSQL,
+                                    parametrosSentencia);
+
+            return totalCervecerias.First();
         }
     }
 }

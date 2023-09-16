@@ -99,6 +99,14 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
 
             unaCerveza.Estilo_id = estiloExistente.Id;
 
+            //Validar que no exista para esa cerveceria, una cerveza con ese nombre
+            int totalCerveceriasAsociadas = await _cervezaRepository
+                .GetTotalAssociatedBreweriesAsync(unaCerveza.Nombre!, unaCerveza.Cerveceria);
+
+            if (totalCerveceriasAsociadas > 0)
+                throw new AppValidationException($"Ya existe la cerveza {unaCerveza.Nombre} " +
+                    $"para la cerveceria {unaCerveza.Cerveceria}");
+
             try
             {
                 bool resultadoAccion = await _cervezaRepository.CreateAsync(unaCerveza);

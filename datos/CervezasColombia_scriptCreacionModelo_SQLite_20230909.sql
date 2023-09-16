@@ -44,7 +44,8 @@ create table cervezas
     cerveceria_id integer not null constraint cerveza_cerveceria_fk references cervecerias,
     ibu           real not null,
     abv           real not null,
-	constraint cervezas_uk unique (nombre,estilo_id,cerveceria_id)
+	constraint cervezas_uk unique (nombre,estilo_id,cerveceria_id),
+    constraint cerveza_cerveceria_uk unique (nombre,cerveceria_id)
 );
 
 create table rangos_abv
