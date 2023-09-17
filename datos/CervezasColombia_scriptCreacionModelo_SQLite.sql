@@ -1,83 +1,82 @@
--- Scripts de clase - Septiembre 9 de 2023
--- Curso de Tópicos Avanzados de base de datos - UPB 202320
--- Juan Dario Rodas - juand.rodasm@upb.edu.co
+-- Juan Dario Rodas - jdrodas@hotmail.com
 
 -- Proyecto: Cervezas Artesanales de Colombia
 -- Motor de Base de datos: SQLite
 
 -- Script de creación de tablas y vistas
 
+-- *****************************
 -- Tablas
+-- *****************************
+create table rangos_abv
+(
+    id                  integer constraint rangos_abv_pk primary key autoincrement,
+    nombre              text not null,
+    valor_inicial       real not null,
+    valor_final         real not null,
+    constraint rangos_abv_nombre_uk unique (nombre)
+);
+
+create table rangos_ibu
+(
+    id                  integer constraint rangos_ibu_pk primary key autoincrement,
+    nombre              text not null,
+    valor_inicial       real not null,
+    valor_final         real not null,
+	constraint rangos_ibu_nombre_uk unique (nombre)
+);
+
+create table estilos
+(
+	id                  integer constraint estilos_pk primary key autoincrement,
+    nombre              text not null,
+	constraint estilo_nombre_uk unique (nombre)    
+);
 
 create table ubicaciones
 (
-    id           integer constraint ubicaciones_pk primary key autoincrement,
-    municipio    text not null,
-    departamento text not null,
+    id                  integer constraint ubicaciones_pk primary key autoincrement,
+    municipio           text not null,
+    departamento        text not null,
     constraint ubicaciones_uk unique (municipio, departamento)
 );
 
 create table cervecerias
 (
-    id           integer constraint cervecerias_pk primary key autoincrement,
-    nombre       text not null,
-    ubicacion_id integer not null constraint cerveceria_ubicacion_fk references ubicaciones,
-    sitio_web     text not null,
-    instagram    integer not null,
+    id                  integer constraint cervecerias_pk primary key autoincrement,
+    nombre              text not null,
+    ubicacion_id        integer not null constraint cerveceria_ubicacion_fk references ubicaciones,
+    sitio_web           text not null,
+    instagram           integer not null,
 	constraint cerveceria_nombre_uk unique (nombre),
 	constraint cerveceria_sitioweb_uk unique (sitio_web),
 	constraint cerveceria_instagram_uk unique (instagram)
 );
 
-create table estilos
-(
-	id           integer constraint estilos_pk primary key autoincrement,
-    nombre       text not null,
-	constraint estilo_nombre_uk unique (nombre)    
-);
-
 create table cervezas
 (
-	id           integer constraint cervezas_pk primary key autoincrement,
-    nombre       text not null,
-    estilo_id     integer not null constraint cerveza_estilo_fk references estilos,
-    cerveceria_id integer not null constraint cerveza_cerveceria_fk references cervecerias,
-    ibu           real not null,
-    abv           real not null,
+	id                  integer constraint cervezas_pk primary key autoincrement,
+    nombre              text not null,
+    estilo_id           integer not null constraint cerveza_estilo_fk references estilos,
+    cerveceria_id       integer not null constraint cerveza_cerveceria_fk references cervecerias,
+    ibu                 real not null,
+    abv                 real not null,
 	constraint cervezas_uk unique (nombre,estilo_id,cerveceria_id),
     constraint cerveza_cerveceria_uk unique (nombre,cerveceria_id)
 );
 
-create table rangos_abv
-(
-    id            integer constraint rangos_abv_pk  primary key autoincrement,
-    nombre        text not null,
-    valor_inicial real not null,
-    valor_final   real not null,
-	constraint rangos_abv_nombre_uk unique (nombre)
-);
-
-create table rangos_ibu
-(
-    id            integer constraint rangos_ibu_pk  primary key autoincrement,
-    nombre        text not null,
-    valor_inicial real not null,
-    valor_final   real not null,
-	constraint rangos_ibu_nombre_uk unique (nombre)
-);
-
 create table envasados
 (
-    id            integer constraint envasados_pk  primary key autoincrement,
-    nombre        text not null,
+    id                  integer constraint envasados_pk  primary key autoincrement,
+    nombre              text not null,
 	constraint envasados_nombre_uk unique (nombre)	
 );
 
 create table unidades_volumen
 (
-    id            integer constraint unidades_volumen_pk  primary key autoincrement,
-    nombre        text not null,
-    abreviatura text not null,
+    id                  integer constraint unidades_volumen_pk  primary key autoincrement,
+    nombre              text not null,
+    abreviatura         text not null,
 	constraint unidades_volumen_uk unique (nombre,abreviatura),
 	constraint unidades_volumen_nombre_uk unique (nombre),	
 	constraint unidades_volumen_abreviatura_uk unique (abreviatura)
@@ -85,17 +84,17 @@ create table unidades_volumen
 
 create table envasados_cervezas
 (
-    cerveza_id        integer not null constraint envasados_cervezas_cerveza_fk references cervezas,
-    envasado_id      integer not null constraint envasados_cervezas_envasado_fk references envasados,
-    unidad_volumen_id integer not null constraint envasados_cervezas_unidad_volumen_fk references unidades_volumen,
-    volumen           integer,
+    cerveza_id          integer not null constraint envasados_cervezas_cerveza_fk references cervezas,
+    envasado_id         integer not null constraint envasados_cervezas_envasado_fk references envasados,
+    unidad_volumen_id   integer not null constraint envasados_cervezas_unidad_volumen_fk references unidades_volumen,
+    volumen             integer not null,
     constraint envasados_cervezas_pk primary key (cerveza_id, envasado_id, unidad_volumen_id, volumen)
 );
 
 create table tipos_ingredientes
 (
-    id            integer constraint tipos_ingredientes_pk  primary key autoincrement,
-    nombre        text not null,
+    id                  integer constraint tipos_ingredientes_pk  primary key autoincrement,
+    nombre              text not null,
 	constraint tipos_ingredientes_uk unique (nombre)	
 );
 
@@ -109,13 +108,15 @@ create table ingredientes
 
 create table ingredientes_cervezas
 (
-    cerveza_id     integer not null constraint ingredientesCerveza_cerveza_Fk references cervezas,
-    ingrediente_id integer not null constraint ingredientesCerveza_ingredientes_fk references ingredientes,
+    cerveza_id          integer not null constraint ingredientesCerveza_cerveza_Fk references cervezas,
+    ingrediente_id      integer not null constraint ingredientesCerveza_ingredientes_fk references ingredientes,
     constraint ingredientes_cervezas_pk primary key (cerveza_id, ingrediente_id)
 );
 
--- Vistas:
 
+-- *****************************
+-- Vistas
+-- *****************************
 create view v_info_cervezas as
 select
     cz.id cerveza_id,
@@ -133,7 +134,7 @@ from cervezas cz
     join estilos e on cz.estilo_id = e.id,
 rangos_abv ra, rangos_ibu ri
 where cz.ibu between ri.valor_inicial and ri.valor_final
-    and cz.abv between ra.valor_inicial and ra.valor_final;
+  and cz.abv between ra.valor_inicial and ra.valor_final;
 	
 create view v_info_envasados_cervezas as
 select
@@ -177,29 +178,32 @@ from ingredientes_cervezas ic
     join ingredientes i on i.id = ic.ingrediente_id
     join tipos_ingredientes ti on i.tipo_ingrediente_id = ti.id;	
 
--- *****************************
--- Orden de cargue de datos
--- *****************************
+
+-- *********************************
+-- Orden para el cargue de datos
+-- *********************************
 
 /*
 - rangos_abv
 - rango_ibu
 - estilos
-- envasados
-- unidades_volumen
+
 - ubicaciones
-
-- tipos_ingredientes
-- ingredientes
-
 - cervecerias
 - cervezas
 
+- envasados
+- unidades_volumen
 - envasados_cervezas
+
+- tipos_ingredientes
+- ingredientes
 - ingredientes_cervezas
 */
 
+-- *****************************
 -- Tablas temporales
+-- *****************************
 -- TMP_CERVECERIAS
 create table tmp_cervecerias
 (nombre text, ubicacion text, sitio_web text, instagram text);
@@ -253,7 +257,6 @@ select
     ti.id  tipo_ingrediente_id
 from tmp_ingredientes tmp
     join tipos_ingredientes ti on tmp.tipo_ingrediente = ti.nombre;
-
 
 -- TMP_INGREDIENTES_CERVEZAS
 create table tmp_ingredientes_cervezas

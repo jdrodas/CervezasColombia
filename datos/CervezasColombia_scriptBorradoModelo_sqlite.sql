@@ -1,6 +1,4 @@
--- Scripts de clase - Septiembre 12 de 2023
--- Curso de Tópicos Avanzados de base de datos - UPB 202320
--- Juan Dario Rodas - juand.rodasm@upb.edu.co
+-- Juan Dario Rodas - jdrodas@hotmail.com
 
 -- Proyecto: Cervezas Artesanales de Colombia
 -- Motor de Base de datos: SQLite
@@ -8,20 +6,25 @@
 -- Script Borrado de Objetos
 
 -- Vistas 
-
 drop view v_info_envasados_cervezas;
 drop view v_info_ingredientes;
 drop view v_info_ingredientes_cervezas;
 drop view v_info_cervezas;
 
 -- Tablas
-
 select ('drop table ' || name || ';') sentencia_drop
 from sqlite_master
 where type = 'table'
 and name not like 'sqlite%';
 
-drop table cervezas_dg_tmp;
+-- Tablas temporales
+drop table tmp_cervecerias;
+drop table tmp_cervezas;
+drop table tmp_envasados_cervezas;
+drop table tmp_ingredientes;
+drop table tmp_ingredientes_cervezas;
+
+-- Tablas del dominio
 drop table ingredientes_cervezas;
 drop table envasados_cervezas;
 
@@ -33,17 +36,8 @@ drop table unidades_volumen;
 
 drop table cervezas;
 drop table cervecerias;
+
 drop table ubicaciones;
 drop table estilos;
-
 drop table rangos_abv;
 drop table rangos_ibu;
-
--- Borrado de tablas temporales
-delete from tmp_envasados_cervezas where cerveza is not null;
-delete from tmp_cervecerias where nombre is not null;
-delete from tmp_cervezas where nombre is not null;
-delete from tmp_envasados_cervezas where cerveza is not null;
-delete from tmp_ingredientes where ingrediente is not null;
-delete from tmp_ingredientes_cervezas where cerveza is not null;
-
