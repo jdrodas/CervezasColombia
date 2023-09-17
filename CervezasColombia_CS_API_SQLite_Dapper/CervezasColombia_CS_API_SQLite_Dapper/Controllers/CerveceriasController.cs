@@ -25,13 +25,13 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
             return Ok(lasCervecerias);
         }
 
-        [HttpGet("{id:int}")]
-        public async Task<IActionResult> GetByIdAsync(int id)
+        [HttpGet("{cerveceria_id:int}")]
+        public async Task<IActionResult> GetByIdAsync(int cerveceria_id)
         {
             try
             {
                 var unaCerveceria = await _cerveceriaService
-                    .GetByIdAsync(id);
+                    .GetByIdAsync(cerveceria_id);
                 
                 return Ok(unaCerveceria);
             }
@@ -41,13 +41,13 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
             }
         }
 
-        [HttpGet("{id:int}/Cervezas")]
-        public async Task<IActionResult> GetAssociatedBeersAsync(int id)
+        [HttpGet("{cerveceria_id:int}/Cervezas")]
+        public async Task<IActionResult> GetAssociatedBeersAsync(int cerveceria_id)
         {
             try
             {
                 var lasCervezasPorCerveceria = await _cerveceriaService.
-                    GetAssociatedBeersAsync(id);
+                    GetAssociatedBeersAsync(cerveceria_id);
 
                 return Ok(lasCervezasPorCerveceria);
             }
@@ -62,8 +62,8 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
         {
             try
             {
-                await _cerveceriaService.CreateAsync(unaCerveceria);
-                return Ok($"Cervecería {unaCerveceria.Nombre} creada correctamente");
+                var cerveceriaCreada = await _cerveceriaService.CreateAsync(unaCerveceria);
+                return Ok(cerveceriaCreada);
             }
             catch (AppValidationException error)
             {
@@ -75,13 +75,13 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
             }
         }
 
-        [HttpPut("{id:int}")]
-        public async Task<IActionResult> UpdateAsync(int id, Cerveceria unaCerveceria)
+        [HttpPut("{cerveceria_id:int}")]
+        public async Task<IActionResult> UpdateAsync(int cerveceria_id, Cerveceria unaCerveceria)
         {
             try
             {
-                await _cerveceriaService.UpdateAsync(id, unaCerveceria);
-                return Ok($"Cervecería {unaCerveceria.Id} actualizada correctamente");
+                var cerveceriaActualizada = await _cerveceriaService.UpdateAsync(cerveceria_id, unaCerveceria);
+                return Ok(cerveceriaActualizada);
 
             }
             catch (AppValidationException error)
@@ -94,13 +94,13 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
             }
         }
 
-        [HttpDelete("{id:int}")]
-        public async Task<IActionResult> DeleteAsync(int id)
+        [HttpDelete("{cerveceria_id:int}")]
+        public async Task<IActionResult> DeleteAsync(int cerveceria_id)
         {
             try
             {
-                await _cerveceriaService.DeleteAsync(id);
-                return Ok($"Cervecería {id} fue eliminada");
+                await _cerveceriaService.DeleteAsync(cerveceria_id);
+                return Ok($"Cervecería {cerveceria_id} fue eliminada");
 
             }
             catch (AppValidationException error)

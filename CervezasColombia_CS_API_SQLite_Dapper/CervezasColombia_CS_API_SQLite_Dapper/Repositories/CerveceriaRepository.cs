@@ -25,7 +25,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
                                       "(u.municipio || ', ' || u.departamento) ubicacion, c.ubicacion_id " +
                                       "FROM cervecerias c JOIN ubicaciones u " +
                                       "ON c.ubicacion_id = u.id " +
-                                      "ORDER BY ubicacion, nombre";
+                                      "ORDER BY c.id DESC";
 
                 var resultadoEstilos = await contextoDB.Conexion.QueryAsync<Cerveceria>(sentenciaSQL,
                                         new DynamicParameters());
@@ -34,14 +34,14 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
             }
         }
 
-        public async Task<Cerveceria> GetByIdAsync(int id)
+        public async Task<Cerveceria> GetByIdAsync(int cerveceria_id)
         {
             Cerveceria unaCerveceria = new Cerveceria();
 
             using (contextoDB.Conexion)
             {
                 DynamicParameters parametrosSentencia = new DynamicParameters();
-                parametrosSentencia.Add("@cerveceria_id", id,
+                parametrosSentencia.Add("@cerveceria_id", cerveceria_id,
                                         DbType.Int32, ParameterDirection.Input);
 
                 string sentenciaSQL = "SELECT c.id, c.nombre, c.sitio_web, c.instagram, " +
@@ -70,7 +70,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
                                         DbType.String, ParameterDirection.Input);
 
                 string sentenciaSQL = "SELECT c.id, c.nombre, c.sitio_web, c.instagram, " +
-                                      "(u.municipio || ', ' || u.departamento) ubicacion " +
+                                      "(u.municipio || ', ' || u.departamento) ubicacion, c.ubicacion_id " +
                                       "FROM cervecerias c JOIN ubicaciones u ON c.ubicacion_id = u.id " +
                                       "WHERE LOWER(nombre) = LOWER(@cerveceria_nombre)";                                      
 
@@ -95,7 +95,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
                                         DbType.String, ParameterDirection.Input);
 
                 string sentenciaSQL = "SELECT c.id, c.nombre, c.sitio_web, c.instagram, " +
-                                      "(u.municipio || ', ' || u.departamento) ubicacion " +
+                                      "(u.municipio || ', ' || u.departamento) ubicacion, c.ubicacion_id " +
                                       "FROM cervecerias c JOIN ubicaciones u ON c.ubicacion_id = u.id " +
                                       "WHERE LOWER(instagram) = LOWER(@cerveceria_instagram) ";
 
@@ -120,7 +120,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
                                         DbType.String, ParameterDirection.Input);
 
                 string sentenciaSQL = "SELECT c.id, c.nombre, c.sitio_web, c.instagram, " +
-                                      "(u.municipio || ', ' || u.departamento) ubicacion " +
+                                      "(u.municipio || ', ' || u.departamento) ubicacion, c.ubicacion_id " +
                                       "FROM cervecerias c JOIN ubicaciones u ON c.ubicacion_id = u.id " +
                                       "WHERE LOWER(sitio_web) = LOWER(@cerveceria_sitio_web) ";
 
@@ -134,11 +134,11 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
             return unaCerveceria;
         }
 
-        public async Task<int> GetTotalAssociatedBeersAsync(int id)
+        public async Task<int> GetTotalAssociatedBeersAsync(int cerveceria_id)
         {
 
                 DynamicParameters parametrosSentencia = new DynamicParameters();
-                parametrosSentencia.Add("@cerveceria_id", id,
+                parametrosSentencia.Add("@cerveceria_id", cerveceria_id,
                                         DbType.Int32, ParameterDirection.Input);
 
             string sentenciaSQL = "SELECT COUNT(id) totalCervezas " +
@@ -153,12 +153,12 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
             return totalCervezas.First();
         }
 
-        public async Task<IEnumerable<Cerveza>> GetAssociatedBeersAsync(int id)
+        public async Task<IEnumerable<Cerveza>> GetAssociatedBeersAsync(int cerveceria_id)
         {
             using (contextoDB.Conexion)
             {
                 DynamicParameters parametrosSentencia = new DynamicParameters();
-                parametrosSentencia.Add("@cerveceria_id", id,
+                parametrosSentencia.Add("@cerveceria_id", cerveceria_id,
                                         DbType.Int32, ParameterDirection.Input);
 
                 string sentenciaSQL = "SELECT cerveza_id id, cerveza nombre, cerveceria, estilo, ibu, abv, rango_ibu, rango_abv " +
@@ -172,12 +172,12 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
             }
         }
 
-        public async Task<int> GetAssociatedLocationIdAsync(string unaUbicacion)
+        public async Task<int> GetAssociatedLocationIdAsync(string ubicacion_nombre)
         {
             using (contextoDB.Conexion)
             {
                 DynamicParameters parametrosSentencia = new DynamicParameters();
-                parametrosSentencia.Add("@ubicacion", unaUbicacion,
+                parametrosSentencia.Add("@ubicacion", ubicacion_nombre,
                                         DbType.String, ParameterDirection.Input);
 
                 string sentenciaSQL = "SELECT id FROM ubicaciones u " +
