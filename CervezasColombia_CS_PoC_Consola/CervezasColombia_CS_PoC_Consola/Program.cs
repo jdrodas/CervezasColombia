@@ -6,11 +6,11 @@
         {
             Console.WriteLine("PoC - Cervezas Artesanales de Colombia");
 
-            //Console.WriteLine("Ejecutando PoC en SQLite...");
-            //PoC_SQLite.Ejecuta_PoC();
+            Console.WriteLine("Ejecutando PoC en SQLite...");
+            PoC_SQLite.Ejecuta_PoC();
 
-            Console.WriteLine("Ejecutando PoC en PostgreSQL...");
-            PoC_Pgsql.Ejecuta_PoC();
+            //Console.WriteLine("Ejecutando PoC en PostgreSQL...");
+            //PoC_Pgsql.Ejecuta_PoC();
 
         }
     }

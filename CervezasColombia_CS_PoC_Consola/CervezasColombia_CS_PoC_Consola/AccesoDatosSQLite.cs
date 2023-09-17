@@ -48,7 +48,7 @@ namespace CervezasColombia_CS_PoC_Consola
 
             using (IDbConnection cxnDB = new SQLiteConnection(cadenaConexion))
             {
-                string sentenciaSQL = "SELECT id, nombre FROM estilos ORDER BY nombre";
+                string sentenciaSQL = "SELECT id, nombre FROM estilos ORDER BY id";
                 var resultadoEstilos = cxnDB.Query<Estilo>(sentenciaSQL, new DynamicParameters());
 
                 return resultadoEstilos.AsList();

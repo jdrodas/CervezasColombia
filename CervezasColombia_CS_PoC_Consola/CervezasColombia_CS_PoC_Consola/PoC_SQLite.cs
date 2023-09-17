@@ -11,7 +11,7 @@ namespace CervezasColombia_CS_PoC_Consola
         public static void Ejecuta_PoC()
         {
             string? cadenaConexion = AccesoDatosSQLite.ObtieneCadenaConexion();
-            Console.WriteLine($"El string de conexión obtenido es \n: {cadenaConexion}");
+            Console.WriteLine($"El string de conexión obtenido es:\n{cadenaConexion}");
 
             //R del CRUD - Lectura de registros existentes - SELECT
             VisualizaNombresEstilosCerveza();
