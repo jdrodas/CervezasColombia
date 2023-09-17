@@ -42,10 +42,10 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
                 parametrosSentencia.Add("@cerveza_id", id,
                                         DbType.Int32, ParameterDirection.Input);
 
-                string sentenciaSQL = "SELECT cerveza_id id, cerveza nombre, cerveceria, estilo, ibu, abv, rango_ibu, rango_abv " +
-                      "FROM v_info_cervezas " +
-                      "WHERE cerveza_id = @cerveza_id " +
-                      "ORDER BY cerveceria, nombre";
+                string sentenciaSQL = "SELECT cerveza_id id, cerveza nombre, cerveceria, cerveceria_id, " +
+                    "estilo, estilo_id, ibu, abv, rango_ibu, rango_abv " +
+                    "FROM v_info_cervezas " +
+                    "WHERE cerveza_id = @cerveza_id ";
 
                 var resultado = await contextoDB.Conexion.QueryAsync<Cerveza>(sentenciaSQL,
                                     parametrosSentencia);
@@ -57,11 +57,39 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
             return unaCerveza;
         }
 
-        public async Task<int> GetTotalAssociatedIngredientsAsync(int id)
+        public async Task<Cerveza> GetByNameAndBreweryAsync(string cerveza_nombre, string cerveceria)
+        {
+            Cerveza unaCerveza = new Cerveza();
+
+            using (contextoDB.Conexion)
+            {
+                DynamicParameters parametrosSentencia = new DynamicParameters();
+                parametrosSentencia.Add("@cerveza", cerveza_nombre,
+                                        DbType.String, ParameterDirection.Input);
+                parametrosSentencia.Add("@cerveceria", cerveceria,
+                                        DbType.String, ParameterDirection.Input);
+
+                string sentenciaSQL = "SELECT cerveza_id id, cerveza nombre, cerveceria, cerveceria_id, " +
+                    "estilo, estilo_id, ibu, abv, rango_ibu, rango_abv " +
+                    "FROM v_info_cervezas " +
+                    "WHERE cerveza = @cerveza " +
+                    "AND cerveceria = @cerveceria ";
+
+                var resultado = await contextoDB.Conexion.QueryAsync<Cerveza>(sentenciaSQL,
+                                    parametrosSentencia);
+
+                if (resultado.ToArray().Length > 0)
+                    unaCerveza = resultado.First();
+            }
+
+            return unaCerveza;
+        }
+
+        public async Task<int> GetTotalAssociatedIngredientsAsync(int cerveza_id)
         {
 
             DynamicParameters parametrosSentencia = new DynamicParameters();
-            parametrosSentencia.Add("@cerveza_id", id,
+            parametrosSentencia.Add("@cerveza_id", cerveza_id,
                                     DbType.Int32, ParameterDirection.Input);
 
             string sentenciaSQL = "SELECT COUNT(ingrediente_id) totalIngredientes " +
@@ -75,12 +103,12 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
             return totalIngredientes.First();
         }
 
-        public async Task<IEnumerable<Ingrediente>> GetAssociatedIngredientsAsync(int id)
+        public async Task<IEnumerable<Ingrediente>> GetAssociatedIngredientsAsync(int cerveza_id)
         {
             using (contextoDB.Conexion)
             {
                 DynamicParameters parametrosSentencia = new DynamicParameters();
-                parametrosSentencia.Add("@cerveza_id", id,
+                parametrosSentencia.Add("@cerveza_id", cerveza_id,
                                         DbType.Int32, ParameterDirection.Input);
 
                 string sentenciaSQL = "SELECT DISTINCT v.ingrediente_id id, v.ingrediente nombre, v.tipo_ingrediente " +
@@ -94,10 +122,10 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
             }
         }
 
-        public async Task<int> GetTotalAssociatedPackagingsAsync(int id)
+        public async Task<int> GetTotalAssociatedPackagingsAsync(int cerveza_id)
         {
             DynamicParameters parametrosSentencia = new DynamicParameters();
-            parametrosSentencia.Add("@cerveza_id", id,
+            parametrosSentencia.Add("@cerveza_id", cerveza_id,
                                     DbType.Int32, ParameterDirection.Input);
 
             string sentenciaSQL = "SELECT COUNT(envasado_id) totalEnvasados " +
@@ -111,12 +139,12 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
             return totalIngredientes.First();
         }
 
-        public async Task<IEnumerable<Envasado>> GetAssociatedPackagingsAsync(int id)
+        public async Task<IEnumerable<Envasado>> GetAssociatedPackagingsAsync(int cerveza_id)
         {
             using (contextoDB.Conexion)
             {
                 DynamicParameters parametrosSentencia = new DynamicParameters();
-                parametrosSentencia.Add("@cerveza_id", id,
+                parametrosSentencia.Add("@cerveza_id", cerveza_id,
                                         DbType.Int32, ParameterDirection.Input);
 
                 string sentenciaSQL = "SELECT DISTINCT v.envasado_id id, v.envasado nombre, v.unidad_volumen, v.volumen " +
@@ -153,25 +181,6 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
             }
 
             return resultadoAccion;
-        }
-
-        public async Task<int> GetTotalAssociatedBreweriesAsync(string nombre, string cerveceria)
-        {
-            DynamicParameters parametrosSentencia = new DynamicParameters();
-            parametrosSentencia.Add("@cerveza_nombre", nombre,
-                                    DbType.String, ParameterDirection.Input);
-            parametrosSentencia.Add("@cerveceria_nombre", cerveceria,
-                                    DbType.String, ParameterDirection.Input);
-
-            string sentenciaSQL = "SELECT COUNT(cerveceria_id) totalCervecerias " +
-                                    "FROM v_info_cervezas " +
-                                    "WHERE cerveza = @cerveza_nombre " +
-                                    "AND cerveceria = @cerveceria_nombre";
-
-            var totalCervecerias = await contextoDB.Conexion.QueryAsync<int>(sentenciaSQL,
-                                    parametrosSentencia);
-
-            return totalCervecerias.First();
         }
     }
 }

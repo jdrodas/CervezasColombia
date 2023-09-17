@@ -24,52 +24,52 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
             return await _cervezaRepository.GetAllAsync();
         }
 
-        public async Task<Cerveza> GetByIdAsync(int id)
+        public async Task<Cerveza> GetByIdAsync(int cerveza_id)
         {
             //Validamos que el estilo exista con ese Id
-            var unaCerveza = await _cervezaRepository.GetByIdAsync(id);
+            var unaCerveza = await _cervezaRepository.GetByIdAsync(cerveza_id);
 
             if (unaCerveza.Id == 0)
-                throw new AppValidationException($"Cerveza no encontrada con el id {id}");
+                throw new AppValidationException($"Cerveza no encontrada con el id {cerveza_id}");
 
             return unaCerveza;
         }
 
-        public async Task<IEnumerable<Ingrediente>> GetAssociatedIngredientsAsync(int id)
+        public async Task<IEnumerable<Ingrediente>> GetAssociatedIngredientsAsync(int cerveza_id)
         {
             //Validamos que la cerveza exista con ese Id
-            var unaCerveza = await _cervezaRepository.GetByIdAsync(id);
+            var unaCerveza = await _cervezaRepository.GetByIdAsync(cerveza_id);
 
             if (unaCerveza.Id == 0)
-                throw new AppValidationException($"Cerveza no encontrada con el id {id}");
+                throw new AppValidationException($"Cerveza no encontrada con el id {cerveza_id}");
 
             //Si la cerveza existe, validamos que tenga ingredientes asociados
-            var cantidadIngredientesAsociados = await _cervezaRepository.GetTotalAssociatedIngredientsAsync(id);
+            var cantidadIngredientesAsociados = await _cervezaRepository.GetTotalAssociatedIngredientsAsync(cerveza_id);
 
             if (cantidadIngredientesAsociados == 0)
                 throw new AppValidationException($"No Existen ingredientes asociados a la cerveza {unaCerveza.Nombre}");
 
-            return await _cervezaRepository.GetAssociatedIngredientsAsync(id);
+            return await _cervezaRepository.GetAssociatedIngredientsAsync(cerveza_id);
         }
 
-        public async Task<IEnumerable<Envasado>> GetAssociatedPackagingsAsync(int id)
+        public async Task<IEnumerable<Envasado>> GetAssociatedPackagingsAsync(int cerveza_id)
         {
             //Validamos que la cerveza exista con ese Id
-            var unaCerveza = await _cervezaRepository.GetByIdAsync(id);
+            var unaCerveza = await _cervezaRepository.GetByIdAsync(cerveza_id);
 
             if (unaCerveza.Id == 0)
-                throw new AppValidationException($"Cerveza no encontrada con el id {id}");
+                throw new AppValidationException($"Cerveza no encontrada con el id {cerveza_id}");
 
             //Si la cerveza existe, validamos que tenga envasados asociados
-            var cantidadEnvasadosAsociados = await _cervezaRepository.GetTotalAssociatedPackagingsAsync(id);
+            var cantidadEnvasadosAsociados = await _cervezaRepository.GetTotalAssociatedPackagingsAsync(cerveza_id);
 
             if (cantidadEnvasadosAsociados == 0)
                 throw new AppValidationException($"No existen envasados asociados a la cerveza {unaCerveza.Nombre}");
 
-            return await _cervezaRepository.GetAssociatedPackagingsAsync(id);
+            return await _cervezaRepository.GetAssociatedPackagingsAsync(cerveza_id);
         }
 
-        public async Task CreateAsync(Cerveza unaCerveza)
+        public async Task<Cerveza> CreateAsync(Cerveza unaCerveza)
         {
             //Validamos que la cerveza tenga nombre
             if (unaCerveza.Nombre.Length == 0)
@@ -100,10 +100,9 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
             unaCerveza.Estilo_id = estiloExistente.Id;
 
             //Validar que no exista para esa cerveceria, una cerveza con ese nombre
-            int totalCerveceriasAsociadas = await _cervezaRepository
-                .GetTotalAssociatedBreweriesAsync(unaCerveza.Nombre!, unaCerveza.Cerveceria);
+            var cervezaExistente = await _cervezaRepository.GetByNameAndBreweryAsync(unaCerveza.Nombre!, unaCerveza.Cerveceria!);
 
-            if (totalCerveceriasAsociadas > 0)
+            if (cervezaExistente.Id !=0)
                 throw new AppValidationException($"Ya existe la cerveza {unaCerveza.Nombre} " +
                     $"para la cerveceria {unaCerveza.Cerveceria}");
 
@@ -113,11 +112,15 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
 
                 if (!resultadoAccion)
                     throw new AppValidationException("Operación ejecutada pero no generó cambios en la DB");
+
+                cervezaExistente = await _cervezaRepository.GetByNameAndBreweryAsync(unaCerveza.Nombre!, unaCerveza.Cerveceria!);
             }
             catch (DbOperationException error)
             {
                 throw error;
             }
+
+            return (cervezaExistente);
         }
     }
 }

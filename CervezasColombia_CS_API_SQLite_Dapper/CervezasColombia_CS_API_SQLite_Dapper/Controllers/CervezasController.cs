@@ -25,13 +25,13 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
             return Ok(lasCervezas);
         }
 
-        [HttpGet("{id:int}")]
-        public async Task<IActionResult> GetByIdAsync(int id)
+        [HttpGet("{cerveza_id:int}")]
+        public async Task<IActionResult> GetByIdAsync(int cerveza_id)
         {
             try
             {
                 var unaCerveza = await _cervezaService
-                    .GetByIdAsync(id);
+                    .GetByIdAsync(cerveza_id);
                 return Ok(unaCerveza);
             }
             catch (AppValidationException error)
@@ -40,13 +40,13 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
             }
         }
 
-        [HttpGet("{id:int}/Ingredientes")]
-        public async Task<IActionResult> GetAssociatedIngredientsAsync(int id)
+        [HttpGet("{cerveza_id:int}/Ingredientes")]
+        public async Task<IActionResult> GetAssociatedIngredientsAsync(int cerveza_id)
         {
             try
             {
                 var losIngredientesPorCerveza = await _cervezaService.
-                    GetAssociatedIngredientsAsync(id);
+                    GetAssociatedIngredientsAsync(cerveza_id);
 
                 return Ok(losIngredientesPorCerveza);
             }
@@ -56,13 +56,13 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
             }
         }
 
-        [HttpGet("{id:int}/Envasados")]
-        public async Task<IActionResult> GetAssociatedPackagingsAsync(int id)
+        [HttpGet("{cerveza_id:int}/Envasados")]
+        public async Task<IActionResult> GetAssociatedPackagingsAsync(int cerveza_id)
         {
             try
             {
                 var losEnvasadosPorCerveza = await _cervezaService.
-                    GetAssociatedPackagingsAsync(id);
+                    GetAssociatedPackagingsAsync(cerveza_id);
 
                 return Ok(losEnvasadosPorCerveza);
             }
@@ -77,8 +77,8 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
         {
             try
             {
-                await _cervezaService.CreateAsync(unaCerveza);
-                return Ok($"Cerveza {unaCerveza.Nombre} creada correctamente");
+                var cervezaCreada = await _cervezaService.CreateAsync(unaCerveza);
+                return Ok(cervezaCreada);
             }
             catch (AppValidationException error)
             {
