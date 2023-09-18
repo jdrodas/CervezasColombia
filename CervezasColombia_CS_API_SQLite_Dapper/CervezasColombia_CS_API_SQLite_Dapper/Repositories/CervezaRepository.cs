@@ -213,5 +213,29 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
 
             return resultadoAccion;
         }
+
+        public async Task<bool> DeleteAsync(Cerveza unaCerveza)
+        {
+            bool resultadoAccion = false;
+
+            try
+            {
+                using (contextoDB.Conexion)
+                {
+                    string sentenciaSQL = "DELETE FROM cervezas WHERE id = @Id";
+
+                    int filasAfectadas = await contextoDB.Conexion.ExecuteAsync(sentenciaSQL, unaCerveza);
+
+                    if (filasAfectadas > 0)
+                        resultadoAccion = true;
+                }
+            }
+            catch (SqliteException error)
+            {
+                throw new DbOperationException(error.Message);
+            }
+
+            return resultadoAccion;
+        }
     }
 }
