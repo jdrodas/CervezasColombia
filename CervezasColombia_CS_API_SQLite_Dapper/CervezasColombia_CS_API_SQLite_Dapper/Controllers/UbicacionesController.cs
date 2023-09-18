@@ -25,13 +25,13 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
             return Ok(lasUbicaciones);
         }
 
-        [HttpGet("{id:int}")]
-        public async Task<IActionResult> GetByIdAsync(int id)
+        [HttpGet("{ubicacion_id:int}")]
+        public async Task<IActionResult> GetByIdAsync(int ubicacion_id)
         {
             try
             {
                 var unaUbicacion = await _ubicacionService
-                    .GetByIdAsync(id);
+                    .GetByIdAsync(ubicacion_id);
                 return Ok(unaUbicacion);
             }
             catch (AppValidationException error)
@@ -40,13 +40,13 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
             }
         }
 
-        [HttpGet("{id:int}/Cervecerias")]
-        public async Task<IActionResult> GetAssociatedBreweriesAsync(int id)
+        [HttpGet("{ubicacion_id:int}/Cervecerias")]
+        public async Task<IActionResult> GetAssociatedBreweriesAsync(int ubicacion_id)
         {
             try
             {
                 var lasCerveceriasPorUbicacion = await _ubicacionService.
-                    GetAssociatedBreweriesAsync(id);
+                    GetAssociatedBreweriesAsync(ubicacion_id);
 
                 return Ok(lasCerveceriasPorUbicacion);
             }
@@ -56,5 +56,60 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
             }
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Create(Ubicacion unaUbicacion)
+        {
+            try
+            {
+                var ubicacionCreada = await _ubicacionService.CreateAsync(unaUbicacion);
+                return Ok(ubicacionCreada);
+            }
+            catch (AppValidationException error)
+            {
+                return BadRequest($"Error de validación: {error.Message}");
+            }
+            catch (DbOperationException error)
+            {
+                return BadRequest($"Error de operacion en DB: {error.Message}");
+            }
+        }
+
+        [HttpPut("{ubicacion_id:int}")]
+        public async Task<IActionResult> UpdateAsync(int ubicacion_id, Ubicacion unaUbicacion)
+        {
+            try
+            {
+                var ubicacionActualizada = await _ubicacionService.UpdateAsync(ubicacion_id, unaUbicacion);
+                return Ok(ubicacionActualizada);
+
+            }
+            catch (AppValidationException error)
+            {
+                return BadRequest($"Error de validación: {error.Message}");
+            }
+            catch (DbOperationException error)
+            {
+                return BadRequest($"Error de operacion en DB: {error.Message}");
+            }
+        }
+
+        [HttpDelete("{ubicacion_id:int}")]
+        public async Task<IActionResult> DeleteAsync(int ubicacion_id)
+        {
+            try
+            {
+                await _ubicacionService.DeleteAsync(ubicacion_id);
+                return Ok($"Ubicación {ubicacion_id} fue eliminada");
+
+            }
+            catch (AppValidationException error)
+            {
+                return BadRequest($"Error de validación: {error.Message}");
+            }
+            catch (DbOperationException error)
+            {
+                return BadRequest($"Error de operacion en DB: {error.Message}");
+            }
+        }
     }
 }
