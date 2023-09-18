@@ -48,11 +48,11 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
                     "FROM v_info_cervezas " +
                     "WHERE cerveza_id = @cerveza_id ";
 
-                var resultado = await contextoDB.Conexion.QueryFirstAsync<Cerveza>(sentenciaSQL,
+                var resultado = await contextoDB.Conexion.QueryAsync<Cerveza>(sentenciaSQL,
                                     parametrosSentencia);
 
-                if (resultado is not null)
-                    unaCerveza = resultado;
+                if (resultado.Count()>0)
+                    unaCerveza = resultado.First();
             }
 
             return unaCerveza;
@@ -73,14 +73,14 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
                 string sentenciaSQL = "SELECT cerveza_id id, cerveza nombre, cerveceria, cerveceria_id, " +
                     "estilo, estilo_id, ibu, abv, rango_ibu, rango_abv " +
                     "FROM v_info_cervezas " +
-                    "WHERE cerveza = @cerveza " +
-                    "AND cerveceria = @cerveceria ";
+                    "WHERE LOWER(cerveza) = LOWER(@cerveza) " +
+                    "AND LOWER(cerveceria) = LOWER(@cerveceria) ";
 
-                var resultado = await contextoDB.Conexion.QueryFirstAsync<Cerveza>(sentenciaSQL,
+                var resultado = await contextoDB.Conexion.QueryAsync<Cerveza>(sentenciaSQL,
                                     parametrosSentencia);
 
-                if (resultado is not null)
-                    unaCerveza = resultado;
+                if (resultado.Count() > 0)
+                    unaCerveza = resultado.First();
             }
 
             return unaCerveza;
@@ -154,7 +154,6 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
                       "ORDER BY envasado, unidad_volumen, volumen ";
 
                 var resultadoEnvasados = await contextoDB.Conexion.QueryAsync<Envasado>(sentenciaSQL, parametrosSentencia);
-
                 return resultadoEnvasados;
             }
         }

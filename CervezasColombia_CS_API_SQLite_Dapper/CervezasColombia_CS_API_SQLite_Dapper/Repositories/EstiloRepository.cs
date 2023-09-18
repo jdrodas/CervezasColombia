@@ -46,11 +46,11 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
                                       "FROM estilos " +
                                       "WHERE id = @estilo_id ";
 
-                var resultado = await contextoDB.Conexion.QueryFirstAsync<Estilo>(sentenciaSQL,
+                var resultado = await contextoDB.Conexion.QueryAsync<Estilo>(sentenciaSQL,
                                     parametrosSentencia);
 
-                if (resultado is not null)
-                    unEstilo = resultado;
+                if (resultado.Count() > 0)
+                    unEstilo = resultado.First();
             }
 
             return unEstilo;
@@ -70,11 +70,11 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
                                       "FROM estilos " +
                                       "WHERE LOWER(nombre) = LOWER(@estilo_nombre) ";
 
-                var resultado = await contextoDB.Conexion.QueryFirstAsync<Estilo>(sentenciaSQL,
+                var resultado = await contextoDB.Conexion.QueryAsync<Estilo>(sentenciaSQL,
                                     parametrosSentencia);
 
-                if (resultado is not null)
-                    unEstilo = resultado;
+                if (resultado.Count() > 0)
+                    unEstilo = resultado.First();
             }
 
             return unEstilo;

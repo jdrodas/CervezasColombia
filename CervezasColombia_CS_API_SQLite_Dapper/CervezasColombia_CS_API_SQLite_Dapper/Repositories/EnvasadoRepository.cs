@@ -48,11 +48,11 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
                     "FROM envasados e " +
                     "WHERE e.id = @envasado_id ";
 
-                var resultado = await contextoDB.Conexion.QueryFirstAsync<Envasado>(sentenciaSQL,
-                                    parametrosSentencia);
+                var resultado = await contextoDB.Conexion.QueryAsync<Envasado>(sentenciaSQL,
+                    parametrosSentencia);
 
-                if (resultado is not null)
-                    unEvasado = resultado;
+                if (resultado.Count() > 0)
+                    unEvasado = resultado.First();
             }
 
             return unEvasado;

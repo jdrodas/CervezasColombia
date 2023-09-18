@@ -49,11 +49,11 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
                                       "FROM cervecerias c JOIN ubicaciones u ON c.ubicacion_id = u.id " +
                                       "WHERE c.id = @cerveceria_id ";
 
-                var resultado = await contextoDB.Conexion.QueryFirstAsync<Cerveceria>(sentenciaSQL,
+                var resultado = await contextoDB.Conexion.QueryAsync<Cerveceria>(sentenciaSQL,
                                     parametrosSentencia);
 
-                if (resultado is not null)
-                    unaCerveceria = resultado;
+                if (resultado.Count()>0)
+                    unaCerveceria = resultado.First();
             }
 
             return unaCerveceria;
@@ -74,11 +74,11 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
                                       "FROM cervecerias c JOIN ubicaciones u ON c.ubicacion_id = u.id " +
                                       "WHERE LOWER(nombre) = LOWER(@cerveceria_nombre)";
 
-                var resultado = await contextoDB.Conexion.QueryFirstAsync<Cerveceria>(sentenciaSQL,
+                var resultado = await contextoDB.Conexion.QueryAsync<Cerveceria>(sentenciaSQL,
                                     parametrosSentencia);
 
-                if (resultado is not null)
-                    unaCerveceria = resultado;
+                if (resultado.Count() > 0)
+                    unaCerveceria = resultado.First();
             }
 
             return unaCerveceria;
@@ -99,11 +99,11 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
                                       "FROM cervecerias c JOIN ubicaciones u ON c.ubicacion_id = u.id " +
                                       "WHERE LOWER(instagram) = LOWER(@cerveceria_instagram) ";
 
-                var resultado = await contextoDB.Conexion.QueryFirstAsync<Cerveceria>(sentenciaSQL,
+                var resultado = await contextoDB.Conexion.QueryAsync<Cerveceria>(sentenciaSQL,
                                     parametrosSentencia);
 
-                if (resultado is not null)
-                    unaCerveceria = resultado;
+                if (resultado.Count()>0)
+                    unaCerveceria = resultado.First();
             }
 
             return unaCerveceria;
@@ -124,11 +124,11 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
                                       "FROM cervecerias c JOIN ubicaciones u ON c.ubicacion_id = u.id " +
                                       "WHERE LOWER(sitio_web) = LOWER(@cerveceria_sitio_web) ";
 
-                var resultado = await contextoDB.Conexion.QueryFirstAsync<Cerveceria>(sentenciaSQL,
+                var resultado = await contextoDB.Conexion.QueryAsync<Cerveceria>(sentenciaSQL,
                                     parametrosSentencia);
 
-                if (resultado is not null)
-                    unaCerveceria = resultado;
+                if (resultado.Count() > 0)
+                    unaCerveceria = resultado.First();
             }
 
             return unaCerveceria;
@@ -173,22 +173,23 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
 
         public async Task<int> GetAssociatedLocationIdAsync(string ubicacion_nombre)
         {
-            int resultadoUbicacion = 0;
-
             using (contextoDB.Conexion)
             {
                 DynamicParameters parametrosSentencia = new DynamicParameters();
                 parametrosSentencia.Add("@ubicacion", ubicacion_nombre,
                                         DbType.String, ParameterDirection.Input);
-
+                
                 string sentenciaSQL = "SELECT id FROM ubicaciones u " +
                       "WHERE (u.municipio || ', ' || u.departamento) = @ubicacion ";
 
-                resultadoUbicacion = await contextoDB.Conexion.QueryFirstAsync<int>(sentenciaSQL,
+                var resultadoIdUbicacion = await contextoDB.Conexion.QueryAsync<int>(sentenciaSQL,
                                                 parametrosSentencia);
-            }
 
-            return resultadoUbicacion;
+                if (resultadoIdUbicacion.Count() > 0)
+                    return resultadoIdUbicacion.First();
+                else
+                    return 0;
+            }
         }
 
         public async Task<bool> CreateAsync(Cerveceria unaCerveceria)

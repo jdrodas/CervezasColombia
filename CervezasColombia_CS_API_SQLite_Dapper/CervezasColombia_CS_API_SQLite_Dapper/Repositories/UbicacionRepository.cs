@@ -46,11 +46,11 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
                       "FROM ubicaciones " +
                       "WHERE id = @ubicacion_id ";
 
-                var resultado = await contextoDB.Conexion.QueryFirstAsync<Ubicacion>(sentenciaSQL,
-                                    parametrosSentencia);
+                var resultado = await contextoDB.Conexion.QueryAsync<Ubicacion>(sentenciaSQL,
+                    parametrosSentencia);
 
-                if (resultado is not null)
-                    unaUbicacion = resultado;
+                if (resultado.Count() > 0)
+                    unaUbicacion = resultado.First();
             }
 
             return unaUbicacion;
@@ -73,11 +73,11 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
                       "WHERE municipio = @ubicacion_municipio " +
                       "AND departamento = @ubicacion_departamento";
 
-                var resultado = await contextoDB.Conexion.QueryFirstAsync<Ubicacion>(sentenciaSQL,
-                                    parametrosSentencia);
+                var resultado = await contextoDB.Conexion.QueryAsync<Ubicacion>(sentenciaSQL,
+                    parametrosSentencia);
 
-                if (resultado is not null)
-                    unaUbicacion = resultado;
+                if (resultado.Count() > 0)
+                    unaUbicacion = resultado.First();
             }
 
             return unaUbicacion;

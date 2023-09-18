@@ -21,27 +21,27 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
             using (contextoDB.Conexion)
             {
                 //Total Ubicaciones
-                string sentenciaSQL = "select count(id) total from ubicaciones";
+                string sentenciaSQL = "SELECT COUNT(id) total FROM ubicaciones";
                 unResumen.Ubicaciones = await contextoDB.Conexion.QueryFirstAsync<int>(sentenciaSQL, new DynamicParameters());
 
                 //Total Cervecerías
-                sentenciaSQL = "select count(id) total from cervecerias";
+                sentenciaSQL = "SELECT COUNT(id) total FROM cervecerias";
                 unResumen.Cervecerias = await contextoDB.Conexion.QueryFirstAsync<int>(sentenciaSQL, new DynamicParameters());
 
                 //Total Cervezas
-                sentenciaSQL = "select count(id) total from cervezas";
+                sentenciaSQL = "SELECT COUNT(id) total FROM cervezas";
                 unResumen.Cervezas = await contextoDB.Conexion.QueryFirstAsync<int>(sentenciaSQL, new DynamicParameters());
 
                 //Total Estilos
-                sentenciaSQL = "select count(id) total from estilos";
+                sentenciaSQL = "SELECT COUNT(id) total FROM estilos";
                 unResumen.Estilos = await contextoDB.Conexion.QueryFirstAsync<int>(sentenciaSQL, new DynamicParameters());
 
                 //Total envasados
-                sentenciaSQL = "select count(id) total from envasados";
+                sentenciaSQL = "SELECT COUNT(id) total FROM envasados";
                 unResumen.Envasados = await contextoDB.Conexion.QueryFirstAsync<int>(sentenciaSQL, new DynamicParameters());
 
                 //Total ingredientes
-                sentenciaSQL = "select count(id) total from ingredientes";
+                sentenciaSQL = "SELECT COUNT(id) total FROM ingredientes";
                 unResumen.Ingredientes = await contextoDB.Conexion.QueryFirstAsync<int>(sentenciaSQL, new DynamicParameters());
             }
 
