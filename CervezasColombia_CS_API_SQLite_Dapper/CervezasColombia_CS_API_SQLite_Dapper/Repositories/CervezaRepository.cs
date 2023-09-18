@@ -21,9 +21,10 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
         {
             using (contextoDB.Conexion)
             {
-                string sentenciaSQL = "SELECT cerveza_id id, cerveza nombre, cerveceria, estilo, ibu, abv, rango_ibu, rango_abv " +
-                      "FROM v_info_cervezas " +
-                      "ORDER BY id DESC";
+                string sentenciaSQL = "SELECT cerveza_id id, cerveza nombre, cerveceria_id, " +
+                                    "cerveceria, estilo_id, estilo, ibu, abv, rango_ibu, rango_abv " +
+                                    "FROM v_info_cervezas " +
+                                    "ORDER BY id DESC";
 
                 var resultadoCervezas = await contextoDB.Conexion.QueryAsync<Cerveza>(sentenciaSQL,
                                             new DynamicParameters());
@@ -168,6 +169,36 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
                 {
                     string sentenciaSQL = "INSERT INTO cervezas (nombre, cerveceria_id, estilo_id, ibu, abv) " +
                                               "VALUES (@Nombre, @Cerveceria_id, @Estilo_id, @Ibu, @Abv )";
+
+                    int filasAfectadas = await contextoDB.Conexion.ExecuteAsync(sentenciaSQL, unaCerveza);
+
+                    if (filasAfectadas > 0)
+                        resultadoAccion = true;
+                }
+            }
+            catch (SqliteException error)
+            {
+                throw new DbOperationException(error.Message);
+            }
+
+            return resultadoAccion;
+        }
+
+        public async Task<bool> UpdateAsync(Cerveza unaCerveza)
+        {
+            bool resultadoAccion = false;
+
+            try
+            {
+                using (contextoDB.Conexion)
+                {
+                    string sentenciaSQL = "UPDATE cervezas " +
+                                                    "SET nombre = @Nombre, " +
+                                                    "estilo_id = @Estilo_id, " +
+                                                    "cerveceria_id = @Cerveceria_id, " +
+                                                    "abv = @Abv, " +
+                                                    "ibu = @Ibu " +
+                                                    "WHERE id = @Id";
 
                     int filasAfectadas = await contextoDB.Conexion.ExecuteAsync(sentenciaSQL, unaCerveza);
 

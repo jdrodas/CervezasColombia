@@ -89,5 +89,24 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
                 return BadRequest($"Error de operacion en DB: {error.Message}");
             }
         }
+
+        [HttpPut("{cerveza_id:int}")]
+        public async Task<IActionResult> UpdateAsync(int cerveza_id, Cerveza unaCerveza)
+        {
+            try
+            {
+                var cervezaActualizada = await _cervezaService.UpdateAsync(cerveza_id, unaCerveza);
+                return Ok(cervezaActualizada);
+
+            }
+            catch (AppValidationException error)
+            {
+                return BadRequest($"Error de validación: {error.Message}");
+            }
+            catch (DbOperationException error)
+            {
+                return BadRequest($"Error de operacion en DB: {error.Message}");
+            }
+        }
     }
 }

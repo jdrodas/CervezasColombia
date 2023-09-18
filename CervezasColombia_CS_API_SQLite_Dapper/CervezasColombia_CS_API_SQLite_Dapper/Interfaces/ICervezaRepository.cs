@@ -12,5 +12,6 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Interfaces
         public Task<int> GetTotalAssociatedPackagingsAsync(int id);
         public Task<IEnumerable<Envasado>> GetAssociatedPackagingsAsync(int id);
         public Task<bool> CreateAsync(Cerveza unaCerveza);
+        public Task<bool> UpdateAsync(Cerveza unaCerveza);
     }
 }

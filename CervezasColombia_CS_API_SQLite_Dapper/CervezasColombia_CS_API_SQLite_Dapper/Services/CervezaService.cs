@@ -87,7 +87,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
 
             unaCerveza.Cerveceria_id = cerveceriaExistente.Id;
 
-            //Validamos que la cerveza teng estilo
+            //Validamos que la cerveza tenga estilo
             if(unaCerveza.Estilo.Length == 0)
                 throw new AppValidationException("No se puede insertar una cerveza con estilo nulo");
 
@@ -121,6 +121,74 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
             }
 
             return (cervezaExistente);
+        }
+
+        public async Task<Cerveza> UpdateAsync(int cerveza_id, Cerveza unaCerveza)
+        {
+            //Validamos que los parametros sean consistentes
+            if (cerveza_id != unaCerveza.Id)
+                throw new AppValidationException($"Inconsistencia en el Id de la cerveza a actualizar. Verifica argumentos");
+
+            //Validamos que la cerveza exista con ese Id
+            var cervezaExistente = await _cervezaRepository.GetByIdAsync(cerveza_id);
+
+            if (cervezaExistente.Id == 0)
+                throw new AppValidationException($"No existe una cerveza registrada con el id {unaCerveza.Id}");
+
+            //Validamos que la cerveza tenga nombre
+            if (unaCerveza.Nombre.Length == 0)
+                throw new AppValidationException("No se puede actualizar una cerveza con nombre nulo");
+
+            //Validamos que la cerveza tenga estilo
+            if (unaCerveza.Estilo.Length == 0)
+                throw new AppValidationException("No se puede insertar una cerveza con estilo nulo");
+
+            //Validamos que el estilo exista
+            var estiloExistente = await _estiloRepository.GetByNameAsync(unaCerveza.Estilo!);
+
+            if (estiloExistente.Id == 0)
+                throw new AppValidationException($"El estilo {unaCerveza.Estilo} no se encuentra registrado");
+
+            unaCerveza.Estilo_id = estiloExistente.Id;
+
+            //Validamos que la cerveza tenga asociada una cerveceria
+            if (unaCerveza.Cerveceria.Length == 0)
+                throw new AppValidationException("No se puede actualizar una cerveza sin una cerveceria");
+
+            //Validamos que la cervecería exista
+            var cerveceriaExistente = await _cerveceriaRepository.GetByNameAsync(unaCerveza.Cerveceria!);
+
+            if (cerveceriaExistente.Id == 0)
+                throw new AppValidationException($"La cervecería {unaCerveza.Cerveceria} no se encuentra registrada");
+
+            unaCerveza.Cerveceria_id = cerveceriaExistente.Id;
+
+            //Validamos que el nombre no exista previamente en otra cerveza diferente para la misma cerveceria
+            cervezaExistente = await _cervezaRepository.GetByNameAndBreweryAsync(unaCerveza.Nombre!, unaCerveza.Cerveceria);
+
+            if (unaCerveza.Id != cervezaExistente.Id)
+                throw new AppValidationException($"Ya existe otra cerveza con el nombre {unaCerveza.Nombre}. " +
+                    $"No se puede Actualizar");
+
+            //Validamos que haya al menos un cambio en las propiedades
+            if (unaCerveza.Equals(cervezaExistente))
+                throw new AppValidationException("No hay cambios en los atributos de la cerveza. No se realiza actualización.");
+
+            try
+            {
+                bool resultadoAccion = await _cervezaRepository.UpdateAsync(unaCerveza);
+
+                if (!resultadoAccion)
+                    throw new AppValidationException("Operación ejecutada pero no generó cambios en la DB");
+
+                cervezaExistente = await _cervezaRepository.GetByNameAndBreweryAsync(unaCerveza.Nombre!, unaCerveza.Cerveceria);
+            }
+            catch (DbOperationException error)
+            {
+                throw error;
+            }
+
+            return cervezaExistente;
         }
     }
 }

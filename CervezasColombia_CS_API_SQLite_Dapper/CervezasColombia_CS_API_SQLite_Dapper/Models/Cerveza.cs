@@ -12,5 +12,22 @@
         public float Ibu { get; set; } = 0f;
         public string Rango_Abv { get; set; } = string.Empty;
         public float Abv { get; set; } = 0f;
+
+        public override bool Equals(object? obj)
+        {
+            if (obj == null || GetType() != obj.GetType())
+                return false;
+
+            var otraCerveza = (Cerveza)obj;
+
+            return Id == otraCerveza.Id
+                && Nombre.Equals(otraCerveza.Nombre)
+                && Cerveceria_id == otraCerveza.Cerveceria_id
+                && Cerveceria.Equals(otraCerveza.Cerveceria)
+                && Estilo_id == otraCerveza.Estilo_id
+                && Estilo.Equals(otraCerveza.Estilo)
+                && Ibu.Equals(otraCerveza.Ibu)
+                && Abv.Equals(otraCerveza.Abv);
+        }
     }
 }

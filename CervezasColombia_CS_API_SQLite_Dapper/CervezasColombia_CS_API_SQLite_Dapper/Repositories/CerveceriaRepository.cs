@@ -143,8 +143,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
 
             string sentenciaSQL = "SELECT COUNT(id) totalCervezas " +
                                   "FROM cervezas " +
-                                  "WHERE cerveceria_id = @cerveceria_id " +
-                                  "ORDER BY nombre";
+                                  "WHERE cerveceria_id = @cerveceria_id ";
 
 
             var totalCervezas = await contextoDB.Conexion.QueryAsync<int>(sentenciaSQL,
@@ -164,7 +163,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
                 string sentenciaSQL = "SELECT cerveza_id id, cerveza nombre, cerveceria, estilo, ibu, abv, rango_ibu, rango_abv " +
                       "FROM v_info_cervezas " +
                       "WHERE cerveceria_id = @cerveceria_id " +
-                      "ORDER BY estilo, nombre";
+                      "ORDER BY id DESC";
 
                 var resultadoCervezas = await contextoDB.Conexion.QueryAsync<Cerveza>(sentenciaSQL, parametrosSentencia);
 
