@@ -1,6 +1,6 @@
-﻿using CervezasColombia_CS_API_SQLite_Dapper.Models;
-using CervezasColombia_CS_API_SQLite_Dapper.Helpers;
+﻿using CervezasColombia_CS_API_SQLite_Dapper.Helpers;
 using CervezasColombia_CS_API_SQLite_Dapper.Interfaces;
+using CervezasColombia_CS_API_SQLite_Dapper.Models;
 
 namespace CervezasColombia_CS_API_SQLite_Dapper.Services
 {
@@ -15,35 +15,40 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
 
         public async Task<IEnumerable<Envasado>> GetAllAsync()
         {
-            return await _envasadoRepository.GetAllAsync();
+            return await _envasadoRepository
+                .GetAllAsync();
         }
 
-        public async Task<Envasado> GetByIdAsync(int id)
+        public async Task<Envasado> GetByIdAsync(int envasado_id)
         {
             //Validamos que la Cerveceria exista con ese Id
-            var unEnvasado = await _envasadoRepository.GetByIdAsync(id);
+            var unEnvasado = await _envasadoRepository
+                .GetByIdAsync(envasado_id);
 
             if (unEnvasado.Id == 0)
-                throw new AppValidationException($"Envasado no encontrado con el id {id}");
+                throw new AppValidationException($"Envasado no encontrado con el id {envasado_id}");
 
             return unEnvasado;
         }
 
-        public async Task<IEnumerable<Cerveza>> GetAssociatedBeersAsync(int id)
+        public async Task<IEnumerable<Cerveza>> GetAssociatedBeersAsync(int envasado_id)
         {
             //Validamos que la Cerveceria exista con ese Id
-            var unEnvasado = await _envasadoRepository.GetByIdAsync(id);
+            var unEnvasado = await _envasadoRepository
+                .GetByIdAsync(envasado_id);
 
             if (unEnvasado.Id == 0)
-                throw new AppValidationException($"Envasado no encontrado con el id {id}");
+                throw new AppValidationException($"Envasado no encontrado con el id {envasado_id}");
 
             //Si la cerveceria existe, validamos que tenga cervezas asociadas
-            var cantidadCervezasAsociadas = await _envasadoRepository.GetTotalAssociatedBeersAsync(id);
+            var cantidadCervezasAsociadas = await _envasadoRepository
+                .GetTotalAssociatedBeersAsync(envasado_id);
 
             if (cantidadCervezasAsociadas == 0)
                 throw new AppValidationException($"No Existen cervezas asociadas al envasado {unEnvasado.Nombre}");
 
-            return await _envasadoRepository.GetAssociatedBeersAsync(id);
+            return await _envasadoRepository
+                .GetAssociatedBeersAsync(envasado_id);
         }
     }
 }

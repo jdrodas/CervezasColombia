@@ -7,7 +7,7 @@
 
 namespace CervezasColombia_CS_API_SQLite_Dapper.Helpers
 {
-    public class AppValidationException:Exception
+    public class AppValidationException : Exception
     {
         public AppValidationException(string message) : base(message) { }
     }

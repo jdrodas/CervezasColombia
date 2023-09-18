@@ -1,5 +1,4 @@
-﻿using CervezasColombia_CS_API_SQLite_Dapper.Models;
-using CervezasColombia_CS_API_SQLite_Dapper.Helpers;
+﻿using CervezasColombia_CS_API_SQLite_Dapper.Helpers;
 using CervezasColombia_CS_API_SQLite_Dapper.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,13 +24,13 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
             return Ok(losEnvasados);
         }
 
-        [HttpGet("{id:int}")]
-        public async Task<IActionResult> GetByIdAsync(int id)
+        [HttpGet("{envasado_id:int}")]
+        public async Task<IActionResult> GetByIdAsync(int envasado_id)
         {
             try
             {
                 var unEnvasado = await _envasadoService
-                    .GetByIdAsync(id);
+                    .GetByIdAsync(envasado_id);
 
                 return Ok(unEnvasado);
             }
@@ -41,13 +40,13 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
             }
         }
 
-        [HttpGet("{id:int}/Cervezas")]
-        public async Task<IActionResult> GetAssociatedBeersAsync(int id)
+        [HttpGet("{envasado_id:int}/Cervezas")]
+        public async Task<IActionResult> GetAssociatedBeersAsync(int envasado_id)
         {
             try
             {
-                var lasCervezasPorEnvasado = await _envasadoService.
-                    GetAssociatedBeersAsync(id);
+                var lasCervezasPorEnvasado = await _envasadoService
+                    .GetAssociatedBeersAsync(envasado_id);
 
                 return Ok(lasCervezasPorEnvasado);
             }

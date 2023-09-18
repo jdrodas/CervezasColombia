@@ -1,5 +1,5 @@
-﻿using CervezasColombia_CS_API_SQLite_Dapper.Models;
-using CervezasColombia_CS_API_SQLite_Dapper.Helpers;
+﻿using CervezasColombia_CS_API_SQLite_Dapper.Helpers;
+using CervezasColombia_CS_API_SQLite_Dapper.Models;
 using CervezasColombia_CS_API_SQLite_Dapper.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -45,8 +45,8 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
         {
             try
             {
-                var losIngredientesPorCerveza = await _cervezaService.
-                    GetAssociatedIngredientsAsync(cerveza_id);
+                var losIngredientesPorCerveza = await _cervezaService
+                    .GetAssociatedIngredientsAsync(cerveza_id);
 
                 return Ok(losIngredientesPorCerveza);
             }
@@ -61,8 +61,8 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
         {
             try
             {
-                var losEnvasadosPorCerveza = await _cervezaService.
-                    GetAssociatedPackagingsAsync(cerveza_id);
+                var losEnvasadosPorCerveza = await _cervezaService
+                    .GetAssociatedPackagingsAsync(cerveza_id);
 
                 return Ok(losEnvasadosPorCerveza);
             }
@@ -77,7 +77,9 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
         {
             try
             {
-                var cervezaCreada = await _cervezaService.CreateAsync(unaCerveza);
+                var cervezaCreada = await _cervezaService
+                    .CreateAsync(unaCerveza);
+
                 return Ok(cervezaCreada);
             }
             catch (AppValidationException error)
@@ -95,7 +97,9 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
         {
             try
             {
-                var cervezaActualizada = await _cervezaService.UpdateAsync(cerveza_id, unaCerveza);
+                var cervezaActualizada = await _cervezaService
+                    .UpdateAsync(cerveza_id, unaCerveza);
+
                 return Ok(cervezaActualizada);
 
             }
@@ -114,7 +118,9 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
         {
             try
             {
-                await _cervezaService.DeleteAsync(cerveza_id);
+                await _cervezaService
+                    .DeleteAsync(cerveza_id);
+
                 return Ok($"Cerveza {cerveza_id} fue eliminada");
 
             }

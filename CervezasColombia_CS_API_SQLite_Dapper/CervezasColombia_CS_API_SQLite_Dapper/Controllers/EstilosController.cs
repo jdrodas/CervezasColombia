@@ -1,5 +1,5 @@
-﻿using CervezasColombia_CS_API_SQLite_Dapper.Models;
-using CervezasColombia_CS_API_SQLite_Dapper.Helpers;
+﻿using CervezasColombia_CS_API_SQLite_Dapper.Helpers;
+using CervezasColombia_CS_API_SQLite_Dapper.Models;
 using CervezasColombia_CS_API_SQLite_Dapper.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,13 +25,13 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
             return Ok(losEstilos);
         }
 
-        [HttpGet("{id:int}")]
-        public async Task<IActionResult> GetByIdAsync(int id)
+        [HttpGet("{estilo_id:int}")]
+        public async Task<IActionResult> GetByIdAsync(int estilo_id)
         {
             try
             {
                 var unEstilo = await _estiloService
-                    .GetByIdAsync(id);
+                    .GetByIdAsync(estilo_id);
                 return Ok(unEstilo);
             }
             catch (AppValidationException error)
@@ -40,13 +40,13 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
             }
         }
 
-        [HttpGet("{id:int}/Cervezas")]
-        public async Task<IActionResult> GetAssociatedBeersAsync(int id)
+        [HttpGet("{estilo_id:int}/Cervezas")]
+        public async Task<IActionResult> GetAssociatedBeersAsync(int estilo_id)
         {
-            try 
+            try
             {
-                var lasCervezasPorEstilo = await _estiloService.
-                    GetAssociatedBeersAsync(id);
+                var lasCervezasPorEstilo = await _estiloService
+                    .GetAssociatedBeersAsync(estilo_id);
 
                 return Ok(lasCervezasPorEstilo);
             }
@@ -61,8 +61,10 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
         {
             try
             {
-                await _estiloService.CreateAsync(unEstilo);
-                return Ok($"Estilo {unEstilo.Nombre} creado correctamente");
+                var estiloCreado = await _estiloService
+                    .CreateAsync(unEstilo);
+
+                return Ok(estiloCreado);
             }
             catch (AppValidationException error)
             {
@@ -74,13 +76,15 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
             }
         }
 
-        [HttpPut("{id:int}")]
-        public async Task<IActionResult> UpdateAsync(int id, Estilo unEstilo)
+        [HttpPut("{estilo_id:int}")]
+        public async Task<IActionResult> UpdateAsync(int estilo_id, Estilo unEstilo)
         {
             try
             {
-                await _estiloService.UpdateAsync(id, unEstilo);
-                return Ok($"Estilo {unEstilo.Id} actualizado al nombre {unEstilo.Nombre}");
+                var estiloActualizado = await _estiloService
+                    .UpdateAsync(estilo_id, unEstilo);
+
+                return Ok(estiloActualizado);
 
             }
             catch (AppValidationException error)
@@ -93,13 +97,15 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
             }
         }
 
-        [HttpDelete("{id:int}")]
-        public async Task<IActionResult> DeleteAsync(int id)
+        [HttpDelete("{estilo_id:int}")]
+        public async Task<IActionResult> DeleteAsync(int estilo_id)
         {
             try
             {
-                await _estiloService.DeleteAsync(id);
-                return Ok($"Estilo {id} fue eliminado" );
+                await _estiloService
+                    .DeleteAsync(estilo_id);
+
+                return Ok($"Estilo {estilo_id} fue eliminado");
 
             }
             catch (AppValidationException error)

@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Mvc.RazorPages;
-
 namespace CervezasColombia_CS_API_SQLite_Dapper.Models
 {
     public class Cerveceria
@@ -7,15 +5,15 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Models
         public int Id { get; set; } = 0;
         public string Nombre { get; set; } = string.Empty;
         public string Sitio_Web { get; set; } = string.Empty;
-        public string Instagram { get; set; } = string.Empty;        
+        public string Instagram { get; set; } = string.Empty;
         public int Ubicacion_Id { get; set; } = 0;
         public string Ubicacion { get; set; } = string.Empty;
 
         public override bool Equals(object? obj)
         {
-            if (obj == null || GetType() != obj.GetType()) 
+            if (obj == null || GetType() != obj.GetType())
                 return false;
-            
+
             var otraCerveceria = (Cerveceria)obj;
 
             return Id == otraCerveceria.Id

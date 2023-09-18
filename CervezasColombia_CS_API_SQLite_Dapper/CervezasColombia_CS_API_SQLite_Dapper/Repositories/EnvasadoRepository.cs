@@ -1,11 +1,8 @@
-﻿using Dapper;
-using System.Data;
-using Microsoft.Data.Sqlite;
-using CervezasColombia_CS_API_SQLite_Dapper.DbContexts;
-using CervezasColombia_CS_API_SQLite_Dapper.Models;
-using CervezasColombia_CS_API_SQLite_Dapper.Helpers;
+﻿using CervezasColombia_CS_API_SQLite_Dapper.DbContexts;
 using CervezasColombia_CS_API_SQLite_Dapper.Interfaces;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using CervezasColombia_CS_API_SQLite_Dapper.Models;
+using Dapper;
+using System.Data;
 
 namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
 {
@@ -22,12 +19,12 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
         {
             using (contextoDB.Conexion)
             {
-                string sentenciaSQL = 
+                string sentenciaSQL =
                     "SELECT DISTINCT  e.id, " +
                     "e.nombre, v.unidad_volumen, v.volumen " +
                     "FROM v_info_envasados_cervezas v " +
                     "RIGHT JOIN envasados e ON v.envasado_id = e.id " +
-                    "order by nombre ";
+                    "order by id DESC ";
 
                 var resultadoEnvasados = await contextoDB.Conexion.QueryAsync<Envasado>(sentenciaSQL,
                                         new DynamicParameters());
@@ -36,14 +33,14 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
             }
         }
 
-        public async Task<Envasado> GetByIdAsync(int id)
+        public async Task<Envasado> GetByIdAsync(int envasado_id)
         {
             Envasado unEvasado = new Envasado();
 
             using (contextoDB.Conexion)
             {
                 DynamicParameters parametrosSentencia = new DynamicParameters();
-                parametrosSentencia.Add("@envasado_id", id,
+                parametrosSentencia.Add("@envasado_id", envasado_id,
                                         DbType.Int32, ParameterDirection.Input);
 
                 string sentenciaSQL =
@@ -51,39 +48,39 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
                     "FROM envasados e " +
                     "WHERE e.id = @envasado_id ";
 
-                var resultado = await contextoDB.Conexion.QueryAsync<Envasado>(sentenciaSQL,
+                var resultado = await contextoDB.Conexion.QueryFirstAsync<Envasado>(sentenciaSQL,
                                     parametrosSentencia);
 
-                if (resultado.ToArray().Length > 0)
-                    unEvasado = resultado.First();
+                if (resultado is not null)
+                    unEvasado = resultado;
             }
 
             return unEvasado;
         }
 
-        public async Task<int> GetTotalAssociatedBeersAsync(int id)
+        public async Task<int> GetTotalAssociatedBeersAsync(int envasado_id)
         {
 
             DynamicParameters parametrosSentencia = new DynamicParameters();
-            parametrosSentencia.Add("@envasado_id", id,
+            parametrosSentencia.Add("@envasado_id", envasado_id,
                                     DbType.Int32, ParameterDirection.Input);
 
             string sentenciaSQL = "SELECT COUNT(cerveza_id) totalCervezas " +
                 "FROM v_info_envasados_cervezas v " +
                 "WHERE envasado_id = @envasado_id ";
 
-            var totalCervezas = await contextoDB.Conexion.QueryAsync<int>(sentenciaSQL,
+            var totalCervezas = await contextoDB.Conexion.QueryFirstAsync<int>(sentenciaSQL,
                                     parametrosSentencia);
 
-            return totalCervezas.First();
+            return totalCervezas;
         }
 
-        public async Task<IEnumerable<Cerveza>> GetAssociatedBeersAsync(int id)
+        public async Task<IEnumerable<Cerveza>> GetAssociatedBeersAsync(int envasado_id)
         {
             using (contextoDB.Conexion)
             {
                 DynamicParameters parametrosSentencia = new DynamicParameters();
-                parametrosSentencia.Add("@envasado_id", id,
+                parametrosSentencia.Add("@envasado_id", envasado_id,
                                         DbType.Int32, ParameterDirection.Input);
 
                 string sentenciaSQL = "SELECT vc.cerveza_id id, vc.cerveza nombre, vc.cerveceria, " +
@@ -91,7 +88,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
                     "FROM v_info_cervezas vc " +
                     "JOIN v_info_envasados_cervezas ve ON vc.cerveza_id = ve.cerveza_id " +
                     "WHERE ve.envasado_id = @envasado_id " +
-                    "ORDER BY vc.cerveceria, vc.cerveza";
+                    "ORDER BY vc.cerveza_id DESC";
 
                 var resultadoCervezas = await contextoDB.Conexion.QueryAsync<Cerveza>(sentenciaSQL, parametrosSentencia);
 

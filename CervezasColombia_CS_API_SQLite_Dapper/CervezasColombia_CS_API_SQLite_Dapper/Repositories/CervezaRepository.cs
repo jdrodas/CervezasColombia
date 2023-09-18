@@ -1,10 +1,10 @@
-﻿using Dapper;
-using System.Data;
-using Microsoft.Data.Sqlite;
-using CervezasColombia_CS_API_SQLite_Dapper.DbContexts;
-using CervezasColombia_CS_API_SQLite_Dapper.Models;
+﻿using CervezasColombia_CS_API_SQLite_Dapper.DbContexts;
 using CervezasColombia_CS_API_SQLite_Dapper.Helpers;
 using CervezasColombia_CS_API_SQLite_Dapper.Interfaces;
+using CervezasColombia_CS_API_SQLite_Dapper.Models;
+using Dapper;
+using Microsoft.Data.Sqlite;
+using System.Data;
 
 namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
 {
@@ -48,11 +48,11 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
                     "FROM v_info_cervezas " +
                     "WHERE cerveza_id = @cerveza_id ";
 
-                var resultado = await contextoDB.Conexion.QueryAsync<Cerveza>(sentenciaSQL,
+                var resultado = await contextoDB.Conexion.QueryFirstAsync<Cerveza>(sentenciaSQL,
                                     parametrosSentencia);
 
-                if (resultado.ToArray().Length > 0)
-                    unaCerveza = resultado.First();
+                if (resultado is not null)
+                    unaCerveza = resultado;
             }
 
             return unaCerveza;
@@ -76,11 +76,11 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
                     "WHERE cerveza = @cerveza " +
                     "AND cerveceria = @cerveceria ";
 
-                var resultado = await contextoDB.Conexion.QueryAsync<Cerveza>(sentenciaSQL,
+                var resultado = await contextoDB.Conexion.QueryFirstAsync<Cerveza>(sentenciaSQL,
                                     parametrosSentencia);
 
-                if (resultado.ToArray().Length > 0)
-                    unaCerveza = resultado.First();
+                if (resultado is not null)
+                    unaCerveza = resultado;
             }
 
             return unaCerveza;
@@ -98,10 +98,10 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
                                   "WHERE cerveza_id = @cerveza_id";
 
 
-            var totalIngredientes = await contextoDB.Conexion.QueryAsync<int>(sentenciaSQL,
+            var totalIngredientes = await contextoDB.Conexion.QueryFirstAsync<int>(sentenciaSQL,
                                     parametrosSentencia);
 
-            return totalIngredientes.First();
+            return totalIngredientes;
         }
 
         public async Task<IEnumerable<Ingrediente>> GetAssociatedIngredientsAsync(int cerveza_id)
@@ -134,10 +134,10 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
                                   "WHERE cerveza_id = @cerveza_id";
 
 
-            var totalIngredientes = await contextoDB.Conexion.QueryAsync<int>(sentenciaSQL,
+            var totalIngredientes = await contextoDB.Conexion.QueryFirstAsync<int>(sentenciaSQL,
                                     parametrosSentencia);
 
-            return totalIngredientes.First();
+            return totalIngredientes;
         }
 
         public async Task<IEnumerable<Envasado>> GetAssociatedPackagingsAsync(int cerveza_id)

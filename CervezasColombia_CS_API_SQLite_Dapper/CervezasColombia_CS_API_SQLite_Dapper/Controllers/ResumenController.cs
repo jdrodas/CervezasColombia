@@ -1,6 +1,4 @@
-﻿using CervezasColombia_CS_API_SQLite_Dapper.Models;
-using CervezasColombia_CS_API_SQLite_Dapper.Helpers;
-using CervezasColombia_CS_API_SQLite_Dapper.Services;
+﻿using CervezasColombia_CS_API_SQLite_Dapper.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers

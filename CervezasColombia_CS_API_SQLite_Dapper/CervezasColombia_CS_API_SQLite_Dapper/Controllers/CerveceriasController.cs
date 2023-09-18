@@ -1,5 +1,5 @@
-﻿using CervezasColombia_CS_API_SQLite_Dapper.Models;
-using CervezasColombia_CS_API_SQLite_Dapper.Helpers;
+﻿using CervezasColombia_CS_API_SQLite_Dapper.Helpers;
+using CervezasColombia_CS_API_SQLite_Dapper.Models;
 using CervezasColombia_CS_API_SQLite_Dapper.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -32,7 +32,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
             {
                 var unaCerveceria = await _cerveceriaService
                     .GetByIdAsync(cerveceria_id);
-                
+
                 return Ok(unaCerveceria);
             }
             catch (AppValidationException error)
@@ -46,8 +46,8 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
         {
             try
             {
-                var lasCervezasPorCerveceria = await _cerveceriaService.
-                    GetAssociatedBeersAsync(cerveceria_id);
+                var lasCervezasPorCerveceria = await _cerveceriaService
+                    .GetAssociatedBeersAsync(cerveceria_id);
 
                 return Ok(lasCervezasPorCerveceria);
             }
@@ -62,7 +62,9 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
         {
             try
             {
-                var cerveceriaCreada = await _cerveceriaService.CreateAsync(unaCerveceria);
+                var cerveceriaCreada = await _cerveceriaService
+                    .CreateAsync(unaCerveceria);
+
                 return Ok(cerveceriaCreada);
             }
             catch (AppValidationException error)
@@ -80,7 +82,9 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
         {
             try
             {
-                var cerveceriaActualizada = await _cerveceriaService.UpdateAsync(cerveceria_id, unaCerveceria);
+                var cerveceriaActualizada = await _cerveceriaService
+                    .UpdateAsync(cerveceria_id, unaCerveceria);
+
                 return Ok(cerveceriaActualizada);
 
             }
@@ -99,7 +103,9 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
         {
             try
             {
-                await _cerveceriaService.DeleteAsync(cerveceria_id);
+                await _cerveceriaService
+                    .DeleteAsync(cerveceria_id);
+
                 return Ok($"Cervecería {cerveceria_id} fue eliminada");
 
             }

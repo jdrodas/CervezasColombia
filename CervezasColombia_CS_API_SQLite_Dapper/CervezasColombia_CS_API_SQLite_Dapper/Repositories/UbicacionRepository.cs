@@ -1,10 +1,10 @@
-﻿using Dapper;
-using System.Data;
-using Microsoft.Data.Sqlite;
-using CervezasColombia_CS_API_SQLite_Dapper.DbContexts;
-using CervezasColombia_CS_API_SQLite_Dapper.Models;
+﻿using CervezasColombia_CS_API_SQLite_Dapper.DbContexts;
 using CervezasColombia_CS_API_SQLite_Dapper.Helpers;
 using CervezasColombia_CS_API_SQLite_Dapper.Interfaces;
+using CervezasColombia_CS_API_SQLite_Dapper.Models;
+using Dapper;
+using Microsoft.Data.Sqlite;
+using System.Data;
 
 namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
 {
@@ -46,11 +46,11 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
                       "FROM ubicaciones " +
                       "WHERE id = @ubicacion_id ";
 
-                var resultado = await contextoDB.Conexion.QueryAsync<Ubicacion>(sentenciaSQL,
+                var resultado = await contextoDB.Conexion.QueryFirstAsync<Ubicacion>(sentenciaSQL,
                                     parametrosSentencia);
 
-                if (resultado.ToArray().Length > 0)
-                    unaUbicacion = resultado.First();
+                if (resultado is not null)
+                    unaUbicacion = resultado;
             }
 
             return unaUbicacion;
@@ -73,11 +73,11 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
                       "WHERE municipio = @ubicacion_municipio " +
                       "AND departamento = @ubicacion_departamento";
 
-                var resultado = await contextoDB.Conexion.QueryAsync<Ubicacion>(sentenciaSQL,
+                var resultado = await contextoDB.Conexion.QueryFirstAsync<Ubicacion>(sentenciaSQL,
                                     parametrosSentencia);
 
-                if (resultado.ToArray().Length > 0)
-                    unaUbicacion = resultado.First();
+                if (resultado is not null)
+                    unaUbicacion = resultado;
             }
 
             return unaUbicacion;
@@ -95,10 +95,10 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
                                   "WHERE ubicacion_id = @ubicacion_id";
 
 
-            var totalCervecerias = await contextoDB.Conexion.QueryAsync<int>(sentenciaSQL,
+            var totalCervecerias = await contextoDB.Conexion.QueryFirstAsync<int>(sentenciaSQL,
                                     parametrosSentencia);
 
-            return totalCervecerias.First();
+            return totalCervecerias;
         }
 
         public async Task<IEnumerable<Cerveceria>> GetAssociatedBreweriesAsync(int ubicacion_id)

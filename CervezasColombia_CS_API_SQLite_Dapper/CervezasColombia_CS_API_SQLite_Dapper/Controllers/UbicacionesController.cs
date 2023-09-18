@@ -1,5 +1,5 @@
-﻿using CervezasColombia_CS_API_SQLite_Dapper.Models;
-using CervezasColombia_CS_API_SQLite_Dapper.Helpers;
+﻿using CervezasColombia_CS_API_SQLite_Dapper.Helpers;
+using CervezasColombia_CS_API_SQLite_Dapper.Models;
 using CervezasColombia_CS_API_SQLite_Dapper.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -32,6 +32,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
             {
                 var unaUbicacion = await _ubicacionService
                     .GetByIdAsync(ubicacion_id);
+
                 return Ok(unaUbicacion);
             }
             catch (AppValidationException error)
@@ -45,8 +46,8 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
         {
             try
             {
-                var lasCerveceriasPorUbicacion = await _ubicacionService.
-                    GetAssociatedBreweriesAsync(ubicacion_id);
+                var lasCerveceriasPorUbicacion = await _ubicacionService
+                    .GetAssociatedBreweriesAsync(ubicacion_id);
 
                 return Ok(lasCerveceriasPorUbicacion);
             }
@@ -61,7 +62,9 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
         {
             try
             {
-                var ubicacionCreada = await _ubicacionService.CreateAsync(unaUbicacion);
+                var ubicacionCreada = await _ubicacionService
+                    .CreateAsync(unaUbicacion);
+
                 return Ok(ubicacionCreada);
             }
             catch (AppValidationException error)
@@ -79,7 +82,9 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
         {
             try
             {
-                var ubicacionActualizada = await _ubicacionService.UpdateAsync(ubicacion_id, unaUbicacion);
+                var ubicacionActualizada = await _ubicacionService
+                    .UpdateAsync(ubicacion_id, unaUbicacion);
+
                 return Ok(ubicacionActualizada);
 
             }
@@ -98,7 +103,9 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
         {
             try
             {
-                await _ubicacionService.DeleteAsync(ubicacion_id);
+                await _ubicacionService
+                    .DeleteAsync(ubicacion_id);
+
                 return Ok($"Ubicación {ubicacion_id} fue eliminada");
 
             }
