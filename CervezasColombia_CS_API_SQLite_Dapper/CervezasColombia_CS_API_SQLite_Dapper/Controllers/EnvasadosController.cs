@@ -1,4 +1,5 @@
 ﻿using CervezasColombia_CS_API_SQLite_Dapper.Helpers;
+using CervezasColombia_CS_API_SQLite_Dapper.Models;
 using CervezasColombia_CS_API_SQLite_Dapper.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -53,6 +54,68 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
             catch (AppValidationException error)
             {
                 return NotFound(error.Message);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(Envasado unEnvasado)
+        {
+            try
+            {
+                var envasadoCreado = await _envasadoService
+                    .CreateAsync(unEnvasado);
+
+                return Ok(envasadoCreado);
+            }
+            catch (AppValidationException error)
+            {
+                return BadRequest($"Error de validación: {error.Message}");
+            }
+            catch (DbOperationException error)
+            {
+                return BadRequest($"Error de operacion en DB: {error.Message}");
+            }
+        }
+
+        [HttpPut("{envasado_id:int}")]
+        public async Task<IActionResult> UpdateAsync(int envasado_id, Envasado unEnvasado)
+        {
+            try
+            {
+                var envasadoActualizado = await _envasadoService
+                    .UpdateAsync(envasado_id, unEnvasado);
+
+                return Ok(envasadoActualizado);
+
+            }
+            catch (AppValidationException error)
+            {
+                return BadRequest($"Error de validación: {error.Message}");
+            }
+            catch (DbOperationException error)
+            {
+                return BadRequest($"Error de operacion en DB: {error.Message}");
+            }
+        }
+
+        [HttpDelete("{envasado_id:int}")]
+        public async Task<IActionResult> DeleteAsync(int envasado_id)
+        {
+            try
+            {
+                await _envasadoService
+                    .DeleteAsync(envasado_id);
+
+                return Ok($"Envasado {envasado_id} fue eliminado");
+
+            }
+            catch (AppValidationException error)
+            {
+                return BadRequest($"Error de validación: {error.Message}");
+            }
+            catch (DbOperationException error)
+            {
+                return BadRequest($"Error de operacion en DB: {error.Message}");
             }
         }
     }

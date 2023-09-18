@@ -127,14 +127,14 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
             return estiloExistente;
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(int estilo_id)
         {
             // validamos que el estilo a eliminar si exista con ese Id
             var estiloExistente = await _estiloRepository
-                .GetByIdAsync(id);
+                .GetByIdAsync(estilo_id);
 
             if (estiloExistente.Id == 0)
-                throw new AppValidationException($"No existe un estilo con el Id {id} que se pueda eliminar");
+                throw new AppValidationException($"No existe un estilo con el Id {estilo_id} que se pueda eliminar");
 
             // Validamos que el estilo no tenga asociadas cervezas
             var cantidadCervezasAsociadas = await _estiloRepository

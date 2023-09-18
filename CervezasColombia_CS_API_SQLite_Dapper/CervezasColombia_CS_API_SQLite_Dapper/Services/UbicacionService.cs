@@ -21,12 +21,12 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
 
         public async Task<Ubicacion> GetByIdAsync(int ubicacion_id)
         {
-            //Validamos que el estilo exista con ese Id
+            //Validamos que la ubicación exista con ese Id
             var unaUbicacion = await _ubicacionRepository
                 .GetByIdAsync(ubicacion_id);
 
             if (unaUbicacion.Id == 0)
-                throw new AppValidationException($"Ubicacion no encontrada con el id {ubicacion_id}");
+                throw new AppValidationException($"Ubicación no encontrada con el id {ubicacion_id}");
 
             return unaUbicacion;
         }
@@ -61,7 +61,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
             if (unaUbicacion.Departamento.Length == 0)
                 throw new AppValidationException("No se puede insertar una ubicación con Departamento nulo");
 
-            // validamos que el estilo a crear no esté previamente creado
+            // validamos que la ubicación a crear no esté previamente creado
             var ubicacionExistente = await _ubicacionRepository
                 .GetByNameAsync(unaUbicacion.Municipio!, unaUbicacion.Departamento!);
 
@@ -140,7 +140,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
 
         public async Task DeleteAsync(int id)
         {
-            // validamos que el estilo a eliminar si exista con ese Id
+            // validamos que la ubicación a eliminar si exista con ese Id
             var ubicacionExistente = await _ubicacionRepository
                 .GetByIdAsync(id);
 

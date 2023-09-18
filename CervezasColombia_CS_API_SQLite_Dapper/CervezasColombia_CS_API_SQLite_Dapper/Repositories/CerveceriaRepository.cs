@@ -27,10 +27,10 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
                                       "ON c.ubicacion_id = u.id " +
                                       "ORDER BY c.id DESC";
 
-                var resultadoEstilos = await contextoDB.Conexion.QueryAsync<Cerveceria>(sentenciaSQL,
+                var resultadoCervecerias = await contextoDB.Conexion.QueryAsync<Cerveceria>(sentenciaSQL,
                                         new DynamicParameters());
 
-                return resultadoEstilos;
+                return resultadoCervecerias;
             }
         }
 

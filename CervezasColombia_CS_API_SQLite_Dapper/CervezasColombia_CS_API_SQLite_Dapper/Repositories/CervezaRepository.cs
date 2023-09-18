@@ -140,7 +140,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
             return totalIngredientes;
         }
 
-        public async Task<IEnumerable<Envasado>> GetAssociatedPackagingsAsync(int cerveza_id)
+        public async Task<IEnumerable<EnvasadoCerveza>> GetAssociatedPackagingsAsync(int cerveza_id)
         {
             using (contextoDB.Conexion)
             {
@@ -153,7 +153,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
                       "WHERE cerveza_id = @cerveza_id " +
                       "ORDER BY envasado, unidad_volumen, volumen ";
 
-                var resultadoEnvasados = await contextoDB.Conexion.QueryAsync<Envasado>(sentenciaSQL, parametrosSentencia);
+                var resultadoEnvasados = await contextoDB.Conexion.QueryAsync<EnvasadoCerveza>(sentenciaSQL, parametrosSentencia);
                 return resultadoEnvasados;
             }
         }

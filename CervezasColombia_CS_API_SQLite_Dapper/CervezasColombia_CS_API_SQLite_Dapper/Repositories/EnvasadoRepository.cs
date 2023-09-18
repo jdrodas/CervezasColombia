@@ -1,7 +1,9 @@
 ﻿using CervezasColombia_CS_API_SQLite_Dapper.DbContexts;
+using CervezasColombia_CS_API_SQLite_Dapper.Helpers;
 using CervezasColombia_CS_API_SQLite_Dapper.Interfaces;
 using CervezasColombia_CS_API_SQLite_Dapper.Models;
 using Dapper;
+using Microsoft.Data.Sqlite;
 using System.Data;
 
 namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
@@ -20,11 +22,8 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
             using (contextoDB.Conexion)
             {
                 string sentenciaSQL =
-                    "SELECT DISTINCT  e.id, " +
-                    "e.nombre, v.unidad_volumen, v.volumen " +
-                    "FROM v_info_envasados_cervezas v " +
-                    "RIGHT JOIN envasados e ON v.envasado_id = e.id " +
-                    "order by id DESC ";
+                    "SELECT DISTINCT  e.id, e.nombre FROM envasados e " +
+                    "order by e.id DESC ";
 
                 var resultadoEnvasados = await contextoDB.Conexion.QueryAsync<Envasado>(sentenciaSQL,
                                         new DynamicParameters());
@@ -56,6 +55,30 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
             }
 
             return unEvasado;
+        }
+
+        public async Task<Envasado> GetByNameAsync(string envasado_nombre)
+        {
+            Envasado unEnvasado = new Envasado();
+
+            using (contextoDB.Conexion)
+            {
+                DynamicParameters parametrosSentencia = new DynamicParameters();
+                parametrosSentencia.Add("@envasado_nombre", envasado_nombre,
+                                        DbType.String, ParameterDirection.Input);
+
+                string sentenciaSQL = "SELECT id, nombre " +
+                                      "FROM envasados " +
+                                      "WHERE LOWER(nombre) = LOWER(@envasado_nombre) ";
+
+                var resultado = await contextoDB.Conexion.QueryAsync<Envasado>(sentenciaSQL,
+                                    parametrosSentencia);
+
+                if (resultado.Count() > 0)
+                    unEnvasado = resultado.First();
+            }
+
+            return unEnvasado;
         }
 
         public async Task<int> GetTotalAssociatedBeersAsync(int envasado_id)
@@ -94,6 +117,84 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
 
                 return resultadoCervezas;
             }
+        }
+
+        public async Task<bool> CreateAsync(Envasado unEnvasado)
+        {
+            bool resultadoAccion = false;
+
+            try
+            {
+                using (contextoDB.Conexion)
+                {
+                    string sentenciaSQL = "INSERT INTO envasados (nombre) " +
+                                              "VALUES (@Nombre)";
+
+                    int filasAfectadas = await contextoDB.Conexion.ExecuteAsync(sentenciaSQL,
+                                            unEnvasado);
+
+                    if (filasAfectadas > 0)
+                        resultadoAccion = true;
+                }
+            }
+            catch (SqliteException error)
+            {
+                throw new DbOperationException(error.Message);
+            }
+
+            return resultadoAccion;
+        }
+
+        public async Task<bool> UpdateAsync(Envasado unEnvasado)
+        {
+            bool resultadoAccion = false;
+
+            try
+            {
+                using (contextoDB.Conexion)
+                {
+                    string sentenciaSQL = "UPDATE envasados SET nombre = @Nombre " +
+                                              "WHERE id = @Id";
+
+                    int filasAfectadas = await contextoDB.Conexion.ExecuteAsync(sentenciaSQL,
+                                            unEnvasado);
+
+                    if (filasAfectadas > 0)
+                        resultadoAccion = true;
+                }
+            }
+            catch (SqliteException error)
+            {
+                throw new DbOperationException(error.Message);
+            }
+
+            return resultadoAccion;
+        }
+
+
+        public async Task<bool> DeleteAsync(Envasado unEnvasado)
+        {
+            bool resultadoAccion = false;
+
+            try
+            {
+                using (contextoDB.Conexion)
+                {
+                    string sentenciaSQL = "DELETE FROM envasados WHERE id = @Id";
+
+                    int filasAfectadas = await contextoDB.Conexion.ExecuteAsync(sentenciaSQL,
+                                            unEnvasado);
+
+                    if (filasAfectadas > 0)
+                        resultadoAccion = true;
+                }
+            }
+            catch (SqliteException error)
+            {
+                throw new DbOperationException(error.Message);
+            }
+
+            return resultadoAccion;
         }
     }
 }

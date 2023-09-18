@@ -57,7 +57,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
                 .GetAssociatedIngredientsAsync(cerveza_id);
         }
 
-        public async Task<IEnumerable<Envasado>> GetAssociatedPackagingsAsync(int cerveza_id)
+        public async Task<IEnumerable<EnvasadoCerveza>> GetAssociatedPackagingsAsync(int cerveza_id)
         {
             //Validamos que la cerveza exista con ese Id
             var unaCerveza = await _cervezaRepository
