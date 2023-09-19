@@ -11,6 +11,8 @@ cerveceria;cerveza;tipo_ingrediente;ingrediente
 3 Cordilleras;Mulata;Agua;Agua de Manantial
 3 Cordilleras;Negra;Agua;Agua de Manantial
 3 Cordilleras;Rose;Agua;Agua de Manantial
+Bari Cerveza Artesanal;Eclipse;Agua;Agua de Manantial
+Bari Cerveza Artesanal;Salazar;Agua;Agua de Manantial
 BBC;Bacatá;Agua;Agua de Manantial
 BBC;Cajicá;Agua;Agua de Manantial
 BBC;Chapinero;Agua;Agua de Manantial
@@ -26,14 +28,17 @@ Bruder;Café;Saborizantes;Café
 Bruder;Chocolate;Agua;Agua de Manantial
 Bruder;Chocolate;Saborizantes;Cacao
 Bruder;Dog Lover;Agua;Agua de Manantial
+Bruder;Imperial Strout;Agua;Agua de Manantial
 Bruder;IPA Maracuyá;Agua;Agua de Manantial
 Bruder;IPA Maracuyá;Saborizantes;Maracuyá
-Bruder;Imperial Strout;Agua;Agua de Manantial
 Bruder;Maracuyá;Agua;Agua de Manantial
 Bruder;Maracuyá;Saborizantes;Maracuyá
 Bruder;Pueblito;Agua;Agua de Manantial
 Bruder;Roja;Agua;Agua de Manantial
 Bruder;Rubia;Agua;Agua de Manantial
+Cervecería Cartagena;Golden;Agua;Agua de Manantial
+Cervecería Cartagena;Porter;Agua;Agua de Manantial
+Cervecería Cartagena;Roja;Agua;Agua de Manantial
 Cervezas Kalima;Alexa;Agua;Agua de Manantial
 Cervezas Kalima;Finca;Agua;Agua de Manantial
 Cervezas Kalima;Más Música Local;Agua;Agua de Manantial
@@ -42,6 +47,10 @@ Fierabrás;Dulcinea;Agua;Agua de Manantial
 Fierabrás;Isabel la Católica;Agua;Agua de Manantial
 Fierabrás;Juana de Arco;Agua;Agua de Manantial
 Fierabrás;Maria Antonieta;Agua;Agua de Manantial
+Lino Brewing Company;Colaa;Agua;Agua de Manantial
+Lino Brewing Company;Colpa;Agua;Agua de Manantial
+Lino Brewing Company;Cols;Agua;Agua de Manantial
+Lino Brewing Company;Neipa;Agua;Agua de Manantial
 Nevada Cerveceria;Happy Ayu;Agua;Agua de Manantial
 Nevada Cerveceria;Happy Colibrí;Agua;Agua de Manantial
 Nevada Cerveceria;Happy Garceta;Agua;Agua de Manantial

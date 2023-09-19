@@ -14,7 +14,8 @@ drop view v_info_cervezas;
 -- Tablas
 select ('drop table ' || table_schema || '.' || table_name || ';') sentencia_drop
 from information_schema.tables
-where table_schema = 'core';
+where table_schema = 'core'
+and table_type = 'BASE TABLE';
 
 -- Tablas temporales
 drop table tmp_cervecerias;
@@ -27,8 +28,8 @@ drop table tmp_ingredientes_cervezas;
 drop table ingredientes_cervezas;
 drop table envasados_cervezas;
 
-drop table tipos_ingredientes;
 drop table ingredientes;
+drop table tipos_ingredientes;
 
 drop table envasados;
 drop table unidades_volumen;

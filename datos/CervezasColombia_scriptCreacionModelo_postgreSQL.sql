@@ -39,16 +39,20 @@ grant create on database cervezas_db to cervezas_app;
 grant create, usage on schema core to cervezas_app;
 alter user cervezas_app set search_path to core;
 
+set timezone='America/Bogota';
+
 -- Script de creación de tablas y vistas
 
 -- -----------------------
 -- Tabla Rangos_ABV
 -- -----------------------
 create table core.rangos_abv (
-  id            integer generated always as identity constraint rangosAbv_pk primary key,
-  nombre        varchar(50) not null constraint rangosAbv_nombre_uk unique,
-  valor_inicial float not null,
-  valor_final   float not null,
+  id                    integer generated always as identity constraint rangosAbv_pk primary key,
+  nombre                varchar(50) not null constraint rangosAbv_nombre_uk unique,
+  valor_inicial         float not null,
+  valor_final           float not null,
+  fecha_creacion        timestamp with time zone default current_timestamp,
+  fecha_actualizacion   timestamp with time zone default current_timestamp,
   constraint rangosAbv_uk unique (valor_inicial, valor_final) 
 );
 
@@ -57,15 +61,19 @@ comment on column core.rangos_abv.id is 'id del rango';
 comment on column core.rangos_abv.nombre is 'nombre del rango';
 comment on column core.rangos_abv.valor_inicial is 'valor inicial del rango';
 comment on column core.rangos_abv.valor_final is 'valor final del rango';
+comment on column core.rangos_abv.fecha_creacion is 'fecha de creación del registro';
+comment on column core.rangos_abv.fecha_actualizacion is 'fecha de actualización del registro';
 
 -- -----------------------
 -- Tabla Rangos_IBU
 -- -----------------------
 create table core.rangos_ibu (
-  id            integer generated always as identity constraint rangosIbu_pk primary key,
-  nombre        varchar(50) not null constraint rangosIbu_nombre_uk unique,
-  valor_inicial float not null,
-  valor_final   float not null,
+  id                    integer generated always as identity constraint rangosIbu_pk primary key,
+  nombre                varchar(50) not null constraint rangosIbu_nombre_uk unique,
+  valor_inicial         float not null,
+  valor_final           float not null,
+  fecha_creacion        timestamp with time zone default current_timestamp,
+  fecha_actualizacion   timestamp with time zone default current_timestamp,
   constraint rangosIbu_uk unique (valor_inicial, valor_final) 
 );
 
@@ -74,39 +82,51 @@ comment on column core.rangos_ibu.id is 'id del rango';
 comment on column core.rangos_ibu.nombre is 'nombre del rango';
 comment on column core.rangos_ibu.valor_inicial is 'valor inicial del rango';
 comment on column core.rangos_ibu.valor_final is 'valor final del rango';
+comment on column core.rangos_ibu.fecha_creacion is 'fecha de creación del registro';
+comment on column core.rangos_ibu.fecha_actualizacion is 'fecha de actualización del registro';
 
 -- -----------------------
 -- Tabla Estilos
 -- -----------------------
 create table core.estilos
 (
-  id          integer generated always as identity constraint estilos_pk primary key,
-  nombre      varchar(100)  not null constraint estilo_nombre_uk unique
+  id                    integer generated always as identity constraint estilos_pk primary key,
+  nombre                varchar(100)  not null constraint estilo_nombre_uk unique,
+  fecha_creacion        timestamp with time zone default current_timestamp,
+  fecha_actualizacion   timestamp with time zone default current_timestamp  
 );
 
 comment on table core.estilos is 'Estilos de cervezas';
 comment on column core.estilos.id is 'id del estilo';
 comment on column core.estilos.nombre is 'nombre del estilo';
+comment on column core.estilos.fecha_creacion is 'fecha de creación del registro';
+comment on column core.estilos.fecha_actualizacion is 'fecha de actualización del registro';
 
 -- ------------------------------
 -- Tabla envasados
 -- ------------------------------
 create table core.envasados (
-  id          integer generated always as identity constraint envasados_pk primary key,
-  nombre      varchar(50)  not null constraint envasados_nombre_uk unique
+  id                    integer generated always as identity constraint envasados_pk primary key,
+  nombre                varchar(50)  not null constraint envasados_nombre_uk unique,
+  fecha_creacion        timestamp with time zone default current_timestamp,
+  fecha_actualizacion   timestamp with time zone default current_timestamp  
 );
 
 comment on table core.envasados is 'Recipientes para el envasado de las cervezas';
 comment on column core.envasados.id is 'id del envasado';
 comment on column core.envasados.nombre is 'nombre del envasado';
+comment on column core.envasados.fecha_creacion is 'fecha de creación del registro';
+comment on column core.envasados.fecha_actualizacion is 'fecha de actualización del registro';
 
 -- ------------------------------
 -- Tabla unidades_volumen
 -- ------------------------------
 create table core.unidades_volumen (
-  id            integer generated always as identity constraint unidades_volumen_pk primary key,  
-  nombre        varchar(100)  not null constraint unidades_volumen_nombre_uk unique,
-  abreviatura   varchar(10)  not null constraint unidades_volumen_abreviatura_uk unique,
+  id                    integer generated always as identity constraint unidades_volumen_pk primary key,  
+  nombre                varchar(100)  not null constraint unidades_volumen_nombre_uk unique,
+  abreviatura           varchar(10)  not null constraint unidades_volumen_abreviatura_uk unique,
+  fecha_creacion        timestamp with time zone default current_timestamp,
+  fecha_actualizacion   timestamp with time zone default current_timestamp, 
   constraint unidades_volumen_uk unique (nombre, abreviatura)
 );
 
@@ -114,14 +134,18 @@ comment on table core.unidades_volumen is 'Unidades de volumen para los envasado
 comment on column core.unidades_volumen.id is 'id de la unidad de volumen';
 comment on column core.unidades_volumen.nombre is 'nombre de la unidad de volumen';
 comment on column core.unidades_volumen.abreviatura is 'abreviatura de la unidad de volumen';
+comment on column core.unidades_volumen.fecha_creacion is 'fecha de creación del registro';
+comment on column core.unidades_volumen.fecha_actualizacion is 'fecha de actualización del registro';
 
 -- -----------------------
 -- Tabla Ubicaciones
 -- -----------------------
 create table core.ubicaciones (
-  id            integer generated always as identity constraint ubicaciones_pk primary key,
-  municipio     varchar(100) not null,
-  departamento  varchar(100) not null,
+  id                    integer generated always as identity constraint ubicaciones_pk primary key,
+  municipio             varchar(100) not null,
+  departamento          varchar(100) not null,
+  fecha_creacion        timestamp with time zone default current_timestamp,
+  fecha_actualizacion   timestamp with time zone default current_timestamp,
   constraint ubicaciones_uk unique (municipio, departamento)    
 );
 
@@ -129,19 +153,25 @@ comment on table core.ubicaciones is 'Ubicaciones de las Cervecerias';
 comment on column core.ubicaciones.id is 'id de la ubicación';
 comment on column core.ubicaciones.municipio is 'municipio de la ubicación';
 comment on column core.ubicaciones.departamento is 'departamento de la ubicacion';
+comment on column core.unidades_volumen.fecha_creacion is 'fecha de creación del registro';
+comment on column core.unidades_volumen.fecha_actualizacion is 'fecha de actualización del registro';
 
 -- --------------------------
 -- Tabla tipos_ingredientes
 -- --------------------------
 create table core.tipos_ingredientes
 (
-  id          integer generated always as identity constraint tipos_ingredientes_pk primary key,
-  nombre      varchar(100)  not null constraint tipos_ingredientes_nombre_uk unique
+  id                    integer generated always as identity constraint tipos_ingredientes_pk primary key,
+  nombre                varchar(100)  not null constraint tipos_ingredientes_nombre_uk unique,
+  fecha_creacion        timestamp with time zone default current_timestamp,
+  fecha_actualizacion   timestamp with time zone default current_timestamp
 );
 
 comment on table core.tipos_ingredientes is 'Tipos de ingredientes de las cervezas';
 comment on column core.tipos_ingredientes.id is 'id del tipo de ingrediente';
 comment on column core.tipos_ingredientes.nombre is 'nombre del tipo de ingrediente';
+comment on column core.tipos_ingredientes.fecha_creacion is 'fecha de creación del registro';
+comment on column core.tipos_ingredientes.fecha_actualizacion is 'fecha de actualización del registro';
 
 -- --------------------------
 -- Tabla ingredientes
@@ -150,6 +180,8 @@ create table core.ingredientes (
   id                    integer generated always as identity constraint ingredientes_pk primary key,
   tipo_ingrediente_id   integer not null constraint ingrediente_tipo_ingrediente_fk references core.tipos_ingredientes,  
   nombre                varchar(100)  not null,
+  fecha_creacion        timestamp with time zone default current_timestamp,
+  fecha_actualizacion   timestamp with time zone default current_timestamp,
   constraint ingrediente_tipo_ingrediente_uk unique (tipo_ingrediente_id, nombre)  
 );
 
@@ -157,16 +189,20 @@ comment on table core.ingredientes is 'ingredientes que pueden tener de las cerv
 comment on column core.ingredientes.id is 'id del ingrediente';
 comment on column core.ingredientes.id is 'id del tipo de ingrediente';
 comment on column core.ingredientes.nombre is 'nombre del ingrediente';
+comment on column core.ingredientes.fecha_creacion is 'fecha de creación del registro';
+comment on column core.ingredientes.fecha_actualizacion is 'fecha de actualización del registro';
 
 -- -----------------------
 -- Tabla Cervecerias
 -- -----------------------
 create table core.cervecerias (
-  id            integer generated always as identity constraint cervecerias_pk primary key,
-  nombre        varchar(100) not null constraint cerveceria_nombre_uk unique,
-  ubicacion_id  integer      not null constraint cerveceria_ubicacion_fk references core.ubicaciones,
-  sitio_web     varchar(200) not null constraint cerveceria_sitio_web_uk unique,
-  instagram     varchar(100) not null constraint cerveceria_instagram_uk unique
+  id                    integer generated always as identity constraint cervecerias_pk primary key,
+  nombre                varchar(100) not null constraint cerveceria_nombre_uk unique,
+  ubicacion_id          integer      not null constraint cerveceria_ubicacion_fk references core.ubicaciones,
+  sitio_web             varchar(200) not null constraint cerveceria_sitio_web_uk unique,
+  instagram             varchar(100) not null constraint cerveceria_instagram_uk unique,
+  fecha_creacion        timestamp with time zone default current_timestamp,
+  fecha_actualizacion   timestamp with time zone default current_timestamp
 );
 
 comment on table core.cervecerias is 'Las Cervecerias';
@@ -175,17 +211,21 @@ comment on column core.cervecerias.nombre is 'Nombre de la Cerveceria';
 comment on column core.cervecerias.ubicacion_id is 'Id de la ubicación de la Cervecería';
 comment on column core.cervecerias.sitio_web is 'Sitio Web de la Cervecería';
 comment on column core.cervecerias.instagram is 'Instagram de la Cerveceria';
+comment on column core.cervecerias.fecha_creacion is 'fecha de creación del registro';
+comment on column core.cervecerias.fecha_actualizacion is 'fecha de actualización del registro';
 
 -- -----------------------
 -- Tabla Cervezas
 -- -----------------------
 create table core.cervezas (
-  id              integer generated always as identity constraint cervezas_pk primary key,
-  nombre          varchar(100) not null,
-  cerveceria_id   integer      not null constraint cerveza_cerveceria_fk references core.cervecerias,
-  estilo_id       integer      not null constraint cerveza_estilo_fk references core.estilos,  
-  ibu             float        not null,
-  abv             float        not null,
+  id                    integer generated always as identity constraint cervezas_pk primary key,
+  nombre                varchar(100) not null,
+  cerveceria_id         integer      not null constraint cerveza_cerveceria_fk references core.cervecerias,
+  estilo_id             integer      not null constraint cerveza_estilo_fk references core.estilos,  
+  ibu                   float        not null,
+  abv                   float        not null,
+  fecha_creacion        timestamp with time zone default current_timestamp,
+  fecha_actualizacion   timestamp with time zone default current_timestamp,
   constraint cervezas_uk unique (nombre,estilo_id,cerveceria_id),
   constraint cerveza_cerveceria_uk unique (nombre, cerveceria_id)
 );
@@ -197,15 +237,20 @@ comment on column core.cervezas.cerveceria_id is 'Id de la cervecería';
 comment on column core.cervezas.estilo_id is 'Id del estilo';
 comment on column core.cervezas.ibu is 'valor del Ibu de la cerveza';
 comment on column core.cervezas.abv is 'valor del abv de la cerveza';
+comment on column core.cervezas.fecha_creacion is 'fecha de creación del registro';
+comment on column core.cervezas.fecha_actualizacion is 'fecha de actualización del registro';
+
 
 -- ------------------------------
 -- Tabla envasados_cervezas
 -- ------------------------------
-create table core. envasados_cervezas (
-  cerveza_id        integer not null constraint envasados_cervezas_cerveza_fk references core.cervezas,  
-  envasado_id       integer not null constraint envasados_cervezas_envasado_fk references core.envasados,
-  unidad_volumen_id integer not null constraint envasados_cervezas_unidad_volumen_fk references core.unidades_volumen,
-  volumen           float not null,
+create table core.envasados_cervezas (
+  cerveza_id            integer not null constraint envasados_cervezas_cerveza_fk references core.cervezas,  
+  envasado_id           integer not null constraint envasados_cervezas_envasado_fk references core.envasados,
+  unidad_volumen_id     integer not null constraint envasados_cervezas_unidad_volumen_fk references core.unidades_volumen,
+  volumen               float not null,
+  fecha_creacion        timestamp with time zone default current_timestamp,
+  fecha_actualizacion   timestamp with time zone default current_timestamp,
   constraint envasados_cervezas_pk primary key (cerveza_id, envasado_id, unidad_volumen_id, volumen)
 );
 
@@ -214,20 +259,26 @@ comment on column core.envasados_cervezas.cerveza_id is 'id de la cerveza';
 comment on column core.envasados_cervezas.envasado_id is 'id del envasado';
 comment on column core.envasados_cervezas.unidad_volumen_id is 'id de la unidad de volumen';
 comment on column core.envasados_cervezas.volumen is 'volumen del envasado';
+comment on column core.envasados_cervezas.fecha_creacion is 'fecha de creación del registro';
+comment on column core.envasados_cervezas.fecha_actualizacion is 'fecha de actualización del registro';
 
 -- ------------------------------
 -- Tabla ingredientes_cervezas
 -- ------------------------------
 
 create table core.ingredientes_cervezas (
-  cerveza_id      integer not null constraint ingredientes_cervezas_cerveza_fk references core.cervezas,  
-  ingrediente_id  integer not null constraint ingredientes_cervezas_ingrediente_fk references core.ingredientes,
+  cerveza_id            integer not null constraint ingredientes_cervezas_cerveza_fk references core.cervezas,  
+  ingrediente_id        integer not null constraint ingredientes_cervezas_ingrediente_fk references core.ingredientes,
+  fecha_creacion        timestamp with time zone default current_timestamp,
+  fecha_actualizacion   timestamp with time zone default current_timestamp,
   constraint ingredientes_cervezas_pk primary key (cerveza_id, ingrediente_id)
 );
 
 comment on table core.ingredientes_cervezas is 'ingredientes identificados de las cervezas';
 comment on column core.ingredientes_cervezas.cerveza_id is 'id de la cerveza';
 comment on column core.ingredientes_cervezas.ingrediente_id is 'id del ingrediente';
+comment on column core.ingredientes_cervezas.fecha_creacion is 'fecha de creación del registro';
+comment on column core.ingredientes_cervezas.fecha_actualizacion is 'fecha de actualización del registro';
 
 -- Vistas:
 
