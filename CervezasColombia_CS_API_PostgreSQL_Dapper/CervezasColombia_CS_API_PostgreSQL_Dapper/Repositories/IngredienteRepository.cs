@@ -3,30 +3,30 @@ using CervezasColombia_CS_API_PostgreSQL_Dapper.Helpers;
 using CervezasColombia_CS_API_PostgreSQL_Dapper.Interfaces;
 using CervezasColombia_CS_API_PostgreSQL_Dapper.Models;
 using Dapper;
-using Microsoft.Data.Sqlite;
+using Npgsql;
 using System.Data;
 
 namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
 {
     public class IngredienteRepository : IIngredienteRepository
     {
-        private readonly SQLiteDbContext contextoDB;
+        private readonly PgsqlDbContext contextoDB;
 
-        public IngredienteRepository(SQLiteDbContext unContexto)
+        public IngredienteRepository(PgsqlDbContext unContexto)
         {
             contextoDB = unContexto;
         }
 
         public async Task<IEnumerable<Ingrediente>> GetAllAsync()
         {
-            using (contextoDB.Conexion)
+            using (var conexion = contextoDB.CreateConnection())
             {
                 string sentenciaSQL =
                     "SELECT DISTINCT v.ingrediente_id id, v.ingrediente nombre, v.tipo_ingrediente, v.tipo_ingrediente_id " +
                     "FROM v_info_ingredientes v " +
                     "ORDER BY v.ingrediente_id DESC ";
 
-                var resultadoEnvasados = await contextoDB.Conexion.QueryAsync<Ingrediente>(sentenciaSQL,
+                var resultadoEnvasados = await conexion.QueryAsync<Ingrediente>(sentenciaSQL,
                                         new DynamicParameters());
 
                 return resultadoEnvasados;
@@ -37,7 +37,7 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
         {
             Ingrediente unIngrediente = new Ingrediente();
 
-            using (contextoDB.Conexion)
+            using (var conexion = contextoDB.CreateConnection())
             {
                 DynamicParameters parametrosSentencia = new DynamicParameters();
                 parametrosSentencia.Add("@ingrediente_id", ingrediente_id,
@@ -48,7 +48,7 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
                     "FROM v_info_ingredientes v " +
                     "WHERE v.ingrediente_id = @ingrediente_id ";
 
-                var resultado = await contextoDB.Conexion.QueryAsync<Ingrediente>(sentenciaSQL,
+                var resultado = await conexion.QueryAsync<Ingrediente>(sentenciaSQL,
                     parametrosSentencia);
 
                 if (resultado.Count() > 0)
@@ -62,7 +62,7 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
         {
             Ingrediente unIngrediente = new Ingrediente();
 
-            using (contextoDB.Conexion)
+            using (var conexion = contextoDB.CreateConnection())
             {
                 DynamicParameters parametrosSentencia = new DynamicParameters();
                 parametrosSentencia.Add("@ingrediente_nombre", ingrediente_nombre,
@@ -76,7 +76,7 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
                     "WHERE LOWER(v.ingrediente) = LOWER(@ingrediente_nombre) " +
                     "AND LOWER(v.tipo_ingrediente) = LOWER(@ingrediente_tipo)";
 
-                var resultado = await contextoDB.Conexion.QueryAsync<Ingrediente>(sentenciaSQL,
+                var resultado = await conexion.QueryAsync<Ingrediente>(sentenciaSQL,
                                     parametrosSentencia);
 
                 if (resultado.Count() > 0)
@@ -88,24 +88,26 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
 
         public async Task<int> GetTotalAssociatedBeersAsync(int ingrediente_id)
         {
+            using (var conexion = contextoDB.CreateConnection())
+            {
+                DynamicParameters parametrosSentencia = new DynamicParameters();
+                parametrosSentencia.Add("@ingrediente_id", ingrediente_id,
+                                        DbType.Int32, ParameterDirection.Input);
 
-            DynamicParameters parametrosSentencia = new DynamicParameters();
-            parametrosSentencia.Add("@ingrediente_id", ingrediente_id,
-                                    DbType.Int32, ParameterDirection.Input);
+                string sentenciaSQL = "SELECT COUNT(v.cerveza_id) totalCervezas " +
+                    "FROM v_info_ingredientes_cervezas v " +
+                    "WHERE v.ingrediente_id = @ingrediente_id ";
 
-            string sentenciaSQL = "SELECT COUNT(v.cerveza_id) totalCervezas " +
-                "FROM v_info_ingredientes_cervezas v " +
-                "WHERE v.ingrediente_id = @ingrediente_id ";
+                var totalCervezas = await conexion.QueryFirstAsync<int>(sentenciaSQL,
+                                        parametrosSentencia);
 
-            var totalCervezas = await contextoDB.Conexion.QueryFirstAsync<int>(sentenciaSQL,
-                                    parametrosSentencia);
-
-            return totalCervezas;
+                return totalCervezas;
+            }
         }
 
         public async Task<IEnumerable<Cerveza>> GetAssociatedBeersAsync(int ingrediente_id)
         {
-            using (contextoDB.Conexion)
+            using (var conexion = contextoDB.CreateConnection())
             {
                 DynamicParameters parametrosSentencia = new DynamicParameters();
                 parametrosSentencia.Add("@ingrediente_id", ingrediente_id,
@@ -118,7 +120,7 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
                     "WHERE vi.ingrediente_id = @ingrediente_id " +
                     "ORDER BY vc.cerveza_id DESC ";
 
-                var resultadoCervezas = await contextoDB.Conexion.QueryAsync<Cerveza>(sentenciaSQL, parametrosSentencia);
+                var resultadoCervezas = await conexion.QueryAsync<Cerveza>(sentenciaSQL, parametrosSentencia);
 
                 return resultadoCervezas;
             }
@@ -126,7 +128,7 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
 
         public async Task<int> GetAssociatedIngredientTypeIdAsync(string tipo_ingrediente_nombre)
         {
-            using (contextoDB.Conexion)
+            using (var conexion = contextoDB.CreateConnection())
             {
                 DynamicParameters parametrosSentencia = new DynamicParameters();
                 parametrosSentencia.Add("@tipo_ingrediente", tipo_ingrediente_nombre,
@@ -135,7 +137,7 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
                 string sentenciaSQL = "SELECT id FROM tipos_ingredientes ti " +
                       "WHERE LOWER(ti.nombre) = LOWER(@tipo_ingrediente) ";
 
-                var resultadotipoIngrediente = await contextoDB.Conexion.QueryAsync<int>(sentenciaSQL,
+                var resultadotipoIngrediente = await conexion.QueryAsync<int>(sentenciaSQL,
                                                 parametrosSentencia);
 
                 if (resultadotipoIngrediente.Count() > 0)
@@ -151,19 +153,19 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
 
             try
             {
-                using (contextoDB.Conexion)
+                using (var conexion = contextoDB.CreateConnection())
                 {
                     string sentenciaSQL = "INSERT INTO ingredientes (nombre, tipo_ingrediente_id) " +
                                               "VALUES (@Nombre, @Tipo_Ingrediente_Id)";
 
-                    int filasAfectadas = await contextoDB.Conexion.ExecuteAsync(sentenciaSQL,
+                    int filasAfectadas = await conexion.ExecuteAsync(sentenciaSQL,
                                             unIngrediente);
 
                     if (filasAfectadas > 0)
                         resultadoAccion = true;
                 }
             }
-            catch (SqliteException error)
+            catch (NpgsqlException error)
             {
                 throw new DbOperationException(error.Message);
             }
@@ -177,19 +179,19 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
 
             try
             {
-                using (contextoDB.Conexion)
+                using (var conexion = contextoDB.CreateConnection())
                 {
                     string sentenciaSQL = "UPDATE ingredientes SET nombre = @Nombre, tipo_ingrediente_id = @Tipo_Ingrediente_Id " +
                                               "WHERE id = @Id";
 
-                    int filasAfectadas = await contextoDB.Conexion.ExecuteAsync(sentenciaSQL,
+                    int filasAfectadas = await conexion.ExecuteAsync(sentenciaSQL,
                                             unIngrediente);
 
                     if (filasAfectadas > 0)
                         resultadoAccion = true;
                 }
             }
-            catch (SqliteException error)
+            catch (NpgsqlException error)
             {
                 throw new DbOperationException(error.Message);
             }
@@ -204,18 +206,18 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
 
             try
             {
-                using (contextoDB.Conexion)
+                using (var conexion = contextoDB.CreateConnection())
                 {
                     string sentenciaSQL = "DELETE FROM ingredientes WHERE id = @Id";
 
-                    int filasAfectadas = await contextoDB.Conexion.ExecuteAsync(sentenciaSQL,
+                    int filasAfectadas = await conexion.ExecuteAsync(sentenciaSQL,
                                             unIngrediente);
 
                     if (filasAfectadas > 0)
                         resultadoAccion = true;
                 }
             }
-            catch (SqliteException error)
+            catch (NpgsqlException error)
             {
                 throw new DbOperationException(error.Message);
             }
