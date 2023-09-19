@@ -34,7 +34,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
 
         public async Task<Envasado> GetByIdAsync(int envasado_id)
         {
-            Envasado unEvasado = new Envasado();
+            Envasado unEnvasado = new Envasado();
 
             using (contextoDB.Conexion)
             {
@@ -51,10 +51,10 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
                     parametrosSentencia);
 
                 if (resultado.Count() > 0)
-                    unEvasado = resultado.First();
+                    unEnvasado = resultado.First();
             }
 
-            return unEvasado;
+            return unEnvasado;
         }
 
         public async Task<Envasado> GetByNameAsync(string envasado_nombre)

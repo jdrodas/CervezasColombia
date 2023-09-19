@@ -21,7 +21,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
 
         public async Task<Envasado> GetByIdAsync(int envasado_id)
         {
-            //Validamos que la Cerveceria exista con ese Id
+            //Validamos que la envasado exista con ese Id
             var unEnvasado = await _envasadoRepository
                 .GetByIdAsync(envasado_id);
 
@@ -135,7 +135,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
             if (envasadoExistente.Id == 0)
                 throw new AppValidationException($"No existe un envasado con el Id {envasado_id} que se pueda eliminar");
 
-            // Validamos que el estilo no tenga asociadas cervezas
+            // Validamos que el envasado no tenga asociadas cervezas
             var cantidadCervezasAsociadas = await _envasadoRepository
                 .GetTotalAssociatedBeersAsync(envasadoExistente.Id);
 

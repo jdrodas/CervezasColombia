@@ -61,16 +61,12 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
             if (unaUbicacion.Departamento.Length == 0)
                 throw new AppValidationException("No se puede insertar una ubicación con Departamento nulo");
 
-            // validamos que la ubicación a crear no esté previamente creado
+            // validamos que la ubicación a crear no esté previamente creada
             var ubicacionExistente = await _ubicacionRepository
                 .GetByNameAsync(unaUbicacion.Municipio!, unaUbicacion.Departamento!);
 
             if (ubicacionExistente.Id != 0)
                 throw new AppValidationException($"Ya existe una ubicación con el nombre {unaUbicacion.Municipio}, {unaUbicacion.Departamento}");
-
-            //Validamos que haya al menos un cambio en las propiedades
-            if (unaUbicacion.Equals(ubicacionExistente))
-                throw new AppValidationException("No hay cambios en los atributos de la cerveza. No se realiza actualización.");
 
             try
             {

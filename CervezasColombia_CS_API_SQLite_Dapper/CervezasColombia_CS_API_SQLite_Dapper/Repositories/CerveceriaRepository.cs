@@ -180,7 +180,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
                                         DbType.String, ParameterDirection.Input);
                 
                 string sentenciaSQL = "SELECT id FROM ubicaciones u " +
-                      "WHERE (u.municipio || ', ' || u.departamento) = @ubicacion ";
+                      "WHERE (LOWER(u.municipio) || ', ' || LOWER(u.departamento)) = LOWER(@ubicacion) ";
 
                 var resultadoIdUbicacion = await contextoDB.Conexion.QueryAsync<int>(sentenciaSQL,
                                                 parametrosSentencia);
