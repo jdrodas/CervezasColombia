@@ -1,7 +1,7 @@
-﻿using CervezasColombia_CS_API_SQLite_Dapper.Models;
+﻿using CervezasColombia_CS_API_PostgreSQL_Dapper.Models;
 
 
-namespace CervezasColombia_CS_API_SQLite_Dapper.Interfaces
+namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Interfaces
 {
     public interface IIngredienteRepository
     {

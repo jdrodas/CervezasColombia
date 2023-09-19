@@ -1,9 +1,9 @@
-﻿using CervezasColombia_CS_API_SQLite_Dapper.DbContexts;
-using CervezasColombia_CS_API_SQLite_Dapper.Interfaces;
-using CervezasColombia_CS_API_SQLite_Dapper.Models;
+﻿using CervezasColombia_CS_API_PostgreSQL_Dapper.DbContexts;
+using CervezasColombia_CS_API_PostgreSQL_Dapper.Interfaces;
+using CervezasColombia_CS_API_PostgreSQL_Dapper.Models;
 using Dapper;
 
-namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
+namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
 {
     public class ResumenRepository : IResumenRepository
     {

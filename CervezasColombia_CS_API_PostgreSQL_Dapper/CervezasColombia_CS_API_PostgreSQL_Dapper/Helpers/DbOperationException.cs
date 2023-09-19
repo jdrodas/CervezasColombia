@@ -5,7 +5,7 @@
  las operaciones CRUD de la aplicación
 */
 
-namespace CervezasColombia_CS_API_SQLite_Dapper.Helpers
+namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Helpers
 {
     public class DbOperationException : Exception
     {

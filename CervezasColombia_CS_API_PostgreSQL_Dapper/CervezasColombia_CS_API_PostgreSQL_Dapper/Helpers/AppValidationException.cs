@@ -5,7 +5,7 @@
 */
 
 
-namespace CervezasColombia_CS_API_SQLite_Dapper.Helpers
+namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Helpers
 {
     public class AppValidationException : Exception
     {

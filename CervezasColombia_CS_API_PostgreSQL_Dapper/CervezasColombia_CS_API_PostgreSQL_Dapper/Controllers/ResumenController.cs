@@ -1,7 +1,7 @@
-﻿using CervezasColombia_CS_API_SQLite_Dapper.Services;
+﻿using CervezasColombia_CS_API_PostgreSQL_Dapper.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
+namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

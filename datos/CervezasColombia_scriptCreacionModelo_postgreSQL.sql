@@ -304,8 +304,6 @@ from envasados_cervezas ec
     join envasados e on ec.envasado_id = e.id
     join unidades_volumen uv on ec.unidad_volumen_id = uv.id;      
 
-
-
 -- *****************************
 -- Orden de cargue de datos
 -- *****************************
