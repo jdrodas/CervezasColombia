@@ -1,18 +1,11 @@
-﻿using CervezasColombia_CS_PoC_Consola;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CervezasColombia_CS_PoC_Consola
+﻿namespace CervezasColombia_CS_PoC_Consola
 {
     public class PoC_Pgsql
     {
         public static void Ejecuta_PoC()
         {
             string? cadenaConexion = AccesoDatosPgsql.ObtieneCadenaConexion();
-            Console.WriteLine($"El string de conexión obtenido es \n: {cadenaConexion}");
+            Console.WriteLine($"El string de conexión obtenido es: \n{cadenaConexion}");
 
             //R del CRUD - Lectura de registros existentes - SELECT
             VisualizaNombresEstilosCerveza();
@@ -69,6 +62,10 @@ namespace CervezasColombia_CS_PoC_Consola
 
             Console.WriteLine("\nPresiona una tecla para continuar...");
             Console.ReadKey();
+
+            //Devolvemos el estilo a su valor orignal
+            estiloActualizado.Nombre = "Amber Ale";
+            AccesoDatosPgsql.ActualizaEstiloCerveza(estiloActualizado);
 
             //D del CRUD - Borrado de un estilo existente - DELETE
             Console.WriteLine($"\n\nBorrando el estilo {nuevoEstilo.Nombre} ...");

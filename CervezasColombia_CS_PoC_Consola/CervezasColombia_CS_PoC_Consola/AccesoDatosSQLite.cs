@@ -72,13 +72,13 @@ namespace CervezasColombia_CS_PoC_Consola
                 parametrosSentencia.Add("@nombre_estilo", nombreEstilo,
                                         DbType.String, ParameterDirection.Input);
 
-                string? sentenciaSQL =  "SELECT id,nombre " +
+                string? sentenciaSQL = "SELECT id,nombre " +
                                         "FROM estilos " +
                                         "WHERE nombre = @nombre_estilo";
-                
+
                 var salida = cxnDB.Query<Estilo>(sentenciaSQL, parametrosSentencia);
 
-                if (salida.ToArray().Length > 0)
+                if (salida.Count() > 0)
                     estiloResultado = salida.First();
 
                 return estiloResultado;
@@ -108,7 +108,7 @@ namespace CervezasColombia_CS_PoC_Consola
 
                 var salida = cxnDB.Query<Estilo>(sentenciaSQL, parametrosSentencia);
 
-                if (salida.ToArray().Length > 0)
+                if (salida.Count() > 0)
                     estiloResultado = salida.First();
 
                 return estiloResultado;
@@ -150,7 +150,7 @@ namespace CervezasColombia_CS_PoC_Consola
                 {
                     string insertaEstiloSQL = "INSERT INTO estilos (nombre) " +
                                                "VALUES (@nombre_estilo)";
-                    
+
                     cantidadFilas = cxnDB.Execute(insertaEstiloSQL, parametrosSentencia);
                 }
                 catch (SQLiteException)
@@ -201,7 +201,7 @@ namespace CervezasColombia_CS_PoC_Consola
                 //Si no hay filas, no existe estilo que actualizar
                 if (cantidadFilas == 0)
                     return false;
-                
+
                 //Aqui validamos que no exista estilos con el nuevo nombre
                 parametrosSentencia = new DynamicParameters();
                 parametrosSentencia.Add("@estilo_nombre", estiloActualizado.Nombre,

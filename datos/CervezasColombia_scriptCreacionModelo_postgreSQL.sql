@@ -42,52 +42,6 @@ alter user cervezas_app set search_path to core;
 -- Script de creación de tablas y vistas
 
 -- -----------------------
--- Tabla Ubicaciones
--- -----------------------
-create table core.ubicaciones (
-  id            integer generated always as identity constraint ubicaciones_pk primary key,
-  municipio     varchar(100) not null,
-  departamento  varchar(100) not null,
-  constraint ubicaciones_uk unique (municipio, departamento)    
-);
-
-comment on table core.ubicaciones is 'Ubicaciones de las Cervecerias';
-comment on column core.ubicaciones.id is 'id de la ubicación';
-comment on column core.ubicaciones.municipio is 'municipio de la ubicación';
-comment on column core.ubicaciones.departamento is 'departamento de la ubicacion';
-
--- -----------------------
--- Tabla Cervecerias
--- -----------------------
-create table core.cervecerias (
-  id            integer generated always as identity constraint cervecerias_pk primary key,
-  nombre        varchar(100) not null constraint cerveceria_nombre_uk unique,
-  ubicacion_id  integer      not null constraint cerveceria_ubicacion_fk references core.ubicaciones,
-  sitio_web     varchar(200) not null constraint cerveceria_sitio_web_uk unique,
-  instagram     varchar(100) not null constraint cerveceria_instagram_uk unique
-);
-
-comment on table core.cervecerias is 'Las Cervecerias';
-comment on column core.cervecerias.id is 'id de la Cerveceria';
-comment on column core.cervecerias.nombre is 'Nombre de la Cerveceria';
-comment on column core.cervecerias.ubicacion_id is 'Id de la ubicación de la Cervecería';
-comment on column core.cervecerias.sitio_web is 'Sitio Web de la Cervecería';
-comment on column core.cervecerias.instagram is 'Instagram de la Cerveceria';
-
--- -----------------------
--- Tabla Estilos
--- -----------------------
-create table core.estilos
-(
-  id          integer generated always as identity constraint estilos_pk primary key,
-  nombre      varchar(100)  not null constraint estilo_nombre_uk unique
-);
-
-comment on table core.estilos is 'Estilos de cervezas';
-comment on column core.estilos.id is 'id del estilo';
-comment on column core.estilos.nombre is 'nombre del estilo';
-
--- -----------------------
 -- Tabla Rangos_ABV
 -- -----------------------
 create table core.rangos_abv (
@@ -122,6 +76,107 @@ comment on column core.rangos_ibu.valor_inicial is 'valor inicial del rango';
 comment on column core.rangos_ibu.valor_final is 'valor final del rango';
 
 -- -----------------------
+-- Tabla Estilos
+-- -----------------------
+create table core.estilos
+(
+  id          integer generated always as identity constraint estilos_pk primary key,
+  nombre      varchar(100)  not null constraint estilo_nombre_uk unique
+);
+
+comment on table core.estilos is 'Estilos de cervezas';
+comment on column core.estilos.id is 'id del estilo';
+comment on column core.estilos.nombre is 'nombre del estilo';
+
+-- ------------------------------
+-- Tabla envasados
+-- ------------------------------
+create table core.envasados (
+  id          integer generated always as identity constraint envasados_pk primary key,
+  nombre      varchar(50)  not null constraint envasados_nombre_uk unique
+);
+
+comment on table core.envasados is 'Recipientes para el envasado de las cervezas';
+comment on column core.envasados.id is 'id del envasado';
+comment on column core.envasados.nombre is 'nombre del envasado';
+
+-- ------------------------------
+-- Tabla unidades_volumen
+-- ------------------------------
+create table core.unidades_volumen (
+  id            integer generated always as identity constraint unidades_volumen_pk primary key,  
+  nombre        varchar(100)  not null constraint unidades_volumen_nombre_uk unique,
+  abreviatura   varchar(10)  not null constraint unidades_volumen_abreviatura_uk unique,
+  constraint unidades_volumen_uk unique (nombre, abreviatura)
+);
+
+comment on table core.unidades_volumen is 'Unidades de volumen para los envasados';
+comment on column core.unidades_volumen.id is 'id de la unidad de volumen';
+comment on column core.unidades_volumen.nombre is 'nombre de la unidad de volumen';
+comment on column core.unidades_volumen.abreviatura is 'abreviatura de la unidad de volumen';
+
+-- -----------------------
+-- Tabla Ubicaciones
+-- -----------------------
+create table core.ubicaciones (
+  id            integer generated always as identity constraint ubicaciones_pk primary key,
+  municipio     varchar(100) not null,
+  departamento  varchar(100) not null,
+  constraint ubicaciones_uk unique (municipio, departamento)    
+);
+
+comment on table core.ubicaciones is 'Ubicaciones de las Cervecerias';
+comment on column core.ubicaciones.id is 'id de la ubicación';
+comment on column core.ubicaciones.municipio is 'municipio de la ubicación';
+comment on column core.ubicaciones.departamento is 'departamento de la ubicacion';
+
+-- --------------------------
+-- Tabla tipos_ingredientes
+-- --------------------------
+create table core.tipos_ingredientes
+(
+  id          integer generated always as identity constraint tipos_ingredientes_pk primary key,
+  nombre      varchar(100)  not null constraint tipos_ingredientes_nombre_uk unique
+);
+
+comment on table core.tipos_ingredientes is 'Tipos de ingredientes de las cervezas';
+comment on column core.tipos_ingredientes.id is 'id del tipo de ingrediente';
+comment on column core.tipos_ingredientes.nombre is 'nombre del tipo de ingrediente';
+
+-- --------------------------
+-- Tabla ingredientes
+-- --------------------------
+create table core.ingredientes (
+  id                    integer generated always as identity constraint ingredientes_pk primary key,
+  tipo_ingrediente_id   integer not null constraint ingrediente_tipo_ingrediente_fk references core.tipos_ingredientes,  
+  nombre                varchar(100)  not null,
+  constraint ingrediente_tipo_ingrediente_uk unique (tipo_ingrediente_id, nombre)  
+);
+
+comment on table core.ingredientes is 'ingredientes que pueden tener de las cervezas';
+comment on column core.ingredientes.id is 'id del ingrediente';
+comment on column core.ingredientes.id is 'id del tipo de ingrediente';
+comment on column core.ingredientes.nombre is 'nombre del ingrediente';
+
+-- -----------------------
+-- Tabla Cervecerias
+-- -----------------------
+create table core.cervecerias (
+  id            integer generated always as identity constraint cervecerias_pk primary key,
+  nombre        varchar(100) not null constraint cerveceria_nombre_uk unique,
+  ubicacion_id  integer      not null constraint cerveceria_ubicacion_fk references core.ubicaciones,
+  sitio_web     varchar(200) not null constraint cerveceria_sitio_web_uk unique,
+  instagram     varchar(100) not null constraint cerveceria_instagram_uk unique
+);
+
+comment on table core.cervecerias is 'Las Cervecerias';
+comment on column core.cervecerias.id is 'id de la Cerveceria';
+comment on column core.cervecerias.nombre is 'Nombre de la Cerveceria';
+comment on column core.cervecerias.ubicacion_id is 'Id de la ubicación de la Cervecería';
+comment on column core.cervecerias.sitio_web is 'Sitio Web de la Cervecería';
+comment on column core.cervecerias.instagram is 'Instagram de la Cerveceria';
+
+-- -----------------------
 -- Tabla Cervezas
 -- -----------------------
 create table core.cervezas (
@@ -143,78 +198,6 @@ comment on column core.cervezas.estilo_id is 'Id del estilo';
 comment on column core.cervezas.ibu is 'valor del Ibu de la cerveza';
 comment on column core.cervezas.abv is 'valor del abv de la cerveza';
 
--- --------------------------
--- Tabla tipos_ingredientes
--- --------------------------
-create table core.tipos_ingredientes
-(
-  id          integer generated always as identity constraint tipos_ingredientes_pk primary key,
-  nombre      varchar(100)  not null constraint tipos_ingredientes_nombre_uk unique
-);
-
-comment on table core.tipos_ingredientes is 'Tipos de ingredientes de las cervezas';
-comment on column core.tipos_ingredientes.id is 'id del tipo de ingrediente';
-comment on column core.tipos_ingredientes.nombre is 'nombre del tipo de ingrediente';
-
--- --------------------------
--- Tabla ingredientes
--- --------------------------
-
-create table core.ingredientes (
-  id                    integer generated always as identity constraint ingredientes_pk primary key,
-  tipo_ingrediente_id   integer not null constraint ingrediente_tipo_ingrediente_fk references core.tipos_ingredientes,  
-  nombre                varchar(100)  not null,
-  constraint ingrediente_tipo_ingrediente_uk unique (tipo_ingrediente_id, nombre)  
-);
-
-comment on table core.ingredientes is 'ingredientes que pueden tener de las cervezas';
-comment on column core.ingredientes.id is 'id del ingrediente';
-comment on column core.ingredientes.id is 'id del tipo de ingrediente';
-comment on column core.ingredientes.nombre is 'nombre del ingrediente';
-
--- ------------------------------
--- Tabla ingredientes_cervezas
--- ------------------------------
-
-create table core.ingredientes_cervezas (
-  cerveza_id      integer not null constraint ingredientes_cervezas_cerveza_fk references core.cervezas,  
-  ingrediente_id  integer not null constraint ingredientes_cervezas_ingrediente_fk references core.ingredientes,
-  constraint ingredientes_cervezas_pk primary key (cerveza_id, ingrediente_id)
-);
-
-comment on table core.ingredientes_cervezas is 'ingredientes identificados de las cervezas';
-comment on column core.ingredientes_cervezas.cerveza_id is 'id de la cerveza';
-comment on column core.ingredientes_cervezas.ingrediente_id is 'id del ingrediente';
-
--- ------------------------------
--- Tabla unidades_volumen
--- ------------------------------
-
-create table core.unidades_volumen (
-  id            integer generated always as identity constraint unidades_volumen_pk primary key,  
-  nombre        varchar(100)  not null constraint unidades_volumen_nombre_uk unique,
-  abreviatura   varchar(10)  not null constraint unidades_volumen_abreviatura_uk unique,
-  constraint unidades_volumen_uk unique (nombre, abreviatura)
-);
-
-comment on table core.unidades_volumen is 'Unidades de volumen para los envasados';
-comment on column core.unidades_volumen.id is 'id de la unidad de volumen';
-comment on column core.unidades_volumen.nombre is 'nombre de la unidad de volumen';
-comment on column core.unidades_volumen.abreviatura is 'abreviatura de la unidad de volumen';
-
--- ------------------------------
--- Tabla envasados
--- ------------------------------
-
-create table core.envasados (
-  id          integer generated always as identity constraint envasados_pk primary key,
-  nombre      varchar(50)  not null constraint envasados_nombre_uk unique
-);
-
-comment on table core.envasados is 'Recipientes para el envasado de las cervezas';
-comment on column core.envasados.id is 'id del envasado';
-comment on column core.envasados.nombre is 'nombre del envasado';
-
 -- ------------------------------
 -- Tabla envasados_cervezas
 -- ------------------------------
@@ -232,6 +215,19 @@ comment on column core.envasados_cervezas.envasado_id is 'id del envasado';
 comment on column core.envasados_cervezas.unidad_volumen_id is 'id de la unidad de volumen';
 comment on column core.envasados_cervezas.volumen is 'volumen del envasado';
 
+-- ------------------------------
+-- Tabla ingredientes_cervezas
+-- ------------------------------
+
+create table core.ingredientes_cervezas (
+  cerveza_id      integer not null constraint ingredientes_cervezas_cerveza_fk references core.cervezas,  
+  ingrediente_id  integer not null constraint ingredientes_cervezas_ingrediente_fk references core.ingredientes,
+  constraint ingredientes_cervezas_pk primary key (cerveza_id, ingrediente_id)
+);
+
+comment on table core.ingredientes_cervezas is 'ingredientes identificados de las cervezas';
+comment on column core.ingredientes_cervezas.cerveza_id is 'id de la cerveza';
+comment on column core.ingredientes_cervezas.ingrediente_id is 'id del ingrediente';
 
 -- Vistas:
 
@@ -336,6 +332,18 @@ from envasados_cervezas ec
 -- Tablas temporales
 
 -- ------------------------------
+-- TMP_INGREDIENTES
+-- ------------------------------
+create table tmp_ingredientes (ingrediente varchar, tipo_ingrediente varchar);
+
+insert into ingredientes (nombre, tipo_ingrediente_id)
+select
+    tmp.ingrediente,
+    ti.id  tipo_ingrediente_id
+from tmp_ingredientes tmp
+    join tipos_ingredientes ti on tmp.tipo_ingrediente = ti.nombre;
+
+-- ------------------------------
 -- TMP_CERVECERIAS
 -- ------------------------------
 create table tmp_cervecerias
@@ -386,18 +394,6 @@ join envasados e on tmp.envasado = e.nombre
 join unidades_volumen uv on tmp.unidad_volumen = uv.nombre;
 
 -- ------------------------------
--- TMP_INGREDIENTES
--- ------------------------------
-create table tmp_ingredientes (ingrediente varchar, tipo_ingrediente varchar);
-
-insert into ingredientes (nombre, tipo_ingrediente_id)
-select
-    tmp.ingrediente,
-    ti.id  tipo_ingrediente_id
-from tmp_ingredientes tmp
-    join tipos_ingredientes ti on tmp.tipo_ingrediente = ti.nombre;
-
--- ------------------------------
 -- TMP_INGREDIENTES_CERVEZAS
 -- ------------------------------
 create table tmp_ingredientes_cervezas
@@ -419,16 +415,15 @@ join ingredientes i on ti.id = i.tipo_ingrediente_id
 -- Procedimientos
 
 -- -------------------------------------
--- Procedimiento: p_estilos_get_names
+-- Procedimiento: p_elimina_estilo
 -- -------------------------------------
 
-create or replace procedure core.p_estilos_get_names(out p_nombres_estilos refcursor)
+create or replace procedure core.p_elimina_estilo(p_id integer)
 language plpgsql as
 $$
-begin
-    open p_nombres_estilos for
-        select distinct nombre from estilos order by nombre;
-end;
+    begin
+        delete from estilos e where e.id = p_id;
+    end;
 $$;
 
 

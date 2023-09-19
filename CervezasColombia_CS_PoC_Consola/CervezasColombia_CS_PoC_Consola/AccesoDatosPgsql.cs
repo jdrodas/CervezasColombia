@@ -1,7 +1,7 @@
 ﻿using Dapper;
 using Microsoft.Extensions.Configuration;
-using System.Data;
 using Npgsql;
+using System.Data;
 
 namespace CervezasColombia_CS_PoC_Consola
 {
@@ -79,7 +79,7 @@ namespace CervezasColombia_CS_PoC_Consola
 
                 var salida = cxnDB.Query<Estilo>(sentenciaSQL, parametrosSentencia);
 
-                if (salida.ToArray().Length > 0)
+                if (salida.Count() > 0)
                     estiloResultado = salida.First();
 
                 return estiloResultado;
@@ -109,7 +109,7 @@ namespace CervezasColombia_CS_PoC_Consola
 
                 var salida = cxnDB.Query<Estilo>(sentenciaSQL, parametrosSentencia);
 
-                if (salida.ToArray().Length > 0)
+                if (salida.Count() > 0)
                     estiloResultado = salida.First();
 
                 return estiloResultado;
@@ -258,7 +258,7 @@ namespace CervezasColombia_CS_PoC_Consola
             bool resultado = false;
             string? cadenaConexion = ObtieneCadenaConexion();
 
-            using (IDbConnection cxnDB = new NpgsqlConnection(cadenaConexion))
+            using (NpgsqlConnection cxnDB = new NpgsqlConnection(cadenaConexion))
             {
                 //Primero, identificamos si hay un estilo con este nombre
 
@@ -298,25 +298,32 @@ namespace CervezasColombia_CS_PoC_Consola
                 //Pasadas las validaciones, borramos el estilo
                 try
                 {
-                    string eliminaEstiloSQL = "DELETE FROM estilos " +
-                                              "WHERE nombre = @Nombre";
+                    //string eliminaEstiloSQL = "DELETE FROM estilos " +
+                    //                          "WHERE nombre = @Nombre";
 
-                    //Aqui no usamos parámetros dinámicos, pasamos el objeto!!!
-                    cantidadFilas = cxnDB.Execute(eliminaEstiloSQL, unEstilo);
-                }
-                catch (NpgsqlException elError)
-                {
-                    resultado = false;
-                    cantidadFilas = 0;
-                    mensajeEliminacion = $"Error de borrado en la DB. {elError.Message}";
-                }
+                    ////Aqui no usamos parámetros dinámicos, pasamos el objeto!!!
+                    //cantidadFilas = cxnDB.Execute(eliminaEstiloSQL, unEstilo);
 
-                if (cantidadFilas > 0)
-                {
+                    NpgsqlCommand comandoEliminaEstilo = new NpgsqlCommand(@"call p_elimina_estilo(:p_id)", cxnDB);
+
+                    comandoEliminaEstilo.CommandType = CommandType.Text;
+                    comandoEliminaEstilo.Parameters.AddWithValue("p_id", DbType.Int32).Value = unEstilo.Id;
+
+                    cxnDB.Open();
+                    comandoEliminaEstilo.ExecuteNonQuery();
+                    cxnDB.Close();
+
                     resultado = true;
                     mensajeEliminacion = $"Eliminación Exitosa. " +
                         $"Se eliminó el estilo {unEstilo.Id} - {unEstilo.Nombre}";
+
                 }
+                catch (NpgsqlException elError)
+                {
+                    resultado = false;                    
+                    mensajeEliminacion = $"Error de borrado en la DB. {elError.Message}";
+                }
+
             }
 
             return resultado;

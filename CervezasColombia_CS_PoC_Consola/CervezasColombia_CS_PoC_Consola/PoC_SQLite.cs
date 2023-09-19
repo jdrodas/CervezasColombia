@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CervezasColombia_CS_PoC_Consola
+﻿namespace CervezasColombia_CS_PoC_Consola
 {
     public class PoC_SQLite
     {
