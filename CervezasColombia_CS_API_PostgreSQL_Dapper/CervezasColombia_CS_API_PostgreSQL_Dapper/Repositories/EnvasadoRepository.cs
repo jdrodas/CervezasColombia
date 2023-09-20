@@ -21,9 +21,9 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
         {
             using (var conexion = contextoDB.CreateConnection())
             {
-                string sentenciaSQL =
-                    "SELECT DISTINCT  e.id, e.nombre FROM envasados e " +
-                    "order by e.id DESC ";
+                string sentenciaSQL =   "SELECT DISTINCT  e.id, e.nombre " +
+                                        "FROM envasados e " +
+                                        "ORDER BY e.id DESC ";
 
                 var resultadoEnvasados = await conexion.QueryAsync<Envasado>(sentenciaSQL,
                                         new DynamicParameters());
@@ -42,10 +42,9 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
                 parametrosSentencia.Add("@envasado_id", envasado_id,
                                         DbType.Int32, ParameterDirection.Input);
 
-                string sentenciaSQL =
-                    "SELECT DISTINCT  e.id, e.nombre " +
-                    "FROM envasados e " +
-                    "WHERE e.id = @envasado_id ";
+                string sentenciaSQL =   "SELECT DISTINCT  e.id, e.nombre " +
+                                        "FROM envasados e " +
+                                        "WHERE e.id = @envasado_id ";
 
                 var resultado = await conexion.QueryAsync<Envasado>(sentenciaSQL,
                     parametrosSentencia);
@@ -89,9 +88,9 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
                 parametrosSentencia.Add("@envasado_id", envasado_id,
                                         DbType.Int32, ParameterDirection.Input);
 
-                string sentenciaSQL = "SELECT COUNT(cerveza_id) totalCervezas " +
-                    "FROM v_info_envasados_cervezas v " +
-                    "WHERE envasado_id = @envasado_id ";
+                string sentenciaSQL =   "SELECT COUNT(cerveza_id) totalCervezas " +
+                                        "FROM v_info_envasados_cervezas v " +
+                                        "WHERE envasado_id = @envasado_id ";
 
                 var totalCervezas = await conexion.QueryFirstAsync<int>(sentenciaSQL,
                                         parametrosSentencia);
@@ -108,12 +107,12 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
                 parametrosSentencia.Add("@envasado_id", envasado_id,
                                         DbType.Int32, ParameterDirection.Input);
 
-                string sentenciaSQL = "SELECT vc.cerveza_id id, vc.cerveza nombre, vc.cerveceria, " +
-                    "vc.estilo, vc.ibu, vc.abv, vc.rango_ibu, vc.rango_abv " +
-                    "FROM v_info_cervezas vc " +
-                    "JOIN v_info_envasados_cervezas ve ON vc.cerveza_id = ve.cerveza_id " +
-                    "WHERE ve.envasado_id = @envasado_id " +
-                    "ORDER BY vc.cerveza_id DESC";
+                string sentenciaSQL =   "SELECT vc.cerveza_id id, vc.cerveza nombre, vc.cerveceria, " +
+                                        "vc.estilo, vc.ibu, vc.abv, vc.rango_ibu, vc.rango_abv " +
+                                        "FROM v_info_cervezas vc " +
+                                        "JOIN v_info_envasados_cervezas ve ON vc.cerveza_id = ve.cerveza_id " +
+                                        "WHERE ve.envasado_id = @envasado_id " +
+                                        "ORDER BY vc.cerveza_id DESC";
 
                 var resultadoCervezas = await conexion.QueryAsync<Cerveza>(sentenciaSQL, parametrosSentencia);
 
@@ -129,8 +128,8 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
             {
                 using (var conexion = contextoDB.CreateConnection())
                 {
-                    string sentenciaSQL = "INSERT INTO envasados (nombre) " +
-                                              "VALUES (@Nombre)";
+                    string sentenciaSQL =   "INSERT INTO envasados (nombre) " +
+                                            "VALUES (@Nombre)";
 
                     int filasAfectadas = await conexion.ExecuteAsync(sentenciaSQL,
                                             unEnvasado);
@@ -155,8 +154,8 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
             {
                 using (var conexion = contextoDB.CreateConnection())
                 {
-                    string sentenciaSQL = "UPDATE envasados SET nombre = @Nombre " +
-                                              "WHERE id = @Id";
+                    string sentenciaSQL =   "UPDATE envasados SET nombre = @Nombre " +
+                                            "WHERE id = @Id";
 
                     int filasAfectadas = await conexion.ExecuteAsync(sentenciaSQL,
                                             unEnvasado);

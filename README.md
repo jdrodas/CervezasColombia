@@ -37,7 +37,7 @@ Apps using .NET framework to demo database connectivity using SQLite, PostgreSQL
 
 Please keep in mind:
 
-- This is an academic project that aims to evolve the learning of concepts related to databases. **This is not a !production ready" application**.
+- This is an academic project that aims to evolve the learning of concepts related to databases. **This is not a "production ready" application**.
 
 - All information stored in the tables and collections of the databases is public information available on the breweries' websites. It is not 100% reliable and it does not claim to be.
 

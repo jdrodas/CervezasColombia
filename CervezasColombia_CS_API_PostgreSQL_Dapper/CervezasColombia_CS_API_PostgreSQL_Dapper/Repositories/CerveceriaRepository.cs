@@ -163,9 +163,9 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
                                         DbType.Int32, ParameterDirection.Input);
 
                 string sentenciaSQL = "SELECT cerveza_id id, cerveza nombre, cerveceria, estilo, ibu, abv, rango_ibu, rango_abv " +
-                      "FROM v_info_cervezas " +
-                      "WHERE cerveceria_id = @cerveceria_id " +
-                      "ORDER BY id DESC";
+                                      "FROM v_info_cervezas " +
+                                      "WHERE cerveceria_id = @cerveceria_id " +
+                                      "ORDER BY id DESC";
 
                 var resultadoCervezas = await conexion.QueryAsync<Cerveza>(sentenciaSQL, parametrosSentencia);
 
@@ -181,8 +181,9 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
                 parametrosSentencia.Add("@ubicacion", ubicacion_nombre,
                                         DbType.String, ParameterDirection.Input);
                 
-                string sentenciaSQL = "SELECT id FROM ubicaciones u " +
-                      "WHERE (LOWER(u.municipio) || ', ' || LOWER(u.departamento)) = LOWER(@ubicacion) ";
+                string sentenciaSQL =   "SELECT id " +
+                                        "FROM ubicaciones u " +
+                                        "WHERE (LOWER(u.municipio) || ', ' || LOWER(u.departamento)) = LOWER(@ubicacion) ";
 
                 var resultadoIdUbicacion = await conexion.QueryAsync<int>(sentenciaSQL,
                                                 parametrosSentencia);
@@ -202,8 +203,8 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
             {
                 using (var conexion = contextoDB.CreateConnection())
                 {
-                    string sentenciaSQL = "INSERT INTO cervecerias (nombre, sitio_web, instagram, ubicacion_id) " +
-                                              "VALUES (@Nombre, @Sitio_Web, @Instagram, @Ubicacion_Id )";
+                    string sentenciaSQL =   "INSERT INTO cervecerias (nombre, sitio_web, instagram, ubicacion_id) " +
+                                            "VALUES (@Nombre, @Sitio_Web, @Instagram, @Ubicacion_Id )";
 
                     int filasAfectadas = await conexion.ExecuteAsync(sentenciaSQL, unaCerveceria);
 
@@ -227,12 +228,12 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
             {
                 using (var conexion = contextoDB.CreateConnection())
                 {
-                    string sentenciaSQL = "UPDATE cervecerias " +
-                                                    "SET nombre = @Nombre, " +
-                                                    "sitio_web = @Sitio_Web, " +
-                                                    "instagram = @Instagram, " +
-                                                    "ubicacion_id = @Ubicacion_Id " +
-                                                    "WHERE id = @Id";
+                    string sentenciaSQL =   "UPDATE cervecerias " +
+                                            "SET nombre = @Nombre, " +
+                                            "sitio_web = @Sitio_Web, " +
+                                            "instagram = @Instagram, " +
+                                            "ubicacion_id = @Ubicacion_Id " +
+                                            "WHERE id = @Id";
 
                     int filasAfectadas = await conexion.ExecuteAsync(sentenciaSQL, unaCerveceria);
 

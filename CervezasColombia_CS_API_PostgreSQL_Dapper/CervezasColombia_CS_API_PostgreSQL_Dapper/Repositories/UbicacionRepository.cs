@@ -22,8 +22,8 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
             using (var conexion = contextoDB.CreateConnection())
             {
                 string sentenciaSQL = "SELECT id, municipio, departamento " +
-                      "FROM ubicaciones " +
-                      "ORDER BY id DESC";
+                                      "FROM ubicaciones " +
+                                      "ORDER BY id DESC";
 
                 var resultadoUbicaciones = await conexion.QueryAsync<Ubicacion>(sentenciaSQL,
                                             new DynamicParameters());
@@ -43,8 +43,8 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
                                         DbType.Int32, ParameterDirection.Input);
 
                 string sentenciaSQL = "SELECT id, municipio, departamento " +
-                      "FROM ubicaciones " +
-                      "WHERE id = @ubicacion_id ";
+                                      "FROM ubicaciones " +
+                                      "WHERE id = @ubicacion_id ";
 
                 var resultado = await conexion.QueryAsync<Ubicacion>(sentenciaSQL,
                     parametrosSentencia);
@@ -69,9 +69,9 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
                                         DbType.String, ParameterDirection.Input);
 
                 string sentenciaSQL = "SELECT id, municipio, departamento " +
-                      "FROM ubicaciones " +
-                      "WHERE municipio = @ubicacion_municipio " +
-                      "AND departamento = @ubicacion_departamento";
+                                      "FROM ubicaciones " +
+                                      "WHERE municipio = @ubicacion_municipio " +
+                                      "AND departamento = @ubicacion_departamento";
 
                 var resultado = await conexion.QueryAsync<Ubicacion>(sentenciaSQL,
                     parametrosSentencia);
@@ -112,9 +112,9 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
                                         DbType.Int32, ParameterDirection.Input);
 
                 string sentenciaSQL = "SELECT c.id, c.nombre, c.sitio_web, c.instagram, " +
-                      "(u.municipio || ', ' || u.departamento) ubicacion, c.ubicacion_id " +
-                      "FROM cervecerias c JOIN ubicaciones u ON c.ubicacion_id = u.id " +
-                      "WHERE c.ubicacion_id = @ubicacion_id ";
+                                      "(u.municipio || ', ' || u.departamento) ubicacion, c.ubicacion_id " +
+                                      "FROM cervecerias c JOIN ubicaciones u ON c.ubicacion_id = u.id " +
+                                      "WHERE c.ubicacion_id = @ubicacion_id ";
 
                 var resultadoCervecerias = await conexion.QueryAsync<Cerveceria>(sentenciaSQL, parametrosSentencia);
 
@@ -130,8 +130,8 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
             {
                 using (var conexion = contextoDB.CreateConnection())
                 {
-                    string sentenciaSQL = "INSERT INTO ubicaciones (municipio, departamento) " +
-                                              "VALUES (@Municipio, @Departamento)";
+                    string sentenciaSQL =   "INSERT INTO ubicaciones (municipio, departamento) " +
+                                            "VALUES (@Municipio, @Departamento)";
 
                     int filasAfectadas = await conexion.ExecuteAsync(sentenciaSQL,
                                             unaUbicacion);

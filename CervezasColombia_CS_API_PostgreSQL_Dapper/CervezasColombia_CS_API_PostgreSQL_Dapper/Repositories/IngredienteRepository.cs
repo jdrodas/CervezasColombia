@@ -21,10 +21,9 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
         {
             using (var conexion = contextoDB.CreateConnection())
             {
-                string sentenciaSQL =
-                    "SELECT DISTINCT v.ingrediente_id id, v.ingrediente nombre, v.tipo_ingrediente, v.tipo_ingrediente_id " +
-                    "FROM v_info_ingredientes v " +
-                    "ORDER BY v.ingrediente_id DESC ";
+                string sentenciaSQL =   "SELECT DISTINCT v.ingrediente_id id, v.ingrediente nombre, v.tipo_ingrediente, v.tipo_ingrediente_id " +
+                                        "FROM v_info_ingredientes v " +
+                                        "ORDER BY v.ingrediente_id DESC ";
 
                 var resultadoEnvasados = await conexion.QueryAsync<Ingrediente>(sentenciaSQL,
                                         new DynamicParameters());
@@ -43,10 +42,9 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
                 parametrosSentencia.Add("@ingrediente_id", ingrediente_id,
                                         DbType.Int32, ParameterDirection.Input);
 
-                string sentenciaSQL =
-                    "SELECT DISTINCT v.ingrediente_id id, v.ingrediente nombre, v.tipo_ingrediente, v.tipo_ingrediente_id " +
-                    "FROM v_info_ingredientes v " +
-                    "WHERE v.ingrediente_id = @ingrediente_id ";
+                string sentenciaSQL =   "SELECT DISTINCT v.ingrediente_id id, v.ingrediente nombre, v.tipo_ingrediente, v.tipo_ingrediente_id " +
+                                        "FROM v_info_ingredientes v " +
+                                        "WHERE v.ingrediente_id = @ingrediente_id ";
 
                 var resultado = await conexion.QueryAsync<Ingrediente>(sentenciaSQL,
                     parametrosSentencia);
@@ -70,11 +68,10 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
                 parametrosSentencia.Add("@ingrediente_tipo", ingrediente_tipo,
                                         DbType.String, ParameterDirection.Input);
 
-                string sentenciaSQL =
-                    "SELECT DISTINCT v.ingrediente_id id, v.ingrediente nombre, v.tipo_ingrediente, v.tipo_ingrediente_id " +
-                    "FROM v_info_ingredientes v " +
-                    "WHERE LOWER(v.ingrediente) = LOWER(@ingrediente_nombre) " +
-                    "AND LOWER(v.tipo_ingrediente) = LOWER(@ingrediente_tipo)";
+                string sentenciaSQL =   "SELECT DISTINCT v.ingrediente_id id, v.ingrediente nombre, v.tipo_ingrediente, v.tipo_ingrediente_id " +
+                                        "FROM v_info_ingredientes v " +
+                                        "WHERE LOWER(v.ingrediente) = LOWER(@ingrediente_nombre) " +
+                                        "AND LOWER(v.tipo_ingrediente) = LOWER(@ingrediente_tipo)";
 
                 var resultado = await conexion.QueryAsync<Ingrediente>(sentenciaSQL,
                                     parametrosSentencia);
@@ -94,9 +91,9 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
                 parametrosSentencia.Add("@ingrediente_id", ingrediente_id,
                                         DbType.Int32, ParameterDirection.Input);
 
-                string sentenciaSQL = "SELECT COUNT(v.cerveza_id) totalCervezas " +
-                    "FROM v_info_ingredientes_cervezas v " +
-                    "WHERE v.ingrediente_id = @ingrediente_id ";
+                string sentenciaSQL =   "SELECT COUNT(v.cerveza_id) totalCervezas " +
+                                        "FROM v_info_ingredientes_cervezas v " +
+                                        "WHERE v.ingrediente_id = @ingrediente_id ";
 
                 var totalCervezas = await conexion.QueryFirstAsync<int>(sentenciaSQL,
                                         parametrosSentencia);
@@ -113,12 +110,12 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
                 parametrosSentencia.Add("@ingrediente_id", ingrediente_id,
                                         DbType.Int32, ParameterDirection.Input);
 
-                string sentenciaSQL = "SELECT vc.cerveza_id id, vc.cerveza nombre, vc.cerveceria, vc.cerveceria_id, " +
-                    "vc.estilo, vc.estilo_id, vc.ibu, vc.abv, vc.rango_ibu, vc.rango_abv " +
-                    "FROM v_info_cervezas vc " +
-                    "JOIN v_info_ingredientes_cervezas vi ON vc.cerveza_id = vi.cerveza_id " +
-                    "WHERE vi.ingrediente_id = @ingrediente_id " +
-                    "ORDER BY vc.cerveza_id DESC ";
+                string sentenciaSQL =   "SELECT vc.cerveza_id id, vc.cerveza nombre, vc.cerveceria, vc.cerveceria_id, " +
+                                        "vc.estilo, vc.estilo_id, vc.ibu, vc.abv, vc.rango_ibu, vc.rango_abv " +
+                                        "FROM v_info_cervezas vc " +
+                                        "JOIN v_info_ingredientes_cervezas vi ON vc.cerveza_id = vi.cerveza_id " +
+                                        "WHERE vi.ingrediente_id = @ingrediente_id " +
+                                        "ORDER BY vc.cerveza_id DESC ";
 
                 var resultadoCervezas = await conexion.QueryAsync<Cerveza>(sentenciaSQL, parametrosSentencia);
 
@@ -134,8 +131,8 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
                 parametrosSentencia.Add("@tipo_ingrediente", tipo_ingrediente_nombre,
                                         DbType.String, ParameterDirection.Input);
 
-                string sentenciaSQL = "SELECT id FROM tipos_ingredientes ti " +
-                      "WHERE LOWER(ti.nombre) = LOWER(@tipo_ingrediente) ";
+                string sentenciaSQL =   "SELECT id FROM tipos_ingredientes ti " +
+                                        "WHERE LOWER(ti.nombre) = LOWER(@tipo_ingrediente) ";
 
                 var resultadotipoIngrediente = await conexion.QueryAsync<int>(sentenciaSQL,
                                                 parametrosSentencia);
@@ -155,8 +152,8 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
             {
                 using (var conexion = contextoDB.CreateConnection())
                 {
-                    string sentenciaSQL = "INSERT INTO ingredientes (nombre, tipo_ingrediente_id) " +
-                                              "VALUES (@Nombre, @Tipo_Ingrediente_Id)";
+                    string sentenciaSQL =   "INSERT INTO ingredientes (nombre, tipo_ingrediente_id) " +
+                                            "VALUES (@Nombre, @Tipo_Ingrediente_Id)";
 
                     int filasAfectadas = await conexion.ExecuteAsync(sentenciaSQL,
                                             unIngrediente);
@@ -181,8 +178,8 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
             {
                 using (var conexion = contextoDB.CreateConnection())
                 {
-                    string sentenciaSQL = "UPDATE ingredientes SET nombre = @Nombre, tipo_ingrediente_id = @Tipo_Ingrediente_Id " +
-                                              "WHERE id = @Id";
+                    string sentenciaSQL =   "UPDATE ingredientes SET nombre = @Nombre, tipo_ingrediente_id = @Tipo_Ingrediente_Id " +
+                                            "WHERE id = @Id";
 
                     int filasAfectadas = await conexion.ExecuteAsync(sentenciaSQL,
                                             unIngrediente);

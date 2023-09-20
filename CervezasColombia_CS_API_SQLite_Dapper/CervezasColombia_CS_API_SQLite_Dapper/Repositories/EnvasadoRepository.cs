@@ -21,9 +21,8 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
         {
             using (contextoDB.Conexion)
             {
-                string sentenciaSQL =
-                    "SELECT DISTINCT  e.id, e.nombre FROM envasados e " +
-                    "order by e.id DESC ";
+                string sentenciaSQL =   "SELECT DISTINCT  e.id, e.nombre FROM envasados e " +
+                                        "ORDER BY e.id DESC ";
 
                 var resultadoEnvasados = await contextoDB.Conexion.QueryAsync<Envasado>(sentenciaSQL,
                                         new DynamicParameters());
@@ -42,10 +41,9 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
                 parametrosSentencia.Add("@envasado_id", envasado_id,
                                         DbType.Int32, ParameterDirection.Input);
 
-                string sentenciaSQL =
-                    "SELECT DISTINCT  e.id, e.nombre " +
-                    "FROM envasados e " +
-                    "WHERE e.id = @envasado_id ";
+                string sentenciaSQL =   "SELECT DISTINCT  e.id, e.nombre " +
+                                        "FROM envasados e " +
+                                        "WHERE e.id = @envasado_id ";
 
                 var resultado = await contextoDB.Conexion.QueryAsync<Envasado>(sentenciaSQL,
                     parametrosSentencia);
@@ -88,9 +86,9 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
             parametrosSentencia.Add("@envasado_id", envasado_id,
                                     DbType.Int32, ParameterDirection.Input);
 
-            string sentenciaSQL = "SELECT COUNT(cerveza_id) totalCervezas " +
-                "FROM v_info_envasados_cervezas v " +
-                "WHERE envasado_id = @envasado_id ";
+            string sentenciaSQL =   "SELECT COUNT(cerveza_id) totalCervezas " +
+                                    "FROM v_info_envasados_cervezas v " +
+                                    "WHERE envasado_id = @envasado_id ";
 
             var totalCervezas = await contextoDB.Conexion.QueryFirstAsync<int>(sentenciaSQL,
                                     parametrosSentencia);
@@ -106,12 +104,12 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
                 parametrosSentencia.Add("@envasado_id", envasado_id,
                                         DbType.Int32, ParameterDirection.Input);
 
-                string sentenciaSQL = "SELECT vc.cerveza_id id, vc.cerveza nombre, vc.cerveceria, " +
-                    "vc.estilo, vc.ibu, vc.abv, vc.rango_ibu, vc.rango_abv " +
-                    "FROM v_info_cervezas vc " +
-                    "JOIN v_info_envasados_cervezas ve ON vc.cerveza_id = ve.cerveza_id " +
-                    "WHERE ve.envasado_id = @envasado_id " +
-                    "ORDER BY vc.cerveza_id DESC";
+                string sentenciaSQL =   "SELECT vc.cerveza_id id, vc.cerveza nombre, vc.cerveceria, " +
+                                        "vc.estilo, vc.ibu, vc.abv, vc.rango_ibu, vc.rango_abv " +
+                                        "FROM v_info_cervezas vc " +
+                                        "JOIN v_info_envasados_cervezas ve ON vc.cerveza_id = ve.cerveza_id " +
+                                        "WHERE ve.envasado_id = @envasado_id " +
+                                        "ORDER BY vc.cerveza_id DESC";
 
                 var resultadoCervezas = await contextoDB.Conexion.QueryAsync<Cerveza>(sentenciaSQL, parametrosSentencia);
 
@@ -128,7 +126,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
                 using (contextoDB.Conexion)
                 {
                     string sentenciaSQL = "INSERT INTO envasados (nombre) " +
-                                              "VALUES (@Nombre)";
+                                          "VALUES (@Nombre)";
 
                     int filasAfectadas = await contextoDB.Conexion.ExecuteAsync(sentenciaSQL,
                                             unEnvasado);
@@ -154,7 +152,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
                 using (contextoDB.Conexion)
                 {
                     string sentenciaSQL = "UPDATE envasados SET nombre = @Nombre " +
-                                              "WHERE id = @Id";
+                                          "WHERE id = @Id";
 
                     int filasAfectadas = await contextoDB.Conexion.ExecuteAsync(sentenciaSQL,
                                             unEnvasado);
