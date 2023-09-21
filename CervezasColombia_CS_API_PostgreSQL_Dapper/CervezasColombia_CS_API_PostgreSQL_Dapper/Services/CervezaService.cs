@@ -136,7 +136,7 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Services
             return (cervezaExistente);
         }
 
-        public async Task<Cerveza> UpdateAsync(int cerveza_id, Cerveza unaCerveza)
+        public async Task<Cerveza>  UpdateAsync(int cerveza_id, Cerveza unaCerveza)
         {
             //Validamos que los parametros sean consistentes
             if (cerveza_id != unaCerveza.Id)
@@ -183,7 +183,7 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Services
             cervezaExistente = await _cervezaRepository
                 .GetByNameAndBreweryAsync(unaCerveza.Nombre!, unaCerveza.Cerveceria);
 
-            if (unaCerveza.Id != cervezaExistente.Id)
+            if (unaCerveza.Id == cervezaExistente.Id)
                 throw new AppValidationException($"Ya existe otra cerveza con el nombre {unaCerveza.Nombre}. " +
                     $"No se puede Actualizar");
 
@@ -218,22 +218,6 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Services
 
             if (cervezaExistente.Id == 0)
                 throw new AppValidationException($"No existe una cerveceria con el Id {cerveza_id} que se pueda eliminar");
-
-            // Validamos que la cervezas no tenga asociados ingredientes
-            var cantidadIngredientesAsociados = await _cervezaRepository
-                .GetTotalAssociatedIngredientsAsync(cervezaExistente.Id);
-
-            if (cantidadIngredientesAsociados > 0)
-                throw new AppValidationException($"Existen {cantidadIngredientesAsociados} ingredientes " +
-                    $"asociados a la cerveza {cervezaExistente.Nombre}. No se puede eliminar");
-
-            // Validamos que la cervezas no tenga asociados envasados
-            var cantidadEnvasadosAsociados = await _cervezaRepository
-                .GetTotalAssociatedPackagingsAsync(cervezaExistente.Id);
-
-            if (cantidadEnvasadosAsociados > 0)
-                throw new AppValidationException($"Existen {cantidadEnvasadosAsociados} envasados " +
-                    $"asociados a la cerveza {cervezaExistente.Nombre}. No se puede eliminar");
 
             //Si existe y no tiene cervezas asociadas, se puede eliminar
             try

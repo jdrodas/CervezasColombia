@@ -183,7 +183,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
             cervezaExistente = await _cervezaRepository
                 .GetByNameAndBreweryAsync(unaCerveza.Nombre!, unaCerveza.Cerveceria);
 
-            if (unaCerveza.Id != cervezaExistente.Id)
+            if (unaCerveza.Id == cervezaExistente.Id)
                 throw new AppValidationException($"Ya existe otra cerveza con el nombre {unaCerveza.Nombre}. " +
                     $"No se puede Actualizar");
 

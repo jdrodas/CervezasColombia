@@ -5,7 +5,7 @@
         public static void Ejecuta_PoC()
         {
             string? cadenaConexion = AccesoDatosPgsql.ObtieneCadenaConexion();
-            Console.WriteLine($"El string de conexión obtenido es: \n{cadenaConexion}");
+            Console.WriteLine($"El string de conexión obtenido es: \n{cadenaConexion}\n");
 
             //R del CRUD - Lectura de registros existentes - SELECT
             VisualizaNombresEstilosCerveza();
@@ -68,6 +68,7 @@
             AccesoDatosPgsql.ActualizaEstiloCerveza(estiloActualizado);
 
             //D del CRUD - Borrado de un estilo existente - DELETE
+            nuevoEstilo = AccesoDatosPgsql.ObtieneEstiloCerveza(nuevoEstilo.Nombre!);
             Console.WriteLine($"\n\nBorrando el estilo {nuevoEstilo.Nombre} ...");
 
             string mensajeEliminacion;

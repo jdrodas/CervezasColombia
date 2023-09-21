@@ -464,14 +464,102 @@ join ingredientes i on ti.id = i.tipo_ingrediente_id
 -- Procedimientos
 
 -- -------------------------------------
--- Procedimiento: p_elimina_estilo
+-- Procedimientos asociados al estilo
 -- -------------------------------------
 
-create or replace procedure core.p_elimina_estilo(p_id integer)
+create or replace procedure core.p_elimina_estilo(in p_id integer)
 language plpgsql as
 $$
     begin
         delete from estilos e where e.id = p_id;
+    end;
+$$;
+
+-- -------------------------------------------
+-- Procedimientos asociados a la ubicacion
+-- -------------------------------------------
+create procedure core.p_elimina_ubicacion(in p_id integer)
+    language plpgsql
+as
+$$
+    begin
+        delete from ubicaciones u where u.id = p_id;
+    end;
+$$;
+
+-- -----------------------------------------
+-- Procedimientos asociados a la cerveza
+-- -----------------------------------------
+
+-- Inserción
+create procedure core.p_inserta_cerveza(
+                    in p_nombre varchar,
+                    in p_cervceria_id integer,
+                    in p_estilo_id integer,
+                    in p_ibu float,
+                    in p_abv float)
+    language plpgsql
+as
+$$
+    declare l_cerveza_id integer;
+    begin
+        -- Insertamos la cerveza
+        insert into cervezas(nombre, cerveceria_id, estilo_id, ibu, abv)
+        values (p_nombre,p_cervceria_id,p_estilo_id,p_ibu,p_abv);
+
+        -- Obtenemos el id creado
+        select c.id into l_cerveza_id from cervezas c
+        where c.nombre = p_nombre
+        and c.cerveceria_id = p_cervceria_id
+        and c.estilo_id = p_estilo_id;
+
+        -- Insertamos el envasado predeterminado: (2) Botella de 330 (4) ml
+        insert into envasados_cervezas (cerveza_id, envasado_id, unidad_volumen_id, volumen)
+        values (l_cerveza_id,2,4,330);
+
+        -- Insertamos el ingrediente predeterminado: (1) Agua de Manantial
+        insert into ingredientes_cervezas(cerveza_id, ingrediente_id)
+        values (l_cerveza_id,1);
+    end;
+$$;
+
+-- Actualización
+create procedure core.p_actualiza_cerveza(
+                    in p_id integer,
+                    in p_nombre varchar,
+                    in p_cervceria_id integer,
+                    in p_estilo_id integer,
+                    in p_ibu float,
+                    in p_abv float)
+    language plpgsql
+as
+$$
+    begin
+        update cervezas
+        set
+            nombre = p_nombre,
+            cerveceria_id = p_cervceria_id,
+            estilo_id = p_estilo_id,
+            ibu = p_ibu,
+            abv = p_abv
+        where id = p_id;
+    end;
+$$;
+
+-- Eliminación
+create procedure core.p_elimina_cerveza(in p_id integer)
+    language plpgsql
+as
+$$
+    begin
+        -- Eliminamos los ingredientes asociados
+        delete from ingredientes_cervezas ic where ic.cerveza_id = p_id;
+
+        -- Eliminamos los envasados asociados
+        delete from envasados_cervezas ec where ec.cerveza_id = p_id;
+
+        -- Eliminamos finalmente la cerveza registrada
+        delete from cervezas c where c.id = p_id;
     end;
 $$;
 

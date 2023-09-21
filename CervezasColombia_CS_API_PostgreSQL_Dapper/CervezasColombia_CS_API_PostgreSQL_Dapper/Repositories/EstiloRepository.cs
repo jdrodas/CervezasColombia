@@ -182,12 +182,18 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
             {
                 using (var conexion = contextoDB.CreateConnection())
                 {
-                    string sentenciaSQL = "DELETE FROM estilos WHERE id = @Id";
+                    string procedimiento = "core.p_elimina_estilo";
+                    var parametros = new 
+                    { 
+                        p_id = unEstilo.Id
+                    };
 
-                    int filasAfectadas = await conexion.ExecuteAsync(sentenciaSQL,
-                                            unEstilo);
+                    var cantidad_filas = await conexion.ExecuteAsync(
+                        procedimiento,
+                        parametros,
+                        commandType: CommandType.StoredProcedure);
 
-                    if (filasAfectadas > 0)
+                    if (cantidad_filas != 0)
                         resultadoAccion = true;
                 }
             }

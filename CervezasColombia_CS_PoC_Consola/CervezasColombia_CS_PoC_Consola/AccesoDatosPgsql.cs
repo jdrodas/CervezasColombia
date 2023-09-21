@@ -304,18 +304,20 @@ namespace CervezasColombia_CS_PoC_Consola
                     ////Aqui no usamos parámetros dinámicos, pasamos el objeto!!!
                     //cantidadFilas = cxnDB.Execute(eliminaEstiloSQL, unEstilo);
 
-                    NpgsqlCommand comandoEliminaEstilo = new NpgsqlCommand(@"call p_elimina_estilo(:p_id)", cxnDB);
+                    string procedimiento = "core.p_elimina_estilo";
+                    var parametros = new { p_id = unEstilo.Id };
 
-                    comandoEliminaEstilo.CommandType = CommandType.Text;
-                    comandoEliminaEstilo.Parameters.AddWithValue("p_id", DbType.Int32).Value = unEstilo.Id;
+                    cantidadFilas = cxnDB.Execute(
+                        procedimiento,
+                        parametros, 
+                        commandType: CommandType.StoredProcedure);
 
-                    cxnDB.Open();
-                    comandoEliminaEstilo.ExecuteNonQuery();
-                    cxnDB.Close();
-
-                    resultado = true;
-                    mensajeEliminacion = $"Eliminación Exitosa. " +
-                        $"Se eliminó el estilo {unEstilo.Id} - {unEstilo.Nombre}";
+                    if (cantidadFilas != 0)
+                    {
+                        resultado = true;
+                        mensajeEliminacion = $"Eliminación Exitosa. " +
+                            $"Se eliminó el estilo {unEstilo.Id} - {unEstilo.Nombre}";
+                    }
 
                 }
                 catch (NpgsqlException elError)
@@ -323,7 +325,6 @@ namespace CervezasColombia_CS_PoC_Consola
                     resultado = false;                    
                     mensajeEliminacion = $"Error de borrado en la DB. {elError.Message}";
                 }
-
             }
 
             return resultado;
