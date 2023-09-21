@@ -108,7 +108,7 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
                 parametrosSentencia.Add("@estilo_id", estilo_id,
                                         DbType.Int32, ParameterDirection.Input);
 
-                string sentenciaSQL =   "SELECT cerveza_id id, cerveza nombre, cerveceria, estilo, " +
+                string sentenciaSQL =   "SELECT cerveza_id id, cerveza nombre, cerveceria, cerveceria_id, estilo, estilo_id, " +
                                         "ibu, abv, rango_ibu, rango_abv " +
                                         "FROM v_info_cervezas " +
                                         "WHERE estilo_id = @estilo_id " +
@@ -129,13 +129,18 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
             {
                 using (var conexion = contextoDB.CreateConnection())
                 {
-                    string sentenciaSQL =   "INSERT INTO estilos (nombre) " +
-                                            "VALUES (@Nombre)";
+                    string procedimiento = "core.p_inserta_estilo";
+                    var parametros = new
+                    {
+                        p_nombre = unEstilo.Nombre
+                    };
 
-                    int filasAfectadas = await conexion.ExecuteAsync(sentenciaSQL,
-                                            unEstilo);
+                    var cantidad_filas = await conexion.ExecuteAsync(
+                        procedimiento,
+                        parametros,
+                        commandType: CommandType.StoredProcedure);
 
-                    if (filasAfectadas > 0)
+                    if (cantidad_filas != 0)
                         resultadoAccion = true;
                 }
             }
@@ -155,13 +160,19 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
             {
                 using (var conexion = contextoDB.CreateConnection())
                 {
-                    string sentenciaSQL =   "UPDATE estilos SET nombre = @Nombre " +
-                                            "WHERE id = @Id";
+                    string procedimiento = "core.p_actualiza_estilo";
+                    var parametros = new
+                    {
+                        p_id = unEstilo.Id,
+                        p_nombre = unEstilo.Nombre
+                    };
 
-                    int filasAfectadas = await conexion.ExecuteAsync(sentenciaSQL,
-                                            unEstilo);
+                    var cantidad_filas = await conexion.ExecuteAsync(
+                        procedimiento,
+                        parametros,
+                        commandType: CommandType.StoredProcedure);
 
-                    if (filasAfectadas > 0)
+                    if (cantidad_filas != 0)
                         resultadoAccion = true;
                 }
             }

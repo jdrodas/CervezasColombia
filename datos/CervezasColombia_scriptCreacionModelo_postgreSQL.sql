@@ -467,6 +467,37 @@ join ingredientes i on ti.id = i.tipo_ingrediente_id
 -- Procedimientos asociados al estilo
 -- -------------------------------------
 
+-- Inserción
+create procedure core.p_inserta_estilo(
+                    in p_nombre varchar)
+    language plpgsql
+as
+$$
+    declare l_estilo_id integer;
+    begin
+        -- Insertamos el estilo
+        insert into estilos (nombre)
+        values (p_nombre);
+    end;
+$$;
+
+-- Actualización
+create procedure core.p_actualiza_estilo(
+                    in p_id integer,
+                    in p_nombre varchar)
+    language plpgsql
+as
+$$
+    begin
+        update estilos
+        set
+            nombre = p_nombre,
+            fecha_actualizacion = current_timestamp
+        where id = p_id;
+    end;
+$$;
+
+-- Eliminación
 create or replace procedure core.p_elimina_estilo(in p_id integer)
 language plpgsql as
 $$
@@ -541,7 +572,8 @@ $$
             cerveceria_id = p_cervceria_id,
             estilo_id = p_estilo_id,
             ibu = p_ibu,
-            abv = p_abv
+            abv = p_abv,
+            fecha_actualizacion = current_timestamp
         where id = p_id;
     end;
 $$;

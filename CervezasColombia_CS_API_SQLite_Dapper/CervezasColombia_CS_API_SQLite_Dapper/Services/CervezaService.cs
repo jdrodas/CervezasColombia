@@ -179,14 +179,6 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
 
             unaCerveza.Cerveceria_id = cerveceriaExistente.Id;
 
-            //Validamos que el nombre no exista previamente en otra cerveza diferente para la misma cerveceria
-            cervezaExistente = await _cervezaRepository
-                .GetByNameAndBreweryAsync(unaCerveza.Nombre!, unaCerveza.Cerveceria);
-
-            if (unaCerveza.Id == cervezaExistente.Id)
-                throw new AppValidationException($"Ya existe otra cerveza con el nombre {unaCerveza.Nombre}. " +
-                    $"No se puede Actualizar");
-
             //Validamos que haya al menos un cambio en las propiedades
             if (unaCerveza.Equals(cervezaExistente))
                 throw new AppValidationException("No hay cambios en los atributos de la cerveza. No se realiza actualización.");
