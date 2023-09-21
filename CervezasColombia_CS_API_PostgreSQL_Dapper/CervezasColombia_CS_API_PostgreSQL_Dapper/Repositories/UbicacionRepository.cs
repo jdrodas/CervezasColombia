@@ -130,13 +130,19 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
             {
                 using (var conexion = contextoDB.CreateConnection())
                 {
-                    string sentenciaSQL =   "INSERT INTO ubicaciones (municipio, departamento) " +
-                                            "VALUES (@Municipio, @Departamento)";
+                    string procedimiento = "core.p_inserta_ubicacion";
+                    var parametros = new
+                    {
+                        p_municipio = unaUbicacion.Municipio,
+                        p_departamento = unaUbicacion.Departamento
+                    };
 
-                    int filasAfectadas = await conexion.ExecuteAsync(sentenciaSQL,
-                                            unaUbicacion);
+                    var cantidad_filas = await conexion.ExecuteAsync(
+                        procedimiento,
+                        parametros,
+                        commandType: CommandType.StoredProcedure);
 
-                    if (filasAfectadas > 0)
+                    if (cantidad_filas != 0)
                         resultadoAccion = true;
                 }
             }
@@ -156,14 +162,20 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
             {
                 using (var conexion = contextoDB.CreateConnection())
                 {
-                    string sentenciaSQL = "UPDATE ubicaciones SET municipio = @Municipio, " +
-                                          "departamento = @Departamento " +
-                                          "WHERE id = @Id";
+                    string procedimiento = "core.p_actualiza_ubicacion";
+                    var parametros = new
+                    {
+                        p_id            = unaUbicacion.Id,
+                        p_municipio     = unaUbicacion.Municipio,
+                        p_departamento  = unaUbicacion.Departamento
+                    };
 
-                    int filasAfectadas = await conexion.ExecuteAsync(sentenciaSQL,
-                                            unaUbicacion);
+                    var cantidad_filas = await conexion.ExecuteAsync(
+                        procedimiento,
+                        parametros,
+                        commandType: CommandType.StoredProcedure);
 
-                    if (filasAfectadas > 0)
+                    if (cantidad_filas != 0)
                         resultadoAccion = true;
                 }
             }

@@ -468,21 +468,19 @@ join ingredientes i on ti.id = i.tipo_ingrediente_id
 -- -------------------------------------
 
 -- Inserción
-create procedure core.p_inserta_estilo(
+create or replace procedure core.p_inserta_estilo(
                     in p_nombre varchar)
     language plpgsql
 as
 $$
-    declare l_estilo_id integer;
     begin
-        -- Insertamos el estilo
         insert into estilos (nombre)
         values (p_nombre);
     end;
 $$;
 
 -- Actualización
-create procedure core.p_actualiza_estilo(
+create or replace procedure core.p_actualiza_estilo(
                     in p_id integer,
                     in p_nombre varchar)
     language plpgsql
@@ -491,7 +489,7 @@ $$
     begin
         update estilos
         set
-            nombre = p_nombre,
+            nombre              = p_nombre,
             fecha_actualizacion = current_timestamp
         where id = p_id;
     end;
@@ -509,7 +507,39 @@ $$;
 -- -------------------------------------------
 -- Procedimientos asociados a la ubicacion
 -- -------------------------------------------
-create procedure core.p_elimina_ubicacion(in p_id integer)
+-- Inserción
+create or replace procedure core.p_inserta_ubicacion(
+                    in p_municipio varchar,
+                    in p_departamento varchar)
+    language plpgsql
+as
+$$
+    begin
+        insert into ubicaciones (municipio,departamento)
+        values (p_municipio, p_departamento);
+    end;
+$$;
+
+-- Actualización
+create or replace procedure core.p_actualiza_ubicacion(
+                    in p_id integer,
+                    in p_municipio varchar,
+                    in p_departamento varchar)
+    language plpgsql
+as
+$$
+    begin
+        update ubicaciones
+        set
+            municipio           = p_municipio,
+            departamento        = p_departamento,
+            fecha_actualizacion = current_timestamp
+        where id = p_id;
+    end;
+$$;
+
+-- Eliminación
+create or replace procedure core.p_elimina_ubicacion(in p_id integer)
     language plpgsql
 as
 $$
@@ -523,7 +553,7 @@ $$;
 -- -----------------------------------------
 
 -- Inserción
-create procedure core.p_inserta_cerveza(
+create or replace procedure core.p_inserta_cerveza(
                     in p_nombre varchar,
                     in p_cervceria_id integer,
                     in p_estilo_id integer,
@@ -555,7 +585,7 @@ $$
 $$;
 
 -- Actualización
-create procedure core.p_actualiza_cerveza(
+create or replace procedure core.p_actualiza_cerveza(
                     in p_id integer,
                     in p_nombre varchar,
                     in p_cervceria_id integer,
@@ -568,18 +598,18 @@ $$
     begin
         update cervezas
         set
-            nombre = p_nombre,
-            cerveceria_id = p_cervceria_id,
-            estilo_id = p_estilo_id,
-            ibu = p_ibu,
-            abv = p_abv,
-            fecha_actualizacion = current_timestamp
+            nombre                  = p_nombre,
+            cerveceria_id           = p_cervceria_id,
+            estilo_id               = p_estilo_id,
+            ibu                     = p_ibu,
+            abv                     = p_abv,
+            fecha_actualizacion     = current_timestamp
         where id = p_id;
     end;
 $$;
 
 -- Eliminación
-create procedure core.p_elimina_cerveza(in p_id integer)
+create or replace procedure core.p_elimina_cerveza(in p_id integer)
     language plpgsql
 as
 $$
@@ -595,8 +625,9 @@ $$
     end;
 $$;
 
-
+-- ------------- 
 -- privilegios
+-- -------------
 
 -- Sentencia para generar los privilegios base en las tablas del esquema core
 select distinct
