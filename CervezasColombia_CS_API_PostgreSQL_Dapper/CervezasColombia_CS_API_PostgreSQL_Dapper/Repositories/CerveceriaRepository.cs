@@ -203,12 +203,21 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
             {
                 using (var conexion = contextoDB.CreateConnection())
                 {
-                    string sentenciaSQL =   "INSERT INTO cervecerias (nombre, sitio_web, instagram, ubicacion_id) " +
-                                            "VALUES (@Nombre, @Sitio_Web, @Instagram, @Ubicacion_Id )";
+                    string procedimiento = "core.p_inserta_cerveceria";
+                    var parametros = new
+                    {
+                        p_nombre        = unaCerveceria.Nombre,
+                        p_ubicacion_id  = unaCerveceria.Ubicacion_Id,
+                        p_sitio_web     = unaCerveceria.Sitio_Web,
+                        p_instagram     = unaCerveceria.Instagram
+                    };
 
-                    int filasAfectadas = await conexion.ExecuteAsync(sentenciaSQL, unaCerveceria);
+                    var cantidad_filas = await conexion.ExecuteAsync(
+                        procedimiento,
+                        parametros,
+                        commandType: CommandType.StoredProcedure);
 
-                    if (filasAfectadas > 0)
+                    if (cantidad_filas != 0)
                         resultadoAccion = true;
                 }
             }
@@ -228,16 +237,22 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
             {
                 using (var conexion = contextoDB.CreateConnection())
                 {
-                    string sentenciaSQL =   "UPDATE cervecerias " +
-                                            "SET nombre = @Nombre, " +
-                                            "sitio_web = @Sitio_Web, " +
-                                            "instagram = @Instagram, " +
-                                            "ubicacion_id = @Ubicacion_Id " +
-                                            "WHERE id = @Id";
+                    string procedimiento = "core.p_actualiza_cerveceria";
+                    var parametros = new
+                    {
+                        p_id            = unaCerveceria.Id,
+                        p_nombre        = unaCerveceria.Nombre,
+                        p_ubicacion_id  = unaCerveceria.Ubicacion_Id,
+                        p_sitio_web     = unaCerveceria.Sitio_Web,
+                        p_instagram     = unaCerveceria.Instagram
+                    };
 
-                    int filasAfectadas = await conexion.ExecuteAsync(sentenciaSQL, unaCerveceria);
+                    var cantidad_filas = await conexion.ExecuteAsync(
+                        procedimiento,
+                        parametros,
+                        commandType: CommandType.StoredProcedure);
 
-                    if (filasAfectadas > 0)
+                    if (cantidad_filas != 0)
                         resultadoAccion = true;
                 }
             }
@@ -257,11 +272,18 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
             {
                 using (var conexion = contextoDB.CreateConnection())
                 {
-                    string sentenciaSQL = "DELETE FROM cervecerias WHERE id = @Id";
+                    string procedimiento = "core.p_elimina_cerveceria";
+                    var parametros = new
+                    {
+                        p_id = unaCerveceria.Id
+                    };
 
-                    int filasAfectadas = await conexion.ExecuteAsync(sentenciaSQL, unaCerveceria);
+                    var cantidad_filas = await conexion.ExecuteAsync(
+                        procedimiento,
+                        parametros,
+                        commandType: CommandType.StoredProcedure);
 
-                    if (filasAfectadas > 0)
+                    if (cantidad_filas != 0)
                         resultadoAccion = true;
                 }
             }

@@ -625,6 +625,60 @@ $$
     end;
 $$;
 
+-- -------------------------------------------
+-- Procedimientos asociados a la cerveceria
+-- -------------------------------------------
+
+-- Inserción
+create or replace procedure core.p_inserta_cerveceria(
+                    in p_nombre varchar,
+                    in p_ubicacion_id integer,
+                    in p_sitio_web varchar,
+                    in p_instagram varchar)
+    language plpgsql
+as
+$$
+    begin
+        -- Insertamos la cerveceria
+        insert into cervecerias (nombre,ubicacion_id,sitio_web,instagram)
+        values (p_nombre,p_ubicacion_id,p_sitio_web,p_instagram);
+    end;
+$$;
+
+-- Actualización
+create or replace procedure core.p_actualiza_cerveceria(
+                    in p_id integer,
+                    in p_nombre varchar,
+                    in p_ubicacion_id integer,
+                    in p_sitio_web varchar,
+                    in p_instagram varchar)
+    language plpgsql
+as
+$$
+    begin
+        update cervecerias
+        set
+            nombre              = p_nombre,
+            ubicacion_id        = p_ubicacion_id,
+            sitio_web           = p_sitio_web,
+            instagram           = p_instagram,
+            fecha_actualizacion = current_timestamp
+        where id = p_id;
+    end;
+$$;
+
+-- Eliminación
+create or replace procedure core.p_elimina_cerveceria(in p_id integer)
+    language plpgsql
+as
+$$
+    begin
+        delete from cervecerias c where c.id = p_id;
+    end;
+$$;
+
+
+
 -- ------------- 
 -- privilegios
 -- -------------

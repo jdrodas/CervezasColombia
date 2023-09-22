@@ -43,6 +43,10 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
                 //Total ingredientes
                 sentenciaSQL = "SELECT COUNT(id) total FROM ingredientes";
                 unResumen.Ingredientes = await conexion.QueryFirstAsync<int>(sentenciaSQL, new DynamicParameters());
+
+                //Total Tipos de Ingredientes
+                sentenciaSQL = "SELECT COUNT(id) total FROM tipos_ingredientes";
+                unResumen.Tipos_Ingredientes = await conexion.QueryFirstAsync<int>(sentenciaSQL, new DynamicParameters());
             }
 
             return unResumen;
