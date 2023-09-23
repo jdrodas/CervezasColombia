@@ -127,6 +127,19 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
 
                 cervezaExistente = await _cervezaRepository
                     .GetByNameAndBreweryAsync(unaCerveza.Nombre!, unaCerveza.Cerveceria!);
+
+                //Luego se insertan los ingredientes y envasados predeterminados
+                resultadoAccion = await _cervezaRepository.
+                    CreateDefaultIngredient(cervezaExistente.Id);
+
+                if (!resultadoAccion)
+                    throw new AppValidationException("No se pudo insertar Agua de Manantial como ingrediente predeterminado");
+
+                resultadoAccion = await _cervezaRepository.
+                    CreateDefaultPackaging(cervezaExistente.Id);
+
+                if (!resultadoAccion)
+                    throw new AppValidationException("No se pudo insertar Botella de 330 ml como envasado predeterminado");
             }
             catch (DbOperationException error)
             {
