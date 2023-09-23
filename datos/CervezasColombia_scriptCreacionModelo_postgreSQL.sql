@@ -698,6 +698,58 @@ $$
     end;
 $$;
 
+-- -------------------------------------------
+-- Procedimientos asociados a los envasados
+-- -------------------------------------------
+
+-- Inserción
+create or replace procedure core.p_inserta_envasado(
+                    in p_nombre varchar)
+    language plpgsql
+as
+$$
+    begin
+        insert into envasados (nombre)
+        values (p_nombre);
+    end;
+$$;
+
+-- Actualización
+create or replace procedure core.p_actualiza_envasado(
+                    in p_id integer,
+                    in p_nombre varchar)
+    language plpgsql
+as
+$$
+    begin
+        update envasados
+        set
+            nombre              = p_nombre,
+            fecha_actualizacion = current_timestamp
+        where id = p_id;
+    end;
+$$;
+
+-- Eliminación
+create or replace procedure core.p_elimina_envasado(in p_id integer)
+language plpgsql as
+$$
+    begin
+        -- Borrar de la tabla envasados cerveza
+        delete from envasados_cervezas where envasado_id = p_id;
+
+        -- Borrar de la tabla envasados
+        delete from envasados e where e.id = p_id;
+    end;
+$$;
+
+-- -------------------------------------------
+-- Procedimientos asociados a los ingredientes
+-- -------------------------------------------
+
+-- Inserción
+-- Actualización
+-- Eliminación
 
 
 -- ------------- 
