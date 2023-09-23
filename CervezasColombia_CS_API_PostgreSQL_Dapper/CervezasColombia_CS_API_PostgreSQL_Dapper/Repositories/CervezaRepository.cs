@@ -153,7 +153,7 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
                 parametrosSentencia.Add("@cerveza_id", cerveza_id,
                                         DbType.Int32, ParameterDirection.Input);
 
-                string sentenciaSQL = "SELECT DISTINCT v.envasado_id id, v.envasado nombre, v.unidad_volumen, v.volumen " +
+                string sentenciaSQL = "SELECT DISTINCT v.envasado_id id, v.envasado nombre, v.unidad_volumen_id, v.unidad_volumen, v.volumen " +
                                       "FROM v_info_envasados_cervezas v " +
                                       "WHERE cerveza_id = @cerveza_id " +
                                       "ORDER BY envasado, unidad_volumen, volumen ";

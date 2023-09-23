@@ -562,25 +562,46 @@ create or replace procedure core.p_inserta_cerveza(
     language plpgsql
 as
 $$
-    declare l_cerveza_id integer;
+    declare
+    l_cerveza_id            integer;
+    l_envasado_id           integer;
+    l_ingrediente_id        integer;
+    l_unidad_volumen_id     integer;
+
     begin
         -- Insertamos la cerveza
         insert into cervezas(nombre, cerveceria_id, estilo_id, ibu, abv)
         values (p_nombre,p_cervceria_id,p_estilo_id,p_ibu,p_abv);
 
-        -- Obtenemos el id creado
+        -- Obtenemos el id creado para la cerveza
         select c.id into l_cerveza_id from cervezas c
         where c.nombre = p_nombre
         and c.cerveceria_id = p_cervceria_id
         and c.estilo_id = p_estilo_id;
 
-        -- Insertamos el envasado predeterminado: (2) Botella de 330 (4) ml
-        insert into envasados_cervezas (cerveza_id, envasado_id, unidad_volumen_id, volumen)
-        values (l_cerveza_id,2,4,330);
+        -- Obtener el Id del envasado Botella
+        select id into l_envasado_id
+        from envasados
+        where nombre = 'Botella';
 
-        -- Insertamos el ingrediente predeterminado: (1) Agua de Manantial
+        -- Obtener el Id de la unidad de volumen Mililitros
+        select id into l_unidad_volumen_id
+        from unidades_volumen
+        where nombre = 'Mililitros';
+
+        -- Obtener el Id del ingrediente Agua de Manantial
+        select ingrediente_id into l_ingrediente_id
+        from v_info_ingredientes
+        where tipo_ingrediente = 'Agua'
+        and ingrediente = 'Agua de Manantial';
+
+        -- Insertamos el envasado predeterminado:
+        insert into envasados_cervezas (cerveza_id, envasado_id, unidad_volumen_id, volumen)
+        values (l_cerveza_id,l_envasado_id,l_unidad_volumen_id,330);
+
+        -- Insertamos el ingrediente predeterminado: 
         insert into ingredientes_cervezas(cerveza_id, ingrediente_id)
-        values (l_cerveza_id,1);
+        values (l_cerveza_id,l_ingrediente_id);
     end;
 $$;
 
