@@ -120,6 +120,38 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
             }
         }
 
+        public async Task<EnvasadoCerveza> GetAssociatedBeerPackagingAsync(int cerveza_id, int envasado_id, int unidad_volumen_id, float volumen)
+        {
+            EnvasadoCerveza unEnvasadoCerveza = new EnvasadoCerveza();
+            
+            using (var conexion = contextoDB.CreateConnection())
+            {
+                DynamicParameters parametrosSentencia = new DynamicParameters();
+                parametrosSentencia.Add("@cerveza_id", cerveza_id,
+                                        DbType.Int32, ParameterDirection.Input);
+                parametrosSentencia.Add("@envasado_id", envasado_id,
+                                        DbType.Int32, ParameterDirection.Input);
+                parametrosSentencia.Add("@unidad_volumen_id", unidad_volumen_id,
+                                        DbType.Int32, ParameterDirection.Input);
+                parametrosSentencia.Add("@volumen", volumen,
+                                        DbType.Single, ParameterDirection.Input);
+
+                string sentenciaSQL =   "SELECT v.envasado_id id, v.envasado nombre, v.unidad_volumen_id, unidad_volumen, volumen " +
+                                        "FROM v_info_envasados_cervezas v " +
+                                        "WHERE v.envasado_id = @envasado_id " +
+                                        "AND v.cerveza_id = @cerveza_id " +
+                                        "AND v.unidad_volumen_id = @unidad_volumen_id " +
+                                        "AND v.volumen = @volumen";
+
+                var resultado = await conexion.QueryAsync<EnvasadoCerveza>(sentenciaSQL, parametrosSentencia);
+
+                if (resultado.Count() > 0)
+                    unEnvasadoCerveza = resultado.First();
+
+                return unEnvasadoCerveza;
+            }
+        }
+
         public async Task<bool> CreateAsync(Envasado unEnvasado)
         {
             bool resultadoAccion = false;

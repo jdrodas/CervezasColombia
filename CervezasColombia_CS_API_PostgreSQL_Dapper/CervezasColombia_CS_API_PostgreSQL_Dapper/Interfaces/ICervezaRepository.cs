@@ -11,7 +11,9 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Interfaces
         public Task<IEnumerable<Ingrediente>> GetAssociatedIngredientsAsync(int cerveza_id);
         public Task<int> GetTotalAssociatedPackagingsAsync(int cerveza_id);
         public Task<IEnumerable<EnvasadoCerveza>> GetAssociatedPackagingsAsync(int cerveza_id);
+        public Task<EnvasadoCerveza> GetPackagedBeerByNameAsync(int cerveza_id, string envasado_nombre, int unidad_volumen_id, float volumen);
         public Task<bool> CreateAsync(Cerveza unaCerveza);
+        public Task<bool> CreatePackagingBeerAsync(int cerveza_id, EnvasadoCerveza unEnvasadoCerveza);
         public Task<bool> UpdateAsync(Cerveza unaCerveza);
         public Task<bool> DeleteAsync(Cerveza unaCerveza);
     }

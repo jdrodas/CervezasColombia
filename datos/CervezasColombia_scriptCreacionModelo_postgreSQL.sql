@@ -575,9 +575,9 @@ $$
 
         -- Obtenemos el id creado para la cerveza
         select c.id into l_cerveza_id from cervezas c
-        where c.nombre = p_nombre
+        where c.nombre      = p_nombre
         and c.cerveceria_id = p_cervceria_id
-        and c.estilo_id = p_estilo_id;
+        and c.estilo_id     = p_estilo_id;
 
         -- Obtener el Id del envasado Botella
         select id into l_envasado_id
@@ -592,8 +592,8 @@ $$
         -- Obtener el Id del ingrediente Agua de Manantial
         select ingrediente_id into l_ingrediente_id
         from v_info_ingredientes
-        where tipo_ingrediente = 'Agua'
-        and ingrediente = 'Agua de Manantial';
+        where tipo_ingrediente  = 'Agua'
+        and ingrediente         = 'Agua de Manantial';
 
         -- Insertamos el envasado predeterminado:
         insert into envasados_cervezas (cerveza_id, envasado_id, unidad_volumen_id, volumen)
@@ -742,6 +742,27 @@ $$
         delete from envasados e where e.id = p_id;
     end;
 $$;
+
+-- --------------------------------------------------
+-- Procedimientos asociados a los envasados_cerveza
+-- --------------------------------------------------
+
+-- Insercion
+create or replace procedure core.p_inserta_envasado_cerveza(
+                        in p_cerveza_id integer,
+                        in p_envasado_id integer,
+                        in p_unidad_volumen_id integer,
+                        in p_volumen float)
+    language plpgsql
+as
+$$
+    begin
+        insert into envasados_cervezas (cerveza_id, envasado_id, unidad_volumen_id, volumen)
+        values (p_cerveza_id, p_envasado_id, p_unidad_volumen_id, p_volumen);
+    end;
+$$;
+-- Actualizacion
+-- Eliminacion
 
 -- -------------------------------------------
 -- Procedimientos asociados a los ingredientes

@@ -9,14 +9,20 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Services
         private readonly ICervezaRepository _cervezaRepository;
         private readonly ICerveceriaRepository _cerveceriaRepository;
         private readonly IEstiloRepository _estiloRepository;
+        private readonly IEnvasadoRepository _envasadoRepository;
+        private readonly IUnidadVolumenRepository _unidadVolumenRepository;
 
         public CervezaService(ICervezaRepository cervezaRepository,
                               ICerveceriaRepository cerveceriaRepository,
-                              IEstiloRepository estiloRepository)
+                              IEstiloRepository estiloRepository,
+                              IEnvasadoRepository envasadoRepository,
+                              IUnidadVolumenRepository unidadVolumenRepository)
         {
-            _cervezaRepository = cervezaRepository;
-            _cerveceriaRepository = cerveceriaRepository;
-            _estiloRepository = estiloRepository;
+            _cervezaRepository          = cervezaRepository;
+            _cerveceriaRepository       = cerveceriaRepository;
+            _estiloRepository           = estiloRepository;
+            _envasadoRepository         = envasadoRepository;
+            _unidadVolumenRepository    = unidadVolumenRepository;
         }
 
         public async Task<IEnumerable<Cerveza>> GetAllAsync()
@@ -134,6 +140,71 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Services
             }
 
             return (cervezaExistente);
+        }
+
+        public async Task<EnvasadoCerveza> CreatePackagingBeerAsync(int cerveza_id, EnvasadoCerveza unEnvasadoCerveza)
+        {
+            //Validamos que la cerveza exista con ese Id
+            var cervezaExistente = await _cervezaRepository
+                .GetByIdAsync(cerveza_id);
+
+            if (cervezaExistente.Id == 0)
+                throw new AppValidationException($"No existe una cerveza registrada con el id {cerveza_id}");
+
+            //Validamos que el envasado tenga nombre
+            if (unEnvasadoCerveza.Nombre.Length == 0)
+                throw new AppValidationException("No se puede insertar un envasado de cerveza con nombre nulo");
+
+            //Validamos que la unidad de volumen tenga nombre
+            if (unEnvasadoCerveza.Unidad_Volumen.Length == 0)
+                throw new AppValidationException("No se puede insertar un envasado de cerveza con unidad de volumen nula");
+
+            //Validamos que el envasado exista
+            var envasadoExistente = await _envasadoRepository
+                .GetByNameAsync(unEnvasadoCerveza.Nombre!);
+
+            if(envasadoExistente.Id ==0)
+                throw new AppValidationException($"El envasado {unEnvasadoCerveza.Nombre} no se encuentra registrado.");
+
+            unEnvasadoCerveza.Id = envasadoExistente.Id;
+
+            //Validamos que la unidad de volumen exista
+            var unidadVolumenExistente = await _unidadVolumenRepository
+                .GetByNameAsync(unEnvasadoCerveza.Unidad_Volumen!);
+
+            if(unidadVolumenExistente.Id == 0)
+                throw new AppValidationException($"La unidad de Volumen {unEnvasadoCerveza.Unidad_Volumen} no se encuentra registrada.");
+
+            unEnvasadoCerveza.Unidad_Volumen_Id = unidadVolumenExistente.Id;
+
+            if(unEnvasadoCerveza.Volumen <=0 )
+                throw new AppValidationException($"el Volumen {unEnvasadoCerveza.Volumen} no corresponde a un valor válido para un envasado.");
+
+            //Validamos que este envasado con unidad de volumen y volumen no exista para esta cerveza
+            var envasadoCervezaExistente = await _envasadoRepository
+                .GetAssociatedBeerPackagingAsync(cerveza_id, unEnvasadoCerveza.Id, unEnvasadoCerveza.Unidad_Volumen_Id, unEnvasadoCerveza.Volumen);
+
+            if(unEnvasadoCerveza.Equals(envasadoCervezaExistente))
+                throw new AppValidationException($"Ya existe un envasado {unEnvasadoCerveza.Nombre} de {unEnvasadoCerveza.Volumen} " +
+                    $"{unEnvasadoCerveza.Unidad_Volumen} para la cerveza {cervezaExistente.Nombre} de {cervezaExistente.Cerveceria}.");
+
+            try
+            {
+                bool resultadoAccion = await _cervezaRepository
+                    .CreatePackagingBeerAsync(cerveza_id, unEnvasadoCerveza);
+
+                if (!resultadoAccion)
+                    throw new AppValidationException("Operación ejecutada pero no generó cambios en la DB");
+
+                envasadoCervezaExistente = await _cervezaRepository
+                    .GetPackagedBeerByNameAsync(cerveza_id,unEnvasadoCerveza.Nombre!,unEnvasadoCerveza.Unidad_Volumen_Id,unEnvasadoCerveza.Volumen);
+            }
+            catch (DbOperationException error)
+            {
+                throw error;
+            }
+
+            return envasadoCervezaExistente;
         }
 
         public async Task<Cerveza>  UpdateAsync(int cerveza_id, Cerveza unaCerveza)

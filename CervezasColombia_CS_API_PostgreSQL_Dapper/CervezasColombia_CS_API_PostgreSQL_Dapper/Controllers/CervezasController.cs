@@ -92,6 +92,27 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Controllers
             }
         }
 
+        [HttpPost("{cerveza_id:int}/Envasados")]
+        public async Task<IActionResult> CreatePackagingBeerAsync(int cerveza_id, EnvasadoCerveza unEnvasadoCerveza)
+        {
+            try
+            {
+                var cervezaEnvasada = await _cervezaService
+                    .CreatePackagingBeerAsync(cerveza_id, unEnvasadoCerveza);
+
+                return Ok(cervezaEnvasada);
+            }
+            catch (AppValidationException error)
+            {
+                return BadRequest($"Error de validación: {error.Message}");
+            }
+            catch (DbOperationException error)
+            {
+                return BadRequest($"Error de operacion en DB: {error.Message}");
+            }
+        }
+
+
         [HttpPut("{cerveza_id:int}")]
         public async Task<IActionResult> UpdateAsync(int cerveza_id, Cerveza unaCerveza)
         {
