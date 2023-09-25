@@ -769,8 +769,48 @@ $$;
 -- -------------------------------------------
 
 -- Inserción
+create or replace procedure core.p_inserta_ingrediente(
+                    in p_nombre varchar,
+                    in p_tipo_ingrediente_id integer)
+    language plpgsql
+as
+$$
+    begin
+        insert into ingredientes (nombre, tipo_ingrediente_id)
+        values (p_nombre,p_tipo_ingrediente_id);
+    end;
+$$;
+
 -- Actualización
+create or replace procedure core.p_actualiza_ingrediente(
+                    in p_id integer,
+                    in p_nombre varchar,
+                    in p_tipo_ingrediente_id integer)
+    language plpgsql
+as
+$$
+    begin
+        update ingredientes
+        set
+            nombre              = p_nombre,
+            tipo_ingrediente_id = p_tipo_ingrediente_id,
+            fecha_actualizacion = current_timestamp
+        where id = p_id;
+    end;
+$$;
+
 -- Eliminación
+create or replace procedure core.p_elimina_ingrediente(in p_id integer)
+language plpgsql as
+$$
+    begin
+        -- Borrar de la tabla ingredientes cerveza
+        delete from ingredientes_cervezas where ingrediente_id = p_id;
+
+        -- Borrar de la tabla envasados
+        delete from ingredientes i where i.id = p_id;
+    end;
+$$;
 
 
 -- ------------- 

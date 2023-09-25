@@ -152,13 +152,19 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
             {
                 using (var conexion = contextoDB.CreateConnection())
                 {
-                    string sentenciaSQL =   "INSERT INTO ingredientes (nombre, tipo_ingrediente_id) " +
-                                            "VALUES (@Nombre, @Tipo_Ingrediente_Id)";
+                    string procedimiento = "core.p_inserta_ingrediente";
+                    var parametros = new
+                    {
+                        p_nombre                = unIngrediente.Nombre,
+                        p_tipo_ingrediente_id   = unIngrediente.Tipo_Ingrediente_Id
+                    };
 
-                    int filasAfectadas = await conexion.ExecuteAsync(sentenciaSQL,
-                                            unIngrediente);
+                    var cantidad_filas = await conexion.ExecuteAsync(
+                        procedimiento,
+                        parametros,
+                        commandType: CommandType.StoredProcedure);
 
-                    if (filasAfectadas > 0)
+                    if (cantidad_filas != 0)
                         resultadoAccion = true;
                 }
             }
@@ -178,13 +184,20 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
             {
                 using (var conexion = contextoDB.CreateConnection())
                 {
-                    string sentenciaSQL =   "UPDATE ingredientes SET nombre = @Nombre, tipo_ingrediente_id = @Tipo_Ingrediente_Id " +
-                                            "WHERE id = @Id";
+                    string procedimiento = "core.p_actualiza_ingrediente";
+                    var parametros = new
+                    {
+                        p_id                    = unIngrediente.Id,
+                        p_nombre                = unIngrediente.Nombre,
+                        p_tipo_ingrediente_id   = unIngrediente.Tipo_Ingrediente_Id
+                    };
 
-                    int filasAfectadas = await conexion.ExecuteAsync(sentenciaSQL,
-                                            unIngrediente);
+                    var cantidad_filas = await conexion.ExecuteAsync(
+                        procedimiento,
+                        parametros,
+                        commandType: CommandType.StoredProcedure);
 
-                    if (filasAfectadas > 0)
+                    if (cantidad_filas != 0)
                         resultadoAccion = true;
                 }
             }
@@ -196,21 +209,26 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
             return resultadoAccion;
         }
 
-
         public async Task<bool> DeleteAsync(Ingrediente unIngrediente)
         {
             bool resultadoAccion = false;
-
+            
             try
             {
                 using (var conexion = contextoDB.CreateConnection())
                 {
-                    string sentenciaSQL = "DELETE FROM ingredientes WHERE id = @Id";
+                    string procedimiento = "core.p_elimina_ingrediente";
+                    var parametros = new
+                    {
+                        p_id = unIngrediente.Id
+                    };
 
-                    int filasAfectadas = await conexion.ExecuteAsync(sentenciaSQL,
-                                            unIngrediente);
+                    var cantidad_filas = await conexion.ExecuteAsync(
+                        procedimiento,
+                        parametros,
+                        commandType: CommandType.StoredProcedure);
 
-                    if (filasAfectadas > 0)
+                    if (cantidad_filas != 0)
                         resultadoAccion = true;
                 }
             }
