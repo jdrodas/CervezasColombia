@@ -73,7 +73,7 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Cerveza unaCerveza)
+        public async Task<IActionResult> CreateAsync(Cerveza unaCerveza)
         {
             try
             {

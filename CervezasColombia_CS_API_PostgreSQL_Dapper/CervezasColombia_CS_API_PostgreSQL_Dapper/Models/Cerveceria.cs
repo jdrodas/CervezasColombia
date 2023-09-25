@@ -23,5 +23,21 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Models
                    && Ubicacion_Id == otraCerveceria.Ubicacion_Id
                    && Ubicacion.Equals(otraCerveceria.Ubicacion);
         }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {                
+                int hash = 3;                                       
+                hash = hash * 5 + Id.GetHashCode();
+                hash = hash * 5 + (Nombre?.GetHashCode() ?? 0);
+                hash = hash * 5 + (Sitio_Web?.GetHashCode() ?? 0);
+                hash = hash * 5 + (Instagram?.GetHashCode() ?? 0);
+                hash = hash * 5 + (Ubicacion?.GetHashCode() ?? 0);
+                hash = hash * 5 + Ubicacion_Id.GetHashCode();
+
+                return hash;
+            }
+        }
     }
 }

@@ -57,7 +57,7 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Estilo unEstilo)
+        public async Task<IActionResult> CreateAsync(Estilo unEstilo)
         {
             try
             {

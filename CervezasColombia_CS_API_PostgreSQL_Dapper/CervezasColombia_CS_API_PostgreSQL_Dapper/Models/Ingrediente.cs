@@ -19,5 +19,19 @@
                    && Tipo_Ingrediente_Id == otroIngrediente.Tipo_Ingrediente_Id
                    && Tipo_Ingrediente.Equals(otroIngrediente.Tipo_Ingrediente);
         }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hash = 3;
+                hash = hash * 5 + Id.GetHashCode();
+                hash = hash * 5 + (Nombre?.GetHashCode() ?? 0);
+                hash = hash * 5 + (Tipo_Ingrediente?.GetHashCode() ?? 0);
+                hash = hash * 5 + Tipo_Ingrediente_Id.GetHashCode();
+
+                return hash;
+            }
+        }
     }
 }
