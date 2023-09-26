@@ -817,62 +817,29 @@ $$;
 -- privilegios
 -- -------------
 
--- Sentencia para generar los privilegios base en las tablas del esquema core
-select distinct
-        table_schema,
-        table_name,
-        ('revoke select, insert, update, delete on ' || table_schema || '.' || table_name || ' from cervezas_usr;') sentencia_revoke,
-        ('grant select, insert, update, delete on ' || table_schema || '.' || table_name || ' to cervezas_usr;') sentencia_grant
-from information_schema.tables
-where table_schema = 'core';
+-- Creacion del usuario de conexión a la aplicación
 
+-- crear el usuario con el que se ejecutarán acciones CRUD
+create user cervezas_usr with encrypted password 'otraClav3';
 
--- Para asignar
+-- asignación de privilegios para el usuario
+grant connect on database cervezas_db to cervezas_usr;
+grant usage on schema core to cervezas_usr;
 
-grant select, insert, update, delete on core.cervecerias to cervezas_usr;
-grant select, insert, update, delete on core.cervezas to cervezas_usr;
-grant select, insert, update, delete on core.estilos to cervezas_usr;
-grant select, insert, update, delete on core.ingredientes to cervezas_usr;
-grant select, insert, update, delete on core.rangos_abv to cervezas_usr;
-grant select, insert, update, delete on core.rangos_ibu to cervezas_usr;
-grant select, insert, update, delete on core.tipos_ingredientes to cervezas_usr;
-grant select, insert, update, delete on core.ubicaciones to cervezas_usr;
-grant select, insert, update, delete on core.ingredientes_cervezas to cervezas_usr;
-grant select, insert, update, delete on core.envasados to cervezas_usr;
-grant select, insert, update, delete on core.unidades_volumen to cervezas_usr;
-grant select, insert, update, delete on core.envasados_cervezas to cervezas_usr;
-grant select on core.v_info_cervezas to cervezas_usr;
-grant select on core.v_info_ingredientes to cervezas_usr;
-grant select on core.v_info_ingredientes_cervezas to cervezas_usr;
-grant select on core.v_info_envasados_cervezas to cervezas_usr;
+-- Solo le damos privilegios de lectura en las tablas y ejecución en los procedimientos
+grant select, insert, update, delete on all tables in schema core to cervezas_usr;
+grant execute on all routines in schema core to cervezas_usr;
 
--- Para revocar
+alter user cervezas_usr set search_path to core; 
 
-sentencia_revoke
-revoke select, insert, update, delete on core.cervecerias from cervezas_usr;
-revoke select, insert, update, delete on core.cervezas from cervezas_usr;
-revoke select, insert, update, delete on core.estilos from cervezas_usr;
-revoke select, insert, update, delete on core.ingredientes from cervezas_usr;
-revoke select, insert, update, delete on core.rangos_abv from cervezas_usr;
-revoke select, insert, update, delete on core.rangos_ibu from cervezas_usr;
-revoke select, insert, update, delete on core.tipos_ingredientes from cervezas_usr;
-revoke select, insert, update, delete on core.ubicaciones from cervezas_usr;
-revoke select, insert, update, delete on core.ingredientes_cervezas from cervezas_usr;
-revoke select, insert, update, delete on core.envasados from cervezas_usr;
-revoke select, insert, update, delete on core.unidades_volumen from cervezas_usr;
-revoke select, insert, update, delete on core.envasados_cervezas from cervezas_usr;
-revoke select on core.v_info_cervezas from cervezas_usr;
-revoke select on core.v_info_ingredientes from cervezas_usr;
-revoke select on core.v_info_ingredientes_cervezas from cervezas_usr;
-revoke select on core.v_info_envasados_cervezas from cervezas_usr;
-
--- Sentencia para identificar privilegios asignados:
+-- Sentencia para identificar privilegios asignados en tablas:
 select grantor, grantee, table_schema, table_name, privilege_type
 from information_schema.table_privileges
 where grantee = 'cervezas_usr'
 and table_schema = 'core';
 
-
-
-
-
+-- Sentencia para identificar privilegios asignados en rutinas:
+select grantor, grantee, routine_schema, routine_name, privilege_type
+from information_schema.routine_privileges
+where grantee = 'cervezas_usr'
+and routine_schema = 'core';
