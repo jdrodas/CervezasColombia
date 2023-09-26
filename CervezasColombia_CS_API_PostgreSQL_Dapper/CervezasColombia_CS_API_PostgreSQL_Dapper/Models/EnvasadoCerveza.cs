@@ -6,7 +6,7 @@
         public string Nombre { get; set; } = string.Empty;
         public int Unidad_Volumen_Id { get; set; } = 0;
         public string Unidad_Volumen { get; set; } = string.Empty;
-        public int Volumen { get; set; } = 0;
+        public float Volumen { get; set; } = 0;
 
         public override bool Equals(object? obj)
         {
