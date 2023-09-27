@@ -21,7 +21,7 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
         {
             using (var conexion = contextoDB.CreateConnection())
             {
-                string sentenciaSQL =   "SELECT cerveza_id id, cerveza nombre, cerveceria_id, " +
+                string sentenciaSQL = "SELECT cerveza_id id, cerveza nombre, cerveceria_id, " +
                                         "cerveceria, estilo_id, estilo, ibu, abv, rango_ibu, rango_abv " +
                                         "FROM v_info_cervezas " +
                                         "ORDER BY id DESC";
@@ -43,7 +43,7 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
                 parametrosSentencia.Add("@cerveza_id", id,
                                         DbType.Int32, ParameterDirection.Input);
 
-                string sentenciaSQL =   "SELECT cerveza_id id, cerveza nombre, cerveceria, cerveceria_id, " +
+                string sentenciaSQL = "SELECT cerveza_id id, cerveza nombre, cerveceria, cerveceria_id, " +
                                         "estilo, estilo_id, ibu, abv, rango_ibu, rango_abv " +
                                         "FROM v_info_cervezas " +
                                         "WHERE cerveza_id = @cerveza_id ";
@@ -51,7 +51,7 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
                 var resultado = await conexion.QueryAsync<Cerveza>(sentenciaSQL,
                                     parametrosSentencia);
 
-                if (resultado.Count()>0)
+                if (resultado.Count() > 0)
                     unaCerveza = resultado.First();
             }
 
@@ -70,7 +70,7 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
                 parametrosSentencia.Add("@cerveceria", cerveceria,
                                         DbType.String, ParameterDirection.Input);
 
-                string sentenciaSQL =   "SELECT cerveza_id id, cerveza nombre, cerveceria, cerveceria_id, " +
+                string sentenciaSQL = "SELECT cerveza_id id, cerveza nombre, cerveceria, cerveceria_id, " +
                                         "estilo, estilo_id, ibu, abv, rango_ibu, rango_abv " +
                                         "FROM v_info_cervezas " +
                                         "WHERE LOWER(cerveza) = LOWER(@cerveza) " +
@@ -207,11 +207,11 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
                     string procedimiento = "core.p_inserta_cerveza";
                     var parametros = new
                     {
-                        p_nombre        = unaCerveza.Nombre,
-                        p_cervceria_id  = unaCerveza.Cerveceria_id,
-                        p_estilo_id     = unaCerveza.Estilo_id,
-                        p_ibu           = unaCerveza.Ibu,                  
-                        p_abv           = unaCerveza.Abv
+                        p_nombre = unaCerveza.Nombre,
+                        p_cervceria_id = unaCerveza.Cerveceria_id,
+                        p_estilo_id = unaCerveza.Estilo_id,
+                        p_ibu = unaCerveza.Ibu,
+                        p_abv = unaCerveza.Abv
                     };
 
                     var cantidad_filas = await conexion.ExecuteAsync(
@@ -231,7 +231,7 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
             return resultadoAccion;
         }
 
-        public async Task<bool> CreatePackagingBeerAsync(int cerveza_id, EnvasadoCerveza unEnvasadoCerveza)
+        public async Task<bool> CreateBeerPackagingAsync(int cerveza_id, EnvasadoCerveza unEnvasadoCerveza)
         {
             bool resultadoAccion = false;
 
@@ -242,10 +242,10 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
                     string procedimiento = "core.p_inserta_envasado_cerveza";
                     var parametros = new
                     {
-                        p_cerveza_id        = cerveza_id,
-                        p_envasado_id       = unEnvasadoCerveza.Id,
+                        p_cerveza_id = cerveza_id,
+                        p_envasado_id = unEnvasadoCerveza.Id,
                         p_unidad_volumen_id = unEnvasadoCerveza.Unidad_Volumen_Id,
-                        p_volumen           = unEnvasadoCerveza.Volumen
+                        p_volumen = unEnvasadoCerveza.Volumen
                     };
 
                     var cantidad_filas = await conexion.ExecuteAsync(
@@ -276,12 +276,46 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
                     string procedimiento = "core.p_actualiza_cerveza";
                     var parametros = new
                     {
-                        p_id            = unaCerveza.Id,
-                        p_nombre        = unaCerveza.Nombre,
-                        p_cervceria_id  = unaCerveza.Cerveceria_id,
-                        p_estilo_id     = unaCerveza.Estilo_id,
-                        p_ibu           = unaCerveza.Ibu,
-                        p_abv           = unaCerveza.Abv
+                        p_id = unaCerveza.Id,
+                        p_nombre = unaCerveza.Nombre,
+                        p_cervceria_id = unaCerveza.Cerveceria_id,
+                        p_estilo_id = unaCerveza.Estilo_id,
+                        p_ibu = unaCerveza.Ibu,
+                        p_abv = unaCerveza.Abv
+                    };
+
+                    var cantidad_filas = await conexion.ExecuteAsync(
+                        procedimiento,
+                        parametros,
+                        commandType: CommandType.StoredProcedure);
+
+                    if (cantidad_filas != 0)
+                        resultadoAccion = true;
+                }
+            }
+            catch (NpgsqlException error)
+            {
+                throw new DbOperationException(error.Message);
+            }
+
+            return resultadoAccion;
+        }
+
+        public async Task<bool> UpdateBeerPackagingAsync(int cerveza_id, EnvasadoCerveza unEnvasadoCerveza)
+        {
+            bool resultadoAccion = false;
+
+            try
+            {
+                using (var conexion = contextoDB.CreateConnection())
+                {
+                    string procedimiento = "core.p_actualiza_envasado_cerveza";
+                    var parametros = new
+                    {
+                        p_cerveza_id = cerveza_id,
+                        p_envasado_id = unEnvasadoCerveza.Id,
+                        p_unidad_volumen_id = unEnvasadoCerveza.Unidad_Volumen_Id,
+                        p_volumen = unEnvasadoCerveza.Volumen
                     };
 
                     var cantidad_filas = await conexion.ExecuteAsync(
@@ -313,6 +347,40 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
                     var parametros = new
                     {
                         p_id = unaCerveza.Id
+                    };
+
+                    var cantidad_filas = await conexion.ExecuteAsync(
+                        procedimiento,
+                        parametros,
+                        commandType: CommandType.StoredProcedure);
+
+                    if (cantidad_filas != 0)
+                        resultadoAccion = true;
+                }
+            }
+            catch (NpgsqlException error)
+            {
+                throw new DbOperationException(error.Message);
+            }
+
+            return resultadoAccion;
+        }
+
+        public async Task<bool> DeleteBeerPackagingAsync(int cerveza_id, EnvasadoCerveza unEnvasadoCerveza)
+        {
+            bool resultadoAccion = false;
+
+            try
+            {
+                using (var conexion = contextoDB.CreateConnection())
+                {
+                    string procedimiento = "core.p_elimina_envasado_cerveza";
+                    var parametros = new
+                    {
+                        p_cerveza_id = cerveza_id,
+                        p_envasado_id = unEnvasadoCerveza.Id,
+                        p_unidad_volumen_id = unEnvasadoCerveza.Unidad_Volumen_Id,
+                        p_volumen = unEnvasadoCerveza.Volumen
                     };
 
                     var cantidad_filas = await conexion.ExecuteAsync(

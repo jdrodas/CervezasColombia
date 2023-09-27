@@ -52,7 +52,7 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
                 var resultado = await conexion.QueryAsync<Cerveceria>(sentenciaSQL,
                                     parametrosSentencia);
 
-                if (resultado.Count()>0)
+                if (resultado.Count() > 0)
                     unaCerveceria = resultado.First();
             }
 
@@ -102,7 +102,7 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
                 var resultado = await conexion.QueryAsync<Cerveceria>(sentenciaSQL,
                                     parametrosSentencia);
 
-                if (resultado.Count()>0)
+                if (resultado.Count() > 0)
                     unaCerveceria = resultado.First();
             }
 
@@ -162,10 +162,11 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
                 parametrosSentencia.Add("@cerveceria_id", cerveceria_id,
                                         DbType.Int32, ParameterDirection.Input);
 
-                string sentenciaSQL = "SELECT cerveza_id id, cerveza nombre, cerveceria, estilo, ibu, abv, rango_ibu, rango_abv " +
-                                      "FROM v_info_cervezas " +
-                                      "WHERE cerveceria_id = @cerveceria_id " +
-                                      "ORDER BY id DESC";
+                string sentenciaSQL = "SELECT cerveza_id id, cerveza nombre, cerveceria_id, cerveceria, estilo_id, " +
+                                        "estilo, ibu, abv, rango_ibu, rango_abv " +
+                                        "FROM v_info_cervezas " +
+                                        "WHERE cerveceria_id = @cerveceria_id " +
+                                        "ORDER BY id DESC";
 
                 var resultadoCervezas = await conexion.QueryAsync<Cerveza>(sentenciaSQL, parametrosSentencia);
 
@@ -180,8 +181,8 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
                 DynamicParameters parametrosSentencia = new DynamicParameters();
                 parametrosSentencia.Add("@ubicacion", ubicacion_nombre,
                                         DbType.String, ParameterDirection.Input);
-                
-                string sentenciaSQL =   "SELECT id " +
+
+                string sentenciaSQL = "SELECT id " +
                                         "FROM ubicaciones u " +
                                         "WHERE (LOWER(u.municipio) || ', ' || LOWER(u.departamento)) = LOWER(@ubicacion) ";
 
@@ -206,10 +207,10 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
                     string procedimiento = "core.p_inserta_cerveceria";
                     var parametros = new
                     {
-                        p_nombre        = unaCerveceria.Nombre,
-                        p_ubicacion_id  = unaCerveceria.Ubicacion_Id,
-                        p_sitio_web     = unaCerveceria.Sitio_Web,
-                        p_instagram     = unaCerveceria.Instagram
+                        p_nombre = unaCerveceria.Nombre,
+                        p_ubicacion_id = unaCerveceria.Ubicacion_Id,
+                        p_sitio_web = unaCerveceria.Sitio_Web,
+                        p_instagram = unaCerveceria.Instagram
                     };
 
                     var cantidad_filas = await conexion.ExecuteAsync(
@@ -240,11 +241,11 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
                     string procedimiento = "core.p_actualiza_cerveceria";
                     var parametros = new
                     {
-                        p_id            = unaCerveceria.Id,
-                        p_nombre        = unaCerveceria.Nombre,
-                        p_ubicacion_id  = unaCerveceria.Ubicacion_Id,
-                        p_sitio_web     = unaCerveceria.Sitio_Web,
-                        p_instagram     = unaCerveceria.Instagram
+                        p_id = unaCerveceria.Id,
+                        p_nombre = unaCerveceria.Nombre,
+                        p_ubicacion_id = unaCerveceria.Ubicacion_Id,
+                        p_sitio_web = unaCerveceria.Sitio_Web,
+                        p_instagram = unaCerveceria.Instagram
                     };
 
                     var cantidad_filas = await conexion.ExecuteAsync(

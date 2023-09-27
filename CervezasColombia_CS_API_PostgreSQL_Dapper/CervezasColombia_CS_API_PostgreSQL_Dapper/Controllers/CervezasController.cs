@@ -93,12 +93,12 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Controllers
         }
 
         [HttpPost("{cerveza_id:int}/Envasados")]
-        public async Task<IActionResult> CreatePackagingBeerAsync(int cerveza_id, EnvasadoCerveza unEnvasadoCerveza)
+        public async Task<IActionResult> CreateBeerPackagingAsync(int cerveza_id, EnvasadoCerveza unEnvasadoCerveza)
         {
             try
             {
                 var cervezaEnvasada = await _cervezaService
-                    .CreatePackagingBeerAsync(cerveza_id, unEnvasadoCerveza);
+                    .CreateBeerPackagingAsync(cerveza_id, unEnvasadoCerveza);
 
                 return Ok(cervezaEnvasada);
             }
@@ -134,6 +134,26 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Controllers
             }
         }
 
+        [HttpPut("{cerveza_id:int}/Envasados")]
+        public async Task<IActionResult> UpdateBeerPackagingAsync(int cerveza_id, EnvasadoCerveza unEnvasadoCerveza)
+        {
+            try
+            {
+                var cervezaEnvasada = await _cervezaService
+                    .UpdateBeerPackagingAsync(cerveza_id, unEnvasadoCerveza);
+
+                return Ok(cervezaEnvasada);
+            }
+            catch (AppValidationException error)
+            {
+                return BadRequest($"Error de validación: {error.Message}");
+            }
+            catch (DbOperationException error)
+            {
+                return BadRequest($"Error de operacion en DB: {error.Message}");
+            }
+        }
+
         [HttpDelete("{cerveza_id:int}")]
         public async Task<IActionResult> DeleteAsync(int cerveza_id)
         {
@@ -144,6 +164,26 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Controllers
 
                 return Ok($"Cerveza {cerveza_id} fue eliminada");
 
+            }
+            catch (AppValidationException error)
+            {
+                return BadRequest($"Error de validación: {error.Message}");
+            }
+            catch (DbOperationException error)
+            {
+                return BadRequest($"Error de operacion en DB: {error.Message}");
+            }
+        }
+
+        [HttpDelete("{cerveza_id:int}/Envasados")]
+        public async Task<IActionResult> DeleteBeerPackagingAsync(int cerveza_id, EnvasadoCerveza unEnvasadoCerveza)
+        {
+            try
+            {
+                await _cervezaService
+                    .DeleteBeerPackagingAsync(cerveza_id, unEnvasadoCerveza);
+
+                return Ok($"Envasado {unEnvasadoCerveza.Nombre} de {unEnvasadoCerveza.Volumen} {unEnvasadoCerveza.Unidad_Volumen} fue eliminado para esta cerveza");
             }
             catch (AppValidationException error)
             {

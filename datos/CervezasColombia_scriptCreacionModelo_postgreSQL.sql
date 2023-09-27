@@ -761,8 +761,44 @@ $$
         values (p_cerveza_id, p_envasado_id, p_unidad_volumen_id, p_volumen);
     end;
 $$;
+
 -- Actualizacion
+create or replace procedure core.p_actualiza_envasado_cerveza(
+                        in p_cerveza_id integer,
+                        in p_envasado_id integer,
+                        in p_unidad_volumen_id integer,
+                        in p_volumen float)
+    language plpgsql
+as
+$$
+    begin
+        update envasados_cervezas
+        set 
+            unidad_volumen_id   = p_unidad_volumen_id,
+            volumen             = p_volumen
+        where cerveza_id    = p_cerveza_id
+        and envasado_id     = p_envasado_id;
+    end;
+$$;
+
 -- Eliminacion
+create or replace procedure core.p_elimina_envasado_cerveza(
+                        in p_cerveza_id integer,
+                        in p_envasado_id integer,
+                        in p_unidad_volumen_id integer,
+                        in p_volumen float)
+    language plpgsql
+as
+$$
+    begin
+        delete from envasados_cervezas
+        where cerveza_id        = p_cerveza_id
+        and envasado_id         = p_envasado_id
+        and unidad_volumen_id   = p_unidad_volumen_id
+        and volumen             = p_volumen;
+    end;
+$$;
+
 
 -- -------------------------------------------
 -- Procedimientos asociados a los ingredientes
@@ -812,6 +848,13 @@ $$
     end;
 $$;
 
+-- ------------------------------------------------------
+-- Procedimientos asociados a los ingredientes_cervezas
+-- ------------------------------------------------------
+
+-- Inserción
+-- Actualización
+-- Eliminacion
 
 -- ------------- 
 -- privilegios
@@ -843,3 +886,9 @@ select grantor, grantee, routine_schema, routine_name, privilege_type
 from information_schema.routine_privileges
 where grantee = 'cervezas_usr'
 and routine_schema = 'core';
+
+-- Para revocar privilegios innecesarios sobre las vistas informativas
+revoke insert, update, delete on v_info_envasados_cervezas from cervezas_usr;
+revoke insert, update, delete on v_info_ingredientes_cervezas from cervezas_usr;
+revoke insert, update, delete on v_info_ingredientes from cervezas_usr;
+revoke insert, update, delete on v_info_cervezas from cervezas_usr;
