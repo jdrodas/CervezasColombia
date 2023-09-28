@@ -11,18 +11,21 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Services
         private readonly IEstiloRepository _estiloRepository;
         private readonly IEnvasadoRepository _envasadoRepository;
         private readonly IUnidadVolumenRepository _unidadVolumenRepository;
+        private readonly IIngredienteRepository _ingredienteRepository;
 
         public CervezaService(ICervezaRepository cervezaRepository,
                               ICerveceriaRepository cerveceriaRepository,
                               IEstiloRepository estiloRepository,
                               IEnvasadoRepository envasadoRepository,
-                              IUnidadVolumenRepository unidadVolumenRepository)
+                              IUnidadVolumenRepository unidadVolumenRepository,
+                              IIngredienteRepository ingredienteRepository)
         {
             _cervezaRepository = cervezaRepository;
             _cerveceriaRepository = cerveceriaRepository;
             _estiloRepository = estiloRepository;
             _envasadoRepository = envasadoRepository;
             _unidadVolumenRepository = unidadVolumenRepository;
+            _ingredienteRepository = ingredienteRepository;
         }
 
         public async Task<IEnumerable<Cerveza>> GetAllAsync()
@@ -207,6 +210,54 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Services
             return envasadoCervezaExistente;
         }
 
+        public async Task CreateBeerIngredientAsync(int cerveza_id, Ingrediente unIngrediente)
+        {
+            //Validamos que la cerveza exista con ese Id
+            var cervezaExistente = await _cervezaRepository
+                .GetByIdAsync(cerveza_id);
+
+            if (cervezaExistente.Id == 0)
+                throw new AppValidationException($"No existe una cerveza registrada con el id {cerveza_id}");
+
+            //Validamos que el ingrediente tenga nombre
+            if (unIngrediente.Nombre.Length == 0)
+                throw new AppValidationException("No se puede insertar un ingrediente de cerveza con nombre nulo");
+
+            //Validamos que el tipo de ingrediente tenga nombre
+            if (unIngrediente.Tipo_Ingrediente.Length == 0)
+                throw new AppValidationException("No se puede insertar un ingrediente de cerveza con tipo de ingrediente nulo");
+
+            //Validamos que el ingrediente exista
+            var ingredienteExistente = await _ingredienteRepository
+                .GetByNameAndTypeAsync(unIngrediente.Nombre!, unIngrediente.Tipo_Ingrediente);
+
+            if (ingredienteExistente.Id == 0)
+                throw new AppValidationException($"El ingrediente {unIngrediente.Tipo_Ingrediente} - {unIngrediente.Nombre} no se encuentra registrado.");
+
+            unIngrediente.Id = ingredienteExistente.Id;
+
+            //Validamos que este ingrediente no exista para esta cerveza
+            var CervezaConIngredienteExistente = await _ingredienteRepository
+                .GetAssociatedBeerByIdAsync(unIngrediente.Id,cerveza_id);
+
+            if (CervezaConIngredienteExistente.Id != 0)
+                throw new AppValidationException($"Ya existe registro para el ingrediente {unIngrediente.Tipo_Ingrediente} " +
+                    $"- {unIngrediente.Nombre} para la cerveza {cervezaExistente.Nombre} ");
+
+            try
+            {
+                bool resultadoAccion = await _cervezaRepository
+                    .CreateBeerIngredientAsync(cerveza_id, unIngrediente);
+
+                if (!resultadoAccion)
+                    throw new AppValidationException("Operación ejecutada pero no generó cambios en la DB");
+            }
+            catch (DbOperationException error)
+            {
+                throw error;
+            }
+        }
+
         public async Task<Cerveza> UpdateAsync(int cerveza_id, Cerveza unaCerveza)
         {
             //Validamos que los parametros sean consistentes
@@ -338,6 +389,7 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Services
             return envasadoCervezaExistente;
         }
 
+        //TODO: Hacer el método en el servicio para actualizar ingredientes por cerveza
         public async Task DeleteAsync(int cerveza_id)
         {
             // validamos que el cerveza a eliminar si exista con ese Id
@@ -422,5 +474,7 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Services
                 throw error;
             }
         }
+
+        //TODO: Hacer el método en el servicio para borrar ingredientes por cerveza
     }
 }

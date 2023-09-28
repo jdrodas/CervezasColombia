@@ -852,9 +852,47 @@ $$;
 -- Procedimientos asociados a los ingredientes_cervezas
 -- ------------------------------------------------------
 
--- Inserción
--- Actualización
+-- Insercion
+create or replace procedure core.p_inserta_ingrediente_cerveza(
+                        in p_cerveza_id integer,
+                        in p_ingrediente_id integer)
+    language plpgsql
+as
+$$
+    begin
+        insert into ingredientes_cervezas (cerveza_id, ingrediente_id)
+        values (p_cerveza_id, p_ingrediente_id);
+    end;
+$$;
+
+-- Actualizacion
+create or replace procedure core.p_actualiza_ingrediente_cerveza(
+                        in p_cerveza_id integer,
+                        in p_ingrediente_id integer)
+    language plpgsql
+as
+$$
+    begin
+        update ingredientes_cervezas
+        set 
+            ingrediente_id  = p_ingrediente_id
+        where cerveza_id    = p_cerveza_id;
+    end;
+$$;
+
 -- Eliminacion
+create or replace procedure core.p_elimina_ingrediente_cerveza(
+                        in p_cerveza_id integer,
+                        in p_ingrediente_id integer)
+    language plpgsql
+as
+$$
+    begin
+        delete from ingredientes_cervezas
+        where ingrediente_id    = p_ingrediente_id
+        and cerveza_id          = p_cerveza_id;
+    end;
+$$;
 
 -- ------------- 
 -- privilegios

@@ -265,6 +265,38 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
             return resultadoAccion;
         }
 
+        public async Task<bool> CreateBeerIngredientAsync(int cerveza_id, Ingrediente unIngrediente)
+        {
+            bool resultadoAccion = false;
+
+            try
+            {
+                using (var conexion = contextoDB.CreateConnection())
+                {
+                    string procedimiento = "core.p_inserta_ingrediente_cerveza";
+                    var parametros = new
+                    {
+                        p_cerveza_id = cerveza_id,
+                        p_ingrediente_id = unIngrediente.Id
+                    };
+
+                    var cantidad_filas = await conexion.ExecuteAsync(
+                        procedimiento,
+                        parametros,
+                        commandType: CommandType.StoredProcedure);
+
+                    if (cantidad_filas != 0)
+                        resultadoAccion = true;
+                }
+            }
+            catch (NpgsqlException error)
+            {
+                throw new DbOperationException(error.Message);
+            }
+
+            return resultadoAccion;
+        }
+
         public async Task<bool> UpdateAsync(Cerveza unaCerveza)
         {
             bool resultadoAccion = false;
@@ -335,6 +367,7 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
             return resultadoAccion;
         }
 
+        //TODO: Hacer el método que invoca el procedimiento p_actualiza_ingrediente_cerveza
         public async Task<bool> DeleteAsync(Cerveza unaCerveza)
         {
             bool resultadoAccion = false;
@@ -399,5 +432,7 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
 
             return resultadoAccion;
         }
+
+        //TODO: Hacer el método que invoca el procedimiento p_elimina_ingrediente_cerveza
     }
 }

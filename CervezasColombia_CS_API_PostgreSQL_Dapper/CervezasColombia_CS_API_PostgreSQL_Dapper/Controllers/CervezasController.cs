@@ -112,6 +112,26 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Controllers
             }
         }
 
+        [HttpPost("{cerveza_id:int}/Ingredientes")]
+        public async Task<IActionResult> CreateBeerIngredientAsync(int cerveza_id, Ingrediente unIngrediente)
+        {
+            try
+            {
+                 await _cervezaService
+                    .CreateBeerIngredientAsync(cerveza_id, unIngrediente);
+
+                return Ok($"Ingrediente {unIngrediente.Tipo_Ingrediente} - {unIngrediente.Nombre} asociado a esta Cerveza");
+            }
+            catch (AppValidationException error)
+            {
+                return BadRequest($"Error de validación: {error.Message}");
+            }
+            catch (DbOperationException error)
+            {
+                return BadRequest($"Error de operacion en DB: {error.Message}");
+            }
+        }
+
 
         [HttpPut("{cerveza_id:int}")]
         public async Task<IActionResult> UpdateAsync(int cerveza_id, Cerveza unaCerveza)
@@ -154,6 +174,8 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Controllers
             }
         }
 
+        //TODO: Hacer el Put para los ingredientes por cerveza
+
         [HttpDelete("{cerveza_id:int}")]
         public async Task<IActionResult> DeleteAsync(int cerveza_id)
         {
@@ -194,5 +216,7 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Controllers
                 return BadRequest($"Error de operacion en DB: {error.Message}");
             }
         }
+
+        //TODO: Hacer el DEL para los ingredientes por cerveza
     }
 }

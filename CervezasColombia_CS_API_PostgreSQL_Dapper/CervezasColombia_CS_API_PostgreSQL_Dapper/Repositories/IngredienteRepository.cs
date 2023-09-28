@@ -123,6 +123,34 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
             }
         }
 
+        public async Task<Cerveza> GetAssociatedBeerByIdAsync(int ingrediente_id, int cerveza_id)
+        {
+            Cerveza cervezaExistente = new Cerveza();
+            
+            using (var conexion = contextoDB.CreateConnection())
+            {
+                DynamicParameters parametrosSentencia = new DynamicParameters();
+                parametrosSentencia.Add("@ingrediente_id", ingrediente_id,
+                                        DbType.Int32, ParameterDirection.Input);
+                parametrosSentencia.Add("@cerveza_id", cerveza_id,
+                                        DbType.Int32, ParameterDirection.Input);
+
+                string sentenciaSQL = "SELECT cerveza_id id, cerveza nombre, cerveceria, " +
+                    "estilo, ibu, abv " +
+                    "FROM v_info_cervezas " +
+                    "WHERE cerveza_id in (SELECT cerveza_id FROM ingredientes_cervezas " +
+                    "WHERE ingrediente_id = @ingrediente_id) AND cerveza_id = @cerveza_id";
+
+                var resultado = await conexion.QueryAsync<Cerveza>(sentenciaSQL, parametrosSentencia);
+
+                if (resultado.Count() > 0)
+                    cervezaExistente = resultado.First();
+
+                return cervezaExistente;
+            }
+        }
+
+
         public async Task<int> GetAssociatedIngredientTypeIdAsync(string tipo_ingrediente_nombre)
         {
             using (var conexion = contextoDB.CreateConnection())
@@ -143,6 +171,7 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
                     return 0;
             }
         }
+
 
         public async Task<bool> CreateAsync(Ingrediente unIngrediente)
         {
