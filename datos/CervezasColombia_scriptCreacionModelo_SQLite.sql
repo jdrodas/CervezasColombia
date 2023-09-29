@@ -178,6 +178,18 @@ from ingredientes_cervezas ic
     join ingredientes i on i.id = ic.ingrediente_id
     join tipos_ingredientes ti on i.tipo_ingrediente_id = ti.id;	
 
+-- ----------------------------
+-- Vista: v_info_cervecerias
+-- ----------------------------
+create view v_info_cervecerias as
+select
+    cv.id cerveceria_id,
+    cv.nombre cerveceria,
+    cv.sitio_web,
+    cv.instagram,
+    cv.ubicacion_id,
+    (u.municipio || ', ' || u.departamento) ubicacion
+from cervecerias cv join ubicaciones u on cv.ubicacion_id = u.id;
 
 -- *********************************
 -- Orden para el cargue de datos
