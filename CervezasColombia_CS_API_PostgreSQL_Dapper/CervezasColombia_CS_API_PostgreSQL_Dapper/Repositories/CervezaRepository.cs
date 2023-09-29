@@ -333,41 +333,6 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
             return resultadoAccion;
         }
 
-        public async Task<bool> UpdateBeerPackagingAsync(int cerveza_id, EnvasadoCerveza unEnvasadoCerveza)
-        {
-            bool resultadoAccion = false;
-
-            try
-            {
-                using (var conexion = contextoDB.CreateConnection())
-                {
-                    string procedimiento = "core.p_actualiza_envasado_cerveza";
-                    var parametros = new
-                    {
-                        p_cerveza_id = cerveza_id,
-                        p_envasado_id = unEnvasadoCerveza.Id,
-                        p_unidad_volumen_id = unEnvasadoCerveza.Unidad_Volumen_Id,
-                        p_volumen = unEnvasadoCerveza.Volumen
-                    };
-
-                    var cantidad_filas = await conexion.ExecuteAsync(
-                        procedimiento,
-                        parametros,
-                        commandType: CommandType.StoredProcedure);
-
-                    if (cantidad_filas != 0)
-                        resultadoAccion = true;
-                }
-            }
-            catch (NpgsqlException error)
-            {
-                throw new DbOperationException(error.Message);
-            }
-
-            return resultadoAccion;
-        }
-
-        //TODO: Hacer el método que invoca el procedimiento p_actualiza_ingrediente_cerveza
         public async Task<bool> DeleteAsync(Cerveza unaCerveza)
         {
             bool resultadoAccion = false;
@@ -433,6 +398,36 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
             return resultadoAccion;
         }
 
-        //TODO: Hacer el método que invoca el procedimiento p_elimina_ingrediente_cerveza
+        public async Task<bool> DeleteBeerIngredientAsync(int cerveza_id, Ingrediente unIngrediente)
+        {
+            bool resultadoAccion = false;
+
+            try
+            {
+                using (var conexion = contextoDB.CreateConnection())
+                {
+                    string procedimiento = "core.p_elimina_ingrediente_cerveza";
+                    var parametros = new
+                    {
+                        p_cerveza_id = cerveza_id,
+                        p_ingrediente_id = unIngrediente.Id
+                    };
+
+                    var cantidad_filas = await conexion.ExecuteAsync(
+                        procedimiento,
+                        parametros,
+                        commandType: CommandType.StoredProcedure);
+
+                    if (cantidad_filas != 0)
+                        resultadoAccion = true;
+                }
+            }
+            catch (NpgsqlException error)
+            {
+                throw new DbOperationException(error.Message);
+            }
+
+            return resultadoAccion;
+        }
     }
 }

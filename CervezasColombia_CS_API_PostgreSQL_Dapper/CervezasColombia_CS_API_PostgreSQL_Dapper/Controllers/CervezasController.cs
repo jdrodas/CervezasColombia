@@ -154,28 +154,6 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Controllers
             }
         }
 
-        [HttpPut("{cerveza_id:int}/Envasados")]
-        public async Task<IActionResult> UpdateBeerPackagingAsync(int cerveza_id, EnvasadoCerveza unEnvasadoCerveza)
-        {
-            try
-            {
-                var cervezaEnvasada = await _cervezaService
-                    .UpdateBeerPackagingAsync(cerveza_id, unEnvasadoCerveza);
-
-                return Ok(cervezaEnvasada);
-            }
-            catch (AppValidationException error)
-            {
-                return BadRequest($"Error de validación: {error.Message}");
-            }
-            catch (DbOperationException error)
-            {
-                return BadRequest($"Error de operacion en DB: {error.Message}");
-            }
-        }
-
-        //TODO: Hacer el Put para los ingredientes por cerveza
-
         [HttpDelete("{cerveza_id:int}")]
         public async Task<IActionResult> DeleteAsync(int cerveza_id)
         {
@@ -217,6 +195,24 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Controllers
             }
         }
 
-        //TODO: Hacer el DEL para los ingredientes por cerveza
+        [HttpDelete("{cerveza_id:int}/Ingredientes")]
+        public async Task<IActionResult> DeleteBeerIngredientAsync(int cerveza_id, Ingrediente unIngrediente)
+        {
+            try
+            {
+                await _cervezaService
+                    .DeleteBeerIngredientAsync(cerveza_id, unIngrediente);
+
+                return Ok($"Ingrediente {unIngrediente.Tipo_Ingrediente} - {unIngrediente.Nombre} fue eliminado para esta cerveza");
+            }
+            catch (AppValidationException error)
+            {
+                return BadRequest($"Error de validación: {error.Message}");
+            }
+            catch (DbOperationException error)
+            {
+                return BadRequest($"Error de operacion en DB: {error.Message}");
+            }
+        }
     }
 }

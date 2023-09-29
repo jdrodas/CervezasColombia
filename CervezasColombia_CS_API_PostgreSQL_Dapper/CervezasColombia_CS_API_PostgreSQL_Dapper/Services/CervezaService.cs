@@ -324,72 +324,6 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Services
             return cervezaExistente;
         }
         
-        public async Task<EnvasadoCerveza> UpdateBeerPackagingAsync(int cerveza_id, EnvasadoCerveza unEnvasadoCerveza)
-        {
-            //Validamos que la cerveza exista con ese Id
-            var cervezaExistente = await _cervezaRepository
-                .GetByIdAsync(cerveza_id);
-
-            if (cervezaExistente.Id == 0)
-                throw new AppValidationException($"No existe una cerveza registrada con el id {cerveza_id}");
-
-            //Validamos que el envasado tenga nombre
-            if (unEnvasadoCerveza.Nombre.Length == 0)
-                throw new AppValidationException("No se puede actualizar un envasado de cerveza con nombre nulo");
-
-            //Validamos que la unidad de volumen tenga nombre
-            if (unEnvasadoCerveza.Unidad_Volumen.Length == 0)
-                throw new AppValidationException("No se puede actualizar un envasado de cerveza con unidad de volumen nula");
-
-            //Validamos que el envasado exista
-            var envasadoExistente = await _envasadoRepository
-                .GetByNameAsync(unEnvasadoCerveza.Nombre!);
-
-            if (envasadoExistente.Id == 0)
-                throw new AppValidationException($"El envasado {unEnvasadoCerveza.Nombre} no se encuentra registrado.");
-
-            unEnvasadoCerveza.Id = envasadoExistente.Id;
-
-            //Validamos que la unidad de volumen exista
-            var unidadVolumenExistente = await _unidadVolumenRepository
-                .GetByNameAsync(unEnvasadoCerveza.Unidad_Volumen!);
-
-            if (unidadVolumenExistente.Id == 0)
-                throw new AppValidationException($"La unidad de Volumen {unEnvasadoCerveza.Unidad_Volumen} no se encuentra registrada.");
-
-            unEnvasadoCerveza.Unidad_Volumen_Id = unidadVolumenExistente.Id;
-
-            if (unEnvasadoCerveza.Volumen <= 0)
-                throw new AppValidationException($"el Volumen {unEnvasadoCerveza.Volumen} no corresponde a un valor válido para un envasado.");
-
-            //Validamos que este envasado con unidad de volumen y volumen no exista para esta cerveza
-            var envasadoCervezaExistente = await _envasadoRepository
-                .GetAssociatedBeerPackagingAsync(cerveza_id, unEnvasadoCerveza.Id, unEnvasadoCerveza.Unidad_Volumen_Id, unEnvasadoCerveza.Volumen);
-
-            if (unEnvasadoCerveza.Equals(envasadoCervezaExistente))
-                throw new AppValidationException($"Ya existe un envasado {unEnvasadoCerveza.Nombre} de {unEnvasadoCerveza.Volumen} " +
-                    $"{unEnvasadoCerveza.Unidad_Volumen} para la cerveza {cervezaExistente.Nombre} de {cervezaExistente.Cerveceria}.");
-
-            try
-            {
-                bool resultadoAccion = await _cervezaRepository
-                    .UpdateBeerPackagingAsync(cerveza_id, unEnvasadoCerveza);
-
-                if (!resultadoAccion)
-                    throw new AppValidationException("Operación ejecutada pero no generó cambios en la DB");
-
-                envasadoCervezaExistente = await _cervezaRepository
-                    .GetPackagedBeerByNameAsync(cerveza_id, unEnvasadoCerveza.Nombre!, unEnvasadoCerveza.Unidad_Volumen_Id, unEnvasadoCerveza.Volumen);
-            }
-            catch (DbOperationException error)
-            {
-                throw error;
-            }
-
-            return envasadoCervezaExistente;
-        }
-
-        //TODO: Hacer el método en el servicio para actualizar ingredientes por cerveza
         public async Task DeleteAsync(int cerveza_id)
         {
             // validamos que el cerveza a eliminar si exista con ese Id
@@ -475,6 +409,52 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Services
             }
         }
 
-        //TODO: Hacer el método en el servicio para borrar ingredientes por cerveza
+        public async Task DeleteBeerIngredientAsync(int cerveza_id, Ingrediente unIngrediente)
+        {
+            //Validamos que la cerveza exista con ese Id
+            var cervezaExistente = await _cervezaRepository
+                .GetByIdAsync(cerveza_id);
+
+            if (cervezaExistente.Id == 0)
+                throw new AppValidationException($"No existe una cerveza registrada con el id {cerveza_id}");
+
+            //Validamos que el ingrediente tenga nombre
+            if (unIngrediente.Nombre.Length == 0)
+                throw new AppValidationException("No se puede validar un ingrediente de cerveza con nombre nulo");
+
+            //Validamos que el tipo de ingrediente tenga nombre
+            if (unIngrediente.Tipo_Ingrediente.Length == 0)
+                throw new AppValidationException("No se puede validar un ingrediente de cerveza con tipo de ingrediente nulo");
+
+            //Validamos que el ingrediente exista
+            var ingredienteExistente = await _ingredienteRepository
+                .GetByNameAndTypeAsync(unIngrediente.Nombre!, unIngrediente.Tipo_Ingrediente);
+
+            if (ingredienteExistente.Id == 0)
+                throw new AppValidationException($"El ingrediente {unIngrediente.Tipo_Ingrediente} - {unIngrediente.Nombre} no se encuentra registrado.");
+
+            unIngrediente.Id = ingredienteExistente.Id;
+
+            //Validamos que este ingrediente no exista para esta cerveza
+            var CervezaConIngredienteExistente = await _ingredienteRepository
+                .GetAssociatedBeerByIdAsync(unIngrediente.Id, cerveza_id);
+
+            if (CervezaConIngredienteExistente.Id == 0)
+                throw new AppValidationException($"No existe registro para el ingrediente {unIngrediente.Tipo_Ingrediente} " +
+                    $"- {unIngrediente.Nombre} para la cerveza {cervezaExistente.Nombre} ");
+
+            try
+            {
+                bool resultadoAccion = await _cervezaRepository
+                    .DeleteBeerIngredientAsync(cerveza_id, unIngrediente);
+
+                if (!resultadoAccion)
+                    throw new AppValidationException("Operación ejecutada pero no generó cambios en la DB");
+            }
+            catch (DbOperationException error)
+            {
+                throw error;
+            }
+        }
     }
 }
