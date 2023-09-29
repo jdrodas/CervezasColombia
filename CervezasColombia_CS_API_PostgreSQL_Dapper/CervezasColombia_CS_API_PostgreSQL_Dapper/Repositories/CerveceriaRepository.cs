@@ -21,11 +21,9 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
         {
             using (var conexion = contextoDB.CreateConnection())
             {
-                string sentenciaSQL = "SELECT c.id, c.nombre, c.sitio_web, c.instagram, " +
-                                      "(u.municipio || ', ' || u.departamento) ubicacion, c.ubicacion_id " +
-                                      "FROM cervecerias c JOIN ubicaciones u " +
-                                      "ON c.ubicacion_id = u.id " +
-                                      "ORDER BY c.id DESC";
+                string sentenciaSQL = "SELECT v.cerveceria_id id, v.cerveceria nombre, v.sitio_web, v.instagram, v.ubicacion, v.ubicacion_id " +
+                    "FROM v_info_cervecerias v " +
+                    "ORDER BY v.cerveceria_id";
 
                 var resultadoCervecerias = await conexion.QueryAsync<Cerveceria>(sentenciaSQL,
                                         new DynamicParameters());
@@ -44,10 +42,9 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
                 parametrosSentencia.Add("@cerveceria_id", cerveceria_id,
                                         DbType.Int32, ParameterDirection.Input);
 
-                string sentenciaSQL = "SELECT c.id, c.nombre, c.sitio_web, c.instagram, " +
-                                      "(u.municipio || ', ' || u.departamento) ubicacion, c.ubicacion_id " +
-                                      "FROM cervecerias c JOIN ubicaciones u ON c.ubicacion_id = u.id " +
-                                      "WHERE c.id = @cerveceria_id ";
+                string sentenciaSQL = "SELECT v.cerveceria_id id, v.cerveceria nombre, v.sitio_web, v.instagram, v.ubicacion, v.ubicacion_id " +
+                    "FROM v_info_cervecerias v " +
+                    "WHERE v.cerveceria_id = @cerveceria_id";
 
                 var resultado = await conexion.QueryAsync<Cerveceria>(sentenciaSQL,
                                     parametrosSentencia);

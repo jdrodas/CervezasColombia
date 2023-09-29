@@ -777,25 +777,6 @@ $$
     end;
 $$;
 
--- Actualizacion
-create or replace procedure core.p_actualiza_envasado_cerveza(
-                        in p_cerveza_id integer,
-                        in p_envasado_id integer,
-                        in p_unidad_volumen_id integer,
-                        in p_volumen float)
-    language plpgsql
-as
-$$
-    begin
-        update envasados_cervezas
-        set 
-            unidad_volumen_id   = p_unidad_volumen_id,
-            volumen             = p_volumen
-        where cerveza_id    = p_cerveza_id
-        and envasado_id     = p_envasado_id;
-    end;
-$$;
-
 -- Eliminacion
 create or replace procedure core.p_elimina_envasado_cerveza(
                         in p_cerveza_id integer,
@@ -880,20 +861,6 @@ $$
     end;
 $$;
 
--- Actualizacion
-create or replace procedure core.p_actualiza_ingrediente_cerveza(
-                        in p_cerveza_id integer,
-                        in p_ingrediente_id integer)
-    language plpgsql
-as
-$$
-    begin
-        update ingredientes_cervezas
-        set 
-            ingrediente_id  = p_ingrediente_id
-        where cerveza_id    = p_cerveza_id;
-    end;
-$$;
 
 -- Eliminacion
 create or replace procedure core.p_elimina_ingrediente_cerveza(
