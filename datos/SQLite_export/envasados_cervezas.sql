@@ -47,4 +47,12 @@ INSERT INTO envasados_cervezas (cerveza_id, envasado_id, unidad_volumen_id, volu
 INSERT INTO envasados_cervezas (cerveza_id, envasado_id, unidad_volumen_id, volumen) VALUES (50, 2, 4, 330);
 INSERT INTO envasados_cervezas (cerveza_id, envasado_id, unidad_volumen_id, volumen) VALUES (51, 2, 4, 330);
 INSERT INTO envasados_cervezas (cerveza_id, envasado_id, unidad_volumen_id, volumen) VALUES (52, 2, 4, 330);
-INSERT INTO envasados_cervezas (cerveza_id, envasado_id, unidad_volumen_id, volumen) VALUES (52, 6, 3, 2);
+INSERT INTO envasados_cervezas (cerveza_id, envasado_id, unidad_volumen_id, volumen) VALUES (52, 4, 3, 2);
+INSERT INTO envasados_cervezas (cerveza_id, envasado_id, unidad_volumen_id, volumen) VALUES (54, 2, 4, 330);
+INSERT INTO envasados_cervezas (cerveza_id, envasado_id, unidad_volumen_id, volumen) VALUES (55, 2, 4, 330);
+INSERT INTO envasados_cervezas (cerveza_id, envasado_id, unidad_volumen_id, volumen) VALUES (56, 2, 4, 330);
+INSERT INTO envasados_cervezas (cerveza_id, envasado_id, unidad_volumen_id, volumen) VALUES (57, 2, 4, 330);
+INSERT INTO envasados_cervezas (cerveza_id, envasado_id, unidad_volumen_id, volumen) VALUES (58, 2, 4, 330);
+INSERT INTO envasados_cervezas (cerveza_id, envasado_id, unidad_volumen_id, volumen) VALUES (58, 2, 4, 750);
+INSERT INTO envasados_cervezas (cerveza_id, envasado_id, unidad_volumen_id, volumen) VALUES (59, 2, 4, 330);
+INSERT INTO envasados_cervezas (cerveza_id, envasado_id, unidad_volumen_id, volumen) VALUES (60, 2, 4, 330);

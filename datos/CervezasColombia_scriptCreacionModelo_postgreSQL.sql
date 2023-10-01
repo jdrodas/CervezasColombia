@@ -144,6 +144,8 @@ create table core.ubicaciones (
   id                    integer generated always as identity constraint ubicaciones_pk primary key,
   municipio             varchar(100) not null,
   departamento          varchar(100) not null,
+  latitud               float default 0,
+  longitud              float default 0,
   fecha_creacion        timestamp with time zone default current_timestamp,
   fecha_actualizacion   timestamp with time zone default current_timestamp,
   constraint ubicaciones_uk unique (municipio, departamento)    
@@ -153,6 +155,8 @@ comment on table core.ubicaciones is 'Ubicaciones de las Cervecerias';
 comment on column core.ubicaciones.id is 'id de la ubicación';
 comment on column core.ubicaciones.municipio is 'municipio de la ubicación';
 comment on column core.ubicaciones.departamento is 'departamento de la ubicacion';
+comment on column core.unidades_volumen.latitud is 'Componente de latitud de la coordenada geográfica';
+comment on column core.unidades_volumen.longitud is 'Componente de longitud de la coordenada geográfica';
 comment on column core.unidades_volumen.fecha_creacion is 'fecha de creación del registro';
 comment on column core.unidades_volumen.fecha_actualizacion is 'fecha de actualización del registro';
 
@@ -239,7 +243,6 @@ comment on column core.cervezas.ibu is 'valor del Ibu de la cerveza';
 comment on column core.cervezas.abv is 'valor del abv de la cerveza';
 comment on column core.cervezas.fecha_creacion is 'fecha de creación del registro';
 comment on column core.cervezas.fecha_actualizacion is 'fecha de actualización del registro';
-
 
 -- ------------------------------
 -- Tabla envasados_cervezas
@@ -525,13 +528,15 @@ $$;
 -- Inserción
 create or replace procedure core.p_inserta_ubicacion(
                     in p_municipio varchar,
-                    in p_departamento varchar)
+                    in p_departamento varchar,
+                    in p_latitud float,
+                    in p_longitud float)
     language plpgsql
 as
 $$
     begin
-        insert into ubicaciones (municipio,departamento)
-        values (p_municipio, p_departamento);
+        insert into ubicaciones (municipio,departamento, latitud, longitud)
+        values (p_municipio, p_departamento, p_latitud, p_longitud);
     end;
 $$;
 
@@ -539,7 +544,9 @@ $$;
 create or replace procedure core.p_actualiza_ubicacion(
                     in p_id integer,
                     in p_municipio varchar,
-                    in p_departamento varchar)
+                    in p_departamento varchar,
+                    in p_latitud float,
+                    in p_longitud float)
     language plpgsql
 as
 $$
@@ -548,6 +555,8 @@ $$
         set
             municipio           = p_municipio,
             departamento        = p_departamento,
+            latitud             = p_latitud,
+            longitud            = p_longitud,
             fecha_actualizacion = current_timestamp
         where id = p_id;
     end;

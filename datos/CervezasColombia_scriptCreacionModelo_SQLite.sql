@@ -38,6 +38,8 @@ create table ubicaciones
     id                  integer constraint ubicaciones_pk primary key autoincrement,
     municipio           text not null,
     departamento        text not null,
+    latitud             real default 0,
+    longitud            real default 0,
     constraint ubicaciones_uk unique (municipio, departamento)
 );
 

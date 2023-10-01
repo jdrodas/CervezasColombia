@@ -4,6 +4,8 @@ table ubicaciones{
   id int [pk, increment]
   municipio varchar
   departamento varchar
+  latitud float
+  longitud float
 }
 
 table cervecerias {

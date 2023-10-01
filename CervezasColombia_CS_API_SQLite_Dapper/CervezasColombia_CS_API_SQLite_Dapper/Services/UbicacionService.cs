@@ -61,6 +61,13 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
             if (unaUbicacion.Departamento.Length == 0)
                 throw new AppValidationException("No se puede insertar una ubicación con Departamento nulo");
 
+            //Validamos que la ubicación tenga latitud en su coordenada geográfica y que esta sea válida
+            if (unaUbicacion.Latitud == 0 || unaUbicacion.Latitud < -90 || unaUbicacion.Latitud > 90)
+                throw new AppValidationException($"No se puede insertar una ubicación en Colombia con valor de latitud en {unaUbicacion.Latitud} para su coordenada geográfica");
+
+            //Validamos que la ubicación tenga longitud en su coordenada geográfica y que esta sea válida
+            if (unaUbicacion.Longitud == 0 || unaUbicacion.Longitud < -180 || unaUbicacion.Longitud > 180)
+                throw new AppValidationException($"No se puede insertar una ubicación en Colombia con valor de longitud en {unaUbicacion.Longitud} para su coordenada geográfica");
             // validamos que la ubicación a crear no esté previamente creada
             var ubicacionExistente = await _ubicacionRepository
                 .GetByNameAsync(unaUbicacion.Municipio!, unaUbicacion.Departamento!);
@@ -101,11 +108,19 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
             if (unaUbicacion.Departamento.Length == 0)
                 throw new AppValidationException("No se puede actualizar una ubicación con Departamento nulo");
 
+            //Validamos que la ubicación tenga latitud en su coordenada geográfica y que esta sea válida
+            if (unaUbicacion.Latitud == 0 || unaUbicacion.Latitud < -90 || unaUbicacion.Latitud > 90)
+                throw new AppValidationException($"No se puede actualizar una ubicación en Colombia con valor de latitud en {unaUbicacion.Latitud} para su coordenada geográfica");
+
+            //Validamos que la ubicación tenga longitud en su coordenada geográfica y que esta sea válida
+            if (unaUbicacion.Longitud == 0 || unaUbicacion.Longitud < -180 || unaUbicacion.Longitud > 180)
+                throw new AppValidationException($"No se puede actualizar una ubicación en Colombia con valor de longitud en {unaUbicacion.Longitud} para su coordenada geográfica");
+
             //Validamos que el nuevo municipio,departamento no exista previamente con otro Id
             var ubicacionExistente = await _ubicacionRepository
                 .GetByNameAsync(unaUbicacion.Municipio!, unaUbicacion.Departamento!);
 
-            if (ubicacionExistente.Id != 0)
+            if (unaUbicacion.Equals(ubicacionExistente))
                 throw new AppValidationException($"Ya existe una ubicación con el nombre {unaUbicacion.Municipio}, {unaUbicacion.Departamento}");
 
             // validamos que la ubicación a actualizar si exista con ese Id

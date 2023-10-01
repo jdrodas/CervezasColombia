@@ -21,7 +21,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
         {
             using (contextoDB.Conexion)
             {
-                string sentenciaSQL = "SELECT id, municipio, departamento " +
+                string sentenciaSQL = "SELECT id, municipio, departamento, latitud, longitud " +
                                       "FROM ubicaciones " +
                                       "ORDER BY id DESC";
 
@@ -42,7 +42,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
                 parametrosSentencia.Add("@ubicacion_id", ubicacion_id,
                                         DbType.Int32, ParameterDirection.Input);
 
-                string sentenciaSQL = "SELECT id, municipio, departamento " +
+                string sentenciaSQL = "SELECT id, municipio, departamento, latitud, longitud " +
                                       "FROM ubicaciones " +
                                       "WHERE id = @ubicacion_id ";
 
@@ -68,7 +68,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
                 parametrosSentencia.Add("@ubicacion_departamento", ubicacion_departamento,
                                         DbType.String, ParameterDirection.Input);
 
-                string sentenciaSQL = "SELECT id, municipio, departamento " +
+                string sentenciaSQL = "SELECT id, municipio, departamento, latitud, longitud " +
                                       "FROM ubicaciones " +
                                       "WHERE municipio = @ubicacion_municipio " +
                                       "AND departamento = @ubicacion_departamento";
@@ -128,8 +128,8 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
             {
                 using (contextoDB.Conexion)
                 {
-                    string sentenciaSQL =   "INSERT INTO ubicaciones (municipio, departamento) " +
-                                            "VALUES (@Municipio, @Departamento)";
+                    string sentenciaSQL =   "INSERT INTO ubicaciones (municipio, departamento, latitud, longitud) " +
+                                            "VALUES (@Municipio, @Departamento, @Latitud, @Longitud)";
 
                     int filasAfectadas = await contextoDB.Conexion.ExecuteAsync(sentenciaSQL,
                                             unaUbicacion);
@@ -155,7 +155,9 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
                 using (contextoDB.Conexion)
                 {
                     string sentenciaSQL = "UPDATE ubicaciones SET municipio = @Municipio, " +
-                                          "departamento = @Departamento " +
+                                          "departamento = @Departamento, " +
+                                          "latitud = @Latitud, " +
+                                          "longitud = @Longitud " +
                                           "WHERE id = @Id";
 
                     int filasAfectadas = await contextoDB.Conexion.ExecuteAsync(sentenciaSQL,

@@ -21,7 +21,7 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
         {
             using (var conexion = contextoDB.CreateConnection())
             {
-                string sentenciaSQL = "SELECT id, municipio, departamento " +
+                string sentenciaSQL = "SELECT id, municipio, departamento, latitud, longitud " +
                                       "FROM ubicaciones " +
                                       "ORDER BY id DESC";
 
@@ -42,7 +42,7 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
                 parametrosSentencia.Add("@ubicacion_id", ubicacion_id,
                                         DbType.Int32, ParameterDirection.Input);
 
-                string sentenciaSQL = "SELECT id, municipio, departamento " +
+                string sentenciaSQL = "SELECT id, municipio, departamento, latitud, longitud " +
                                       "FROM ubicaciones " +
                                       "WHERE id = @ubicacion_id ";
 
@@ -68,7 +68,7 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
                 parametrosSentencia.Add("@ubicacion_departamento", ubicacion_departamento,
                                         DbType.String, ParameterDirection.Input);
 
-                string sentenciaSQL = "SELECT id, municipio, departamento " +
+                string sentenciaSQL = "SELECT id, municipio, departamento, latitud, longitud " +
                                       "FROM ubicaciones " +
                                       "WHERE municipio = @ubicacion_municipio " +
                                       "AND departamento = @ubicacion_departamento";
@@ -111,10 +111,10 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
                 parametrosSentencia.Add("@ubicacion_id", ubicacion_id,
                                         DbType.Int32, ParameterDirection.Input);
 
-                string sentenciaSQL = "SELECT c.id, c.nombre, c.sitio_web, c.instagram, " +
-                                      "(u.municipio || ', ' || u.departamento) ubicacion, c.ubicacion_id " +
-                                      "FROM cervecerias c JOIN ubicaciones u ON c.ubicacion_id = u.id " +
-                                      "WHERE c.ubicacion_id = @ubicacion_id ";
+                string sentenciaSQL =   "SELECT v.cervceria_id id, v.cerveceria nombre, v.sitio_web, c.instagram, " +
+                                        "v.ubicacion, v.ubicacion_id " +
+                                        "FROM v_info_cervecerias v " +
+                                        "where v.ubicacion_id = @ubicacion_id";
 
                 var resultadoCervecerias = await conexion.QueryAsync<Cerveceria>(sentenciaSQL, parametrosSentencia);
 
@@ -134,7 +134,9 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
                     var parametros = new
                     {
                         p_municipio = unaUbicacion.Municipio,
-                        p_departamento = unaUbicacion.Departamento
+                        p_departamento = unaUbicacion.Departamento,
+                        p_latitud = unaUbicacion.Latitud,
+                        p_longitud = unaUbicacion.Longitud
                     };
 
                     var cantidad_filas = await conexion.ExecuteAsync(
@@ -167,7 +169,9 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
                     {
                         p_id            = unaUbicacion.Id,
                         p_municipio     = unaUbicacion.Municipio,
-                        p_departamento  = unaUbicacion.Departamento
+                        p_departamento  = unaUbicacion.Departamento,
+                        p_latitud       = unaUbicacion.Latitud,
+                        p_longitud      = unaUbicacion.Longitud
                     };
 
                     var cantidad_filas = await conexion.ExecuteAsync(

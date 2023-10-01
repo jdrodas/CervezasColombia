@@ -10,6 +10,7 @@ drop view v_info_envasados_cervezas;
 drop view v_info_ingredientes;
 drop view v_info_ingredientes_cervezas;
 drop view v_info_cervezas;
+drop view v_info_cervecerias;
 
 -- Tablas
 select ('drop table ' || name || ';') sentencia_drop
