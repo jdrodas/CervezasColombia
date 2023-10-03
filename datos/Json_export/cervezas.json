@@ -1,0 +1,422 @@
+[
+  {
+    "cerveceria": "3 Cordilleras",
+    "nombre": "Blanca",
+    "estilo": "Wheat Ale",
+    "ibu": 15,
+    "abv": 4.6
+  },
+  {
+    "cerveceria": "3 Cordilleras",
+    "nombre": "Mona",
+    "estilo": "Blonde Ale",
+    "ibu": 20,
+    "abv": 3.9
+  },
+  {
+    "cerveceria": "3 Cordilleras",
+    "nombre": "Mulata",
+    "estilo": "Amber Ale",
+    "ibu": 27,
+    "abv": 5.2
+  },
+  {
+    "cerveceria": "3 Cordilleras",
+    "nombre": "Mestiza",
+    "estilo": "American Pale Ale",
+    "ibu": 29,
+    "abv": 4.8
+  },
+  {
+    "cerveceria": "3 Cordilleras",
+    "nombre": "Negra",
+    "estilo": "Sweet Stout",
+    "ibu": 25,
+    "abv": 6.4
+  },
+  {
+    "cerveceria": "3 Cordilleras",
+    "nombre": "Rose",
+    "estilo": "Rose",
+    "ibu": 15,
+    "abv": 3.8
+  },
+  {
+    "cerveceria": "20 Mission",
+    "nombre": "Blonde",
+    "estilo": "Blonde Ale",
+    "ibu": 19,
+    "abv": 5
+  },
+  {
+    "cerveceria": "20 Mission",
+    "nombre": "Witbier",
+    "estilo": "Witbier",
+    "ibu": 16,
+    "abv": 5
+  },
+  {
+    "cerveceria": "20 Mission",
+    "nombre": "Pale Ale",
+    "estilo": "Pale Ale",
+    "ibu": 30,
+    "abv": 5
+  },
+  {
+    "cerveceria": "20 Mission",
+    "nombre": "Porter",
+    "estilo": "Porter",
+    "ibu": 30,
+    "abv": 5.5
+  },
+  {
+    "cerveceria": "20 Mission",
+    "nombre": "IPA",
+    "estilo": "India Pale Ale (IPA)",
+    "ibu": 60,
+    "abv": 6
+  },
+  {
+    "cerveceria": "20 Mission",
+    "nombre": "Saison",
+    "estilo": "Saison",
+    "ibu": 27,
+    "abv": 6
+  },
+  {
+    "cerveceria": "Rincón del Mar",
+    "nombre": "Açaí",
+    "estilo": "Irish Red Ale",
+    "ibu": 0,
+    "abv": 6.7
+  },
+  {
+    "cerveceria": "Rincón del Mar",
+    "nombre": "Cacao",
+    "estilo": "Irish Red Ale",
+    "ibu": 0,
+    "abv": 6.2
+  },
+  {
+    "cerveceria": "Rincón del Mar",
+    "nombre": "Canábica",
+    "estilo": "Irish Red Ale",
+    "ibu": 0,
+    "abv": 6.7
+  },
+  {
+    "cerveceria": "Rincón del Mar",
+    "nombre": "Colorada",
+    "estilo": "Irish Red Ale",
+    "ibu": 0,
+    "abv": 5.5
+  },
+  {
+    "cerveceria": "Rincón del Mar",
+    "nombre": "Coca",
+    "estilo": "American Pale Ale",
+    "ibu": 0,
+    "abv": 6.2
+  },
+  {
+    "cerveceria": "Rincón del Mar",
+    "nombre": "Gringa",
+    "estilo": "American Pale Ale",
+    "ibu": 0,
+    "abv": 6.3
+  },
+  {
+    "cerveceria": "Bruder",
+    "nombre": "IPA Maracuyá",
+    "estilo": "India Pale Ale (IPA)",
+    "ibu": 45,
+    "abv": 6.5
+  },
+  {
+    "cerveceria": "Bruder",
+    "nombre": "Barley Wine",
+    "estilo": "British Ale",
+    "ibu": 45,
+    "abv": 12
+  },
+  {
+    "cerveceria": "Bruder",
+    "nombre": "Dog Lover",
+    "estilo": "Vienna Lager",
+    "ibu": 32,
+    "abv": 4.5
+  },
+  {
+    "cerveceria": "Bruder",
+    "nombre": "Café",
+    "estilo": "Schwartzbier",
+    "ibu": 30,
+    "abv": 5
+  },
+  {
+    "cerveceria": "Bruder",
+    "nombre": "Pueblito",
+    "estilo": "Pilsen Lager",
+    "ibu": 25,
+    "abv": 4.5
+  },
+  {
+    "cerveceria": "Bruder",
+    "nombre": "Maracuyá",
+    "estilo": "Belgian Ale",
+    "ibu": 23,
+    "abv": 5
+  },
+  {
+    "cerveceria": "Bruder",
+    "nombre": "Roja",
+    "estilo": "Vienna Lager",
+    "ibu": 32,
+    "abv": 4.5
+  },
+  {
+    "cerveceria": "Bruder",
+    "nombre": "Chocolate",
+    "estilo": "Chocolate Stout",
+    "ibu": 38,
+    "abv": 8.5
+  },
+  {
+    "cerveceria": "Bruder",
+    "nombre": "Rubia",
+    "estilo": "Pilsen Lager",
+    "ibu": 25,
+    "abv": 4.5
+  },
+  {
+    "cerveceria": "Bruder",
+    "nombre": "Imperial Strout",
+    "estilo": "Imperial Strout",
+    "ibu": 40,
+    "abv": 8.5
+  },
+  {
+    "cerveceria": "BBC",
+    "nombre": "Septimazo",
+    "estilo": "India Pale Ale (IPA)",
+    "ibu": 83,
+    "abv": 6
+  },
+  {
+    "cerveceria": "BBC",
+    "nombre": "Macondo",
+    "estilo": "Stout",
+    "ibu": 37,
+    "abv": 5
+  },
+  {
+    "cerveceria": "BBC",
+    "nombre": "Monserrate",
+    "estilo": "Bitter",
+    "ibu": 37,
+    "abv": 5
+  },
+  {
+    "cerveceria": "BBC",
+    "nombre": "Lager",
+    "estilo": "Lager",
+    "ibu": 18,
+    "abv": 5
+  },
+  {
+    "cerveceria": "BBC",
+    "nombre": "Bacatá",
+    "estilo": "Witbier",
+    "ibu": 14,
+    "abv": 4.1
+  },
+  {
+    "cerveceria": "BBC",
+    "nombre": "Chapinero",
+    "estilo": "Porter",
+    "ibu": 35,
+    "abv": 5
+  },
+  {
+    "cerveceria": "BBC",
+    "nombre": "Cajicá",
+    "estilo": "Honey Ale",
+    "ibu": 16,
+    "abv": 5.3
+  },
+  {
+    "cerveceria": "Fierabrás",
+    "nombre": "Isabel la Católica",
+    "estilo": "Blonde Ale",
+    "ibu": 0,
+    "abv": 4.8
+  },
+  {
+    "cerveceria": "Fierabrás",
+    "nombre": "Dulcinea",
+    "estilo": "Brown Ale",
+    "ibu": 0,
+    "abv": 5
+  },
+  {
+    "cerveceria": "Fierabrás",
+    "nombre": "Juana de Arco",
+    "estilo": "Porter",
+    "ibu": 0,
+    "abv": 5
+  },
+  {
+    "cerveceria": "Fierabrás",
+    "nombre": "Maria Antonieta",
+    "estilo": "Pale Ale",
+    "ibu": 0,
+    "abv": 5
+  },
+  {
+    "cerveceria": "BBC",
+    "nombre": "Rubia",
+    "estilo": "Lager",
+    "ibu": 18,
+    "abv": 5
+  },
+  {
+    "cerveceria": "Cervezas Kalima",
+    "nombre": "Alexa",
+    "estilo": "Blonde Ale",
+    "ibu": 18,
+    "abv": 5.2
+  },
+  {
+    "cerveceria": "Cervezas Kalima",
+    "nombre": "Vinilo",
+    "estilo": "Stout Ale",
+    "ibu": 30,
+    "abv": 5.5
+  },
+  {
+    "cerveceria": "Cervezas Kalima",
+    "nombre": "Finca",
+    "estilo": "India Pale Ale (IPA)",
+    "ibu": 50,
+    "abv": 6
+  },
+  {
+    "cerveceria": "Cervezas Kalima",
+    "nombre": "Más Música Local",
+    "estilo": "Double IPA",
+    "ibu": 80,
+    "abv": 8
+  },
+  {
+    "cerveceria": "Nevada Cerveceria",
+    "nombre": "Happy Ayu",
+    "estilo": "Pale Ale",
+    "ibu": 70,
+    "abv": 5
+  },
+  {
+    "cerveceria": "Nevada Cerveceria",
+    "nombre": "Happy Tucán",
+    "estilo": "Irish Red Ale",
+    "ibu": 25,
+    "abv": 5
+  },
+  {
+    "cerveceria": "Nevada Cerveceria",
+    "nombre": "Happy Nebbi",
+    "estilo": "Pilsner",
+    "ibu": 50,
+    "abv": 5
+  },
+  {
+    "cerveceria": "Nevada Cerveceria",
+    "nombre": "Happy Colibrí",
+    "estilo": "Coffee Stout",
+    "ibu": 30,
+    "abv": 7
+  },
+  {
+    "cerveceria": "Nevada Cerveceria",
+    "nombre": "Happy Pava",
+    "estilo": "Pilsner",
+    "ibu": 60,
+    "abv": 5
+  },
+  {
+    "cerveceria": "Nevada Cerveceria",
+    "nombre": "Happy Garceta",
+    "estilo": "Kolsch",
+    "ibu": 30,
+    "abv": 5
+  },
+  {
+    "cerveceria": "Nevada Cerveceria",
+    "nombre": "Happy Trepadora",
+    "estilo": "Citra IPA",
+    "ibu": 30,
+    "abv": 4.3
+  },
+  {
+    "cerveceria": "Bari Cerveza Artesanal",
+    "nombre": "Eclipse",
+    "estilo": "Witbier",
+    "ibu": 0,
+    "abv": 5.5
+  },
+  {
+    "cerveceria": "Bari Cerveza Artesanal",
+    "nombre": "Salazar",
+    "estilo": "Coffee Stout",
+    "ibu": 0,
+    "abv": 6
+  },
+  {
+    "cerveceria": "Cervecería Cartagena",
+    "nombre": "Golden",
+    "estilo": "Golden Ale",
+    "ibu": 0,
+    "abv": 4.5
+  },
+  {
+    "cerveceria": "Cervecería Cartagena",
+    "nombre": "Porter",
+    "estilo": "Porter",
+    "ibu": 0,
+    "abv": 5.5
+  },
+  {
+    "cerveceria": "Cervecería Cartagena",
+    "nombre": "Roja",
+    "estilo": "Irish Red Ale",
+    "ibu": 0,
+    "abv": 3.5
+  },
+  {
+    "cerveceria": "Lino Brewing Company",
+    "nombre": "Colaa",
+    "estilo": "Amber Ale",
+    "ibu": 0,
+    "abv": 5
+  },
+  {
+    "cerveceria": "Lino Brewing Company",
+    "nombre": "Cols",
+    "estilo": "Stout",
+    "ibu": 0,
+    "abv": 5
+  },
+  {
+    "cerveceria": "Lino Brewing Company",
+    "nombre": "Colpa",
+    "estilo": "Pale Ale",
+    "ibu": 0,
+    "abv": 5
+  },
+  {
+    "cerveceria": "Lino Brewing Company",
+    "nombre": "Neipa",
+    "estilo": "New England IPA",
+    "ibu": 0,
+    "abv": 7
+  }
+]

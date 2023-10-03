@@ -1,0 +1,206 @@
+[
+  {
+    "municipio": "Leticia",
+    "departamento": "Amazonas",
+    "latitud": -4.215,
+    "longitud": -69.941111
+  },
+  {
+    "municipio": "Medellín",
+    "departamento": "Antioquia",
+    "latitud": 6.244747,
+    "longitud": -75.574828
+  },
+  {
+    "municipio": "Sabaneta",
+    "departamento": "Antioquia",
+    "latitud": 6.150833,
+    "longitud": 75.615
+  },
+  {
+    "municipio": "Arauca",
+    "departamento": "Arauca",
+    "latitud": 7.090278,
+    "longitud": -70.761667
+  },
+  {
+    "municipio": "Barranquilla",
+    "departamento": "Atlántico",
+    "latitud": 10.983333,
+    "longitud": -74.801944
+  },
+  {
+    "municipio": "Cartagena",
+    "departamento": "Bolívar",
+    "latitud": 10.423611,
+    "longitud": -75.525278
+  },
+  {
+    "municipio": "Tunja",
+    "departamento": "Boyacá",
+    "latitud": 5.540278,
+    "longitud": -73.361389
+  },
+  {
+    "municipio": "Manizales",
+    "departamento": "Caldas",
+    "latitud": 5.066111,
+    "longitud": -75.484722
+  },
+  {
+    "municipio": "Florencia",
+    "departamento": "Caquetá",
+    "latitud": 1.614167,
+    "longitud": -75.611667
+  },
+  {
+    "municipio": "Yopal",
+    "departamento": "Casanare",
+    "latitud": 5.330556,
+    "longitud": -72.390556
+  },
+  {
+    "municipio": "Popayán",
+    "departamento": "Cauca",
+    "latitud": 2.4411,
+    "longitud": -76.6061
+  },
+  {
+    "municipio": "Valledupar",
+    "departamento": "Cesar",
+    "latitud": 10.460278,
+    "longitud": -73.259722
+  },
+  {
+    "municipio": "Quibdó",
+    "departamento": "Chocó",
+    "latitud": 5.692277,
+    "longitud": -76.658192
+  },
+  {
+    "municipio": "Montería",
+    "departamento": "Córdoba",
+    "latitud": 8.76,
+    "longitud": -75.885556
+  },
+  {
+    "municipio": "Bogotá",
+    "departamento": "Cundinamarca",
+    "latitud": 4.60971,
+    "longitud": -74.08175
+  },
+  {
+    "municipio": "Funza",
+    "departamento": "Cundinamarca",
+    "latitud": 4.7175,
+    "longitud": -74.209444
+  },
+  {
+    "municipio": "Inírida",
+    "departamento": "Guainía",
+    "latitud": 3.870833,
+    "longitud": -67.921111
+  },
+  {
+    "municipio": "Riohacha",
+    "departamento": "Guajira",
+    "latitud": 11.544167,
+    "longitud": -72.906944
+  },
+  {
+    "municipio": "San José del Guaviare",
+    "departamento": "Guaviare",
+    "latitud": 2.565278,
+    "longitud": -72.638611
+  },
+  {
+    "municipio": "Neiva",
+    "departamento": "Huila",
+    "latitud": 2.9275,
+    "longitud": -75.2875
+  },
+  {
+    "municipio": "Santa Marta",
+    "departamento": "Magdalena",
+    "latitud": 11.236111,
+    "longitud": -74.201667
+  },
+  {
+    "municipio": "Villavicencio",
+    "departamento": "Meta",
+    "latitud": 4.1425,
+    "longitud": -73.629444
+  },
+  {
+    "municipio": "Pasto",
+    "departamento": "Nariño",
+    "latitud": 1.21,
+    "longitud": -77.274722
+  },
+  {
+    "municipio": "Cúcuta",
+    "departamento": "Norte de Santander",
+    "latitud": 7.9075,
+    "longitud": -72.504722
+  },
+  {
+    "municipio": "Mocoa",
+    "departamento": "Putumayo",
+    "latitud": 1.149167,
+    "longitud": -76.646389
+  },
+  {
+    "municipio": "Armenia",
+    "departamento": "Quindío",
+    "latitud": 4.538889,
+    "longitud": -75.6725
+  },
+  {
+    "municipio": "Pereira",
+    "departamento": "Risaralda",
+    "latitud": 4.814278,
+    "longitud": -75.694558
+  },
+  {
+    "municipio": "San Andrés",
+    "departamento": "San Andrés y Providencia",
+    "latitud": 12.584722,
+    "longitud": -81.700556
+  },
+  {
+    "municipio": "Bucaramanga",
+    "departamento": "Santander",
+    "latitud": 7.118611,
+    "longitud": -73.116111
+  },
+  {
+    "municipio": "Sincelejo",
+    "departamento": "Sucre",
+    "latitud": 9.299444,
+    "longitud": -75.395833
+  },
+  {
+    "municipio": "Ibagué",
+    "departamento": "Tolima",
+    "latitud": 4.437778,
+    "longitud": -75.200556
+  },
+  {
+    "municipio": "Cali",
+    "departamento": "Valle del Cauca",
+    "latitud": 3.44,
+    "longitud": -76.519722
+  },
+  {
+    "municipio": "Mitú",
+    "departamento": "Vaupes",
+    "latitud": 1.250278,
+    "longitud": -70.235
+  },
+  {
+    "municipio": "Puerto Carreño",
+    "departamento": "Vichada",
+    "latitud": 6.190312,
+    "longitud": -67.483742
+  }
+]
