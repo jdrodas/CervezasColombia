@@ -68,12 +68,13 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
             //Validamos que la ubicación tenga longitud en su coordenada geográfica y que esta sea válida
             if (unaUbicacion.Longitud == 0 || unaUbicacion.Longitud < -180 || unaUbicacion.Longitud > 180)
                 throw new AppValidationException($"No se puede insertar una ubicación en Colombia con valor de longitud en {unaUbicacion.Longitud} para su coordenada geográfica");
+
             // validamos que la ubicación a crear no esté previamente creada
             var ubicacionExistente = await _ubicacionRepository
                 .GetByNameAsync(unaUbicacion.Municipio!, unaUbicacion.Departamento!);
 
             if (ubicacionExistente.Id != 0)
-                throw new AppValidationException($"Ya existe una ubicación con el nombre {unaUbicacion.Municipio}, {unaUbicacion.Departamento}");
+                return ubicacionExistente;
 
             try
             {
@@ -121,7 +122,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
                 .GetByNameAsync(unaUbicacion.Municipio!, unaUbicacion.Departamento!);
 
             if (unaUbicacion.Equals(ubicacionExistente))
-                throw new AppValidationException($"Ya existe una ubicación con el nombre {unaUbicacion.Municipio}, {unaUbicacion.Departamento}");
+                return ubicacionExistente;
 
             // validamos que la ubicación a actualizar si exista con ese Id
             ubicacionExistente = await _ubicacionRepository

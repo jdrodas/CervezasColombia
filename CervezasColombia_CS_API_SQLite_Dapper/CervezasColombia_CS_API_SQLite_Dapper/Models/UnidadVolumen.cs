@@ -1,23 +1,20 @@
 ﻿namespace CervezasColombia_CS_API_SQLite_Dapper.Models
 {
-    public class Ingrediente
+    public class UnidadVolumen
     {
         public int Id { get; set; } = 0;
         public string Nombre { get; set; } = string.Empty;
-        public int Tipo_Ingrediente_Id { get; set; } = 0;
-        public string Tipo_Ingrediente { get; set; } = string.Empty;
-
+        public string Abreviatura { get; set; } = string.Empty;
         public override bool Equals(object? obj)
         {
             if (obj == null || GetType() != obj.GetType())
                 return false;
 
-            var otroIngrediente = (Ingrediente)obj;
+            var otraUnidadVolumen = (UnidadVolumen)obj;
 
-            return Id == otroIngrediente.Id
-                   && Nombre.Equals(otroIngrediente.Nombre)
-                   && Tipo_Ingrediente_Id == otroIngrediente.Tipo_Ingrediente_Id
-                   && Tipo_Ingrediente.Equals(otroIngrediente.Tipo_Ingrediente);
+            return Id == otraUnidadVolumen.Id
+                   && Nombre.Equals(otraUnidadVolumen.Nombre)
+                   && Abreviatura.Equals(otraUnidadVolumen.Abreviatura);
         }
 
         public override int GetHashCode()
@@ -27,8 +24,7 @@
                 int hash = 3;
                 hash = hash * 5 + Id.GetHashCode();
                 hash = hash * 5 + (Nombre?.GetHashCode() ?? 0);
-                hash = hash * 5 + (Tipo_Ingrediente?.GetHashCode() ?? 0);
-                hash = hash * 5 + Tipo_Ingrediente_Id.GetHashCode();
+                hash = hash * 5 + (Abreviatura?.GetHashCode() ?? 0);
 
                 return hash;
             }

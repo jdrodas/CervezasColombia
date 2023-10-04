@@ -34,11 +34,11 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
 
         public async Task<Estilo> GetByIdAsync(int estilo_id)
         {
-            Estilo unEstilo = new Estilo();
+            Estilo unEstilo = new();
 
             using (contextoDB.Conexion)
             {
-                DynamicParameters parametrosSentencia = new DynamicParameters();
+                DynamicParameters parametrosSentencia = new();
                 parametrosSentencia.Add("@estilo_id", estilo_id,
                                         DbType.Int32, ParameterDirection.Input);
 
@@ -49,7 +49,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
                 var resultado = await contextoDB.Conexion.QueryAsync<Estilo>(sentenciaSQL,
                                     parametrosSentencia);
 
-                if (resultado.Count() > 0)
+                if (resultado.Any())
                     unEstilo = resultado.First();
             }
 
@@ -58,11 +58,11 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
 
         public async Task<Estilo> GetByNameAsync(string estilo_nombre)
         {
-            Estilo unEstilo = new Estilo();
+            Estilo unEstilo = new();
 
             using (contextoDB.Conexion)
             {
-                DynamicParameters parametrosSentencia = new DynamicParameters();
+                DynamicParameters parametrosSentencia = new();
                 parametrosSentencia.Add("@estilo_nombre", estilo_nombre,
                                         DbType.String, ParameterDirection.Input);
 
@@ -73,7 +73,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
                 var resultado = await contextoDB.Conexion.QueryAsync<Estilo>(sentenciaSQL,
                                     parametrosSentencia);
 
-                if (resultado.Count() > 0)
+                if (resultado.Any())
                     unEstilo = resultado.First();
             }
 
@@ -83,7 +83,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
         public async Task<int> GetTotalAssociatedBeersAsync(int estilo_id)
         {
 
-            DynamicParameters parametrosSentencia = new DynamicParameters();
+            DynamicParameters parametrosSentencia = new();
             parametrosSentencia.Add("@estilo_id", estilo_id,
                                     DbType.Int32, ParameterDirection.Input);
 
@@ -102,7 +102,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
         {
             using (contextoDB.Conexion)
             {
-                DynamicParameters parametrosSentencia = new DynamicParameters();
+                DynamicParameters parametrosSentencia = new();
                 parametrosSentencia.Add("@estilo_id", estilo_id,
                                         DbType.Int32, ParameterDirection.Input);
 
@@ -127,7 +127,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
             {
                 using (contextoDB.Conexion)
                 {
-                    string sentenciaSQL =   "INSERT INTO estilos (nombre) " +
+                    string sentenciaSQL = "INSERT INTO estilos (nombre) " +
                                             "VALUES (@Nombre)";
 
                     int filasAfectadas = await contextoDB.Conexion.ExecuteAsync(sentenciaSQL,
@@ -153,7 +153,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
             {
                 using (contextoDB.Conexion)
                 {
-                    string sentenciaSQL =   "UPDATE estilos SET nombre = @Nombre " +
+                    string sentenciaSQL = "UPDATE estilos SET nombre = @Nombre " +
                                             "WHERE id = @Id";
 
                     int filasAfectadas = await contextoDB.Conexion.ExecuteAsync(sentenciaSQL,

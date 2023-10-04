@@ -16,7 +16,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
 
         public async Task<Resumen> GetAllAsync()
         {
-            Resumen unResumen = new Resumen();
+            Resumen unResumen = new();
 
             using (contextoDB.Conexion)
             {
@@ -43,6 +43,10 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
                 //Total ingredientes
                 sentenciaSQL = "SELECT COUNT(id) total FROM ingredientes";
                 unResumen.Ingredientes = await contextoDB.Conexion.QueryFirstAsync<int>(sentenciaSQL, new DynamicParameters());
+
+                //Total Tipos de ingredientes
+                sentenciaSQL = "SELECT COUNT(id) total FROM tipos_ingredientes";
+                unResumen.Tipos_Ingredientes = await contextoDB.Conexion.QueryFirstAsync<int>(sentenciaSQL, new DynamicParameters());
             }
 
             return unResumen;

@@ -34,11 +34,11 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
 
         public async Task<Ubicacion> GetByIdAsync(int ubicacion_id)
         {
-            Ubicacion unaUbicacion = new Ubicacion();
+            Ubicacion unaUbicacion = new();
 
             using (contextoDB.Conexion)
             {
-                DynamicParameters parametrosSentencia = new DynamicParameters();
+                DynamicParameters parametrosSentencia = new();
                 parametrosSentencia.Add("@ubicacion_id", ubicacion_id,
                                         DbType.Int32, ParameterDirection.Input);
 
@@ -49,7 +49,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
                 var resultado = await contextoDB.Conexion.QueryAsync<Ubicacion>(sentenciaSQL,
                     parametrosSentencia);
 
-                if (resultado.Count() > 0)
+                if (resultado.Any())
                     unaUbicacion = resultado.First();
             }
 
@@ -58,11 +58,11 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
 
         public async Task<Ubicacion> GetByNameAsync(string ubicacion_municipio, string ubicacion_departamento)
         {
-            Ubicacion unaUbicacion = new Ubicacion();
+            Ubicacion unaUbicacion = new();
 
             using (contextoDB.Conexion)
             {
-                DynamicParameters parametrosSentencia = new DynamicParameters();
+                DynamicParameters parametrosSentencia = new();
                 parametrosSentencia.Add("@ubicacion_municipio", ubicacion_municipio,
                                         DbType.String, ParameterDirection.Input);
                 parametrosSentencia.Add("@ubicacion_departamento", ubicacion_departamento,
@@ -76,7 +76,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
                 var resultado = await contextoDB.Conexion.QueryAsync<Ubicacion>(sentenciaSQL,
                     parametrosSentencia);
 
-                if (resultado.Count() > 0)
+                if (resultado.Any())
                     unaUbicacion = resultado.First();
             }
 
@@ -86,7 +86,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
         public async Task<int> GetTotalAssociatedBreweriesAsync(int ubicacion_id)
         {
 
-            DynamicParameters parametrosSentencia = new DynamicParameters();
+            DynamicParameters parametrosSentencia = new();
             parametrosSentencia.Add("@ubicacion_id", ubicacion_id,
                                     DbType.Int32, ParameterDirection.Input);
 
@@ -105,7 +105,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
         {
             using (contextoDB.Conexion)
             {
-                DynamicParameters parametrosSentencia = new DynamicParameters();
+                DynamicParameters parametrosSentencia = new();
                 parametrosSentencia.Add("@ubicacion_id", ubicacion_id,
                                         DbType.Int32, ParameterDirection.Input);
 
@@ -128,7 +128,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
             {
                 using (contextoDB.Conexion)
                 {
-                    string sentenciaSQL =   "INSERT INTO ubicaciones (municipio, departamento, latitud, longitud) " +
+                    string sentenciaSQL = "INSERT INTO ubicaciones (municipio, departamento, latitud, longitud) " +
                                             "VALUES (@Municipio, @Departamento, @Latitud, @Longitud)";
 
                     int filasAfectadas = await contextoDB.Conexion.ExecuteAsync(sentenciaSQL,

@@ -8,5 +8,6 @@
         public int Estilos { get; set; } = 0;
         public int Envasados { get; set; } = 0;
         public int Ingredientes { get; set; } = 0;
+        public int Tipos_Ingredientes { get; set; } = 0;
     }
 }

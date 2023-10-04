@@ -26,12 +26,12 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
         }
 
         [HttpGet("{cerveceria_id:int}")]
-        public async Task<IActionResult> GetByIdAsync(int cerveceria_id)
+        public async Task<IActionResult> GetDetailsByIdAsync(int cerveceria_id)
         {
             try
             {
                 var unaCerveceria = await _cerveceriaService
-                    .GetByIdAsync(cerveceria_id);
+                    .GetDetailsByIdAsync(cerveceria_id);
 
                 return Ok(unaCerveceria);
             }
@@ -58,7 +58,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Cerveceria unaCerveceria)
+        public async Task<IActionResult> CreateAsync(Cerveceria unaCerveceria)
         {
             try
             {

@@ -7,10 +7,13 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
     public class CerveceriaService
     {
         private readonly ICerveceriaRepository _cerveceriaRepository;
+        private readonly IUbicacionRepository _ubicacionRepository;
 
-        public CerveceriaService(ICerveceriaRepository cerveceriaRepository)
+        public CerveceriaService(ICerveceriaRepository cerveceriaRepository,
+                                 IUbicacionRepository ubicacionRepository)
         {
             _cerveceriaRepository = cerveceriaRepository;
+            _ubicacionRepository = ubicacionRepository;
         }
 
         public async Task<IEnumerable<Cerveceria>> GetAllAsync()
@@ -19,11 +22,11 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
                 .GetAllAsync();
         }
 
-        public async Task<Cerveceria> GetByIdAsync(int cerveceria_id)
+        public async Task<CerveceriaDetallada> GetDetailsByIdAsync(int cerveceria_id)
         {
             //Validamos que la Cerveceria exista con ese Id
             var unaCerveceria = await _cerveceriaRepository
-                .GetByIdAsync(cerveceria_id);
+                .GetDetailsByIdAsync(cerveceria_id);
 
             if (unaCerveceria.Id == 0)
                 throw new AppValidationException($"Cerveceria no encontrada con el id {cerveceria_id}");
@@ -64,18 +67,18 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
             if (unaCerveceria.Instagram.Length == 0)
                 throw new AppValidationException("No se puede insertar una cervecería con Instagram nulo");
 
-            //Validamos que la cerveceria tenga ubicación
-            if (unaCerveceria.Ubicacion.Length == 0)
-                throw new AppValidationException("No se puede insertar una cervecería una ubicación nula");
+            //Validamos que la cerveceria tenga ubicación para el municipio y departamento
+            if (unaCerveceria.Ubicacion.Municipio.Length == 0 || unaCerveceria.Ubicacion.Departamento.Length == 0)
+                throw new AppValidationException("No se puede insertar una cervecería con una ubicación nula");
 
             //Validamos que la cerveceria tenga ubicación válida
-            var ubicacionExistente = await _cerveceriaRepository
-                .GetAssociatedLocationIdAsync(unaCerveceria.Ubicacion);
+            var ubicacionExistente = await _ubicacionRepository
+                .GetByNameAsync(unaCerveceria.Ubicacion.Municipio!, unaCerveceria.Ubicacion.Departamento!);
 
-            if (ubicacionExistente == 0)
+            if (ubicacionExistente.Id == 0)
                 throw new AppValidationException("No se puede insertar una cervecería sin ubicación conocida");
 
-            unaCerveceria.Ubicacion_Id = ubicacionExistente;
+            unaCerveceria.Ubicacion = ubicacionExistente;
 
             //Validamos que el nombre no exista previamente
             var cerveceriaExistente = await _cerveceriaRepository
@@ -167,17 +170,17 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
                     $"No se puede Actualizar");
 
             //Validamos que la cerveceria tenga ubicación
-            if (unaCerveceria.Ubicacion.Length == 0)
+            if (unaCerveceria.Ubicacion.Municipio.Length == 0 || unaCerveceria.Ubicacion.Departamento.Length == 0)
                 throw new AppValidationException("No se puede actualizar una cervecería con ubicación nula");
 
             //Validamos que la cerveceria tenga ubicación válida
-            var ubicacionExistente = await _cerveceriaRepository
-                .GetAssociatedLocationIdAsync(unaCerveceria.Ubicacion);
+            var ubicacionExistente = await _ubicacionRepository
+                .GetByNameAsync(unaCerveceria.Ubicacion.Municipio!, unaCerveceria.Ubicacion.Departamento!);
 
-            if (ubicacionExistente == 0)
+            if (ubicacionExistente.Id == 0)
                 throw new AppValidationException("No se puede actualizar una cervecería sin ubicación conocida");
 
-            unaCerveceria.Ubicacion_Id = ubicacionExistente;
+            unaCerveceria.Ubicacion = ubicacionExistente;
 
             //Validamos que haya al menos un cambio en las propiedades
             if (unaCerveceria.Equals(cerveceriaExistente))

@@ -29,5 +29,23 @@
                 && Ibu.Equals(otraCerveza.Ibu)
                 && Abv.Equals(otraCerveza.Abv);
         }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hash = 3;
+                hash = hash * 5 + Id.GetHashCode();
+                hash = hash * 5 + (Nombre?.GetHashCode() ?? 0);
+                hash = hash * 5 + (Cerveceria?.GetHashCode() ?? 0);
+                hash = hash * 5 + (Estilo?.GetHashCode() ?? 0);
+                hash = hash * 5 + Cerveceria_id.GetHashCode();
+                hash = hash * 5 + Estilo_id.GetHashCode();
+                hash = hash * 5 + Ibu.GetHashCode();
+                hash = hash * 5 + Abv.GetHashCode();
+
+                return hash;
+            }
+        }
     }
 }
