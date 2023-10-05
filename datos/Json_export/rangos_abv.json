@@ -1,0 +1,17 @@
+[
+  {
+    "nombre": "Bajo ABV",
+    "valor_inicial": 0,
+    "valor_final": 4.5
+  },
+  {
+    "nombre": "Medio ABV",
+    "valor_inicial": 4.6,
+    "valor_final": 7.5
+  },
+  {
+    "nombre": "Alto ABV",
+    "valor_inicial": 7.6,
+    "valor_final": 12
+  }
+]

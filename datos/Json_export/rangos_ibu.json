@@ -1,0 +1,17 @@
+[
+  {
+    "nombre": "Bajo IBU",
+    "valor_inicial": 0,
+    "valor_final": 20
+  },
+  {
+    "nombre": "Medio IBU",
+    "valor_inicial": 21,
+    "valor_final": 50
+  },
+  {
+    "nombre": "Alto IBU",
+    "valor_inicial": 51,
+    "valor_final": 100
+  }
+]

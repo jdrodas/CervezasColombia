@@ -1,0 +1,22 @@
+[
+  {
+    "nombre": "Centilitros",
+    "abreviatura": "cl"
+  },
+  {
+    "nombre": "Galon",
+    "abreviatura": "gal"
+  },
+  {
+    "nombre": "Litros",
+    "abreviatura": "l"
+  },
+  {
+    "nombre": "Mililitros",
+    "abreviatura": "ml"
+  },
+  {
+    "nombre": "Onzas Volumétricas",
+    "abreviatura": "oz"
+  }
+]
