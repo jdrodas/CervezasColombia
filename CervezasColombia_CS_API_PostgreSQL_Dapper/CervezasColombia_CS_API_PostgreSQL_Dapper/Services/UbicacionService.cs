@@ -121,10 +121,6 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Services
             var ubicacionExistente = await _ubicacionRepository
                 .GetByNameAsync(unaUbicacion.Municipio!, unaUbicacion.Departamento!);
 
-            //Validamos que el nuevo municipio,departamento no exista previamente con otro Id
-            ubicacionExistente = await _ubicacionRepository
-                .GetByNameAsync(unaUbicacion.Municipio!, unaUbicacion.Departamento!);
-
             if (unaUbicacion.Equals(ubicacionExistente))
                 return ubicacionExistente;
 
