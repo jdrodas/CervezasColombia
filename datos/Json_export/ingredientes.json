@@ -37,6 +37,10 @@
   },
   {
     "tipo_ingrediente": "Maltas",
+    "ingrediente": "CaraVienne"
+  },
+  {
+    "tipo_ingrediente": "Maltas",
     "ingrediente": "Carafa Special"
   },
   {
@@ -46,10 +50,6 @@
   {
     "tipo_ingrediente": "Maltas",
     "ingrediente": "Carapils"
-  },
-  {
-    "tipo_ingrediente": "Maltas",
-    "ingrediente": "CaraVienne"
   },
   {
     "tipo_ingrediente": "Maltas",

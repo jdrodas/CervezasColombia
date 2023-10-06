@@ -12,12 +12,6 @@
     "longitud": -75.574828
   },
   {
-    "municipio": "Sabaneta",
-    "departamento": "Antioquia",
-    "latitud": 6.150833,
-    "longitud": 75.615
-  },
-  {
     "municipio": "Arauca",
     "departamento": "Arauca",
     "latitud": 7.090278,
@@ -202,5 +196,11 @@
     "departamento": "Vichada",
     "latitud": 6.190312,
     "longitud": -67.483742
+  },
+  {
+    "municipio": "Palmira",
+    "departamento": "Valle del Cauca",
+    "latitud": 3.534722,
+    "longitud": -76.295556
   }
 ]
