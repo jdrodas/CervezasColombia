@@ -19,20 +19,20 @@
             Console.ReadKey();
 
             //C del CRUD - Creación de un nuevo registro - INSERT
-            Estilo nuevoEstilo = new Estilo() { Nombre = "UchuvIPA" };
-            Console.WriteLine($"\nRegistro de nuevo estilo de cerveza: {nuevoEstilo.Nombre}:");
+            Estilo unEstilo = new() { Nombre = "UchuvIPA" };
+            Console.WriteLine($"\nRegistro de nuevo estilo de cerveza: {unEstilo.Nombre}:");
 
-            bool resultadoInsercion = AccesoDatosSQLite.InsertaEstiloCerveza(nuevoEstilo);
+            bool resultadoInsercion = AccesoDatosSQLite.InsertaEstiloCerveza(unEstilo);
 
             if (resultadoInsercion == false)
-                Console.WriteLine($"Inserción fallida para el estilo {nuevoEstilo}");
+                Console.WriteLine($"Inserción fallida para el estilo {unEstilo.Nombre}");
             else
             {
                 Console.WriteLine($"Inserción exitosa! Este fue el estilo registrado");
 
                 //Obtenemos el estilo por nombre
-                nuevoEstilo = AccesoDatosSQLite.ObtieneEstiloCerveza(nuevoEstilo.Nombre);
-                Console.WriteLine($"Id: {nuevoEstilo.Id}, Nombre: {nuevoEstilo.Nombre}");
+                unEstilo = AccesoDatosSQLite.ObtieneEstiloCerveza(unEstilo.Nombre);
+                Console.WriteLine($"Id: {unEstilo.Id}, Nombre: {unEstilo.Nombre}");
             }
 
             VisualizaEstilosCerveza();
@@ -41,20 +41,20 @@
             Console.ReadKey();
 
             //U del CRUD - Actualización de un nuevo registro - UPDATE
-            Estilo estiloActualizado = new Estilo() { Id = 1, Nombre = "MaracuyIPA" };
-            Console.WriteLine($"\n\nActualizando el estilo No. {estiloActualizado.Id} " +
-                $"al nuevo nombre de {estiloActualizado.Nombre}...");
+            unEstilo.Nombre = "MaracuyIPA";
+            Console.WriteLine($"\n\nActualizando el estilo No. {unEstilo.Id} " +
+                $"al nuevo nombre de {unEstilo.Nombre}...");
 
-            bool resultadoActualizacion = AccesoDatosSQLite.ActualizaEstiloCerveza(estiloActualizado);
+            bool resultadoActualizacion = AccesoDatosSQLite.ActualizaEstiloCerveza(unEstilo);
 
             if (resultadoActualizacion == false)
-                Console.WriteLine($"Actualización fallida para el estilo {estiloActualizado.Nombre}");
+                Console.WriteLine($"Actualización fallida para el estilo {unEstilo.Nombre}");
             else
             {
                 Console.WriteLine($"Actualización exitosa! Este fue el estilo actualizado");
 
                 //Obtenemos el estilo por Id
-                Estilo unEstilo = AccesoDatosSQLite.ObtieneEstiloCerveza(estiloActualizado.Id);
+                unEstilo = AccesoDatosSQLite.ObtieneEstiloCerveza(unEstilo.Id);
                 Console.WriteLine($"Id: {unEstilo.Id}, Nombre: {unEstilo.Nombre}");
             }
 
@@ -64,16 +64,16 @@
             Console.ReadKey();
 
             //D del CRUD - Borrado de un estilo existente - DELETE
-            Console.WriteLine($"\n\nBorrando el estilo {nuevoEstilo.Nombre} ...");
+            Console.WriteLine($"\n\nBorrando el estilo {unEstilo.Nombre} ...");
 
             string mensajeEliminacion;
-            bool resultadoEliminacion = AccesoDatosSQLite.EliminaEstiloCerveza(nuevoEstilo, out mensajeEliminacion);
+            bool resultadoEliminacion = AccesoDatosSQLite.EliminaEstiloCerveza(unEstilo, out mensajeEliminacion);
 
             if (resultadoEliminacion == false)
                 Console.WriteLine(mensajeEliminacion);
             else
             {
-                Console.WriteLine($"Eliminación exitosa! el estilo {nuevoEstilo.Nombre} fue eliminado");
+                Console.WriteLine($"Eliminación exitosa! el estilo {unEstilo.Nombre} fue eliminado");
                 VisualizaEstilosCerveza();
             }
 
