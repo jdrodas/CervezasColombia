@@ -19,39 +19,33 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
 
         public async Task<IEnumerable<Estilo>> GetAllAsync()
         {
-            using (contextoDB.Conexion)
-            {
-                string sentenciaSQL = "SELECT id, nombre " +
-                                      "FROM estilos " +
-                                      "ORDER BY id DESC";
+            string sentenciaSQL = "SELECT id, nombre " +
+                                  "FROM estilos " +
+                                  "ORDER BY id DESC";
 
-                var resultadoEstilos = await contextoDB.Conexion.QueryAsync<Estilo>(sentenciaSQL,
-                                            new DynamicParameters());
+            var resultadoEstilos = await contextoDB.Conexion.QueryAsync<Estilo>(sentenciaSQL,
+                                        new DynamicParameters());
 
-                return resultadoEstilos;
-            }
+            return resultadoEstilos;
         }
 
         public async Task<Estilo> GetByIdAsync(int estilo_id)
         {
             Estilo unEstilo = new();
 
-            using (contextoDB.Conexion)
-            {
-                DynamicParameters parametrosSentencia = new();
-                parametrosSentencia.Add("@estilo_id", estilo_id,
-                                        DbType.Int32, ParameterDirection.Input);
+            DynamicParameters parametrosSentencia = new();
+            parametrosSentencia.Add("@estilo_id", estilo_id,
+                                    DbType.Int32, ParameterDirection.Input);
 
-                string sentenciaSQL = "SELECT id, nombre " +
-                                      "FROM estilos " +
-                                      "WHERE id = @estilo_id ";
+            string sentenciaSQL = "SELECT id, nombre " +
+                                  "FROM estilos " +
+                                  "WHERE id = @estilo_id ";
 
-                var resultado = await contextoDB.Conexion.QueryAsync<Estilo>(sentenciaSQL,
-                                    parametrosSentencia);
+            var resultado = await contextoDB.Conexion.QueryAsync<Estilo>(sentenciaSQL,
+                                parametrosSentencia);
 
-                if (resultado.Any())
-                    unEstilo = resultado.First();
-            }
+            if (resultado.Any())
+                unEstilo = resultado.First();
 
             return unEstilo;
         }
@@ -60,22 +54,19 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
         {
             Estilo unEstilo = new();
 
-            using (contextoDB.Conexion)
-            {
-                DynamicParameters parametrosSentencia = new();
-                parametrosSentencia.Add("@estilo_nombre", estilo_nombre,
-                                        DbType.String, ParameterDirection.Input);
+            DynamicParameters parametrosSentencia = new();
+            parametrosSentencia.Add("@estilo_nombre", estilo_nombre,
+                                    DbType.String, ParameterDirection.Input);
 
-                string sentenciaSQL = "SELECT id, nombre " +
-                                      "FROM estilos " +
-                                      "WHERE LOWER(nombre) = LOWER(@estilo_nombre) ";
+            string sentenciaSQL = "SELECT id, nombre " +
+                                  "FROM estilos " +
+                                  "WHERE LOWER(nombre) = LOWER(@estilo_nombre) ";
 
-                var resultado = await contextoDB.Conexion.QueryAsync<Estilo>(sentenciaSQL,
-                                    parametrosSentencia);
+            var resultado = await contextoDB.Conexion.QueryAsync<Estilo>(sentenciaSQL,
+                                parametrosSentencia);
 
-                if (resultado.Any())
-                    unEstilo = resultado.First();
-            }
+            if (resultado.Any())
+                unEstilo = resultado.First();
 
             return unEstilo;
         }
@@ -100,23 +91,20 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
 
         public async Task<IEnumerable<Cerveza>> GetAssociatedBeersAsync(int estilo_id)
         {
-            using (contextoDB.Conexion)
-            {
-                DynamicParameters parametrosSentencia = new();
-                parametrosSentencia.Add("@estilo_id", estilo_id,
-                                        DbType.Int32, ParameterDirection.Input);
+            DynamicParameters parametrosSentencia = new();
+            parametrosSentencia.Add("@estilo_id", estilo_id,
+                                    DbType.Int32, ParameterDirection.Input);
 
-                string sentenciaSQL = "SELECT cerveza_id id, cerveza nombre, cerveceria, cerveceria_id, estilo, estilo_id, " +
-                                        "ibu, abv, rango_ibu, rango_abv " +
-                                        "FROM v_info_cervezas " +
-                                        "WHERE estilo_id = @estilo_id " +
-                                        "ORDER BY cerveza_id DESC";
+            string sentenciaSQL = "SELECT cerveza_id id, cerveza nombre, cerveceria, cerveceria_id, estilo, estilo_id, " +
+                                    "ibu, abv, rango_ibu, rango_abv " +
+                                    "FROM v_info_cervezas " +
+                                    "WHERE estilo_id = @estilo_id " +
+                                    "ORDER BY cerveza_id DESC";
 
-                var resultadoCervezas = await contextoDB.Conexion.QueryAsync<Cerveza>(sentenciaSQL,
-                                            parametrosSentencia);
+            var resultadoCervezas = await contextoDB.Conexion.QueryAsync<Cerveza>(sentenciaSQL,
+                                        parametrosSentencia);
 
-                return resultadoCervezas;
-            }
+            return resultadoCervezas;
         }
 
         public async Task<bool> CreateAsync(Estilo unEstilo)
@@ -125,17 +113,14 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
 
             try
             {
-                using (contextoDB.Conexion)
-                {
-                    string sentenciaSQL = "INSERT INTO estilos (nombre) " +
-                                            "VALUES (@Nombre)";
+                string sentenciaSQL = "INSERT INTO estilos (nombre) " +
+                                        "VALUES (@Nombre)";
 
-                    int filasAfectadas = await contextoDB.Conexion.ExecuteAsync(sentenciaSQL,
-                                            unEstilo);
+                int filasAfectadas = await contextoDB.Conexion.ExecuteAsync(sentenciaSQL,
+                                        unEstilo);
 
-                    if (filasAfectadas > 0)
-                        resultadoAccion = true;
-                }
+                if (filasAfectadas > 0)
+                    resultadoAccion = true;
             }
             catch (SqliteException error)
             {
@@ -151,17 +136,14 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
 
             try
             {
-                using (contextoDB.Conexion)
-                {
-                    string sentenciaSQL = "UPDATE estilos SET nombre = @Nombre " +
-                                            "WHERE id = @Id";
+                string sentenciaSQL = "UPDATE estilos SET nombre = @Nombre " +
+                                        "WHERE id = @Id";
 
-                    int filasAfectadas = await contextoDB.Conexion.ExecuteAsync(sentenciaSQL,
-                                            unEstilo);
+                int filasAfectadas = await contextoDB.Conexion.ExecuteAsync(sentenciaSQL,
+                                        unEstilo);
 
-                    if (filasAfectadas > 0)
-                        resultadoAccion = true;
-                }
+                if (filasAfectadas > 0)
+                    resultadoAccion = true;
             }
             catch (SqliteException error)
             {
@@ -178,16 +160,13 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
 
             try
             {
-                using (contextoDB.Conexion)
-                {
-                    string sentenciaSQL = "DELETE FROM estilos WHERE id = @Id";
+                string sentenciaSQL = "DELETE FROM estilos WHERE id = @Id";
 
-                    int filasAfectadas = await contextoDB.Conexion.ExecuteAsync(sentenciaSQL,
-                                            unEstilo);
+                int filasAfectadas = await contextoDB.Conexion.ExecuteAsync(sentenciaSQL,
+                                        unEstilo);
 
-                    if (filasAfectadas > 0)
-                        resultadoAccion = true;
-                }
+                if (filasAfectadas > 0)
+                    resultadoAccion = true;
             }
             catch (SqliteException error)
             {

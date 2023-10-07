@@ -19,39 +19,33 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
 
         public async Task<IEnumerable<Ubicacion>> GetAllAsync()
         {
-            using (contextoDB.Conexion)
-            {
-                string sentenciaSQL = "SELECT id, municipio, departamento, latitud, longitud " +
-                                      "FROM ubicaciones " +
-                                      "ORDER BY id DESC";
+            string sentenciaSQL = "SELECT id, municipio, departamento, latitud, longitud " +
+                                  "FROM ubicaciones " +
+                                  "ORDER BY id DESC";
 
-                var resultadoUbicaciones = await contextoDB.Conexion.QueryAsync<Ubicacion>(sentenciaSQL,
-                                            new DynamicParameters());
+            var resultadoUbicaciones = await contextoDB.Conexion.QueryAsync<Ubicacion>(sentenciaSQL,
+                                        new DynamicParameters());
 
-                return resultadoUbicaciones;
-            }
+            return resultadoUbicaciones;
         }
 
         public async Task<Ubicacion> GetByIdAsync(int ubicacion_id)
         {
             Ubicacion unaUbicacion = new();
 
-            using (contextoDB.Conexion)
-            {
-                DynamicParameters parametrosSentencia = new();
-                parametrosSentencia.Add("@ubicacion_id", ubicacion_id,
-                                        DbType.Int32, ParameterDirection.Input);
+            DynamicParameters parametrosSentencia = new();
+            parametrosSentencia.Add("@ubicacion_id", ubicacion_id,
+                                    DbType.Int32, ParameterDirection.Input);
 
-                string sentenciaSQL = "SELECT id, municipio, departamento, latitud, longitud " +
-                                      "FROM ubicaciones " +
-                                      "WHERE id = @ubicacion_id ";
+            string sentenciaSQL = "SELECT id, municipio, departamento, latitud, longitud " +
+                                  "FROM ubicaciones " +
+                                  "WHERE id = @ubicacion_id ";
 
-                var resultado = await contextoDB.Conexion.QueryAsync<Ubicacion>(sentenciaSQL,
-                    parametrosSentencia);
+            var resultado = await contextoDB.Conexion.QueryAsync<Ubicacion>(sentenciaSQL,
+                parametrosSentencia);
 
-                if (resultado.Any())
-                    unaUbicacion = resultado.First();
-            }
+            if (resultado.Any())
+                unaUbicacion = resultado.First();
 
             return unaUbicacion;
         }
@@ -60,25 +54,22 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
         {
             Ubicacion unaUbicacion = new();
 
-            using (contextoDB.Conexion)
-            {
-                DynamicParameters parametrosSentencia = new();
-                parametrosSentencia.Add("@ubicacion_municipio", ubicacion_municipio,
-                                        DbType.String, ParameterDirection.Input);
-                parametrosSentencia.Add("@ubicacion_departamento", ubicacion_departamento,
-                                        DbType.String, ParameterDirection.Input);
+            DynamicParameters parametrosSentencia = new();
+            parametrosSentencia.Add("@ubicacion_municipio", ubicacion_municipio,
+                                    DbType.String, ParameterDirection.Input);
+            parametrosSentencia.Add("@ubicacion_departamento", ubicacion_departamento,
+                                    DbType.String, ParameterDirection.Input);
 
-                string sentenciaSQL = "SELECT id, municipio, departamento, latitud, longitud " +
-                                      "FROM ubicaciones " +
-                                      "WHERE municipio = @ubicacion_municipio " +
-                                      "AND departamento = @ubicacion_departamento";
+            string sentenciaSQL = "SELECT id, municipio, departamento, latitud, longitud " +
+                                  "FROM ubicaciones " +
+                                  "WHERE municipio = @ubicacion_municipio " +
+                                  "AND departamento = @ubicacion_departamento";
 
-                var resultado = await contextoDB.Conexion.QueryAsync<Ubicacion>(sentenciaSQL,
-                    parametrosSentencia);
+            var resultado = await contextoDB.Conexion.QueryAsync<Ubicacion>(sentenciaSQL,
+                parametrosSentencia);
 
-                if (resultado.Any())
-                    unaUbicacion = resultado.First();
-            }
+            if (resultado.Any())
+                unaUbicacion = resultado.First();
 
             return unaUbicacion;
         }
@@ -103,21 +94,18 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
 
         public async Task<IEnumerable<Cerveceria>> GetAssociatedBreweriesAsync(int ubicacion_id)
         {
-            using (contextoDB.Conexion)
-            {
-                DynamicParameters parametrosSentencia = new();
-                parametrosSentencia.Add("@ubicacion_id", ubicacion_id,
-                                        DbType.Int32, ParameterDirection.Input);
+            DynamicParameters parametrosSentencia = new();
+            parametrosSentencia.Add("@ubicacion_id", ubicacion_id,
+                                    DbType.Int32, ParameterDirection.Input);
 
-                string sentenciaSQL = "SELECT c.id, c.nombre, c.sitio_web, c.instagram, " +
-                                      "(u.municipio || ', ' || u.departamento) ubicacion, c.ubicacion_id " +
-                                      "FROM cervecerias c JOIN ubicaciones u ON c.ubicacion_id = u.id " +
-                                      "WHERE c.ubicacion_id = @ubicacion_id ";
+            string sentenciaSQL = "SELECT c.id, c.nombre, c.sitio_web, c.instagram, " +
+                                  "(u.municipio || ', ' || u.departamento) ubicacion, c.ubicacion_id " +
+                                  "FROM cervecerias c JOIN ubicaciones u ON c.ubicacion_id = u.id " +
+                                  "WHERE c.ubicacion_id = @ubicacion_id ";
 
-                var resultadoCervecerias = await contextoDB.Conexion.QueryAsync<Cerveceria>(sentenciaSQL, parametrosSentencia);
+            var resultadoCervecerias = await contextoDB.Conexion.QueryAsync<Cerveceria>(sentenciaSQL, parametrosSentencia);
 
-                return resultadoCervecerias;
-            }
+            return resultadoCervecerias;
         }
 
         public async Task<bool> CreateAsync(Ubicacion unaUbicacion)
@@ -126,17 +114,14 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
 
             try
             {
-                using (contextoDB.Conexion)
-                {
-                    string sentenciaSQL = "INSERT INTO ubicaciones (municipio, departamento, latitud, longitud) " +
-                                            "VALUES (@Municipio, @Departamento, @Latitud, @Longitud)";
+                string sentenciaSQL = "INSERT INTO ubicaciones (municipio, departamento, latitud, longitud) " +
+                                        "VALUES (@Municipio, @Departamento, @Latitud, @Longitud)";
 
-                    int filasAfectadas = await contextoDB.Conexion.ExecuteAsync(sentenciaSQL,
-                                            unaUbicacion);
+                int filasAfectadas = await contextoDB.Conexion.ExecuteAsync(sentenciaSQL,
+                                        unaUbicacion);
 
-                    if (filasAfectadas > 0)
-                        resultadoAccion = true;
-                }
+                if (filasAfectadas > 0)
+                    resultadoAccion = true;
             }
             catch (SqliteException error)
             {
@@ -152,20 +137,17 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
 
             try
             {
-                using (contextoDB.Conexion)
-                {
-                    string sentenciaSQL = "UPDATE ubicaciones SET municipio = @Municipio, " +
-                                          "departamento = @Departamento, " +
-                                          "latitud = @Latitud, " +
-                                          "longitud = @Longitud " +
-                                          "WHERE id = @Id";
+                string sentenciaSQL = "UPDATE ubicaciones SET municipio = @Municipio, " +
+                                      "departamento = @Departamento, " +
+                                      "latitud = @Latitud, " +
+                                      "longitud = @Longitud " +
+                                      "WHERE id = @Id";
 
-                    int filasAfectadas = await contextoDB.Conexion.ExecuteAsync(sentenciaSQL,
-                                            unaUbicacion);
+                int filasAfectadas = await contextoDB.Conexion.ExecuteAsync(sentenciaSQL,
+                                        unaUbicacion);
 
-                    if (filasAfectadas > 0)
-                        resultadoAccion = true;
-                }
+                if (filasAfectadas > 0)
+                    resultadoAccion = true;
             }
             catch (SqliteException error)
             {
@@ -182,16 +164,13 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
 
             try
             {
-                using (contextoDB.Conexion)
-                {
-                    string sentenciaSQL = "DELETE FROM ubicaciones WHERE id = @Id";
+                string sentenciaSQL = "DELETE FROM ubicaciones WHERE id = @Id";
 
-                    int filasAfectadas = await contextoDB.Conexion.ExecuteAsync(sentenciaSQL,
-                                            unaUbicacion);
+                int filasAfectadas = await contextoDB.Conexion.ExecuteAsync(sentenciaSQL,
+                                        unaUbicacion);
 
-                    if (filasAfectadas > 0)
-                        resultadoAccion = true;
-                }
+                if (filasAfectadas > 0)
+                    resultadoAccion = true;
             }
             catch (SqliteException error)
             {

@@ -21,22 +21,19 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
         {
             UnidadVolumen unaUnidadVolumen = new();
 
-            using (contextoDB.Conexion)
-            {
-                DynamicParameters parametrosSentencia = new();
-                parametrosSentencia.Add("@nombre", unidad_volumen_nombre,
-                                        DbType.String, ParameterDirection.Input);
+            DynamicParameters parametrosSentencia = new();
+            parametrosSentencia.Add("@nombre", unidad_volumen_nombre,
+                                    DbType.String, ParameterDirection.Input);
 
-                string sentenciaSQL = "SELECT id, nombre, abreviatura " +
-                                      "FROM unidades_volumen " +
-                                      "WHERE nombre = @nombre ";
+            string sentenciaSQL = "SELECT id, nombre, abreviatura " +
+                                  "FROM unidades_volumen " +
+                                  "WHERE nombre = @nombre ";
 
-                var resultado = await contextoDB.Conexion.QueryAsync<UnidadVolumen>(sentenciaSQL,
-                    parametrosSentencia);
+            var resultado = await contextoDB.Conexion.QueryAsync<UnidadVolumen>(sentenciaSQL,
+                parametrosSentencia);
 
-                if (resultado.Any())
-                    unaUnidadVolumen = resultado.First();
-            }
+            if (resultado.Any())
+                unaUnidadVolumen = resultado.First();
 
             return unaUnidadVolumen;
         }

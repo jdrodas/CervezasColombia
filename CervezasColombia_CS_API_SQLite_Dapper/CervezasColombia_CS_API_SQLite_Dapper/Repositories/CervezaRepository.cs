@@ -37,23 +37,20 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
         {
             Cerveza unaCerveza = new();
 
-            using (contextoDB.Conexion)
-            {
-                DynamicParameters parametrosSentencia = new();
-                parametrosSentencia.Add("@cerveza_id", cerveza_id,
-                                        DbType.Int32, ParameterDirection.Input);
+            DynamicParameters parametrosSentencia = new();
+            parametrosSentencia.Add("@cerveza_id", cerveza_id,
+                                    DbType.Int32, ParameterDirection.Input);
 
-                string sentenciaSQL = "SELECT cerveza_id id, cerveza nombre, cerveceria, cerveceria_id, " +
-                                        "estilo, estilo_id, ibu, abv, rango_ibu, rango_abv " +
-                                        "FROM v_info_cervezas " +
-                                        "WHERE cerveza_id = @cerveza_id ";
+            string sentenciaSQL = "SELECT cerveza_id id, cerveza nombre, cerveceria, cerveceria_id, " +
+                                    "estilo, estilo_id, ibu, abv, rango_ibu, rango_abv " +
+                                    "FROM v_info_cervezas " +
+                                    "WHERE cerveza_id = @cerveza_id ";
 
-                var resultado = await contextoDB.Conexion.QueryAsync<Cerveza>(sentenciaSQL,
-                                    parametrosSentencia);
+            var resultado = await contextoDB.Conexion.QueryAsync<Cerveza>(sentenciaSQL,
+                                parametrosSentencia);
 
-                if (resultado.Any())
-                    unaCerveza = resultado.First();
-            }
+            if (resultado.Any())
+                unaCerveza = resultado.First();
 
             return unaCerveza;
         }
@@ -62,31 +59,27 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
         {
             CervezaDetallada unaCervezaDetallada = new();
 
-            using (contextoDB.Conexion)
+            DynamicParameters parametrosSentencia = new();
+            parametrosSentencia.Add("@cerveza_id", cerveza_id,
+                                    DbType.Int32, ParameterDirection.Input);
+
+            string sentenciaSQL = "SELECT cerveza_id id, cerveza nombre, cerveceria, cerveceria_id, " +
+                                    "estilo, estilo_id, ibu, abv, rango_ibu, rango_abv " +
+                                    "FROM v_info_cervezas " +
+                                    "WHERE cerveza_id = @cerveza_id ";
+
+            var resultado = await contextoDB.Conexion.QueryAsync<CervezaDetallada>(sentenciaSQL,
+                                parametrosSentencia);
+
+            if (resultado.Any())
             {
-                DynamicParameters parametrosSentencia = new();
-                parametrosSentencia.Add("@cerveza_id", cerveza_id,
-                                        DbType.Int32, ParameterDirection.Input);
+                unaCervezaDetallada = resultado.First();
 
-                string sentenciaSQL = "SELECT cerveza_id id, cerveza nombre, cerveceria, cerveceria_id, " +
-                                        "estilo, estilo_id, ibu, abv, rango_ibu, rango_abv " +
-                                        "FROM v_info_cervezas " +
-                                        "WHERE cerveza_id = @cerveza_id ";
+                var envasadosCerveza = await GetAssociatedPackagingsAsync(unaCervezaDetallada.Id);
+                unaCervezaDetallada.Envasados = envasadosCerveza.ToList();
 
-                var resultado = await contextoDB.Conexion.QueryAsync<CervezaDetallada>(sentenciaSQL,
-                                    parametrosSentencia);
-
-                if (resultado.Any())
-                {
-                    unaCervezaDetallada = resultado.First();
-
-                    var envasadosCerveza = await GetAssociatedPackagingsAsync(unaCervezaDetallada.Id);
-                    unaCervezaDetallada.Envasados = envasadosCerveza.ToList();
-
-                    var ingredientesCerveza = await GetAssociatedIngredientsAsync(unaCervezaDetallada.Id);
-                    unaCervezaDetallada.Ingredientes = ingredientesCerveza.ToList();
-                }
-
+                var ingredientesCerveza = await GetAssociatedIngredientsAsync(unaCervezaDetallada.Id);
+                unaCervezaDetallada.Ingredientes = ingredientesCerveza.ToList();
             }
 
             return unaCervezaDetallada;
@@ -96,26 +89,23 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
         {
             Cerveza unaCerveza = new();
 
-            using (contextoDB.Conexion)
-            {
-                DynamicParameters parametrosSentencia = new();
-                parametrosSentencia.Add("@cerveza", cerveza_nombre,
-                                        DbType.String, ParameterDirection.Input);
-                parametrosSentencia.Add("@cerveceria", cerveceria,
-                                        DbType.String, ParameterDirection.Input);
+            DynamicParameters parametrosSentencia = new();
+            parametrosSentencia.Add("@cerveza", cerveza_nombre,
+                                    DbType.String, ParameterDirection.Input);
+            parametrosSentencia.Add("@cerveceria", cerveceria,
+                                    DbType.String, ParameterDirection.Input);
 
-                string sentenciaSQL = "SELECT cerveza_id id, cerveza nombre, cerveceria, cerveceria_id, " +
-                                        "estilo, estilo_id, ibu, abv, rango_ibu, rango_abv " +
-                                        "FROM v_info_cervezas " +
-                                        "WHERE LOWER(cerveza) = LOWER(@cerveza) " +
-                                        "AND LOWER(cerveceria) = LOWER(@cerveceria) ";
+            string sentenciaSQL = "SELECT cerveza_id id, cerveza nombre, cerveceria, cerveceria_id, " +
+                                    "estilo, estilo_id, ibu, abv, rango_ibu, rango_abv " +
+                                    "FROM v_info_cervezas " +
+                                    "WHERE LOWER(cerveza) = LOWER(@cerveza) " +
+                                    "AND LOWER(cerveceria) = LOWER(@cerveceria) ";
 
-                var resultado = await contextoDB.Conexion.QueryAsync<Cerveza>(sentenciaSQL,
-                                    parametrosSentencia);
+            var resultado = await contextoDB.Conexion.QueryAsync<Cerveza>(sentenciaSQL,
+                                parametrosSentencia);
 
-                if (resultado.Any())
-                    unaCerveza = resultado.First();
-            }
+            if (resultado.Any())
+                unaCerveza = resultado.First();
 
             return unaCerveza;
         }
@@ -140,21 +130,18 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
 
         public async Task<IEnumerable<Ingrediente>> GetAssociatedIngredientsAsync(int cerveza_id)
         {
-            using (contextoDB.Conexion)
-            {
-                DynamicParameters parametrosSentencia = new();
-                parametrosSentencia.Add("@cerveza_id", cerveza_id,
-                                        DbType.Int32, ParameterDirection.Input);
+            DynamicParameters parametrosSentencia = new();
+            parametrosSentencia.Add("@cerveza_id", cerveza_id,
+                                    DbType.Int32, ParameterDirection.Input);
 
-                string sentenciaSQL = "SELECT DISTINCT v.ingrediente_id id, v.ingrediente nombre, v.tipo_ingrediente " +
-                                        "FROM v_info_ingredientes_cervezas v " +
-                                        "WHERE cerveza_id = @cerveza_id " +
-                                        "ORDER BY tipo_ingrediente, nombre ";
+            string sentenciaSQL = "SELECT DISTINCT v.ingrediente_id id, v.ingrediente nombre, v.tipo_ingrediente " +
+                                    "FROM v_info_ingredientes_cervezas v " +
+                                    "WHERE cerveza_id = @cerveza_id " +
+                                    "ORDER BY tipo_ingrediente, nombre ";
 
-                var resultadoIngredientes = await contextoDB.Conexion.QueryAsync<Ingrediente>(sentenciaSQL, parametrosSentencia);
+            var resultadoIngredientes = await contextoDB.Conexion.QueryAsync<Ingrediente>(sentenciaSQL, parametrosSentencia);
 
-                return resultadoIngredientes;
-            }
+            return resultadoIngredientes;
         }
 
         public async Task<int> GetTotalAssociatedPackagingsAsync(int cerveza_id)
@@ -176,51 +163,45 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
 
         public async Task<IEnumerable<EnvasadoCerveza>> GetAssociatedPackagingsAsync(int cerveza_id)
         {
-            using (contextoDB.Conexion)
-            {
-                DynamicParameters parametrosSentencia = new();
-                parametrosSentencia.Add("@cerveza_id", cerveza_id,
-                                        DbType.Int32, ParameterDirection.Input);
+            DynamicParameters parametrosSentencia = new();
+            parametrosSentencia.Add("@cerveza_id", cerveza_id,
+                                    DbType.Int32, ParameterDirection.Input);
 
-                string sentenciaSQL = "SELECT DISTINCT v.envasado_id id, v.envasado nombre, v.unidad_volumen_id, v.unidad_volumen, v.volumen " +
-                                        "FROM v_info_envasados_cervezas v " +
-                                        "WHERE cerveza_id = @cerveza_id " +
-                                        "ORDER BY envasado, unidad_volumen, volumen ";
+            string sentenciaSQL = "SELECT DISTINCT v.envasado_id id, v.envasado nombre, v.unidad_volumen_id, v.unidad_volumen, v.volumen " +
+                                    "FROM v_info_envasados_cervezas v " +
+                                    "WHERE cerveza_id = @cerveza_id " +
+                                    "ORDER BY envasado, unidad_volumen, volumen ";
 
-                var resultadoEnvasados = await contextoDB.Conexion.QueryAsync<EnvasadoCerveza>(sentenciaSQL, parametrosSentencia);
-                return resultadoEnvasados;
-            }
+            var resultadoEnvasados = await contextoDB.Conexion.QueryAsync<EnvasadoCerveza>(sentenciaSQL, parametrosSentencia);
+            return resultadoEnvasados;
         }
 
         public async Task<EnvasadoCerveza> GetPackagedBeerByNameAsync(int cerveza_id, string envasado_nombre, int unidad_volumen_id, float volumen)
         {
             EnvasadoCerveza unEnvasadoCerveza = new();
 
-            using (contextoDB.Conexion)
-            {
-                DynamicParameters parametrosSentencia = new();
-                parametrosSentencia.Add("@cerveza_id", cerveza_id,
-                                        DbType.Int32, ParameterDirection.Input);
-                parametrosSentencia.Add("@envasado_nombre", envasado_nombre,
-                                        DbType.String, ParameterDirection.Input);
-                parametrosSentencia.Add("@unidad_volumen_id", unidad_volumen_id,
-                                        DbType.Int32, ParameterDirection.Input);
-                parametrosSentencia.Add("@volumen", volumen,
-                                        DbType.Single, ParameterDirection.Input);
+            DynamicParameters parametrosSentencia = new();
+            parametrosSentencia.Add("@cerveza_id", cerveza_id,
+                                    DbType.Int32, ParameterDirection.Input);
+            parametrosSentencia.Add("@envasado_nombre", envasado_nombre,
+                                    DbType.String, ParameterDirection.Input);
+            parametrosSentencia.Add("@unidad_volumen_id", unidad_volumen_id,
+                                    DbType.Int32, ParameterDirection.Input);
+            parametrosSentencia.Add("@volumen", volumen,
+                                    DbType.Single, ParameterDirection.Input);
 
-                string sentenciaSQL = "SELECT v.envasado_id id, v.envasado nombre, v.unidad_volumen_id, unidad_volumen, volumen " +
-                        "FROM v_info_envasados_cervezas v " +
-                        "WHERE LOWER(envasado) = LOWER(@envasado_nombre) " +
-                        "AND v.cerveza_id = @cerveza_id " +
-                        "AND v.unidad_volumen_id = @unidad_volumen_id " +
-                        "AND v.volumen = @volumen";
+            string sentenciaSQL = "SELECT v.envasado_id id, v.envasado nombre, v.unidad_volumen_id, unidad_volumen, volumen " +
+                    "FROM v_info_envasados_cervezas v " +
+                    "WHERE LOWER(envasado) = LOWER(@envasado_nombre) " +
+                    "AND v.cerveza_id = @cerveza_id " +
+                    "AND v.unidad_volumen_id = @unidad_volumen_id " +
+                    "AND v.volumen = @volumen";
 
-                var resultado = await contextoDB.Conexion.QueryAsync<EnvasadoCerveza>(sentenciaSQL,
-                                    parametrosSentencia);
+            var resultado = await contextoDB.Conexion.QueryAsync<EnvasadoCerveza>(sentenciaSQL,
+                                parametrosSentencia);
 
-                if (resultado.Any())
-                    unEnvasadoCerveza = resultado.First();
-            }
+            if (resultado.Any())
+                unEnvasadoCerveza = resultado.First();
 
             return unEnvasadoCerveza;
         }
@@ -231,23 +212,20 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
 
             try
             {
-                using (contextoDB.Conexion)
+                string sentenciaSQL = "INSERT INTO cervezas (nombre, cerveceria_id, estilo_id, ibu, abv) " +
+                                "VALUES (@Nombre, @Cerveceria_id, @Estilo_id, @Ibu, @Abv )";
+
+                int filasAfectadas = await contextoDB.Conexion.ExecuteAsync(sentenciaSQL, unaCerveza);
+
+                if (filasAfectadas > 0)
                 {
-                    string sentenciaSQL = "INSERT INTO cervezas (nombre, cerveceria_id, estilo_id, ibu, abv) " +
-                                    "VALUES (@Nombre, @Cerveceria_id, @Estilo_id, @Ibu, @Abv )";
+                    //Obtenemos el ID asignado luego de la inserción
+                    var cervezaInsertada = await GetByNameAndBreweryAsync(unaCerveza.Nombre!, unaCerveza.Cerveceria!);
 
-                    int filasAfectadas = await contextoDB.Conexion.ExecuteAsync(sentenciaSQL, unaCerveza);
+                    await CreateDefaultIngredient(cervezaInsertada.Id);
+                    await CreateDefaultPackaging(cervezaInsertada.Id);
 
-                    if (filasAfectadas > 0)
-                    {
-                        //Obtenemos el ID asignado luego de la inserción
-                        var cervezaInsertada = await GetByNameAndBreweryAsync(unaCerveza.Nombre!, unaCerveza.Cerveceria!);
-
-                        await CreateDefaultIngredient(cervezaInsertada.Id);
-                        await CreateDefaultPackaging(cervezaInsertada.Id);
-
-                        resultadoAccion = true;
-                    }
+                    resultadoAccion = true;
                 }
             }
             catch (SqliteException error)
@@ -263,36 +241,33 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
             bool resultadoAccion = false;
             try
             {
-                using (contextoDB.Conexion)
-                {
-                    DynamicParameters parametrosSentencia = new();
-                    parametrosSentencia.Add("@ingrediente_nombre", "Agua de Manantial",
-                                            DbType.String, ParameterDirection.Input);
+                DynamicParameters parametrosSentencia = new();
+                parametrosSentencia.Add("@ingrediente_nombre", "Agua de Manantial",
+                                        DbType.String, ParameterDirection.Input);
 
-                    string sentenciaSQL = "SELECT ingrediente_id " +
-                                          "FROM v_info_ingredientes " +
-                                          "WHERE LOWER(ingrediente) = LOWER(@ingrediente_nombre)";
+                string sentenciaSQL = "SELECT ingrediente_id " +
+                                      "FROM v_info_ingredientes " +
+                                      "WHERE LOWER(ingrediente) = LOWER(@ingrediente_nombre)";
 
-                    int ingrediente_id = await contextoDB.Conexion.QueryFirstAsync<int>(sentenciaSQL,
-                                            parametrosSentencia);
+                int ingrediente_id = await contextoDB.Conexion.QueryFirstAsync<int>(sentenciaSQL,
+                                        parametrosSentencia);
 
-                    parametrosSentencia = new();
-                    parametrosSentencia.Add("@ingrediente_id", ingrediente_id,
-                                            DbType.Int32, ParameterDirection.Input);
+                parametrosSentencia = new();
+                parametrosSentencia.Add("@ingrediente_id", ingrediente_id,
+                                        DbType.Int32, ParameterDirection.Input);
 
-                    parametrosSentencia.Add("@cerveza_id", cerveza_id,
-                                            DbType.Int32, ParameterDirection.Input);
+                parametrosSentencia.Add("@cerveza_id", cerveza_id,
+                                        DbType.Int32, ParameterDirection.Input);
 
-                    sentenciaSQL = "INSERT INTO ingredientes_cervezas (cerveza_id, ingrediente_id) " +
-                                    "VALUES (@cerveza_id, @ingrediente_id)";
+                sentenciaSQL = "INSERT INTO ingredientes_cervezas (cerveza_id, ingrediente_id) " +
+                                "VALUES (@cerveza_id, @ingrediente_id)";
 
-                    int filasAfectadas = await contextoDB.Conexion.ExecuteAsync(sentenciaSQL, parametrosSentencia);
+                int filasAfectadas = await contextoDB.Conexion.ExecuteAsync(sentenciaSQL, parametrosSentencia);
 
-                    if (filasAfectadas > 0)
-                        resultadoAccion = true;
+                if (filasAfectadas > 0)
+                    resultadoAccion = true;
 
-                    return resultadoAccion;
-                }
+                return resultadoAccion;
             }
             catch (SqliteException error)
             {
@@ -305,44 +280,41 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
             bool resultadoAccion = false;
             try
             {
-                using (contextoDB.Conexion)
-                {
-                    DynamicParameters parametrosSentencia = new();
-                    parametrosSentencia.Add("@envasado_nombre", "Botella",
-                                            DbType.String, ParameterDirection.Input);
-                    parametrosSentencia.Add("@unidad_volumen", "Mililitros",
-                                            DbType.String, ParameterDirection.Input);
+                DynamicParameters parametrosSentencia = new();
+                parametrosSentencia.Add("@envasado_nombre", "Botella",
+                                        DbType.String, ParameterDirection.Input);
+                parametrosSentencia.Add("@unidad_volumen", "Mililitros",
+                                        DbType.String, ParameterDirection.Input);
 
-                    string sentenciaSQL = "SELECT e.id, uv.id unidad_volumen_id, 330 volumen " +
-                                          "FROM envasados e, unidades_volumen uv " +
-                                          "WHERE LOWER(e.nombre) = LOWER(@envasado_nombre) " +
-                                          "AND LOWER(uv.nombre) = LOWER(@unidad_volumen)";
+                string sentenciaSQL = "SELECT e.id, uv.id unidad_volumen_id, 330 volumen " +
+                                      "FROM envasados e, unidades_volumen uv " +
+                                      "WHERE LOWER(e.nombre) = LOWER(@envasado_nombre) " +
+                                      "AND LOWER(uv.nombre) = LOWER(@unidad_volumen)";
 
-                    var envasado_predeterminado = await contextoDB.Conexion.QueryFirstAsync<EnvasadoCerveza>(sentenciaSQL,
-                                                                    parametrosSentencia);
+                var envasado_predeterminado = await contextoDB.Conexion.QueryFirstAsync<EnvasadoCerveza>(sentenciaSQL,
+                                                                parametrosSentencia);
 
-                    parametrosSentencia.Add("@unidad_volumen_id", envasado_predeterminado.Unidad_Volumen_Id,
-                                            DbType.Int32, ParameterDirection.Input);
+                parametrosSentencia.Add("@unidad_volumen_id", envasado_predeterminado.Unidad_Volumen_Id,
+                                        DbType.Int32, ParameterDirection.Input);
 
-                    parametrosSentencia.Add("@volumen", envasado_predeterminado.Volumen,
-                                            DbType.Int32, ParameterDirection.Input);
+                parametrosSentencia.Add("@volumen", envasado_predeterminado.Volumen,
+                                        DbType.Int32, ParameterDirection.Input);
 
-                    parametrosSentencia.Add("@envasado_id", envasado_predeterminado.Id,
-                                            DbType.Int32, ParameterDirection.Input);
+                parametrosSentencia.Add("@envasado_id", envasado_predeterminado.Id,
+                                        DbType.Int32, ParameterDirection.Input);
 
-                    parametrosSentencia.Add("@cerveza_id", cerveza_id,
-                                            DbType.Int32, ParameterDirection.Input);
+                parametrosSentencia.Add("@cerveza_id", cerveza_id,
+                                        DbType.Int32, ParameterDirection.Input);
 
-                    sentenciaSQL = "INSERT INTO envasados_cervezas (cerveza_id, envasado_id, unidad_volumen_id, volumen) " +
-                                    "VALUES (@cerveza_id, @envasado_id, @unidad_volumen_id, @volumen)";
+                sentenciaSQL = "INSERT INTO envasados_cervezas (cerveza_id, envasado_id, unidad_volumen_id, volumen) " +
+                                "VALUES (@cerveza_id, @envasado_id, @unidad_volumen_id, @volumen)";
 
-                    int filasAfectadas = await contextoDB.Conexion.ExecuteAsync(sentenciaSQL, parametrosSentencia);
+                int filasAfectadas = await contextoDB.Conexion.ExecuteAsync(sentenciaSQL, parametrosSentencia);
 
-                    if (filasAfectadas > 0)
-                        resultadoAccion = true;
+                if (filasAfectadas > 0)
+                    resultadoAccion = true;
 
-                    return resultadoAccion;
-                }
+                return resultadoAccion;
             }
             catch (SqliteException error)
             {
@@ -356,25 +328,22 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
 
             try
             {
-                using (contextoDB.Conexion)
+                string procedimiento = "core.p_inserta_envasado_cerveza";
+                var parametros = new
                 {
-                    string procedimiento = "core.p_inserta_envasado_cerveza";
-                    var parametros = new
-                    {
-                        p_cerveza_id = cerveza_id,
-                        p_envasado_id = unEnvasadoCerveza.Id,
-                        p_unidad_volumen_id = unEnvasadoCerveza.Unidad_Volumen_Id,
-                        p_volumen = unEnvasadoCerveza.Volumen
-                    };
+                    p_cerveza_id = cerveza_id,
+                    p_envasado_id = unEnvasadoCerveza.Id,
+                    p_unidad_volumen_id = unEnvasadoCerveza.Unidad_Volumen_Id,
+                    p_volumen = unEnvasadoCerveza.Volumen
+                };
 
-                    var cantidad_filas = await contextoDB.Conexion.ExecuteAsync(
-                        procedimiento,
-                        parametros,
-                        commandType: CommandType.StoredProcedure);
+                var cantidad_filas = await contextoDB.Conexion.ExecuteAsync(
+                    procedimiento,
+                    parametros,
+                    commandType: CommandType.StoredProcedure);
 
-                    if (cantidad_filas != 0)
-                        resultadoAccion = true;
-                }
+                if (cantidad_filas != 0)
+                    resultadoAccion = true;
             }
             catch (SqliteException error)
             {
@@ -390,23 +359,20 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
 
             try
             {
-                using (contextoDB.Conexion)
+                string procedimiento = "core.p_inserta_ingrediente_cerveza";
+                var parametros = new
                 {
-                    string procedimiento = "core.p_inserta_ingrediente_cerveza";
-                    var parametros = new
-                    {
-                        p_cerveza_id = cerveza_id,
-                        p_ingrediente_id = unIngrediente.Id
-                    };
+                    p_cerveza_id = cerveza_id,
+                    p_ingrediente_id = unIngrediente.Id
+                };
 
-                    var cantidad_filas = await contextoDB.Conexion.ExecuteAsync(
-                        procedimiento,
-                        parametros,
-                        commandType: CommandType.StoredProcedure);
+                var cantidad_filas = await contextoDB.Conexion.ExecuteAsync(
+                    procedimiento,
+                    parametros,
+                    commandType: CommandType.StoredProcedure);
 
-                    if (cantidad_filas != 0)
-                        resultadoAccion = true;
-                }
+                if (cantidad_filas != 0)
+                    resultadoAccion = true;
             }
             catch (SqliteException error)
             {
@@ -422,21 +388,18 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
 
             try
             {
-                using (contextoDB.Conexion)
-                {
-                    string sentenciaSQL = "UPDATE cervezas " +
-                                            "SET nombre = @Nombre, " +
-                                            "estilo_id = @Estilo_id, " +
-                                            "cerveceria_id = @Cerveceria_id, " +
-                                            "abv = @Abv, " +
-                                            "ibu = @Ibu " +
-                                            "WHERE id = @Id";
+                string sentenciaSQL = "UPDATE cervezas " +
+                                        "SET nombre = @Nombre, " +
+                                        "estilo_id = @Estilo_id, " +
+                                        "cerveceria_id = @Cerveceria_id, " +
+                                        "abv = @Abv, " +
+                                        "ibu = @Ibu " +
+                                        "WHERE id = @Id";
 
-                    int filasAfectadas = await contextoDB.Conexion.ExecuteAsync(sentenciaSQL, unaCerveza);
+                int filasAfectadas = await contextoDB.Conexion.ExecuteAsync(sentenciaSQL, unaCerveza);
 
-                    if (filasAfectadas > 0)
-                        resultadoAccion = true;
-                }
+                if (filasAfectadas > 0)
+                    resultadoAccion = true;
             }
             catch (SqliteException error)
             {
@@ -452,15 +415,12 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
 
             try
             {
-                using (contextoDB.Conexion)
-                {
-                    string sentenciaSQL = "DELETE FROM cervezas WHERE id = @Id";
+                string sentenciaSQL = "DELETE FROM cervezas WHERE id = @Id";
 
-                    int filasAfectadas = await contextoDB.Conexion.ExecuteAsync(sentenciaSQL, unaCerveza);
+                int filasAfectadas = await contextoDB.Conexion.ExecuteAsync(sentenciaSQL, unaCerveza);
 
-                    if (filasAfectadas > 0)
-                        resultadoAccion = true;
-                }
+                if (filasAfectadas > 0)
+                    resultadoAccion = true;
             }
             catch (SqliteException error)
             {
@@ -476,25 +436,22 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
 
             try
             {
-                using (contextoDB.Conexion)
+                string procedimiento = "core.p_elimina_envasado_cerveza";
+                var parametros = new
                 {
-                    string procedimiento = "core.p_elimina_envasado_cerveza";
-                    var parametros = new
-                    {
-                        p_cerveza_id = cerveza_id,
-                        p_envasado_id = unEnvasadoCerveza.Id,
-                        p_unidad_volumen_id = unEnvasadoCerveza.Unidad_Volumen_Id,
-                        p_volumen = unEnvasadoCerveza.Volumen
-                    };
+                    p_cerveza_id = cerveza_id,
+                    p_envasado_id = unEnvasadoCerveza.Id,
+                    p_unidad_volumen_id = unEnvasadoCerveza.Unidad_Volumen_Id,
+                    p_volumen = unEnvasadoCerveza.Volumen
+                };
 
-                    var cantidad_filas = await contextoDB.Conexion.ExecuteAsync(
-                        procedimiento,
-                        parametros,
-                        commandType: CommandType.StoredProcedure);
+                var cantidad_filas = await contextoDB.Conexion.ExecuteAsync(
+                    procedimiento,
+                    parametros,
+                    commandType: CommandType.StoredProcedure);
 
-                    if (cantidad_filas != 0)
-                        resultadoAccion = true;
-                }
+                if (cantidad_filas != 0)
+                    resultadoAccion = true;
             }
             catch (SqliteException error)
             {
@@ -510,23 +467,20 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
 
             try
             {
-                using (contextoDB.Conexion)
+                string procedimiento = "core.p_elimina_ingrediente_cerveza";
+                var parametros = new
                 {
-                    string procedimiento = "core.p_elimina_ingrediente_cerveza";
-                    var parametros = new
-                    {
-                        p_cerveza_id = cerveza_id,
-                        p_ingrediente_id = unIngrediente.Id
-                    };
+                    p_cerveza_id = cerveza_id,
+                    p_ingrediente_id = unIngrediente.Id
+                };
 
-                    var cantidad_filas = await contextoDB.Conexion.ExecuteAsync(
-                        procedimiento,
-                        parametros,
-                        commandType: CommandType.StoredProcedure);
+                var cantidad_filas = await contextoDB.Conexion.ExecuteAsync(
+                    procedimiento,
+                    parametros,
+                    commandType: CommandType.StoredProcedure);
 
-                    if (cantidad_filas != 0)
-                        resultadoAccion = true;
-                }
+                if (cantidad_filas != 0)
+                    resultadoAccion = true;
             }
             catch (SqliteException error)
             {
@@ -535,6 +489,5 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
 
             return resultadoAccion;
         }
-
     }
 }
