@@ -19,11 +19,11 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Services
                 .GetAllAsync();
         }
 
-        public async Task<Estilo> GetByIdAsync(int estilo_id)
+        public async Task<EstiloDetallado> GetDetailsByIdAsync(int estilo_id)
         {
             //Validamos que el estilo exista con ese Id
             var unEstilo = await _estiloRepository
-                .GetByIdAsync(estilo_id);
+                .GetDetailsByIdAsync(estilo_id);
 
             if (unEstilo.Id == 0)
                 throw new AppValidationException($"Estilo no encontrado con el id {estilo_id}");

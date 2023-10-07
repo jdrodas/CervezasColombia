@@ -202,5 +202,11 @@
     "departamento": "Valle del Cauca",
     "latitud": 3.534722,
     "longitud": -76.295556
+  },
+  {
+    "municipio": "Tolú",
+    "departamento": "Sucre",
+    "latitud": 9.525,
+    "longitud": 75.581667
   }
 ]

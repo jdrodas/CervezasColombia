@@ -56,6 +56,35 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
             return unEstilo;
         }
 
+        public async Task<EstiloDetallado> GetDetailsByIdAsync(int estilo_id)
+        {
+            EstiloDetallado unEstilo = new EstiloDetallado();
+
+            using (var conexion = contextoDB.CreateConnection())
+            {
+                DynamicParameters parametrosSentencia = new DynamicParameters();
+                parametrosSentencia.Add("@estilo_id", estilo_id,
+                                        DbType.Int32, ParameterDirection.Input);
+
+                string sentenciaSQL = "SELECT id, nombre " +
+                                      "FROM estilos " +
+                                      "WHERE id = @estilo_id ";
+
+                var resultado = await conexion.QueryAsync<EstiloDetallado>(sentenciaSQL,
+                                    parametrosSentencia);
+
+                if (resultado.Any())
+                {
+                    unEstilo = resultado.First();
+
+                    var lasCervezas = await GetAssociatedBeersAsync(unEstilo.Id);
+                    unEstilo.Cervezas = lasCervezas.ToList();
+                }
+            }
+
+            return unEstilo;
+        }
+
         public async Task<Estilo> GetByNameAsync(string estilo_nombre)
         {
             Estilo unEstilo = new Estilo();

@@ -26,12 +26,12 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Controllers
         }
 
         [HttpGet("{estilo_id:int}")]
-        public async Task<IActionResult> GetByIdAsync(int estilo_id)
+        public async Task<IActionResult> GetDetailsByIdAsync(int estilo_id)
         {
             try
             {
                 var unEstilo = await _estiloService
-                    .GetByIdAsync(estilo_id);
+                    .GetDetailsByIdAsync(estilo_id);
                 return Ok(unEstilo);
             }
             catch (AppValidationException error)
