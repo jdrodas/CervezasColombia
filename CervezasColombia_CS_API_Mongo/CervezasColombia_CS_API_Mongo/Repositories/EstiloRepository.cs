@@ -41,7 +41,7 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
                 .SortBy(estilo => estilo.Nombre)
                 .FirstOrDefaultAsync();
 
-            if (string.IsNullOrEmpty(resultado.Id))
+            if (resultado is not null)
                 unEstilo = resultado;
 
             return unEstilo;

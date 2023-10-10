@@ -41,7 +41,7 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
                 .Find(ubicacion => ubicacion.Id == ubicacion_id)
                 .FirstOrDefaultAsync();
 
-            if (string.IsNullOrEmpty(resultado.Id))
+            if (resultado is not null)
                 unaUbicacion = resultado;
 
             return unaUbicacion;
