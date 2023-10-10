@@ -50,7 +50,7 @@ namespace CervezasColombia_CS_API_Mongo.Models
             unchecked
             {
                 int hash = 3;
-                hash = hash * 5 + Id.GetHashCode();
+                hash = hash * 5 + (Id?.GetHashCode() ?? 0);
                 hash = hash * 5 + (Municipio?.GetHashCode() ?? 0);
                 hash = hash * 5 + (Departamento?.GetHashCode() ?? 0);
                 hash = hash * 5 + Latitud.GetHashCode();

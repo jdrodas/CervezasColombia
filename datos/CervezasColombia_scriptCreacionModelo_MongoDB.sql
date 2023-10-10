@@ -44,6 +44,44 @@ db.createCollection("rangos_ibu");
 
 
 -- Creamos las collecciones ... usando un json schema para validación
+
+db.createCollection("ingredientes", {
+   validator: {
+      $jsonSchema: {
+         bsonType: "object",
+         title: "Ingredientes de las cervezas",
+         required: [ "nombre","tipo_ingrediente" ],
+         properties: {
+            nombre: {
+               bsonType: "string",
+               description: "'nombre' Debe ser una cadena de caracteres y no puede ser nulo"
+            },
+            tipo_ingrediente: {
+               bsonType: "string",
+               description: "'tipo_ingrediente' Debe ser una cadena de caracteres y no puede ser nulo"
+            }
+         }
+      }
+   }
+} );
+
+db.createCollection("envasados", {
+   validator: {
+      $jsonSchema: {
+         bsonType: "object",
+         title: "Envasados de cervezas",
+         required: [ "nombre" ],
+         properties: {
+            nombre: {
+               bsonType: "string",
+               description: "'nombre' Debe ser una cadena de caracteres y no puede ser nulo"
+            }
+         }
+      }
+   }
+} );
+
+
 db.createCollection("estilos", {
    validator: {
       $jsonSchema: {

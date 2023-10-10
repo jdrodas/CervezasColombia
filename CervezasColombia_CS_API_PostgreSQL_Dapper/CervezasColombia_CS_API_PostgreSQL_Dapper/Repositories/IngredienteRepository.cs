@@ -20,16 +20,15 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
         public async Task<IEnumerable<Ingrediente>> GetAllAsync()
         {
             var conexion = contextoDB.CreateConnection();
-            {
-                string sentenciaSQL = "SELECT DISTINCT v.ingrediente_id id, v.ingrediente nombre, v.tipo_ingrediente, v.tipo_ingrediente_id " +
-                                        "FROM v_info_ingredientes v " +
-                                        "ORDER BY v.ingrediente_id DESC ";
 
-                var resultadoEnvasados = await conexion.QueryAsync<Ingrediente>(sentenciaSQL,
-                                        new DynamicParameters());
+            string sentenciaSQL = "SELECT DISTINCT v.ingrediente_id id, v.ingrediente nombre, v.tipo_ingrediente, v.tipo_ingrediente_id " +
+                        "FROM v_info_ingredientes v " +
+                        "ORDER BY v.ingrediente_id DESC ";
 
-                return resultadoEnvasados;
-            }
+            var resultadoEnvasados = await conexion.QueryAsync<Ingrediente>(sentenciaSQL,
+                                    new DynamicParameters());
+
+            return resultadoEnvasados;
         }
 
         public async Task<Ingrediente> GetByIdAsync(int ingrediente_id)

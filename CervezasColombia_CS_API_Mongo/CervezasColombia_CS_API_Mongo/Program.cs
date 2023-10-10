@@ -12,9 +12,11 @@ builder.Services.AddSingleton<MongoDbContext>();
 
 //Los repositorios
 builder.Services.AddScoped<IUbicacionRepository, UbicacionRepository>();
+builder.Services.AddScoped<IEstiloRepository, EstiloRepository>();
 
 //Aqui agregamos los servicios asociados para cada EndPoint
 builder.Services.AddScoped<UbicacionService>();
+builder.Services.AddScoped<EstiloService>();
 
 
 // Add services to the container.

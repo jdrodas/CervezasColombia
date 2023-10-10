@@ -1,122 +1,122 @@
 [
   {
     "tipo_ingrediente": "Agua",
-    "ingrediente": "Agua de Manantial"
+    "nombre": "Agua de Manantial"
   },
   {
     "tipo_ingrediente": "Estimulantes",
-    "ingrediente": "Cannabis"
+    "nombre": "Cannabis"
   },
   {
     "tipo_ingrediente": "Estimulantes",
-    "ingrediente": "Coca"
+    "nombre": "Coca"
   },
   {
     "tipo_ingrediente": "Maltas",
-    "ingrediente": "Amber Malt"
+    "nombre": "Amber Malt"
   },
   {
     "tipo_ingrediente": "Maltas",
-    "ingrediente": "Belgian Special"
+    "nombre": "Belgian Special"
   },
   {
     "tipo_ingrediente": "Maltas",
-    "ingrediente": "Biscuit Malt"
+    "nombre": "Biscuit Malt"
   },
   {
     "tipo_ingrediente": "Maltas",
-    "ingrediente": "Black Barley"
+    "nombre": "Black Barley"
   },
   {
     "tipo_ingrediente": "Maltas",
-    "ingrediente": "Black Patent"
+    "nombre": "Black Patent"
   },
   {
     "tipo_ingrediente": "Maltas",
-    "ingrediente": "Brown Malt"
+    "nombre": "Brown Malt"
   },
   {
     "tipo_ingrediente": "Maltas",
-    "ingrediente": "CaraVienne"
+    "nombre": "CaraVienne"
   },
   {
     "tipo_ingrediente": "Maltas",
-    "ingrediente": "Carafa Special"
+    "nombre": "Carafa Special"
   },
   {
     "tipo_ingrediente": "Maltas",
-    "ingrediente": "Caramel Malt"
+    "nombre": "Caramel Malt"
   },
   {
     "tipo_ingrediente": "Maltas",
-    "ingrediente": "Carapils"
+    "nombre": "Carapils"
   },
   {
     "tipo_ingrediente": "Maltas",
-    "ingrediente": "Chocolate Malt"
+    "nombre": "Chocolate Malt"
   },
   {
     "tipo_ingrediente": "Maltas",
-    "ingrediente": "Honey Malt"
+    "nombre": "Honey Malt"
   },
   {
     "tipo_ingrediente": "Maltas",
-    "ingrediente": "Munich Malt"
+    "nombre": "Munich Malt"
   },
   {
     "tipo_ingrediente": "Maltas",
-    "ingrediente": "Pale Malt"
+    "nombre": "Pale Malt"
   },
   {
     "tipo_ingrediente": "Maltas",
-    "ingrediente": "Peated Malt"
+    "nombre": "Peated Malt"
   },
   {
     "tipo_ingrediente": "Maltas",
-    "ingrediente": "Roasted Barley"
+    "nombre": "Roasted Barley"
   },
   {
     "tipo_ingrediente": "Maltas",
-    "ingrediente": "Rye Malt"
+    "nombre": "Rye Malt"
   },
   {
     "tipo_ingrediente": "Maltas",
-    "ingrediente": "Special Roast"
+    "nombre": "Special Roast"
   },
   {
     "tipo_ingrediente": "Maltas",
-    "ingrediente": "Victory Malt"
+    "nombre": "Victory Malt"
   },
   {
     "tipo_ingrediente": "Maltas",
-    "ingrediente": "Vienna Malt"
+    "nombre": "Vienna Malt"
   },
   {
     "tipo_ingrediente": "Maltas",
-    "ingrediente": "Wheat Malt"
+    "nombre": "Wheat Malt"
   },
   {
     "tipo_ingrediente": "Maltas",
-    "ingrediente": "Wiener"
+    "nombre": "Wiener"
   },
   {
     "tipo_ingrediente": "Saborizantes",
-    "ingrediente": "Açaí"
+    "nombre": "Açaí"
   },
   {
     "tipo_ingrediente": "Saborizantes",
-    "ingrediente": "Cacao"
+    "nombre": "Cacao"
   },
   {
     "tipo_ingrediente": "Saborizantes",
-    "ingrediente": "Café"
+    "nombre": "Café"
   },
   {
     "tipo_ingrediente": "Saborizantes",
-    "ingrediente": "Ciruela"
+    "nombre": "Ciruela"
   },
   {
     "tipo_ingrediente": "Saborizantes",
-    "ingrediente": "Maracuyá"
+    "nombre": "Maracuyá"
   }
 ]

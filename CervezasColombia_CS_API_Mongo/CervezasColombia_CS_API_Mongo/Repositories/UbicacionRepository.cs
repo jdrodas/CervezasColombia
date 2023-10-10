@@ -32,12 +32,17 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
 
         public async Task<Ubicacion> GetByIdAsync(string ubicacion_id)
         {
+            Ubicacion unaUbicacion = new();
+
             var conexion = contextoDB.CreateConnection();
             var coleccionUbicaciones = conexion.GetCollection<Ubicacion>("ubicaciones");
 
-            var unaUbicacion = await coleccionUbicaciones
+            var resultado = await coleccionUbicaciones
                 .Find(ubicacion => ubicacion.Id == ubicacion_id)
                 .FirstOrDefaultAsync();
+
+            if (string.IsNullOrEmpty(resultado.Id))
+                unaUbicacion = resultado;
 
             return unaUbicacion;
         }
