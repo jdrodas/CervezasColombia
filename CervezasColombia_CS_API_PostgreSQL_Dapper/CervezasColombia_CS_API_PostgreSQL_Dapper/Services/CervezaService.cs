@@ -238,7 +238,7 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Services
 
             //Validamos que este ingrediente no exista para esta cerveza
             var CervezaConIngredienteExistente = await _ingredienteRepository
-                .GetAssociatedBeerByIdAsync(unIngrediente.Id,cerveza_id);
+                .GetAssociatedBeerByIdAsync(unIngrediente.Id, cerveza_id);
 
             if (CervezaConIngredienteExistente.Id != 0)
                 throw new AppValidationException($"Ya existe registro para el ingrediente {unIngrediente.Tipo_Ingrediente} " +
@@ -323,7 +323,7 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Services
 
             return cervezaExistente;
         }
-        
+
         public async Task DeleteAsync(int cerveza_id)
         {
             // validamos que el cerveza a eliminar si exista con ese Id

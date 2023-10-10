@@ -4,34 +4,34 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Models
 {
     public class Cerveza
     {
-        [JsonPropertyName("id")] 
+        [JsonPropertyName("id")]
         public int Id { get; set; } = 0;
-        
-        [JsonPropertyName("nombre")] 
+
+        [JsonPropertyName("nombre")]
         public string Nombre { get; set; } = string.Empty;
-        
-        [JsonPropertyName("cerveceria_id")]    
+
+        [JsonPropertyName("cerveceria_id")]
         public int Cerveceria_id { get; set; } = 0;
-        
-        [JsonPropertyName("cerveceria")] 
+
+        [JsonPropertyName("cerveceria")]
         public string Cerveceria { get; set; } = string.Empty;
-        
-        [JsonPropertyName("estilo_id")] 
+
+        [JsonPropertyName("estilo_id")]
         public int Estilo_id { get; set; } = 0;
-        
-        [JsonPropertyName("estilo")] 
+
+        [JsonPropertyName("estilo")]
         public string Estilo { get; set; } = string.Empty;
-        
-        [JsonPropertyName("rango_ibu")] 
+
+        [JsonPropertyName("rango_ibu")]
         public string Rango_Ibu { get; set; } = string.Empty;
-        
-        [JsonPropertyName("ibu")] 
+
+        [JsonPropertyName("ibu")]
         public float Ibu { get; set; } = 0f;
-        
-        [JsonPropertyName("rango_abv")] 
+
+        [JsonPropertyName("rango_abv")]
         public string Rango_Abv { get; set; } = string.Empty;
-        
-        [JsonPropertyName("abv")] 
+
+        [JsonPropertyName("abv")]
         public float Abv { get; set; } = 0f;
 
         public override bool Equals(object? obj)

@@ -73,7 +73,7 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Services
             var idTipoIngredienteExistente = await _ingredienteRepository
                 .GetAssociatedIngredientTypeIdAsync(unIngrediente.Tipo_Ingrediente);
 
-            if(idTipoIngredienteExistente == 0)
+            if (idTipoIngredienteExistente == 0)
                 throw new AppValidationException($"No existe un tipo de ingrediente con el nombre {unIngrediente.Tipo_Ingrediente}");
 
             unIngrediente.Tipo_Ingrediente_Id = idTipoIngredienteExistente;

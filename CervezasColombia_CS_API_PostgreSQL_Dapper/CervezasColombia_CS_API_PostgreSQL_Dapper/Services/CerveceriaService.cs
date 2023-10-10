@@ -9,7 +9,7 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Services
         private readonly ICerveceriaRepository _cerveceriaRepository;
         private readonly IUbicacionRepository _ubicacionRepository;
 
-        public CerveceriaService(ICerveceriaRepository cerveceriaRepository, 
+        public CerveceriaService(ICerveceriaRepository cerveceriaRepository,
                                 IUbicacionRepository ubicacionRepository)
         {
             _cerveceriaRepository = cerveceriaRepository;
@@ -75,7 +75,7 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Services
             //Validamos que la cerveceria tenga ubicación válida
             var ubicacionExistente = await _ubicacionRepository
                 .GetByNameAsync(unaCerveceria.Ubicacion.Municipio, unaCerveceria.Ubicacion.Departamento);
-                
+
             if (ubicacionExistente.Id == 0)
                 throw new AppValidationException("No se puede insertar una cervecería sin ubicación conocida");
 

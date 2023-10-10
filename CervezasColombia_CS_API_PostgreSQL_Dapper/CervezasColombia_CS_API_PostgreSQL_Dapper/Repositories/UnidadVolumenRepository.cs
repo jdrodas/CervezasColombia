@@ -1,9 +1,7 @@
 ﻿using CervezasColombia_CS_API_PostgreSQL_Dapper.DbContexts;
-using CervezasColombia_CS_API_PostgreSQL_Dapper.Helpers;
 using CervezasColombia_CS_API_PostgreSQL_Dapper.Interfaces;
 using CervezasColombia_CS_API_PostgreSQL_Dapper.Models;
 using Dapper;
-using Npgsql;
 using System.Data;
 
 namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
@@ -17,28 +15,25 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
             contextoDB = unContexto;
         }
 
-
-
         public async Task<UnidadVolumen> GetByNameAsync(string unidad_volumen_nombre)
         {
-            UnidadVolumen unaUnidadVolumen = new UnidadVolumen();
+            UnidadVolumen unaUnidadVolumen = new();
 
-            using (var conexion = contextoDB.CreateConnection())
-            {
-                DynamicParameters parametrosSentencia = new DynamicParameters();
-                parametrosSentencia.Add("@nombre", unidad_volumen_nombre,
-                                        DbType.String, ParameterDirection.Input);
+            var conexion = contextoDB.CreateConnection();
 
-                string sentenciaSQL = "SELECT id, nombre, abreviatura " +
-                                      "FROM unidades_volumen " +
-                                      "WHERE nombre = @nombre ";
+            DynamicParameters parametrosSentencia = new();
+            parametrosSentencia.Add("@nombre", unidad_volumen_nombre,
+                                    DbType.String, ParameterDirection.Input);
 
-                var resultado = await conexion.QueryAsync<UnidadVolumen>(sentenciaSQL,
-                    parametrosSentencia);
+            string sentenciaSQL = "SELECT id, nombre, abreviatura " +
+                                  "FROM unidades_volumen " +
+                                  "WHERE nombre = @nombre ";
 
-                if (resultado.Count() > 0)
-                    unaUnidadVolumen = resultado.First();
-            }
+            var resultado = await conexion.QueryAsync<UnidadVolumen>(sentenciaSQL,
+                parametrosSentencia);
+
+            if (resultado.Any())
+                unaUnidadVolumen = resultado.First();
 
             return unaUnidadVolumen;
         }

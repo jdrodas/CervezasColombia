@@ -117,8 +117,8 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Controllers
         {
             try
             {
-                 await _cervezaService
-                    .CreateBeerIngredientAsync(cerveza_id, unIngrediente);
+                await _cervezaService
+                   .CreateBeerIngredientAsync(cerveza_id, unIngrediente);
 
                 return Ok($"Ingrediente {unIngrediente.Tipo_Ingrediente} - {unIngrediente.Nombre} asociado a esta Cerveza");
             }

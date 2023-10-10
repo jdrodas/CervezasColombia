@@ -4,21 +4,21 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Models
 {
     public class Resumen
     {
-        [JsonPropertyName("ubicaciones")] 
+        [JsonPropertyName("ubicaciones")]
         public int Ubicaciones { get; set; } = 0;
-        
-        [JsonPropertyName("cervecerias")] 
+
+        [JsonPropertyName("cervecerias")]
         public int Cervecerias { get; set; } = 0;
-        
-        [JsonPropertyName("cervezas")] 
+
+        [JsonPropertyName("cervezas")]
         public int Cervezas { get; set; } = 0;
-        
-        [JsonPropertyName("estilos")] 
+
+        [JsonPropertyName("estilos")]
         public int Estilos { get; set; } = 0;
-        
-        [JsonPropertyName("envasados")] 
+
+        [JsonPropertyName("envasados")]
         public int Envasados { get; set; } = 0;
-        
+
         [JsonPropertyName("ingredientes")]
         public int Ingredientes { get; set; } = 0;
 
