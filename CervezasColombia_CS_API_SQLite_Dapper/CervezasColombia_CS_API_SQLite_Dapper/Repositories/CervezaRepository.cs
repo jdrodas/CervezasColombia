@@ -134,7 +134,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
             parametrosSentencia.Add("@cerveza_id", cerveza_id,
                                     DbType.Int32, ParameterDirection.Input);
 
-            string sentenciaSQL = "SELECT DISTINCT v.ingrediente_id id, v.ingrediente nombre, v.tipo_ingrediente " +
+            string sentenciaSQL = "SELECT DISTINCT v.ingrediente_id id, v.ingrediente nombre, v.tipo_ingrediente, v.tipo_ingrediente_id  " +
                                     "FROM v_info_ingredientes_cervezas v " +
                                     "WHERE cerveza_id = @cerveza_id " +
                                     "ORDER BY tipo_ingrediente, nombre ";

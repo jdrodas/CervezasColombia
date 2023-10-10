@@ -1,10 +1,19 @@
-﻿namespace CervezasColombia_CS_API_SQLite_Dapper.Models
+﻿using System.Text.Json.Serialization;
+
+namespace CervezasColombia_CS_API_SQLite_Dapper.Models
 {
     public class Ingrediente
     {
+        [JsonPropertyName("id")]
         public int Id { get; set; } = 0;
+
+        [JsonPropertyName("nombre")]
         public string Nombre { get; set; } = string.Empty;
+
+        [JsonPropertyName("tipo_ingrediente_id")]
         public int Tipo_Ingrediente_Id { get; set; } = 0;
+
+        [JsonPropertyName("tipo_ingrediente")]
         public string Tipo_Ingrediente { get; set; } = string.Empty;
 
         public override bool Equals(object? obj)

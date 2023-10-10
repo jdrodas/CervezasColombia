@@ -1,11 +1,22 @@
+using System.Text.Json.Serialization;
+
 namespace CervezasColombia_CS_API_SQLite_Dapper.Models
 {
     public class Cerveceria
     {
+        [JsonPropertyName("id")]
         public int Id { get; set; } = 0;
+        
+        [JsonPropertyName("nombre")]
         public string Nombre { get; set; } = string.Empty;
+
+        [JsonPropertyName("sitio_web")] 
         public string Sitio_Web { get; set; } = string.Empty;
+        
+        [JsonPropertyName("instagram")]
         public string Instagram { get; set; } = string.Empty;
+        
+        [JsonPropertyName("ubicacion")]
         public Ubicacion Ubicacion { get; set; } = new();
 
         public override bool Equals(object? obj)

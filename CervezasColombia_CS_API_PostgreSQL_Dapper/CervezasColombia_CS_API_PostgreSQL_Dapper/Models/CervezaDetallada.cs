@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace CervezasColombia_CS_API_SQLite_Dapper.Models
+namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Models
 {
     public class CervezaDetallada : Cerveza
     {

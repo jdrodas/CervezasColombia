@@ -1,11 +1,22 @@
-﻿namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Models
+﻿using System.Text.Json.Serialization;
+
+namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Models
 {
     public class Ubicacion
     {
+        [JsonPropertyName("id")] 
         public int Id { get; set; } = 0;
+        
+        [JsonPropertyName("municipio")] 
         public string Municipio { get; set; } = string.Empty;
+        
+        [JsonPropertyName("departamento")] 
         public string Departamento { get; set; } = string.Empty;
+        
+        [JsonPropertyName("latitud")] 
         public float Latitud { get; set; } = 0.0f;
+        
+        [JsonPropertyName("longitud")] 
         public float Longitud { get; set; } = 0.0f;
         public override bool Equals(object? obj)
         {
