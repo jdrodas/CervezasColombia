@@ -1,12 +1,36 @@
-﻿namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Models
+﻿using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Bson;
+using System.Text.Json.Serialization;
+
+
+namespace CervezasColombia_CS_API_Mongo.Models
 {
     public class Ubicacion
     {
-        public int Id { get; set; } = 0;
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        [JsonPropertyName("id")]
+        public string? Id { get; set; } = string.Empty;
+
+        [BsonElement("municipio")]
+        [JsonPropertyName("municipio")]
+        [BsonRepresentation(BsonType.String)]
         public string Municipio { get; set; } = string.Empty;
+
+        [BsonElement("departamento")]
+        [JsonPropertyName("departamento")]
+        [BsonRepresentation(BsonType.String)]
         public string Departamento { get; set; } = string.Empty;
-        public float Latitud { get; set; } = 0.0f;
-        public float Longitud { get; set; } = 0.0f;
+
+        [BsonElement("latitud")]
+        [JsonPropertyName("latitud")]
+        [BsonRepresentation(BsonType.Double)]
+        public double Latitud { get; set; } = 0.0d;
+
+        [BsonElement("longitud")]
+        [JsonPropertyName("longitud")]
+        [BsonRepresentation(BsonType.Double)] 
+        public double Longitud { get; set; } = 0.0d;
         public override bool Equals(object? obj)
         {
             if (obj == null || GetType() != obj.GetType())

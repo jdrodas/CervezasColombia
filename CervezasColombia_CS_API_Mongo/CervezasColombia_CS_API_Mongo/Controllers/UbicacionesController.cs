@@ -1,9 +1,8 @@
-﻿using CervezasColombia_CS_API_PostgreSQL_Dapper.Helpers;
-using CervezasColombia_CS_API_PostgreSQL_Dapper.Models;
-using CervezasColombia_CS_API_PostgreSQL_Dapper.Services;
+﻿using CervezasColombia_CS_API_Mongo.Helpers;
+using CervezasColombia_CS_API_Mongo.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Controllers
+namespace CervezasColombia_CS_API_Mongo.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -25,8 +24,8 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Controllers
             return Ok(lasUbicaciones);
         }
 
-        [HttpGet("{ubicacion_id:int}")]
-        public async Task<IActionResult> GetByIdAsync(int ubicacion_id)
+        [HttpGet("{ubicacion_id:length(24)}")]
+        public async Task<IActionResult> GetByIdAsync(string ubicacion_id)
         {
             try
             {
@@ -41,82 +40,82 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Controllers
             }
         }
 
-        [HttpGet("{ubicacion_id:int}/Cervecerias")]
-        public async Task<IActionResult> GetAssociatedBreweriesAsync(int ubicacion_id)
-        {
-            try
-            {
-                var lasCerveceriasPorUbicacion = await _ubicacionService
-                    .GetAssociatedBreweriesAsync(ubicacion_id);
+        //[HttpGet("{ubicacion_id:int}/Cervecerias")]
+        //public async Task<IActionResult> GetAssociatedBreweriesAsync(int ubicacion_id)
+        //{
+        //    try
+        //    {
+        //        var lasCerveceriasPorUbicacion = await _ubicacionService
+        //            .GetAssociatedBreweriesAsync(ubicacion_id);
 
-                return Ok(lasCerveceriasPorUbicacion);
-            }
-            catch (AppValidationException error)
-            {
-                return NotFound(error.Message);
-            }
-        }
+        //        return Ok(lasCerveceriasPorUbicacion);
+        //    }
+        //    catch (AppValidationException error)
+        //    {
+        //        return NotFound(error.Message);
+        //    }
+        //}
 
-        [HttpPost]
-        public async Task<IActionResult> CreateAsync(Ubicacion unaUbicacion)
-        {
-            try
-            {
-                var ubicacionCreada = await _ubicacionService
-                    .CreateAsync(unaUbicacion);
+        //[HttpPost]
+        //public async Task<IActionResult> CreateAsync(Ubicacion unaUbicacion)
+        //{
+        //    try
+        //    {
+        //        var ubicacionCreada = await _ubicacionService
+        //            .CreateAsync(unaUbicacion);
 
-                return Ok(ubicacionCreada);
-            }
-            catch (AppValidationException error)
-            {
-                return BadRequest($"Error de validación: {error.Message}");
-            }
-            catch (DbOperationException error)
-            {
-                return BadRequest($"Error de operacion en DB: {error.Message}");
-            }
-        }
+        //        return Ok(ubicacionCreada);
+        //    }
+        //    catch (AppValidationException error)
+        //    {
+        //        return BadRequest($"Error de validación: {error.Message}");
+        //    }
+        //    catch (DbOperationException error)
+        //    {
+        //        return BadRequest($"Error de operacion en DB: {error.Message}");
+        //    }
+        //}
 
-        [HttpPut("{ubicacion_id:int}")]
-        public async Task<IActionResult> UpdateAsync(int ubicacion_id, Ubicacion unaUbicacion)
-        {
-            try
-            {
-                var ubicacionActualizada = await _ubicacionService
-                    .UpdateAsync(ubicacion_id, unaUbicacion);
+        //[HttpPut("{ubicacion_id:int}")]
+        //public async Task<IActionResult> UpdateAsync(int ubicacion_id, Ubicacion unaUbicacion)
+        //{
+        //    try
+        //    {
+        //        var ubicacionActualizada = await _ubicacionService
+        //            .UpdateAsync(ubicacion_id, unaUbicacion);
 
-                return Ok(ubicacionActualizada);
+        //        return Ok(ubicacionActualizada);
 
-            }
-            catch (AppValidationException error)
-            {
-                return BadRequest($"Error de validación: {error.Message}");
-            }
-            catch (DbOperationException error)
-            {
-                return BadRequest($"Error de operacion en DB: {error.Message}");
-            }
-        }
+        //    }
+        //    catch (AppValidationException error)
+        //    {
+        //        return BadRequest($"Error de validación: {error.Message}");
+        //    }
+        //    catch (DbOperationException error)
+        //    {
+        //        return BadRequest($"Error de operacion en DB: {error.Message}");
+        //    }
+        //}
 
-        [HttpDelete("{ubicacion_id:int}")]
-        public async Task<IActionResult> DeleteAsync(int ubicacion_id)
-        {
-            try
-            {
-                await _ubicacionService
-                    .DeleteAsync(ubicacion_id);
+        //[HttpDelete("{ubicacion_id:int}")]
+        //public async Task<IActionResult> DeleteAsync(int ubicacion_id)
+        //{
+        //    try
+        //    {
+        //        await _ubicacionService
+        //            .DeleteAsync(ubicacion_id);
 
-                return Ok($"Ubicación {ubicacion_id} fue eliminada");
+        //        return Ok($"Ubicación {ubicacion_id} fue eliminada");
 
-            }
-            catch (AppValidationException error)
-            {
-                return BadRequest($"Error de validación: {error.Message}");
-            }
-            catch (DbOperationException error)
-            {
-                return BadRequest($"Error de operacion en DB: {error.Message}");
-            }
-        }
+        //    }
+        //    catch (AppValidationException error)
+        //    {
+        //        return BadRequest($"Error de validación: {error.Message}");
+        //    }
+        //    catch (DbOperationException error)
+        //    {
+        //        return BadRequest($"Error de operacion en DB: {error.Message}");
+        //    }
+        //}
     }
 }

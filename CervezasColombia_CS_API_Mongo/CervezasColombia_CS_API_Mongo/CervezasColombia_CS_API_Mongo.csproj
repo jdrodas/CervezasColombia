@@ -8,6 +8,12 @@
 
   <ItemGroup>
     <Folder Include="Controllers\" />
+    <Folder Include="DbContexts\" />
+    <Folder Include="Helpers\" />
+    <Folder Include="Interfaces\" />
+    <Folder Include="Models\" />
+    <Folder Include="Services\" />
+    <Folder Include="Repositories\" />
   </ItemGroup>
 
   <ItemGroup>

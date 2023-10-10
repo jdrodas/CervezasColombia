@@ -123,6 +123,38 @@ db.createCollection("rangos_abv", {
    }
 } );
 
+db.createCollection("ubicaciones", {
+   validator: {
+      $jsonSchema: {
+         bsonType: "object",
+         title: "Ubicaciones de las Cervecerias",
+         required: [ "municipio", "departamento", "latitud","longitud" ],
+         properties: {
+            municipio: {
+               bsonType: "string",
+               description: "'municipio' Debe ser una cadena de caracteres y no puede ser nulo"
+            },
+            departamento: {
+               bsonType: "string",
+               description: "'departamento' Debe ser una cadena de caracteres y no puede ser nulo"
+            },
+            latitud: {
+               bsonType: "number",
+               minimum:-90,
+               maximum:90,
+               description: "'latitud' Debe ser un numero real entre -90 y 90"
+            },
+            longitud: {
+               bsonType: "number",
+               minimum:-180,
+               maximum:180,
+               description: "'longitud' Debe ser un numero real entre -90 y 90"
+            }
+         }
+      }
+   }
+} );
+
 -- ***************************************************
 -- Consultas de apoyo para implementar el repositorio
 -- ***************************************************

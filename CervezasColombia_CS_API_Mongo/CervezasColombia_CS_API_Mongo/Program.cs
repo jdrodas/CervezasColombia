@@ -1,41 +1,27 @@
-using CervezasColombia_CS_API_PostgreSQL_Dapper.DbContexts;
-using CervezasColombia_CS_API_PostgreSQL_Dapper.Interfaces;
-using CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories;
-using CervezasColombia_CS_API_PostgreSQL_Dapper.Services;
+using CervezasColombia_CS_API_Mongo.DbContexts;
+using CervezasColombia_CS_API_Mongo.Interfaces;
+using CervezasColombia_CS_API_Mongo.Repositories;
+using CervezasColombia_CS_API_Mongo.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 //Aqui agregamos los servicios requeridos
 
 //El DBContext a utilizar
-builder.Services.AddSingleton<PgsqlDbContext>();
+builder.Services.AddSingleton<MongoDbContext>();
 
 //Los repositorios
-builder.Services.AddScoped<IEstiloRepository, EstiloRepository>();
-builder.Services.AddScoped<IResumenRepository, ResumenRepository>();
-builder.Services.AddScoped<ICervezaRepository, CervezaRepository>();
-builder.Services.AddScoped<ICerveceriaRepository, CerveceriaRepository>();
 builder.Services.AddScoped<IUbicacionRepository, UbicacionRepository>();
-builder.Services.AddScoped<IEnvasadoRepository, EnvasadoRepository>();
-builder.Services.AddScoped<IIngredienteRepository, IngredienteRepository>();
-builder.Services.AddScoped<IUnidadVolumenRepository, UnidadVolumenRepository>();
 
 //Aqui agregamos los servicios asociados para cada EndPoint
-builder.Services.AddScoped<EstiloService>();
-builder.Services.AddScoped<ResumenService>();
-builder.Services.AddScoped<CervezaService>();
-builder.Services.AddScoped<CerveceriaService>();
 builder.Services.AddScoped<UbicacionService>();
-builder.Services.AddScoped<EnvasadoService>();
-builder.Services.AddScoped<IngredienteService>();
+
 
 // Add services to the container.
-builder.Services.AddControllers()
-    .AddJsonOptions(
-        options => options.JsonSerializerOptions.PropertyNamingPolicy = null);
+
+builder.Services.AddControllers();
 
 var app = builder.Build();
-
 
 // Configure the HTTP request pipeline.
 
