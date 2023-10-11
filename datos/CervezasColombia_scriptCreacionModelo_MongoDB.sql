@@ -31,19 +31,51 @@ use cervezas_db;
 -- Creamos las collecciones ... Sin validación
 
 -- Estilos
-db.createCollection("estilos");
-db.createCollection("envasados");
-db.createCollection("ubicaciones");
-db.createCollection("ingredientes");
-db.createCollection("tipos_ingredientes");
 db.createCollection("cervecerias");
 db.createCollection("cervezas");
-db.createCollection("unidades_volumen");
+db.createCollection("envasados");
+db.createCollection("estilos");
+db.createCollection("ingredientes");
 db.createCollection("rangos_abv");
 db.createCollection("rangos_ibu");
+db.createCollection("tipos_ingredientes");
+db.createCollection("ubicaciones");
+db.createCollection("unidades_volumen");
 
 
 -- Creamos las collecciones ... usando un json schema para validación
+
+db.createCollection("envasados", {
+   validator: {
+      $jsonSchema: {
+         bsonType: "object",
+         title: "Recipientes para el envasado de las cervezas",
+         required: [ "nombre" ],
+         properties: {
+            nombre: {
+               bsonType: "string",
+               description: "'nombre' Debe ser una cadena de caracteres y no puede ser nulo"
+            }
+         }
+      }
+   }
+} );
+
+db.createCollection("estilos", {
+   validator: {
+      $jsonSchema: {
+         bsonType: "object",
+         title: "Estilos de cervezas",
+         required: [ "nombre" ],
+         properties: {
+            nombre: {
+               bsonType: "string",
+               description: "'nombre' Debe ser una cadena de caracteres y no puede ser nulo"
+            }
+         }
+      }
+   }
+} );
 
 db.createCollection("ingredientes", {
    validator: {
@@ -65,76 +97,6 @@ db.createCollection("ingredientes", {
    }
 } );
 
-db.createCollection("envasados", {
-   validator: {
-      $jsonSchema: {
-         bsonType: "object",
-         title: "Envasados de cervezas",
-         required: [ "nombre" ],
-         properties: {
-            nombre: {
-               bsonType: "string",
-               description: "'nombre' Debe ser una cadena de caracteres y no puede ser nulo"
-            }
-         }
-      }
-   }
-} );
-
-
-db.createCollection("estilos", {
-   validator: {
-      $jsonSchema: {
-         bsonType: "object",
-         title: "Estilos de cervezas",
-         required: [ "nombre" ],
-         properties: {
-            nombre: {
-               bsonType: "string",
-               description: "'nombre' Debe ser una cadena de caracteres y no puede ser nulo"
-            }
-         }
-      }
-   }
-} );
-
-db.createCollection("envasados", {
-   validator: {
-      $jsonSchema: {
-         bsonType: "object",
-         title: "Recipientes para el envasado de las cervezas",
-         required: [ "nombre" ],
-         properties: {
-            nombre: {
-               bsonType: "string",
-               description: "'nombre' Debe ser una cadena de caracteres y no puede ser nulo"
-            }
-         }
-      }
-   }
-} );
-
-db.createCollection("unidades_volumen", {
-   validator: {
-      $jsonSchema: {
-         bsonType: "object",
-         title: "Unidades de volumen para los envasados",
-         required: [ "nombre","abreviatura" ],
-         properties: {
-            nombre: {
-               bsonType: "string",
-               description: "'nombre' Debe ser una cadena de caracteres y no puede ser nulo"
-            },
-            abreviatura: {
-               bsonType: "string",
-               description: "'abreviatura' Debe ser una cadena de caracteres y no puede ser nulo"
-            }
-         }
-      }
-   }
-} );
-
-
 db.createCollection("rangos_abv", {
    validator: {
       $jsonSchema: {
@@ -155,6 +117,48 @@ db.createCollection("rangos_abv", {
                bsonType: "number",
                minimum: 0,
                description: "'valor_final' Debe ser numérico mínimo 0 y no puede ser nulo"
+            }
+         }
+      }
+   }
+} );
+
+db.createCollection("rangos_ibu", {
+   validator: {
+      $jsonSchema: {
+         bsonType: "object",
+         title: "Rangos de Unidades Internacionales de Amargor (IBU) para las cervezas",
+         required: [ "nombre","valor_inicial","valor_final" ],
+         properties: {
+            nombre: {
+               bsonType: "string",
+               description: "'nombre' Debe ser una cadena de caracteres y no puede ser nulo"
+            },
+            valor_inicial: {
+               bsonType: "number",
+               minimum: 0,
+               description: "'valor_inicial' Debe ser numérico mínimo 0 y no puede ser nulo"
+            },
+            valor_final: {
+               bsonType: "number",
+               minimum: 0,
+               description: "'valor_final' Debe ser numérico mínimo 0 y no puede ser nulo"
+            }
+         }
+      }
+   }
+} );
+
+db.createCollection("tipos_ingredientes", {
+   validator: {
+      $jsonSchema: {
+         bsonType: "object",
+         title: "Tipos de ingredientes de las cervezas",
+         required: [ "nombre" ],
+         properties: {
+            nombre: {
+               bsonType: "string",
+               description: "'nombre' Debe ser una cadena de caracteres y no puede ser nulo"
             }
          }
       }
@@ -187,6 +191,26 @@ db.createCollection("ubicaciones", {
                minimum:-180,
                maximum:180,
                description: "'longitud' Debe ser un numero real entre -90 y 90"
+            }
+         }
+      }
+   }
+} );
+
+db.createCollection("unidades_volumen", {
+   validator: {
+      $jsonSchema: {
+         bsonType: "object",
+         title: "Unidades de volumen para los envasados",
+         required: [ "nombre","abreviatura" ],
+         properties: {
+            nombre: {
+               bsonType: "string",
+               description: "'nombre' Debe ser una cadena de caracteres y no puede ser nulo"
+            },
+            abreviatura: {
+               bsonType: "string",
+               description: "'abreviatura' Debe ser una cadena de caracteres y no puede ser nulo"
             }
          }
       }

@@ -38,7 +38,6 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
 
             var resultado = await coleccionEstilos
                 .Find(estilo => estilo.Id == estilo_id)
-                .SortBy(estilo => estilo.Nombre)
                 .FirstOrDefaultAsync();
 
             if (resultado is not null)
@@ -75,28 +74,22 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
         //    return unEstilo;
         //}
 
-        //public async Task<Estilo> GetByNameAsync(string estilo_nombre)
-        //{
-        //    Estilo unEstilo = new();
+        public async Task<Estilo> GetByNameAsync(string estilo_nombre)
+        {
+            Estilo unEstilo = new();
 
-        //    var conexion = contextoDB.CreateConnection();
+            var conexion = contextoDB.CreateConnection();
+            var coleccionEstilos = conexion.GetCollection<Estilo>("estilos");
 
-        //    DynamicParameters parametrosSentencia = new();
-        //    parametrosSentencia.Add("@estilo_nombre", estilo_nombre,
-        //                            DbType.String, ParameterDirection.Input);
+            var resultado = await coleccionEstilos
+                .Find(estilo => estilo.Nombre == estilo_nombre)
+                .FirstOrDefaultAsync();
 
-        //    string sentenciaSQL = "SELECT id, nombre " +
-        //                          "FROM estilos " +
-        //                          "WHERE LOWER(nombre) = LOWER(@estilo_nombre) ";
+            if (resultado is not null)
+                unEstilo = resultado;
 
-        //    var resultado = await conexion.QueryAsync<Estilo>(sentenciaSQL,
-        //                        parametrosSentencia);
-
-        //    if (resultado.Any())
-        //        unEstilo = resultado.First();
-
-        //    return unEstilo;
-        //}
+            return unEstilo;
+        }
 
         //public async Task<int> GetTotalAssociatedBeersAsync(int estilo_id)
         //{
@@ -137,66 +130,40 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
         //    return resultadoCervezas;
         //}
 
-        //public async Task<bool> CreateAsync(Estilo unEstilo)
-        //{
-        //    bool resultadoAccion = false;
+        public async Task<bool> CreateAsync(Estilo unEstilo)
+        {
+            bool resultadoAccion = false;
 
-        //    try
-        //    {
-        //        var conexion = contextoDB.CreateConnection();
+            var conexion = contextoDB.CreateConnection();
+            var coleccionEstilos = conexion.GetCollection<Estilo>("estilos");
 
-        //        string procedimiento = "core.p_inserta_estilo";
-        //        var parametros = new
-        //        {
-        //            p_nombre = unEstilo.Nombre
-        //        };
+            await coleccionEstilos
+                .InsertOneAsync(unEstilo);
 
-        //        var cantidad_filas = await conexion.ExecuteAsync(
-        //            procedimiento,
-        //            parametros,
-        //            commandType: CommandType.StoredProcedure);
+            var resultado = await coleccionEstilos
+                .Find(estilo => estilo.Nombre == unEstilo.Nombre)
+                .FirstOrDefaultAsync();
 
-        //        if (cantidad_filas != 0)
-        //            resultadoAccion = true;
-        //    }
-        //    catch (NpgsqlException error)
-        //    {
-        //        throw new DbOperationException(error.Message);
-        //    }
+            if (resultado is not null)
+                resultadoAccion = true;
 
-        //    return resultadoAccion;
-        //}
+            return resultadoAccion;
+        }
 
-        //public async Task<bool> UpdateAsync(Estilo unEstilo)
-        //{
-        //    bool resultadoAccion = false;
+        public async Task<bool> UpdateAsync(Estilo unEstilo)
+        {
+            bool resultadoAccion = false;
 
-        //    try
-        //    {
-        //        var conexion = contextoDB.CreateConnection();
+            var conexion = contextoDB.CreateConnection();
+            var coleccionEstilos = conexion.GetCollection<Estilo>("estilos");
 
-        //        string procedimiento = "core.p_actualiza_estilo";
-        //        var parametros = new
-        //        {
-        //            p_id = unEstilo.Id,
-        //            p_nombre = unEstilo.Nombre
-        //        };
+            var resultado = await coleccionEstilos.ReplaceOneAsync(estilo => estilo.Id == unEstilo.Id, unEstilo);
 
-        //        var cantidad_filas = await conexion.ExecuteAsync(
-        //            procedimiento,
-        //            parametros,
-        //            commandType: CommandType.StoredProcedure);
+            if (resultado.IsAcknowledged)
+                resultadoAccion = true;
 
-        //        if (cantidad_filas != 0)
-        //            resultadoAccion = true;
-        //    }
-        //    catch (NpgsqlException error)
-        //    {
-        //        throw new DbOperationException(error.Message);
-        //    }
-
-        //    return resultadoAccion;
-        //}
+            return resultadoAccion;
+        }
 
 
         //public async Task<bool> DeleteAsync(Estilo unEstilo)

@@ -208,5 +208,11 @@
     "departamento": "Sucre",
     "latitud": 9.525,
     "longitud": 75.581667
+  },
+  {
+    "municipio": "Soledad",
+    "departamento": "Atlántico",
+    "latitud": 10.909722,
+    "longitud": -74.785833
   }
 ]

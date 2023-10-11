@@ -11,12 +11,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSingleton<MongoDbContext>();
 
 //Los repositorios
+builder.Services.AddScoped<IResumenRepository, ResumenRepository>();
 builder.Services.AddScoped<IUbicacionRepository, UbicacionRepository>();
 builder.Services.AddScoped<IEstiloRepository, EstiloRepository>();
+builder.Services.AddScoped<IEnvasadoRepository, EnvasadoRepository>();
 
 //Aqui agregamos los servicios asociados para cada EndPoint
+builder.Services.AddScoped<ResumenService>();
 builder.Services.AddScoped<UbicacionService>();
 builder.Services.AddScoped<EstiloService>();
+builder.Services.AddScoped<EnvasadoService>();
 
 
 // Add services to the container.

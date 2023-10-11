@@ -56,46 +56,46 @@ namespace CervezasColombia_CS_API_Mongo.Controllers
         //    }
         //}
 
-        //[HttpPost]
-        //public async Task<IActionResult> CreateAsync(Estilo unEstilo)
-        //{
-        //    try
-        //    {
-        //        var estiloCreado = await _estiloService
-        //            .CreateAsync(unEstilo);
+        [HttpPost]
+        public async Task<IActionResult> CreateAsync(Estilo unEstilo)
+        {
+            try
+            {
+                var estiloCreado = await _estiloService
+                    .CreateAsync(unEstilo);
 
-        //        return Ok(estiloCreado);
-        //    }
-        //    catch (AppValidationException error)
-        //    {
-        //        return BadRequest($"Error de validación: {error.Message}");
-        //    }
-        //    catch (DbOperationException error)
-        //    {
-        //        return BadRequest($"Error de operacion en DB: {error.Message}");
-        //    }
-        //}
+                return Ok(estiloCreado);
+            }
+            catch (AppValidationException error)
+            {
+                return BadRequest($"Error de validación: {error.Message}");
+            }
+            catch (DbOperationException error)
+            {
+                return BadRequest($"Error de operacion en DB: {error.Message}");
+            }
+        }
 
-        //[HttpPut("{estilo_id:int}")]
-        //public async Task<IActionResult> UpdateAsync(int estilo_id, Estilo unEstilo)
-        //{
-        //    try
-        //    {
-        //        var estiloActualizado = await _estiloService
-        //            .UpdateAsync(estilo_id, unEstilo);
+        [HttpPut("{estilo_id:length(24)}")]
+        public async Task<IActionResult> UpdateAsync(string estilo_id, Estilo unEstilo)
+        {
+            try
+            {
+                var estiloActualizado = await _estiloService
+                    .UpdateAsync(estilo_id, unEstilo);
 
-        //        return Ok(estiloActualizado);
+                return Ok(estiloActualizado);
 
-        //    }
-        //    catch (AppValidationException error)
-        //    {
-        //        return BadRequest($"Error de validación: {error.Message}");
-        //    }
-        //    catch (DbOperationException error)
-        //    {
-        //        return BadRequest($"Error de operacion en DB: {error.Message}");
-        //    }
-        //}
+            }
+            catch (AppValidationException error)
+            {
+                return BadRequest($"Error de validación: {error.Message}");
+            }
+            catch (DbOperationException error)
+            {
+                return BadRequest($"Error de operacion en DB: {error.Message}");
+            }
+        }
 
         //[HttpDelete("{estilo_id:int}")]
         //public async Task<IActionResult> DeleteAsync(int estilo_id)
