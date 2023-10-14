@@ -26,12 +26,12 @@ namespace CervezasColombia_CS_API_Mongo.Controllers
         }
 
         [HttpGet("{estilo_id:length(24)}")]
-        public async Task<IActionResult> GetByIdAsync(string estilo_id)
+        public async Task<IActionResult> GetDetailsByIdAsync(string estilo_id)
         {
             try
             {
                 var unEstilo = await _estiloService
-                    .GetByIdAsync(estilo_id);
+                    .GetDetailsByIdAsync(estilo_id);
                 return Ok(unEstilo);
             }
             catch (AppValidationException error)
@@ -40,21 +40,21 @@ namespace CervezasColombia_CS_API_Mongo.Controllers
             }
         }
 
-        //[HttpGet("{estilo_id:int}/Cervezas")]
-        //public async Task<IActionResult> GetAssociatedBeersAsync(int estilo_id)
-        //{
-        //    try
-        //    {
-        //        var lasCervezasPorEstilo = await _estiloService
-        //            .GetAssociatedBeersAsync(estilo_id);
+        [HttpGet("{estilo_id:length(24)}/Cervezas")]
+        public async Task<IActionResult> GetAssociatedBeersAsync(string estilo_id)
+        {
+            try
+            {
+                var lasCervezasPorEstilo = await _estiloService
+                    .GetAssociatedBeersAsync(estilo_id);
 
-        //        return Ok(lasCervezasPorEstilo);
-        //    }
-        //    catch (AppValidationException error)
-        //    {
-        //        return NotFound(error.Message);
-        //    }
-        //}
+                return Ok(lasCervezasPorEstilo);
+            }
+            catch (AppValidationException error)
+            {
+                return NotFound(error.Message);
+            }
+        }
 
         [HttpPost]
         public async Task<IActionResult> CreateAsync(Estilo unEstilo)
@@ -97,25 +97,25 @@ namespace CervezasColombia_CS_API_Mongo.Controllers
             }
         }
 
-        //[HttpDelete("{estilo_id:int}")]
-        //public async Task<IActionResult> DeleteAsync(int estilo_id)
-        //{
-        //    try
-        //    {
-        //        await _estiloService
-        //            .DeleteAsync(estilo_id);
+        [HttpDelete("{estilo_id:length(24)}")]
+        public async Task<IActionResult> DeleteAsync(string estilo_id)
+        {
+            try
+            {
+                await _estiloService
+                    .DeleteAsync(estilo_id);
 
-        //        return Ok($"Estilo {estilo_id} fue eliminado");
+                return Ok($"Estilo {estilo_id} fue eliminado");
 
-        //    }
-        //    catch (AppValidationException error)
-        //    {
-        //        return BadRequest($"Error de validación: {error.Message}");
-        //    }
-        //    catch (DbOperationException error)
-        //    {
-        //        return BadRequest($"Error de operacion en DB: {error.Message}");
-        //    }
-        //}
+            }
+            catch (AppValidationException error)
+            {
+                return BadRequest($"Error de validación: {error.Message}");
+            }
+            catch (DbOperationException error)
+            {
+                return BadRequest($"Error de operacion en DB: {error.Message}");
+            }
+        }
     }
 }

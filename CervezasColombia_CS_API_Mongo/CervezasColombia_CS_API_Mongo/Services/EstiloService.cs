@@ -19,7 +19,19 @@ namespace CervezasColombia_CS_API_Mongo.Services
                 .GetAllAsync();
         }
 
-        public async Task<Estilo> GetByIdAsync(string estilo_id)
+        public async Task<EstiloDetallado> GetDetailsByIdAsync(string estilo_id)
+        {
+            //Validamos que el estilo exista con ese Id
+            var unEstilo = await _estiloRepository
+                .GetDetailsByIdAsync(estilo_id);
+
+            if (string.IsNullOrEmpty(unEstilo.Id))
+                throw new AppValidationException($"Estilo no encontrado con el id {estilo_id}");
+
+            return unEstilo;
+        }
+
+        public async Task<IEnumerable<Cerveza>> GetAssociatedBeersAsync(string estilo_id)
         {
             //Validamos que el estilo exista con ese Id
             var unEstilo = await _estiloRepository
@@ -28,29 +40,17 @@ namespace CervezasColombia_CS_API_Mongo.Services
             if (string.IsNullOrEmpty(unEstilo.Id))
                 throw new AppValidationException($"Estilo no encontrado con el id {estilo_id}");
 
-            return unEstilo;
+            //Si el estilo existe, validamos que tenga cervezas asociadas
+            // Validamos que el estilo no tenga asociadas cervezas
+            var cantidadCervezasAsociadas = await _estiloRepository
+                .GetTotalAssociatedBeersAsync(estilo_id);
+
+            if (cantidadCervezasAsociadas == 0)
+                throw new AppValidationException($"No existen cervezas asociadas al estilo {unEstilo.Nombre}");
+
+            return await _estiloRepository
+                .GetAssociatedBeersAsync(estilo_id);
         }
-
-        //public async Task<IEnumerable<Cerveza>> GetAssociatedBeersAsync(int estilo_id)
-        //{
-        //    //Validamos que el estilo exista con ese Id
-        //    var unEstilo = await _estiloRepository
-        //        .GetByIdAsync(estilo_id);
-
-        //    if (unEstilo.Id == 0)
-        //        throw new AppValidationException($"Estilo no encontrado con el id {estilo_id}");
-
-        //    //Si el estilo existe, validamos que tenga cervezas asociadas
-        //    // Validamos que el estilo no tenga asociadas cervezas
-        //    var cantidadCervezasAsociadas = await _estiloRepository
-        //        .GetTotalAssociatedBeersAsync(estilo_id);
-
-        //    if (cantidadCervezasAsociadas == 0)
-        //        throw new AppValidationException($"No Existen cervezas asociadas al estilo {unEstilo.Nombre}");
-
-        //    return await _estiloRepository
-        //        .GetAssociatedBeersAsync(estilo_id);
-        //}
 
         public async Task<Estilo> CreateAsync(Estilo unEstilo)
         {
@@ -127,36 +127,37 @@ namespace CervezasColombia_CS_API_Mongo.Services
             return estiloExistente;
         }
 
-        //public async Task DeleteAsync(int estilo_id)
-        //{
-        //    // validamos que el estilo a eliminar si exista con ese Id
-        //    var estiloExistente = await _estiloRepository
-        //        .GetByIdAsync(estilo_id);
+        public async Task DeleteAsync(string estilo_id)
+        {
+            // validamos que el estilo a eliminar si exista con ese Id
+            var estiloExistente = await _estiloRepository
+                .GetByIdAsync(estilo_id);
 
-        //    if (estiloExistente.Id == 0)
-        //        throw new AppValidationException($"No existe un estilo con el Id {estilo_id} que se pueda eliminar");
+            if (string.IsNullOrEmpty(estiloExistente.Id))
+                throw new AppValidationException($"No existe un estilo con el Id {estilo_id} que se pueda eliminar");
 
-        //    // Validamos que el estilo no tenga asociadas cervezas
-        //    var cantidadCervezasAsociadas = await _estiloRepository
-        //        .GetTotalAssociatedBeersAsync(estiloExistente.Id);
+            //TODO: Validar que el estilo no tenga cervezas asociadas antes de borrarlo
+            // Validamos que el estilo no tenga asociadas cervezas
+            //var cantidadCervezasAsociadas = await _estiloRepository
+            //    .GetTotalAssociatedBeersAsync(estiloExistente.Id);
 
-        //    if (cantidadCervezasAsociadas > 0)
-        //        throw new AppValidationException($"Existen {cantidadCervezasAsociadas} cervezas " +
-        //            $"asociadas al estilo {estiloExistente.Nombre}. No se puede eliminar");
+            //if (cantidadCervezasAsociadas > 0)
+            //    throw new AppValidationException($"Existen {cantidadCervezasAsociadas} cervezas " +
+            //        $"asociadas al estilo {estiloExistente.Nombre}. No se puede eliminar");
 
-        //    //Si existe y no tiene cervezas asociadas, se puede eliminar
-        //    try
-        //    {
-        //        bool resultadoAccion = await _estiloRepository
-        //            .DeleteAsync(estiloExistente);
+            //Si existe y no tiene cervezas asociadas, se puede eliminar
+            try
+            {
+                bool resultadoAccion = await _estiloRepository
+                    .DeleteAsync(estiloExistente);
 
-        //        if (!resultadoAccion)
-        //            throw new AppValidationException("Operación ejecutada pero no generó cambios en la DB");
-        //    }
-        //    catch (DbOperationException error)
-        //    {
-        //        throw error;
-        //    }
-        //}
+                if (!resultadoAccion)
+                    throw new AppValidationException("Operación ejecutada pero no generó cambios en la DB");
+            }
+            catch (DbOperationException error)
+            {
+                throw error;
+            }
+        }
     }
 }

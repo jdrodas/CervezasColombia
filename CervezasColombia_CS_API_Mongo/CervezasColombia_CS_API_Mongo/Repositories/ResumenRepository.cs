@@ -48,18 +48,26 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
 
             unResumen.Envasados = totalEnvasados;
 
-            ////Total Cervecerías
-            //sentenciaSQL = "SELECT COUNT(id) total FROM cervecerias";
-            //unResumen.Cervecerias = await conexion.QueryFirstAsync<int>(sentenciaSQL, new DynamicParameters());
+            //Total ingredientes
+            var coleccionIngredientes = conexion.GetCollection<Ingrediente>("ingredientes");
+            var totalIngredientes = await coleccionIngredientes
+                .EstimatedDocumentCountAsync();
 
-            ////Total Cervezas
-            //sentenciaSQL = "SELECT COUNT(id) total FROM cervezas";
-            //unResumen.Cervezas = await conexion.QueryFirstAsync<int>(sentenciaSQL, new DynamicParameters());
+            unResumen.Ingredientes = totalIngredientes;
 
-            ////Total ingredientes
-            //sentenciaSQL = "SELECT COUNT(id) total FROM ingredientes";
-            //unResumen.Ingredientes = await conexion.QueryFirstAsync<int>(sentenciaSQL, new DynamicParameters());
+            //Total Cervecerías
+            var coleccionCervecerias = conexion.GetCollection<Cerveceria>("cervecerias");
+            var totalCervecerias = await coleccionCervecerias
+                .EstimatedDocumentCountAsync();
 
+            unResumen.Cervecerias = totalCervecerias;
+
+            //Total Cervezas
+            var coleccionCervezas = conexion.GetCollection<Cerveza>("cervezas");
+            var totalCervezas = await coleccionCervezas
+                .EstimatedDocumentCountAsync();
+
+            unResumen.Cervezas = totalCervezas;
 
             return unResumen;
         }

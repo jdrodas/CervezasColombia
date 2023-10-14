@@ -46,33 +46,26 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             return unEstilo;
         }
 
-        //public async Task<EstiloDetallado> GetDetailsByIdAsync(int estilo_id)
-        //{
-        //    EstiloDetallado unEstilo = new();
+        public async Task<EstiloDetallado> GetDetailsByIdAsync(string estilo_id)
+        {
+            EstiloDetallado unEstilo = new();
 
-        //    var conexion = contextoDB.CreateConnection();
+            var conexion = contextoDB.CreateConnection();
+            var coleccionEstilos = conexion.GetCollection<EstiloDetallado>("estilos");
 
-        //    DynamicParameters parametrosSentencia = new();
-        //    parametrosSentencia.Add("@estilo_id", estilo_id,
-        //                            DbType.Int32, ParameterDirection.Input);
+            var resultado = await coleccionEstilos
+                .Find(estilo => estilo.Id == estilo_id)
+                .FirstOrDefaultAsync();
 
-        //    string sentenciaSQL = "SELECT id, nombre " +
-        //                          "FROM estilos " +
-        //                          "WHERE id = @estilo_id ";
+            if (resultado is not null)
+            {
+                unEstilo = resultado;
+                var lasCervezas =  await GetAssociatedBeersAsync(estilo_id);
+                unEstilo.Cervezas = lasCervezas.ToList();
+            }
 
-        //    var resultado = await conexion.QueryAsync<EstiloDetallado>(sentenciaSQL,
-        //                        parametrosSentencia);
-
-        //    if (resultado.Any())
-        //    {
-        //        unEstilo = resultado.First();
-
-        //        var lasCervezas = await GetAssociatedBeersAsync(unEstilo.Id);
-        //        unEstilo.Cervezas = lasCervezas.ToList();
-        //    }
-
-        //    return unEstilo;
-        //}
+            return unEstilo;
+        }
 
         public async Task<Estilo> GetByNameAsync(string estilo_nombre)
         {
@@ -91,44 +84,35 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             return unEstilo;
         }
 
-        //public async Task<int> GetTotalAssociatedBeersAsync(int estilo_id)
-        //{
-        //    var conexion = contextoDB.CreateConnection();
+        public async Task<int> GetTotalAssociatedBeersAsync(string estilo_id)
+        {
+            var unEstilo = await GetByIdAsync(estilo_id);
 
-        //    DynamicParameters parametrosSentencia = new();
-        //    parametrosSentencia.Add("@estilo_id", estilo_id,
-        //                            DbType.Int32, ParameterDirection.Input);
+            var conexion = contextoDB.CreateConnection();
+            var coleccionCervezas = conexion.GetCollection<Cerveza>("cervezas");
 
-        //    string sentenciaSQL = "SELECT COUNT(id) totalCervezas " +
-        //                          "FROM cervezas " +
-        //                          "WHERE estilo_id = @estilo_id";
+            var lasCervezas = await coleccionCervezas
+                .Find(cerveza => cerveza.Estilo == unEstilo.Nombre)
+                .ToListAsync();
 
+            int totalCervezas = lasCervezas.Count();
 
-        //    var totalCervezas = await conexion.QueryFirstAsync<int>(sentenciaSQL,
-        //                            parametrosSentencia);
+            return totalCervezas;
+        }
 
-        //    return totalCervezas;
-        //}
+        public async Task<IEnumerable<Cerveza>> GetAssociatedBeersAsync(string estilo_id)
+        {
+            var unEstilo = await GetByIdAsync(estilo_id);
 
-        //public async Task<IEnumerable<Cerveza>> GetAssociatedBeersAsync(int estilo_id)
-        //{
-        //    var conexion = contextoDB.CreateConnection();
+            var conexion = contextoDB.CreateConnection();
+            var coleccionCervezas = conexion.GetCollection<Cerveza>("cervezas");
 
-        //    DynamicParameters parametrosSentencia = new();
-        //    parametrosSentencia.Add("@estilo_id", estilo_id,
-        //                            DbType.Int32, ParameterDirection.Input);
+            var lasCervezas = await coleccionCervezas
+                .Find(cerveza => cerveza.Estilo == unEstilo.Nombre)
+                .ToListAsync();
 
-        //    string sentenciaSQL = "SELECT cerveza_id id, cerveza nombre, cerveceria, cerveceria_id, estilo, estilo_id, " +
-        //                            "ibu, abv, rango_ibu, rango_abv " +
-        //                            "FROM v_info_cervezas " +
-        //                            "WHERE estilo_id = @estilo_id " +
-        //                            "ORDER BY cerveza_id DESC";
-
-        //    var resultadoCervezas = await conexion.QueryAsync<Cerveza>(sentenciaSQL,
-        //                                parametrosSentencia);
-
-        //    return resultadoCervezas;
-        //}
+            return lasCervezas;
+        }
 
         public async Task<bool> CreateAsync(Estilo unEstilo)
         {
@@ -166,34 +150,20 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
         }
 
 
-        //public async Task<bool> DeleteAsync(Estilo unEstilo)
-        //{
-        //    bool resultadoAccion = false;
+        public async Task<bool> DeleteAsync(Estilo unEstilo)
+        {
+            bool resultadoAccion = false;
 
-        //    try
-        //    {
-        //        var conexion = contextoDB.CreateConnection();
+            var conexion = contextoDB.CreateConnection();
+            var coleccionEstilos = conexion.GetCollection<Estilo>("estilos");
 
-        //        string procedimiento = "core.p_elimina_estilo";
-        //        var parametros = new
-        //        {
-        //            p_id = unEstilo.Id
-        //        };
+            var resultado = await coleccionEstilos
+                .DeleteOneAsync(estilo => estilo.Id == unEstilo.Id);
 
-        //        var cantidad_filas = await conexion.ExecuteAsync(
-        //            procedimiento,
-        //            parametros,
-        //            commandType: CommandType.StoredProcedure);
+            if (resultado.IsAcknowledged)
+                resultadoAccion = true;
 
-        //        if (cantidad_filas != 0)
-        //            resultadoAccion = true;
-        //    }
-        //    catch (NpgsqlException error)
-        //    {
-        //        throw new DbOperationException(error.Message);
-        //    }
-
-        //    return resultadoAccion;
-        //}
+            return resultadoAccion;
+        }
     }
 }

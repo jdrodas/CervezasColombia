@@ -44,6 +44,68 @@ db.createCollection("unidades_volumen");
 
 
 -- Creamos las collecciones ... usando un json schema para validación
+db.createCollection("cervecerias", {
+   validator: {
+      $jsonSchema: {
+         bsonType: "object",
+         title: "Las Cervecerias que hacen las cervezas",
+         required: [ "nombre","sitio_web","instagram","ubicacion" ],
+         properties: {
+            nombre: {
+               bsonType: "string",
+               description: "'nombre' Debe ser una cadena de caracteres y no puede ser nulo"
+            },
+            sitio_web: {
+               bsonType: "string",
+               description: "'sitio_web' Debe ser una cadena de caracteres y no puede ser nulo"
+            },
+            instagram: {
+               bsonType: "string",
+               description: "'instagram' Debe ser una cadena de caracteres y no puede ser nulo"
+            },
+            ubicacion: {
+               bsonType: "string",
+               description: "'ubicacion' Debe ser una cadena de caracteres y no puede ser nulo"
+            }
+         }
+      }
+   }
+} );
+
+db.createCollection("cervezas", {
+   validator: {
+      $jsonSchema: {
+         bsonType: "object",
+         title: "Las Cervezas Artesanales de Colombia",
+         required: [ "nombre","cerveceria","estilo","ibu","abv" ],
+         properties: {
+            nombre: {
+               bsonType: "string",
+               description: "'nombre' Debe ser una cadena de caracteres y no puede ser nulo"
+            },
+            cerveceria: {
+               bsonType: "string",
+               description: "'cerveceria' Debe ser una cadena de caracteres y no puede ser nulo"
+            },
+            estilo: {
+               bsonType: "string",
+               description: "'estilo' Debe ser una cadena de caracteres y no puede ser nulo"
+            },
+            ibu: {
+               bsonType: "number",
+               minimum: 0,
+               description: "'ibu' Debe ser numérico mínimo 0 y no puede ser nulo"
+            },
+            abv: {
+               bsonType: "number",
+               minimum: 0,
+               description: "'abv' Debe ser numérico mínimo 0 y no puede ser nulo"
+            },            
+         }
+      }
+   }
+} );
+
 
 db.createCollection("envasados", {
    validator: {
