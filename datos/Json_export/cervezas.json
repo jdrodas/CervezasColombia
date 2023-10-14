@@ -418,5 +418,12 @@
     "estilo": "New England IPA",
     "ibu": 0,
     "abv": 7
+  },
+  {
+    "nombre": "La Provinciana",
+    "cerveceria": "Torrealta Cervecería",
+    "estilo": "French Saison",
+    "ibu": 0,
+    "abv": 6.5
   }
 ]

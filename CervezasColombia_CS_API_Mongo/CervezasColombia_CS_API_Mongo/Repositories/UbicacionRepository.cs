@@ -47,32 +47,51 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             return unaUbicacion;
         }
 
-        //public async Task<Ubicacion> GetByNameAsync(string ubicacion_municipio, string ubicacion_departamento)
-        //{
-        //    Ubicacion unaUbicacion = new Ubicacion();
+        public async Task<Ubicacion> GetByNameAsync(string ubicacion_municipio, string ubicacion_departamento)
+        {
+            Ubicacion unaUbicacion = new();
 
-        //    using (var conexion = contextoDB.CreateConnection())
-        //    {
-        //        DynamicParameters parametrosSentencia = new DynamicParameters();
-        //        parametrosSentencia.Add("@ubicacion_municipio", ubicacion_municipio,
-        //                                DbType.String, ParameterDirection.Input);
-        //        parametrosSentencia.Add("@ubicacion_departamento", ubicacion_departamento,
-        //                                DbType.String, ParameterDirection.Input);
+            var conexion = contextoDB.CreateConnection();
+            var coleccionUbicaciones = conexion.GetCollection<Ubicacion>("ubicaciones");
 
-        //        string sentenciaSQL = "SELECT id, municipio, departamento, latitud, longitud " +
-        //                              "FROM ubicaciones " +
-        //                              "WHERE municipio = @ubicacion_municipio " +
-        //                              "AND departamento = @ubicacion_departamento";
+            var builder = Builders<Ubicacion>.Filter;
+            var filtro = builder.And(
+                builder.Eq(ubicacion => ubicacion.Municipio, ubicacion_municipio),
+                builder.Eq(ubicacion => ubicacion.Departamento, ubicacion_departamento));
 
-        //        var resultado = await conexion.QueryAsync<Ubicacion>(sentenciaSQL,
-        //            parametrosSentencia);
+            var resultado = await coleccionUbicaciones
+                .Find(filtro)
+                .FirstOrDefaultAsync();
 
-        //        if (resultado.Count() > 0)
-        //            unaUbicacion = resultado.First();
-        //    }
+            if (resultado is not null)
+                unaUbicacion = resultado;
 
-        //    return unaUbicacion;
-        //}
+            return unaUbicacion;
+        }
+
+        public async Task<Ubicacion> GetByNameAsync(string ubicacion_nombre)
+        {
+            Ubicacion unaUbicacion = new();
+
+            var conexion = contextoDB.CreateConnection();
+            var coleccionUbicaciones = conexion.GetCollection<Ubicacion>("ubicaciones");
+
+            string[] partesUbicacion = ubicacion_nombre.Split(',');
+
+            var builder = Builders<Ubicacion>.Filter;
+            var filtro = builder.And(
+                builder.Eq(ubicacion => ubicacion.Municipio, partesUbicacion[0].Trim()),
+                builder.Eq(ubicacion => ubicacion.Departamento, partesUbicacion[1].Trim()));
+
+            var resultado = await coleccionUbicaciones
+                .Find(filtro)
+                .FirstOrDefaultAsync();
+
+            if (resultado is not null)
+                unaUbicacion = resultado;
+
+            return unaUbicacion;
+        }
 
         //public async Task<int> GetTotalAssociatedBreweriesAsync(int ubicacion_id)
         //{
@@ -113,39 +132,23 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
         //    }
         //}
 
-        //public async Task<bool> CreateAsync(Ubicacion unaUbicacion)
-        //{
-        //    bool resultadoAccion = false;
+        public async Task<bool> CreateAsync(Ubicacion unaUbicacion)
+        {
+            bool resultadoAccion = false;
 
-        //    try
-        //    {
-        //        using (var conexion = contextoDB.CreateConnection())
-        //        {
-        //            string procedimiento = "core.p_inserta_ubicacion";
-        //            var parametros = new
-        //            {
-        //                p_municipio = unaUbicacion.Municipio,
-        //                p_departamento = unaUbicacion.Departamento,
-        //                p_latitud = unaUbicacion.Latitud,
-        //                p_longitud = unaUbicacion.Longitud
-        //            };
+            var conexion = contextoDB.CreateConnection();
+            var coleccionUbicaciones = conexion.GetCollection<Ubicacion>("ubicaciones");
 
-        //            var cantidad_filas = await conexion.ExecuteAsync(
-        //                procedimiento,
-        //                parametros,
-        //                commandType: CommandType.StoredProcedure);
+            await coleccionUbicaciones
+                .InsertOneAsync(unaUbicacion);
 
-        //            if (cantidad_filas != 0)
-        //                resultadoAccion = true;
-        //        }
-        //    }
-        //    catch (NpgsqlException error)
-        //    {
-        //        throw new DbOperationException(error.Message);
-        //    }
+            var resultado = await GetByNameAsync(unaUbicacion.Municipio, unaUbicacion.Departamento);
 
-        //    return resultadoAccion;
-        //}
+            if (resultado is not null)
+                resultadoAccion = true;
+
+            return resultadoAccion;
+        }
 
         //public async Task<bool> UpdateAsync(Ubicacion unaUbicacion)
         //{

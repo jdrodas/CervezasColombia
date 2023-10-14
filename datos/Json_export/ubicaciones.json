@@ -214,5 +214,11 @@
     "departamento": "Atlántico",
     "latitud": 10.909722,
     "longitud": -74.785833
+  },
+  {
+    "municipio": "El Retiro",
+    "departamento": "Antioquia",
+    "latitud": 6.059722,
+    "longitud": -75.503889
   }
 ]

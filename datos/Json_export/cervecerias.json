@@ -64,5 +64,11 @@
     "sitio_web": "https://www.bruder.com.co/",
     "instagram": "bruder_cerveza",
     "ubicacion": "Tunja, Boyacá"
+  },
+  {
+    "nombre": "Torrealta Cervecería",
+    "sitio_web": "https://www.facebook.com/p/TorreAlta-Brewing-100063982125552",
+    "instagram": "torrealta_cerveceria",
+    "ubicacion": "El Retiro, Antioquia"
   }
 ]

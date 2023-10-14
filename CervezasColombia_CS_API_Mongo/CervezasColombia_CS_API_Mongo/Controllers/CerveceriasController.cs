@@ -1,5 +1,5 @@
-﻿using CervezasColombia_CS_API_Mongo.Models;
-using CervezasColombia_CS_API_Mongo.Helpers;
+﻿using CervezasColombia_CS_API_Mongo.Helpers;
+using CervezasColombia_CS_API_Mongo.Models;
 using CervezasColombia_CS_API_Mongo.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,33 +7,33 @@ namespace CervezasColombia_CS_API_Mongo.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UbicacionesController : Controller
+    public class CerveceriasController : Controller
     {
-        private readonly UbicacionService _ubicacionService;
+        private readonly CerveceriaService _cerveceriaService;
 
-        public UbicacionesController(UbicacionService ubicacionService)
+        public CerveceriasController(CerveceriaService cerveceriaService)
         {
-            _ubicacionService = ubicacionService;
+            _cerveceriaService = cerveceriaService;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {
-            var lasUbicaciones = await _ubicacionService
+            var lasCervecerias = await _cerveceriaService
                 .GetAllAsync();
 
-            return Ok(lasUbicaciones);
+            return Ok(lasCervecerias);
         }
 
-        [HttpGet("{ubicacion_id:length(24)}")]
-        public async Task<IActionResult> GetByIdAsync(string ubicacion_id)
+        [HttpGet("{cerveceria_id:length(24)}")]
+        public async Task<IActionResult> GetByIdAsync(string cerveceria_id)
         {
             try
             {
-                var unaUbicacion = await _ubicacionService
-                    .GetByIdAsync(ubicacion_id);
+                var unaCerveceriaDetallada = await _cerveceriaService
+                    .GetByIdAsync(cerveceria_id);
 
-                return Ok(unaUbicacion);
+                return Ok(unaCerveceriaDetallada);
             }
             catch (AppValidationException error)
             {
@@ -41,15 +41,15 @@ namespace CervezasColombia_CS_API_Mongo.Controllers
             }
         }
 
-        //[HttpGet("{ubicacion_id:int}/Cervecerias")]
-        //public async Task<IActionResult> GetAssociatedBreweriesAsync(int ubicacion_id)
+        //[HttpGet("{cerveceria_id:int}/Cervezas")]
+        //public async Task<IActionResult> GetAssociatedBeersAsync(int cerveceria_id)
         //{
         //    try
         //    {
-        //        var lasCerveceriasPorUbicacion = await _ubicacionService
-        //            .GetAssociatedBreweriesAsync(ubicacion_id);
+        //        var lasCervezasPorCerveceria = await _cerveceriaService
+        //            .GetAssociatedBeersAsync(cerveceria_id);
 
-        //        return Ok(lasCerveceriasPorUbicacion);
+        //        return Ok(lasCervezasPorCerveceria);
         //    }
         //    catch (AppValidationException error)
         //    {
@@ -58,14 +58,14 @@ namespace CervezasColombia_CS_API_Mongo.Controllers
         //}
 
         [HttpPost]
-        public async Task<IActionResult> CreateAsync(Ubicacion unaUbicacion)
+        public async Task<IActionResult> CreateAsync(Cerveceria unaCerveceria)
         {
             try
             {
-                var ubicacionCreada = await _ubicacionService
-                    .CreateAsync(unaUbicacion);
+                var cerveceriaCreada = await _cerveceriaService
+                    .CreateAsync(unaCerveceria);
 
-                return Ok(ubicacionCreada);
+                return Ok(cerveceriaCreada);
             }
             catch (AppValidationException error)
             {
@@ -77,15 +77,15 @@ namespace CervezasColombia_CS_API_Mongo.Controllers
             }
         }
 
-        //[HttpPut("{ubicacion_id:int}")]
-        //public async Task<IActionResult> UpdateAsync(int ubicacion_id, Ubicacion unaUbicacion)
+        //[HttpPut("{cerveceria_id:int}")]
+        //public async Task<IActionResult> UpdateAsync(int cerveceria_id, Cerveceria unaCerveceria)
         //{
         //    try
         //    {
-        //        var ubicacionActualizada = await _ubicacionService
-        //            .UpdateAsync(ubicacion_id, unaUbicacion);
+        //        var cerveceriaActualizada = await _cerveceriaService
+        //            .UpdateAsync(cerveceria_id, unaCerveceria);
 
-        //        return Ok(ubicacionActualizada);
+        //        return Ok(cerveceriaActualizada);
 
         //    }
         //    catch (AppValidationException error)
@@ -98,15 +98,15 @@ namespace CervezasColombia_CS_API_Mongo.Controllers
         //    }
         //}
 
-        //[HttpDelete("{ubicacion_id:int}")]
-        //public async Task<IActionResult> DeleteAsync(int ubicacion_id)
+        //[HttpDelete("{cerveceria_id:int}")]
+        //public async Task<IActionResult> DeleteAsync(int cerveceria_id)
         //{
         //    try
         //    {
-        //        await _ubicacionService
-        //            .DeleteAsync(ubicacion_id);
+        //        await _cerveceriaService
+        //            .DeleteAsync(cerveceria_id);
 
-        //        return Ok($"Ubicación {ubicacion_id} fue eliminada");
+        //        return Ok($"Cervecería {cerveceria_id} fue eliminada");
 
         //    }
         //    catch (AppValidationException error)
