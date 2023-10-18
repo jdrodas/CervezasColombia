@@ -79,50 +79,46 @@ namespace CervezasColombia_CS_API_Mongo.Controllers
             }
         }
 
-        //TODO: CerveceriasController: Actualizar Cerveceria
+        [HttpPut("{cerveceria_id:length(24)}")]
+        public async Task<IActionResult> UpdateAsync(string cerveceria_id, Cerveceria unaCerveceria)
+        {
+            try
+            {
+                var cerveceriaActualizada = await _cerveceriaService
+                    .UpdateAsync(cerveceria_id, unaCerveceria);
 
-        //[HttpPut("{cerveceria_id:int}")]
-        //public async Task<IActionResult> UpdateAsync(int cerveceria_id, Cerveceria unaCerveceria)
-        //{
-        //    try
-        //    {
-        //        var cerveceriaActualizada = await _cerveceriaService
-        //            .UpdateAsync(cerveceria_id, unaCerveceria);
+                return Ok(cerveceriaActualizada);
 
-        //        return Ok(cerveceriaActualizada);
+            }
+            catch (AppValidationException error)
+            {
+                return BadRequest($"Error de validación: {error.Message}");
+            }
+            catch (DbOperationException error)
+            {
+                return BadRequest($"Error de operacion en DB: {error.Message}");
+            }
+        }
 
-        //    }
-        //    catch (AppValidationException error)
-        //    {
-        //        return BadRequest($"Error de validación: {error.Message}");
-        //    }
-        //    catch (DbOperationException error)
-        //    {
-        //        return BadRequest($"Error de operacion en DB: {error.Message}");
-        //    }
-        //}
+        [HttpDelete("{cerveceria_id:length(24)}")]
+        public async Task<IActionResult> DeleteAsync(string cerveceria_id)
+        {
+            try
+            {
+                await _cerveceriaService
+                    .DeleteAsync(cerveceria_id);
 
-        //TODO: CerveceriasController: Borrar Cerveceria
+                return Ok($"Cervecería {cerveceria_id} fue eliminada");
 
-        //[HttpDelete("{cerveceria_id:int}")]
-        //public async Task<IActionResult> DeleteAsync(int cerveceria_id)
-        //{
-        //    try
-        //    {
-        //        await _cerveceriaService
-        //            .DeleteAsync(cerveceria_id);
-
-        //        return Ok($"Cervecería {cerveceria_id} fue eliminada");
-
-        //    }
-        //    catch (AppValidationException error)
-        //    {
-        //        return BadRequest($"Error de validación: {error.Message}");
-        //    }
-        //    catch (DbOperationException error)
-        //    {
-        //        return BadRequest($"Error de operacion en DB: {error.Message}");
-        //    }
-        //}
+            }
+            catch (AppValidationException error)
+            {
+                return BadRequest($"Error de validación: {error.Message}");
+            }
+            catch (DbOperationException error)
+            {
+                return BadRequest($"Error de operacion en DB: {error.Message}");
+            }
+        }
     }
 }

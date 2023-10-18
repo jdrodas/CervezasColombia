@@ -14,7 +14,7 @@ namespace CervezasColombia_CS_API_Mongo.Interfaces
         //public Task<IEnumerable<Cerveza>> GetAssociatedBeersAsync(int cerveceria_id);
         //public Task<Ubicacion> GetAssociatedLocationAsync(int cerveceria_id);
         public Task<bool> CreateAsync(Cerveceria unaCerveceria);
-        //public Task<bool> UpdateAsync(Cerveceria unaCerveceria);
-        //public Task<bool> DeleteAsync(Cerveceria unaCerveceria);
+        public Task<bool> UpdateAsync(Cerveceria unaCerveceria);
+        public Task<bool> DeleteAsync(Cerveceria unaCerveceria);
     }
 }

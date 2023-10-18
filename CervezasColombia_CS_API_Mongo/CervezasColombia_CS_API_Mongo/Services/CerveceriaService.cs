@@ -122,127 +122,124 @@ namespace CervezasColombia_CS_API_Mongo.Services
             return cerveceriaExistente;
         }
 
-        //TODO: CerveceriaService: Actualizar cervecería
+        public async Task<Cerveceria> UpdateAsync(string cerveceria_id, Cerveceria unaCerveceria)
+        {
+            //Validamos que los parametros sean consistentes
+            if (cerveceria_id != unaCerveceria.Id)
+                throw new AppValidationException($"Inconsistencia en el Id de la cervecería a actualizar. Verifica argumentos");
 
-        //public async Task<Cerveceria> UpdateAsync(int cerveceria_id, Cerveceria unaCerveceria)
-        //{
-        //    //Validamos que los parametros sean consistentes
-        //    if (cerveceria_id != unaCerveceria.Id)
-        //        throw new AppValidationException($"Inconsistencia en el Id de la cervecería a actualizar. Verifica argumentos");
+            //Validamos que la Cerveceria exista con ese Id
+            var cerveceriaExistente = await _cerveceriaRepository
+                .GetByIdAsync(cerveceria_id);
 
-        //    //Validamos que la Cerveceria exista con ese Id
-        //    var cerveceriaExistente = await _cerveceriaRepository
-        //        .GetByIdAsync(cerveceria_id);
+            if (string.IsNullOrEmpty(cerveceriaExistente.Id))
+                throw new AppValidationException($"No existe una cervecería registrada con el id {unaCerveceria.Id}");
 
-        //    if (cerveceriaExistente.Id == 0)
-        //        throw new AppValidationException($"No existe una cervecería registrada con el id {unaCerveceria.Id}");
+            //Validamos que la cerveceria tenga nombre
+            if (unaCerveceria.Nombre.Length == 0)
+                throw new AppValidationException("No se puede actualizar una cervecería con nombre nulo");
 
-        //    //Validamos que la cerveceria tenga nombre
-        //    if (unaCerveceria.Nombre.Length == 0)
-        //        throw new AppValidationException("No se puede actualizar una cervecería con nombre nulo");
+            //Validamos que el nombre no exista previamente en otra cervecería diferente a la que se está actualizando
+            cerveceriaExistente = await _cerveceriaRepository
+                .GetByNameAsync(unaCerveceria.Nombre);
 
-        //    //Validamos que el nombre no exista previamente en otra cervecería diferente a la que se está actualizando
-        //    cerveceriaExistente = await _cerveceriaRepository
-        //        .GetByNameAsync(unaCerveceria.Nombre);
+            if (unaCerveceria.Id != cerveceriaExistente.Id)
+                throw new AppValidationException($"Ya existe otra cervecería con el nombre {unaCerveceria.Nombre}. " +
+                    $"No se puede Actualizar");
 
-        //    if (unaCerveceria.Id != cerveceriaExistente.Id)
-        //        throw new AppValidationException($"Ya existe otra cervecería con el nombre {unaCerveceria.Nombre}. " +
-        //            $"No se puede Actualizar");
+            //Validamos que la cerveceria tenga sitio_web
+            if (unaCerveceria.Sitio_Web.Length == 0)
+                throw new AppValidationException("No se puede actualizar una cervecería con Sitio Web nulo");
 
-        //    //Validamos que la cerveceria tenga sitio_web
-        //    if (unaCerveceria.Sitio_Web.Length == 0)
-        //        throw new AppValidationException("No se puede actualizar una cervecería con Sitio Web nulo");
+            //Validamos que el sitio_web no exista previamente en otra cervecería diferente a la que se está actualizando
+            cerveceriaExistente = await _cerveceriaRepository
+                .GetBySitioWebAsync(unaCerveceria.Sitio_Web);
 
-        //    //Validamos que el sitio_web no exista previamente en otra cervecería diferente a la que se está actualizando
-        //    cerveceriaExistente = await _cerveceriaRepository
-        //        .GetBySitioWebAsync(unaCerveceria.Sitio_Web);
+            if (unaCerveceria.Id != cerveceriaExistente.Id)
+                throw new AppValidationException($"Ya existe otra cervecería con el sitio web {unaCerveceria.Sitio_Web}. " +
+                    $"No se puede Actualizar");
 
-        //    if (unaCerveceria.Id != cerveceriaExistente.Id)
-        //        throw new AppValidationException($"Ya existe otra cervecería con el sitio web {unaCerveceria.Sitio_Web}. " +
-        //            $"No se puede Actualizar");
+            //Validamos que la cerveceria tenga instagram
+            if (unaCerveceria.Instagram.Length == 0)
+                throw new AppValidationException("No se puede actualizar una cervecería con Instagram nulo");
 
-        //    //Validamos que la cerveceria tenga instagram
-        //    if (unaCerveceria.Instagram.Length == 0)
-        //        throw new AppValidationException("No se puede actualizar una cervecería con Instagram nulo");
+            //Validamos que el instagram no exista previamente en otra cervecería diferente a la que se está actualizando
+            cerveceriaExistente = await _cerveceriaRepository
+                .GetByInstagramAsync(unaCerveceria.Instagram);
 
-        //    //Validamos que el instagram no exista previamente en otra cervecería diferente a la que se está actualizando
-        //    cerveceriaExistente = await _cerveceriaRepository
-        //        .GetByInstagramAsync(unaCerveceria.Instagram);
+            if (unaCerveceria.Id != cerveceriaExistente.Id)
+                throw new AppValidationException($"Ya existe otra cervecería con el instagram {unaCerveceria.Instagram}. " +
+                    $"No se puede Actualizar");
 
-        //    if (unaCerveceria.Id != cerveceriaExistente.Id)
-        //        throw new AppValidationException($"Ya existe otra cervecería con el instagram {unaCerveceria.Instagram}. " +
-        //            $"No se puede Actualizar");
+            //Validamos que la cerveceria tenga ubicación
+            if (unaCerveceria.Ubicacion.Length == 0)
+                throw new AppValidationException("No se puede actualizar una cervecería con ubicación nula");
 
-        //    //Validamos que la cerveceria tenga ubicación
-        //    if (unaCerveceria.Ubicacion.Departamento.Length == 0 ||
-        //        unaCerveceria.Ubicacion.Municipio.Length == 0)
-        //        throw new AppValidationException("No se puede actualizar una cervecería con ubicación nula");
-
-        //    //Validamos que la cerveceria tenga ubicación válida
-        //    var ubicacionExistente = await _ubicacionRepository
-        //                    .GetByNameAsync(unaCerveceria.Ubicacion.Municipio, unaCerveceria.Ubicacion.Departamento);
+            //Validamos que la cerveceria tenga ubicación válida
+            var ubicacionExistente = await _ubicacionRepository
+                            .GetByNameAsync(unaCerveceria.Ubicacion);
 
 
-        //    if (ubicacionExistente.Id == 0)
-        //        throw new AppValidationException("No se puede actualizar una cervecería sin ubicación conocida");
+            if (string.IsNullOrEmpty(ubicacionExistente.Id))
+                throw new AppValidationException("No se puede actualizar una cervecería sin ubicación conocida");
 
-        //    unaCerveceria.Ubicacion = ubicacionExistente;
+            unaCerveceria.Ubicacion = ubicacionExistente.Municipio + ", " + ubicacionExistente.Departamento;
 
-        //    //Validamos que haya al menos un cambio en las propiedades
-        //    if (unaCerveceria.Equals(cerveceriaExistente))
-        //        throw new AppValidationException("No hay cambios en los atributos de la cervecería. No se realiza actualización.");
+            //Validamos que haya al menos un cambio en las propiedades
+            if (unaCerveceria.Equals(cerveceriaExistente))
+                throw new AppValidationException("No hay cambios en los atributos de la cervecería. No se realiza actualización.");
 
-        //    try
-        //    {
-        //        bool resultadoAccion = await _cerveceriaRepository
-        //            .UpdateAsync(unaCerveceria);
+            try
+            {
+                bool resultadoAccion = await _cerveceriaRepository
+                    .UpdateAsync(unaCerveceria);
 
-        //        if (!resultadoAccion)
-        //            throw new AppValidationException("Operación ejecutada pero no generó cambios en la DB");
+                if (!resultadoAccion)
+                    throw new AppValidationException("Operación ejecutada pero no generó cambios en la DB");
 
-        //        cerveceriaExistente = await _cerveceriaRepository
-        //            .GetByNameAsync(unaCerveceria.Nombre!);
-        //    }
-        //    catch (DbOperationException error)
-        //    {
-        //        throw error;
-        //    }
+                cerveceriaExistente = await _cerveceriaRepository
+                    .GetByNameAsync(unaCerveceria.Nombre!);
+            }
+            catch (DbOperationException error)
+            {
+                throw error;
+            }
 
-        //    return cerveceriaExistente;
-        //}
+            return cerveceriaExistente;
+        }
 
-        //TODO: CerveceriaService: Borrar Cervecería
+        public async Task DeleteAsync(string cerveceria_id)
+        {
+            // validamos que el cerveceria a eliminar si exista con ese Id
+            var cerveceriaExistente = await _cerveceriaRepository
+                .GetByIdAsync(cerveceria_id);
 
-        //public async Task DeleteAsync(int cerveceria_id)
-        //{
-        //    // validamos que el cerveceria a eliminar si exista con ese Id
-        //    var cerveceriaExistente = await _cerveceriaRepository
-        //        .GetByIdAsync(cerveceria_id);
+            if (string.IsNullOrEmpty(cerveceriaExistente.Id))
+                throw new AppValidationException($"No existe una cerveceria con el Id {cerveceria_id} que se pueda eliminar");
 
-        //    if (cerveceriaExistente.Id == 0)
-        //        throw new AppValidationException($"No existe una cerveceria con el Id {cerveceria_id} que se pueda eliminar");
+            //TODO: Validar que no hayan cervezas asociadas a esta cerveria
+            
+            //// Validamos que la cerveceria no tenga asociadas cervezas
+            //var cantidadCervezasAsociadas = await _cerveceriaRepository
+            //    .GetTotalAssociatedBeersAsync(cerveceriaExistente.Id);
 
-        //    // Validamos que la cerveceria no tenga asociadas cervezas
-        //    var cantidadCervezasAsociadas = await _cerveceriaRepository
-        //        .GetTotalAssociatedBeersAsync(cerveceriaExistente.Id);
+            //if (cantidadCervezasAsociadas > 0)
+            //    throw new AppValidationException($"Existen {cantidadCervezasAsociadas} cervezas " +
+            //        $"asociadas a {cerveceriaExistente.Nombre}. No se puede eliminar");
 
-        //    if (cantidadCervezasAsociadas > 0)
-        //        throw new AppValidationException($"Existen {cantidadCervezasAsociadas} cervezas " +
-        //            $"asociadas a {cerveceriaExistente.Nombre}. No se puede eliminar");
+            //Si existe y no tiene cervezas asociadas, se puede eliminar
+            try
+            {
+                bool resultadoAccion = await _cerveceriaRepository
+                    .DeleteAsync(cerveceriaExistente);
 
-        //    //Si existe y no tiene cervezas asociadas, se puede eliminar
-        //    try
-        //    {
-        //        bool resultadoAccion = await _cerveceriaRepository
-        //            .DeleteAsync(cerveceriaExistente);
-
-        //        if (!resultadoAccion)
-        //            throw new AppValidationException("Operación ejecutada pero no generó cambios en la DB");
-        //    }
-        //    catch (DbOperationException error)
-        //    {
-        //        throw error;
-        //    }
-        //}
+                if (!resultadoAccion)
+                    throw new AppValidationException("Operación ejecutada pero no generó cambios en la DB");
+            }
+            catch (DbOperationException error)
+            {
+                throw error;
+            }
+        }
     }
 }

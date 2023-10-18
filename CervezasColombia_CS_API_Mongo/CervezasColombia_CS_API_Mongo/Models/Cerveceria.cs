@@ -11,6 +11,11 @@ namespace CervezasColombia_CS_API_Mongo.Models
         [JsonPropertyName("id")]
         public string? Id { get; set; } = string.Empty;
 
+        [BsonElement("version_documento")]
+        [JsonPropertyName("version_documento")]
+        [BsonRepresentation(BsonType.Int32)]
+        public int Version_Documento { get; set; } = 1;
+
         [BsonElement("nombre")]
         [JsonPropertyName("nombre")]
         [BsonRepresentation(BsonType.String)]

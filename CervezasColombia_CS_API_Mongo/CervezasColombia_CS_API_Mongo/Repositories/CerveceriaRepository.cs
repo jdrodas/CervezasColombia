@@ -214,72 +214,35 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             return resultadoAccion;
         }
 
-        //TODO: CerveceriaRepository: Actualizar Cerveceria
+        public async Task<bool> UpdateAsync(Cerveceria unaCerveceria)
+        {
+            bool resultadoAccion = false;
 
-        //public async Task<bool> UpdateAsync(Cerveceria unaCerveceria)
-        //{
-        //    bool resultadoAccion = false;
+            var conexion = contextoDB.CreateConnection();
+            var coleccionCervecerias = conexion.GetCollection<Cerveceria>("cervecerias");
 
-        //    try
-        //    {
-        //        var conexion = contextoDB.CreateConnection();
+            var resultado = await coleccionCervecerias.ReplaceOneAsync(cerveceria => cerveceria.Id == unaCerveceria.Id, unaCerveceria);
 
-        //        string procedimiento = "core.p_actualiza_cerveceria";
-        //        var parametros = new
-        //        {
-        //            p_id = unaCerveceria.Id,
-        //            p_nombre = unaCerveceria.Nombre,
-        //            p_ubicacion_id = unaCerveceria.Ubicacion.Id,
-        //            p_sitio_web = unaCerveceria.Sitio_Web,
-        //            p_instagram = unaCerveceria.Instagram
-        //        };
+            if (resultado.IsAcknowledged)
+                resultadoAccion = true;
 
-        //        var cantidad_filas = await conexion.ExecuteAsync(
-        //            procedimiento,
-        //            parametros,
-        //            commandType: CommandType.StoredProcedure);
+            return resultadoAccion;
+        }
 
-        //        if (cantidad_filas != 0)
-        //            resultadoAccion = true;
-        //    }
-        //    catch (NpgsqlException error)
-        //    {
-        //        throw new DbOperationException(error.Message);
-        //    }
+        public async Task<bool> DeleteAsync(Cerveceria unaCerveceria)
+        {
+            bool resultadoAccion = false;
 
-        //    return resultadoAccion;
-        //}
+            var conexion = contextoDB.CreateConnection();
+            var coleccionCervecerias = conexion.GetCollection<Cerveceria>("cervecerias");
 
-        //TODO: CerveceriaRepository: Borrar cerveceria
+            var resultado = await coleccionCervecerias
+                .DeleteOneAsync(cerveceria => cerveceria.Id == unaCerveceria.Id);
 
-        //public async Task<bool> DeleteAsync(Cerveceria unaCerveceria)
-        //{
-        //    bool resultadoAccion = false;
+            if (resultado.IsAcknowledged)
+                resultadoAccion = true;
 
-        //    try
-        //    {
-        //        var conexion = contextoDB.CreateConnection();
-
-        //        string procedimiento = "core.p_elimina_cerveceria";
-        //        var parametros = new
-        //        {
-        //            p_id = unaCerveceria.Id
-        //        };
-
-        //        var cantidad_filas = await conexion.ExecuteAsync(
-        //            procedimiento,
-        //            parametros,
-        //            commandType: CommandType.StoredProcedure);
-
-        //        if (cantidad_filas != 0)
-        //            resultadoAccion = true;
-        //    }
-        //    catch (NpgsqlException error)
-        //    {
-        //        throw new DbOperationException(error.Message);
-        //    }
-
-        //    return resultadoAccion;
-        //}
+            return resultadoAccion;
+        }
     }
 }
