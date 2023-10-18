@@ -1,8 +1,11 @@
 municipio;departamento;latitud;longitud
 Leticia;Amazonas;-4.215;-69.941111
+El Retiro;Antioquia;6.059722;-75.503889
 Medellín;Antioquia;6.244747;-75.574828
+Sabaneta;Antioquia;6.150833;75.615
 Arauca;Arauca;7.090278;-70.761667
 Barranquilla;Atlántico;10.983333;-74.801944
+Soledad;Atlántico;10.909722;-74.785833
 Cartagena;Bolívar;10.423611;-75.525278
 Tunja;Boyacá;5.540278;-73.361389
 Manizales;Caldas;5.066111;-75.484722
@@ -28,11 +31,9 @@ Pereira;Risaralda;4.814278;-75.694558
 San Andrés;San Andrés y Providencia;12.584722;-81.700556
 Bucaramanga;Santander;7.118611;-73.116111
 Sincelejo;Sucre;9.299444;-75.395833
+Tolú;Sucre;9.525;-75.581667
 Ibagué;Tolima;4.437778;-75.200556
 Cali;Valle del Cauca;3.44;-76.519722
+Palmira;Valle del Cauca;3.534722;-76.295556
 Mitú;Vaupes;1.250278;-70.235
 Puerto Carreño;Vichada;6.190312;-67.483742
-Palmira;Valle del Cauca; 3.534722;-76.295556
-Tolú;Sucre;9.525;-75.581667
-Soledad;Atlántico;10.909722;-74.785833
-El Retiro;Antioquia;6.059722;-75.503889

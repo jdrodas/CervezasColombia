@@ -34,6 +34,8 @@ namespace CervezasColombia_CS_API_Mongo.Services
             return unaCerveceria;
         }
 
+        //TODO: CerveceriaService: Obtener cervezas asociadas
+
         //public async Task<IEnumerable<Cerveza>> GetAssociatedBeersAsync(int cerveceria_id)
         //{
         //    //Validamos que la Cerveceria exista con ese Id
@@ -119,6 +121,8 @@ namespace CervezasColombia_CS_API_Mongo.Services
 
             return cerveceriaExistente;
         }
+
+        //TODO: CerveceriaService: Actualizar cervecería
 
         //public async Task<Cerveceria> UpdateAsync(int cerveceria_id, Cerveceria unaCerveceria)
         //{
@@ -206,6 +210,8 @@ namespace CervezasColombia_CS_API_Mongo.Services
 
         //    return cerveceriaExistente;
         //}
+
+        //TODO: CerveceriaService: Borrar Cervecería
 
         //public async Task DeleteAsync(int cerveceria_id)
         //{

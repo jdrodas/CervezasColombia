@@ -6,10 +6,22 @@
     "longitud": -69.941111
   },
   {
+    "municipio": "El Retiro",
+    "departamento": "Antioquia",
+    "latitud": 6.059722,
+    "longitud": -75.503889
+  },
+  {
     "municipio": "Medellín",
     "departamento": "Antioquia",
     "latitud": 6.244747,
     "longitud": -75.574828
+  },
+  {
+    "municipio": "Sabaneta",
+    "departamento": "Antioquia",
+    "latitud": 6.150833,
+    "longitud": 75.615
   },
   {
     "municipio": "Arauca",
@@ -22,6 +34,12 @@
     "departamento": "Atlántico",
     "latitud": 10.983333,
     "longitud": -74.801944
+  },
+  {
+    "municipio": "Soledad",
+    "departamento": "Atlántico",
+    "latitud": 10.909722,
+    "longitud": -74.785833
   },
   {
     "municipio": "Cartagena",
@@ -174,6 +192,12 @@
     "longitud": -75.395833
   },
   {
+    "municipio": "Tolú",
+    "departamento": "Sucre",
+    "latitud": 9.525,
+    "longitud": -75.581667
+  },
+  {
     "municipio": "Ibagué",
     "departamento": "Tolima",
     "latitud": 4.437778,
@@ -186,6 +210,12 @@
     "longitud": -76.519722
   },
   {
+    "municipio": "Palmira",
+    "departamento": "Valle del Cauca",
+    "latitud": 3.534722,
+    "longitud": -76.295556
+  },
+  {
     "municipio": "Mitú",
     "departamento": "Vaupes",
     "latitud": 1.250278,
@@ -196,29 +226,5 @@
     "departamento": "Vichada",
     "latitud": 6.190312,
     "longitud": -67.483742
-  },
-  {
-    "municipio": "Palmira",
-    "departamento": "Valle del Cauca",
-    "latitud": 3.534722,
-    "longitud": -76.295556
-  },
-  {
-    "municipio": "Tolú",
-    "departamento": "Sucre",
-    "latitud": 9.525,
-    "longitud": 75.581667
-  },
-  {
-    "municipio": "Soledad",
-    "departamento": "Atlántico",
-    "latitud": 10.909722,
-    "longitud": -74.785833
-  },
-  {
-    "municipio": "El Retiro",
-    "departamento": "Antioquia",
-    "latitud": 6.059722,
-    "longitud": -75.503889
   }
 ]

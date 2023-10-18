@@ -57,6 +57,9 @@
     "nombre": "Double IPA"
   },
   {
+    "nombre": "French Saison"
+  },
+  {
     "nombre": "Fruit Beer"
   },
   {
@@ -133,8 +136,5 @@
   },
   {
     "nombre": "Witbier"
-  },
-  {
-    "nombre": "French Saison"
   }
 ]

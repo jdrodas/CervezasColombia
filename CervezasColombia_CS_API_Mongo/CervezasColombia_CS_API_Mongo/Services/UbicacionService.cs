@@ -31,6 +31,8 @@ namespace CervezasColombia_CS_API_Mongo.Services
             return unaUbicacion;
         }
 
+        //TODO: UbicacionService: Obtener Cervecerias Asociadas
+
         //public async Task<IEnumerable<Cerveceria>> GetAssociatedBreweriesAsync(int ubicacion_id)
         //{
         //    //Validamos que la ubicacion exista con ese Id
@@ -95,6 +97,8 @@ namespace CervezasColombia_CS_API_Mongo.Services
             return ubicacionExistente;
         }
 
+        //TODO: UbicacionService: Actualizar Cerveceria
+
         //public async Task<Ubicacion> UpdateAsync(int ubicacion_id, Ubicacion unaUbicacion)
         //{
         //    //Validamos que los parametros sean consistentes
@@ -149,6 +153,8 @@ namespace CervezasColombia_CS_API_Mongo.Services
 
         //    return ubicacionExistente;
         //}
+
+        //TODO: UbicacionService: Borrar ubicación
 
         //public async Task DeleteAsync(int id)
         //{

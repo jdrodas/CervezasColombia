@@ -68,6 +68,8 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             return unaCerveza;
         }
 
+        //TODO: CervezaRepository: Obtener Total Ingredientes asociados
+
         //public async Task<int> GetTotalAssociatedIngredientsAsync(int cerveza_id)
         //{
         //    var conexion = contextoDB.CreateConnection();
@@ -87,6 +89,8 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
         //    return totalIngredientes;
         //}
 
+        //TODO: CervezaRepository: Obtener Ingredientes asociados
+
         //public async Task<IEnumerable<Ingrediente>> GetAssociatedIngredientsAsync(int cerveza_id)
         //{
         //    var conexion = contextoDB.CreateConnection();
@@ -104,6 +108,8 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
 
         //    return resultadoIngredientes;
         //}
+
+        //TODO: CervezaRepository: Obtener Total envasados asociados
 
         //public async Task<int> GetTotalAssociatedPackagingsAsync(int cerveza_id)
         //{
@@ -123,6 +129,8 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
         //    return totalIngredientes;
         //}
 
+        //TODO: CervezaRepository: Obtener  envasados asociados
+
         //public async Task<IEnumerable<EnvasadoCerveza>> GetAssociatedPackagingsAsync(int cerveza_id)
         //{
         //    var conexion = contextoDB.CreateConnection();
@@ -139,6 +147,8 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
         //    var resultadoEnvasados = await conexion.QueryAsync<EnvasadoCerveza>(sentenciaSQL, parametrosSentencia);
         //    return resultadoEnvasados;
         //}
+
+        //TODO: CervezaRepository: Obtener cerveza envasada por nombre
 
         //public async Task<EnvasadoCerveza> GetPackagedBeerByNameAsync(int cerveza_id, string envasado_nombre, int unidad_volumen_id, float volumen)
         //{
@@ -190,6 +200,8 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             return resultadoAccion;
         }
 
+        //TODO: CervezaRepository: Crear envasado por cerveza
+
         //public async Task<bool> CreateBeerPackagingAsync(int cerveza_id, EnvasadoCerveza unEnvasadoCerveza)
         //{
         //    bool resultadoAccion = false;
@@ -223,6 +235,8 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
         //    return resultadoAccion;
         //}
 
+        //TODO: CervezaRepository: Crear ingrediente por cerveza
+
         //public async Task<bool> CreateBeerIngredientAsync(int cerveza_id, Ingrediente unIngrediente)
         //{
         //    bool resultadoAccion = false;
@@ -253,6 +267,8 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
 
         //    return resultadoAccion;
         //}
+
+        //TODO: CervezaRepository: Actualizar Cerveza
 
         //public async Task<bool> UpdateAsync(Cerveza unaCerveza)
         //{
@@ -289,6 +305,8 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
         //    return resultadoAccion;
         //}
 
+        //TODO: CervezaRepository: Borrar cerveza
+
         //public async Task<bool> DeleteAsync(Cerveza unaCerveza)
         //{
         //    bool resultadoAccion = false;
@@ -318,6 +336,8 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
 
         //    return resultadoAccion;
         //}
+
+        //TODO: CervezaRepository: Borrar envasado por cerveza
 
         //public async Task<bool> DeleteBeerPackagingAsync(int cerveza_id, EnvasadoCerveza unEnvasadoCerveza)
         //{
@@ -351,6 +371,8 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
 
         //    return resultadoAccion;
         //}
+
+        //TODO: CervezaRepository: Borrar ingrediente por cerveza
 
         //public async Task<bool> DeleteBeerIngredientAsync(int cerveza_id, Ingrediente unIngrediente)
         //{

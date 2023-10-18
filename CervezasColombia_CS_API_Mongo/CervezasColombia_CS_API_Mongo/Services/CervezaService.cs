@@ -47,6 +47,8 @@ namespace CervezasColombia_CS_API_Mongo.Services
             return unaCerveza;
         }
 
+        //TODO: CervezaService: Obtener ingredientes asociados
+
         //public async Task<IEnumerable<Ingrediente>> GetAssociatedIngredientsAsync(int cerveza_id)
         //{
         //    //Validamos que la cerveza exista con ese Id
@@ -66,6 +68,8 @@ namespace CervezasColombia_CS_API_Mongo.Services
         //    return await _cervezaRepository
         //        .GetAssociatedIngredientsAsync(cerveza_id);
         //}
+
+        //TODO: CervezaService: Obtener envasados asociados
 
         //public async Task<IEnumerable<EnvasadoCerveza>> GetAssociatedPackagingsAsync(int cerveza_id)
         //{
@@ -146,6 +150,8 @@ namespace CervezasColombia_CS_API_Mongo.Services
             return (cervezaExistente);
         }
 
+        //TODO: CervezaService: Crear envasados para cervezas
+
         //public async Task<EnvasadoCerveza> CreateBeerPackagingAsync(int cerveza_id, EnvasadoCerveza unEnvasadoCerveza)
         //{
         //    //Validamos que la cerveza exista con ese Id
@@ -211,6 +217,8 @@ namespace CervezasColombia_CS_API_Mongo.Services
         //    return envasadoCervezaExistente;
         //}
 
+        //TODO: CervezaService: Crear envasados para cervezas 
+
         //public async Task CreateBeerIngredientAsync(int cerveza_id, Ingrediente unIngrediente)
         //{
         //    //Validamos que la cerveza exista con ese Id
@@ -258,6 +266,8 @@ namespace CervezasColombia_CS_API_Mongo.Services
         //        throw error;
         //    }
         //}
+
+        //TODO: CervezaService: Actualizar cerveza
 
         //public async Task<Cerveza> UpdateAsync(int cerveza_id, Cerveza unaCerveza)
         //{
@@ -325,6 +335,8 @@ namespace CervezasColombia_CS_API_Mongo.Services
         //    return cervezaExistente;
         //}
 
+        //TODO: CervezaService: Borrar cerveza
+
         //public async Task DeleteAsync(int cerveza_id)
         //{
         //    // validamos que el cerveza a eliminar si exista con ese Id
@@ -348,6 +360,8 @@ namespace CervezasColombia_CS_API_Mongo.Services
         //        throw error;
         //    }
         //}
+
+        //TODO: CervezaService: Borrar envasado Cervezas
 
         //public async Task DeleteBeerPackagingAsync(int cerveza_id, EnvasadoCerveza unEnvasadoCerveza)
         //{
@@ -409,6 +423,8 @@ namespace CervezasColombia_CS_API_Mongo.Services
         //        throw error;
         //    }
         //}
+
+        //TODO: CervezaService: Borrar envasado Cervezas
 
         //public async Task DeleteBeerIngredientAsync(int cerveza_id, Ingrediente unIngrediente)
         //{

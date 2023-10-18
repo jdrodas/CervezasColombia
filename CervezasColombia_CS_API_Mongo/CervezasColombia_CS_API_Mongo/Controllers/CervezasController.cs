@@ -40,6 +40,8 @@ namespace CervezasColombia_CS_API_Mongo.Controllers
             }
         }
 
+        //TODO: CervezasController: Obtener Ingredientes de Cervezas
+
         //[HttpGet("{cerveza_id:int}/Ingredientes")]
         //public async Task<IActionResult> GetAssociatedIngredientsAsync(int cerveza_id)
         //{
@@ -55,6 +57,8 @@ namespace CervezasColombia_CS_API_Mongo.Controllers
         //        return NotFound(error.Message);
         //    }
         //}
+
+        //TODO: CervezasController: Obtener Envasados de Cervezas
 
         //[HttpGet("{cerveza_id:int}/Envasados")]
         //public async Task<IActionResult> GetAssociatedPackagingsAsync(int cerveza_id)
@@ -92,6 +96,9 @@ namespace CervezasColombia_CS_API_Mongo.Controllers
             }
         }
 
+
+        //TODO: CervezasController: Crear envasados de Cervezas
+
         //[HttpPost("{cerveza_id:int}/Envasados")]
         //public async Task<IActionResult> CreateBeerPackagingAsync(int cerveza_id, EnvasadoCerveza unEnvasadoCerveza)
         //{
@@ -111,6 +118,8 @@ namespace CervezasColombia_CS_API_Mongo.Controllers
         //        return BadRequest($"Error de operacion en DB: {error.Message}");
         //    }
         //}
+
+        //TODO: CervezasController: Crear ingredientes de Cervezas
 
         //[HttpPost("{cerveza_id:int}/Ingredientes")]
         //public async Task<IActionResult> CreateBeerIngredientAsync(int cerveza_id, Ingrediente unIngrediente)
@@ -133,6 +142,8 @@ namespace CervezasColombia_CS_API_Mongo.Controllers
         //}
 
 
+        //TODO: CervezasController: Actualizar Cervezas
+
         //[HttpPut("{cerveza_id:int}")]
         //public async Task<IActionResult> UpdateAsync(int cerveza_id, Cerveza unaCerveza)
         //{
@@ -153,6 +164,8 @@ namespace CervezasColombia_CS_API_Mongo.Controllers
         //        return BadRequest($"Error de operacion en DB: {error.Message}");
         //    }
         //}
+
+        //TODO: CervezasController: Borrar Cerveza
 
         //[HttpDelete("{cerveza_id:int}")]
         //public async Task<IActionResult> DeleteAsync(int cerveza_id)
@@ -175,6 +188,8 @@ namespace CervezasColombia_CS_API_Mongo.Controllers
         //    }
         //}
 
+        //TODO: CervezasController: Borrar envasados de Cervezas
+
         //[HttpDelete("{cerveza_id:int}/Envasados")]
         //public async Task<IActionResult> DeleteBeerPackagingAsync(int cerveza_id, EnvasadoCerveza unEnvasadoCerveza)
         //{
@@ -194,6 +209,8 @@ namespace CervezasColombia_CS_API_Mongo.Controllers
         //        return BadRequest($"Error de operacion en DB: {error.Message}");
         //    }
         //}
+
+        //TODO: CervezasController: Borrar ingredientes de Cervezas
 
         //[HttpDelete("{cerveza_id:int}/Ingredientes")]
         //public async Task<IActionResult> DeleteBeerIngredientAsync(int cerveza_id, Ingrediente unIngrediente)

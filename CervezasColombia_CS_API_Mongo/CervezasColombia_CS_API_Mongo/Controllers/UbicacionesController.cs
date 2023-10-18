@@ -41,6 +41,8 @@ namespace CervezasColombia_CS_API_Mongo.Controllers
             }
         }
 
+        //TODO: UbicacionesController: Obtener Cervecerias por ubicación
+
         //[HttpGet("{ubicacion_id:int}/Cervecerias")]
         //public async Task<IActionResult> GetAssociatedBreweriesAsync(int ubicacion_id)
         //{
@@ -77,6 +79,8 @@ namespace CervezasColombia_CS_API_Mongo.Controllers
             }
         }
 
+        //TODO: UbicacionesController: Actualizar ubicación
+
         //[HttpPut("{ubicacion_id:int}")]
         //public async Task<IActionResult> UpdateAsync(int ubicacion_id, Ubicacion unaUbicacion)
         //{
@@ -97,6 +101,8 @@ namespace CervezasColombia_CS_API_Mongo.Controllers
         //        return BadRequest($"Error de operacion en DB: {error.Message}");
         //    }
         //}
+
+        //TODO: UbicacionesController: Borrar ubicación
 
         //[HttpDelete("{ubicacion_id:int}")]
         //public async Task<IActionResult> DeleteAsync(int ubicacion_id)

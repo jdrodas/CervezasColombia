@@ -46,6 +46,8 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             return unaCerveceria;
         }
 
+        //TODO: CerveceriaRepository: Obtener detalles cerveceria
+
         //public async Task<CerveceriaDetallada> GetDetailsByIdAsync(int cerveceria_id)
         //{
         //    CerveceriaDetallada unaCerveceriaDetallada = new();
@@ -127,6 +129,8 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             return unaCerveceria;
         }
 
+        //TODO: CerveceriaRepository: Obtener Total cervezas asociadas
+
         //public async Task<int> GetTotalAssociatedBeersAsync(int cerveceria_id)
         //{
         //    var conexion = contextoDB.CreateConnection();
@@ -146,6 +150,8 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
         //    return totalCervezas;
         //}
 
+        //TODO: CerveceriaRepository: Obtener cervezas asociadas
+
         //public async Task<IEnumerable<Cerveza>> GetAssociatedBeersAsync(int cerveceria_id)
         //{
         //    var conexion = contextoDB.CreateConnection();
@@ -164,6 +170,8 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
 
         //    return resultadoCervezas;
         //}
+
+        //TODO: CerveceriaRepository: Obtener Ubicación asociada
 
         //public async Task<Ubicacion> GetAssociatedLocationAsync(int cerveceria_id)
         //{
@@ -206,6 +214,8 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             return resultadoAccion;
         }
 
+        //TODO: CerveceriaRepository: Actualizar Cerveceria
+
         //public async Task<bool> UpdateAsync(Cerveceria unaCerveceria)
         //{
         //    bool resultadoAccion = false;
@@ -239,6 +249,8 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
 
         //    return resultadoAccion;
         //}
+
+        //TODO: CerveceriaRepository: Borrar cerveceria
 
         //public async Task<bool> DeleteAsync(Cerveceria unaCerveceria)
         //{

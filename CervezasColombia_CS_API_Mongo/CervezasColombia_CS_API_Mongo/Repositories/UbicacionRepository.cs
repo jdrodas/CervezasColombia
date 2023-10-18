@@ -93,6 +93,8 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             return unaUbicacion;
         }
 
+        //TODO: UbicacionRepository: Obtener total cervecerias asociadas
+
         //public async Task<int> GetTotalAssociatedBreweriesAsync(int ubicacion_id)
         //{
         //    using (var conexion = contextoDB.CreateConnection())
@@ -112,6 +114,8 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
         //        return totalCervecerias;
         //    }
         //}
+
+        //TODO: UbicacionRepository: Obtener cervecerias asociadas
 
         //public async Task<IEnumerable<Cerveceria>> GetAssociatedBreweriesAsync(int ubicacion_id)
         //{
@@ -150,6 +154,8 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             return resultadoAccion;
         }
 
+        //TODO: UbicacionRepository: Actualizar Ubicación
+
         //public async Task<bool> UpdateAsync(Ubicacion unaUbicacion)
         //{
         //    bool resultadoAccion = false;
@@ -185,6 +191,7 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
         //    return resultadoAccion;
         //}
 
+        //TODO: UbicacionRepository: Borrar Urbanización
 
         //public async Task<bool> DeleteAsync(Ubicacion unaUbicacion)
         //{

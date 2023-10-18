@@ -46,30 +46,36 @@ db.createCollection("unidades_volumen");
 -- Creamos las collecciones ... usando un json schema para validación
 db.createCollection("cervecerias", {
    validator: {
-      $jsonSchema: {
-         bsonType: "object",
-         title: "Las Cervecerias que hacen las cervezas",
-         required: [ "nombre","sitio_web","instagram","ubicacion" ],
-         properties: {
-            nombre: {
-               bsonType: "string",
-               description: "'nombre' Debe ser una cadena de caracteres y no puede ser nulo"
-            },
-            sitio_web: {
-               bsonType: "string",
-               description: "'sitio_web' Debe ser una cadena de caracteres y no puede ser nulo"
-            },
-            instagram: {
-               bsonType: "string",
-               description: "'instagram' Debe ser una cadena de caracteres y no puede ser nulo"
-            },
-            ubicacion: {
-               bsonType: "string",
-               description: "'ubicacion' Debe ser una cadena de caracteres y no puede ser nulo"
-            }
-         }
+  $jsonSchema: {
+    bsonType: 'object',
+    title: 'Las Cervecerias que hacen las cervezas',
+    required: [
+      'nombre',
+      'sitio_web',
+      'instagram',
+      'ubicacion',
+      'version_documento'
+    ],
+    properties: {
+      nombre: {
+        bsonType: 'string',
+        description: '\'nombre\' Debe ser una cadena de caracteres y no puede ser nulo'
+      },
+      sitio_web: {
+        bsonType: 'string',
+        description: '\'sitio_web\' Debe ser una cadena de caracteres y no puede ser nulo'
+      },
+      instagram: {
+        bsonType: 'string',
+        description: '\'instagram\' Debe ser una cadena de caracteres y no puede ser nulo'
+      },
+      version_documento: {
+        bsonType: 'int',
+        description: '\'document_version\' Debe ser entero y no puede ser nulo'
       }
-   }
+    }
+  }
+}
 } );
 
 db.createCollection("cervezas", {

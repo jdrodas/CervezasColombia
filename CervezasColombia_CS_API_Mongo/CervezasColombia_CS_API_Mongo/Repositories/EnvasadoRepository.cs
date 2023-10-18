@@ -63,6 +63,8 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             return unEnvasado;
         }
 
+        //TODO: EnvasadoRepository: Obtener total de cervezas asociadas
+
         //public async Task<int> GetTotalAssociatedBeersAsync(int envasado_id)
         //{
         //    var conexion = contextoDB.CreateConnection();
@@ -80,6 +82,8 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
 
         //    return totalCervezas;
         //}
+
+        //TODO: EnvasadoRepository: Obtener cervezas asociadas
 
         //public async Task<IEnumerable<Cerveza>> GetAssociatedBeersAsync(int envasado_id)
         //{
@@ -100,6 +104,8 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
 
         //    return resultadoCervezas;
         //}
+
+        //TODO: EnvasadoRepository: Obtener envasados asociados
 
         //public async Task<EnvasadoCerveza> GetAssociatedBeerPackagingAsync(int cerveza_id, int envasado_id, int unidad_volumen_id, float volumen)
         //{

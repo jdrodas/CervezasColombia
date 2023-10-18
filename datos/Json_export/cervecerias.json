@@ -1,72 +1,91 @@
 [
   {
-    "nombre": "Fierabrás",
-    "sitio_web": "https://www.cervezafierabras.com/",
-    "instagram": "cervezafierabras",
-    "ubicacion": "Barranquilla, Atlántico"
-  },
-  {
-    "nombre": "BBC",
-    "sitio_web": "https://www.bbccerveceria.com/",
-    "instagram": "bbccerveceria",
-    "ubicacion": "Bogotá, Cundinamarca"
-  },
-  {
-    "nombre": "Cervezas Kalima",
-    "sitio_web": "https://www.cervezaskalima.com/",
-    "instagram": "cervezaskalima",
-    "ubicacion": "Cali, Valle del Cauca"
-  },
-  {
-    "nombre": "Cervecería Cartagena",
-    "sitio_web": "https://cerveceriacartagena.co/",
-    "instagram": "ctgcraftbeer",
-    "ubicacion": "Cartagena, Bolívar"
-  },
-  {
-    "nombre": "Bari Cerveza Artesanal",
-    "sitio_web": "https://www.cervezabari.com/",
-    "instagram": "cervezabari",
-    "ubicacion": "Cúcuta, Norte de Santander"
-  },
-  {
-    "nombre": "Lino Brewing Company",
-    "sitio_web": "https://linktr.ee/Linobrewing",
-    "instagram": "lino_brewing",
-    "ubicacion": "Funza, Cundinamarca"
-  },
-  {
     "nombre": "20 Mission",
+    "version_documento": 1,
     "sitio_web": "https://20missioncerveza.com/",
     "instagram": "20missioncerveza",
     "ubicacion": "Medellín, Antioquia"
   },
   {
     "nombre": "3 Cordilleras",
+    "version_documento": 1,
     "sitio_web": "https://3cordilleras.com/",
     "instagram": "3cordilleras",
     "ubicacion": "Medellín, Antioquia"
   },
   {
-    "nombre": "Rincón del Mar",
-    "sitio_web": "https://rincondelmar.com.co/",
-    "instagram": "rincondelmarcerveceria",
-    "ubicacion": "Medellín, Antioquia"
+    "nombre": "Bari Cerveza Artesanal",
+    "version_documento": 1,
+    "sitio_web": "https://www.cervezabari.com/",
+    "instagram": "cervezabari",
+    "ubicacion": "Cúcuta, Norte de Santander"
   },
   {
-    "nombre": "Nevada Cerveceria",
-    "sitio_web": "https://nevadacerveceria.beer",
-    "instagram": "nevadacerveceria",
-    "ubicacion": "Santa Marta, Magdalena"
+    "nombre": "BBC",
+    "version_documento": 1,
+    "sitio_web": "https://www.bbccerveceria.com/",
+    "instagram": "bbccerveceria",
+    "ubicacion": "Bogotá, Cundinamarca"
   },
   {
     "nombre": "Bruder",
+    "version_documento": 1,
     "sitio_web": "https://www.bruder.com.co/",
     "instagram": "bruder_cerveza",
     "ubicacion": "Tunja, Boyacá"
   },
   {
+    "nombre": "Cervecería Cartagena",
+    "version_documento": 1,
+    "sitio_web": "https://cerveceriacartagena.co/",
+    "instagram": "ctgcraftbeer",
+    "ubicacion": "Cartagena, Bolívar"
+  },
+  {
+    "nombre": "Cervezas Kalima",
+    "version_documento": 1,
+    "sitio_web": "https://www.cervezaskalima.com/",
+    "instagram": "cervezaskalima",
+    "ubicacion": "Cali, Valle del Cauca"
+  },
+  {
+    "nombre": "Fierabrás",
+    "version_documento": 1,
+    "sitio_web": "https://www.cervezafierabras.com/",
+    "instagram": "cervezafierabras",
+    "ubicacion": "Barranquilla, Atlántico"
+  },
+  {
+    "nombre": "Lino Brewing Company",
+    "version_documento": 1,
+    "sitio_web": "https://linktr.ee/Linobrewing",
+    "instagram": "lino_brewing",
+    "ubicacion": "Funza, Cundinamarca"
+  },
+  {
+    "nombre": "Nevada Cerveceria",
+    "version_documento": 1,
+    "sitio_web": "https://nevadacerveceria.beer",
+    "instagram": "nevadacerveceria",
+    "ubicacion": "Santa Marta, Magdalena"
+  },
+  {
+    "nombre": "Perro Bravo",
+    "version_documento": 1,
+    "sitio_web": "https://www.facebook.com/perrobravo.cerveza",
+    "instagram": "perrobravo.cerveza",
+    "ubicacion": "El Retiro, Antioquia"
+  },
+  {
+    "nombre": "Rincón del Mar",
+    "version_documento": 1,
+    "sitio_web": "https://rincondelmar.com.co/",
+    "instagram": "rincondelmarcerveceria",
+    "ubicacion": "Medellín, Antioquia"
+  },
+  {
     "nombre": "Torrealta Cervecería",
+    "version_documento": 1,
     "sitio_web": "https://www.facebook.com/p/TorreAlta-Brewing-100063982125552",
     "instagram": "torrealta_cerveceria",
     "ubicacion": "El Retiro, Antioquia"

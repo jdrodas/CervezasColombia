@@ -41,6 +41,8 @@ namespace CervezasColombia_CS_API_Mongo.Controllers
             }
         }
 
+        //TODO: EnvasadosController: Obtener Cervezas por envasado
+
         //[HttpGet("{envasado_id:int}/Cervezas")]
         //public async Task<IActionResult> GetAssociatedBeersAsync(int envasado_id)
         //{

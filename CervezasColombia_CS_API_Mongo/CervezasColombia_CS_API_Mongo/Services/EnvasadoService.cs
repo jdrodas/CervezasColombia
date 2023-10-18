@@ -31,6 +31,8 @@ namespace CervezasColombia_CS_API_Mongo.Services
             return unEnvasado;
         }
 
+        //TODO: EnvasadoService: Obtener cervezas asociada
+
         //public async Task<IEnumerable<Cerveza>> GetAssociatedBeersAsync(int envasado_id)
         //{
         //    //Validamos que la Cerveceria exista con ese Id
