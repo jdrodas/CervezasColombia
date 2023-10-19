@@ -1,5 +1,5 @@
-﻿using CervezasColombia_CS_API_Mongo.Models;
-using CervezasColombia_CS_API_Mongo.Helpers;
+﻿using CervezasColombia_CS_API_Mongo.Helpers;
+using CervezasColombia_CS_API_Mongo.Models;
 using CervezasColombia_CS_API_Mongo.Services;
 using Microsoft.AspNetCore.Mvc;
 

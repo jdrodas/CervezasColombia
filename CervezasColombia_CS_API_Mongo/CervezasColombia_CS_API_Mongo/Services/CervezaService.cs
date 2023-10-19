@@ -14,9 +14,9 @@ namespace CervezasColombia_CS_API_Mongo.Services
         //private readonly IIngredienteRepository _ingredienteRepository;
 
         public CervezaService(ICervezaRepository cervezaRepository
-            ,ICerveceriaRepository cerveceriaRepository
-            ,IEstiloRepository estiloRepository
-            ,IEnvasadoRepository envasadoRepository
+            , ICerveceriaRepository cerveceriaRepository
+            , IEstiloRepository estiloRepository
+            , IEnvasadoRepository envasadoRepository
             //,IUnidadVolumenRepository unidadVolumenRepository
             //,IIngredienteRepository ingredienteRepository
             )

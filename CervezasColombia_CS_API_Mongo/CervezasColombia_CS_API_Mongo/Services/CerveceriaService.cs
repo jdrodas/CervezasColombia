@@ -103,7 +103,7 @@ namespace CervezasColombia_CS_API_Mongo.Services
             var cerveceriaExistente = await _cerveceriaRepository
                 .GetByNameAsync(unaCerveceria.Nombre);
 
-            if (string.IsNullOrEmpty(cerveceriaExistente.Id)==false)
+            if (string.IsNullOrEmpty(cerveceriaExistente.Id) == false)
                 throw new AppValidationException($"Ya existe una cervecería con el nombre {unaCerveceria.Nombre}");
 
             //Validamos que el sitio_web no exista previamente

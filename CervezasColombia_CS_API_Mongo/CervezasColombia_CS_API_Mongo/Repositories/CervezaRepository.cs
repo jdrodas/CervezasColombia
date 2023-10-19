@@ -1,9 +1,7 @@
 ﻿using CervezasColombia_CS_API_Mongo.DbContexts;
-using CervezasColombia_CS_API_Mongo.Helpers;
 using CervezasColombia_CS_API_Mongo.Interfaces;
 using CervezasColombia_CS_API_Mongo.Models;
 using MongoDB.Driver;
-using System.Data;
 
 namespace CervezasColombia_CS_API_Mongo.Repositories
 {
@@ -48,10 +46,11 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
                 .FirstOrDefaultAsync();
 
             if (resultado is not null)
+            {
                 unaCerveza = resultado;
-
-            unaCerveza.Rango_Ibu = await GetIbuRangeNameAsync(unaCerveza.Ibu);
-            unaCerveza.Rango_Abv = await GetAbvRangeNameAsync(unaCerveza.Abv);
+                unaCerveza.Rango_Ibu = await GetIbuRangeNameAsync(unaCerveza.Ibu);
+                unaCerveza.Rango_Abv = await GetAbvRangeNameAsync(unaCerveza.Abv);
+            }
 
             return unaCerveza;
         }
@@ -73,7 +72,11 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
                 .FirstOrDefaultAsync();
 
             if (resultado is not null)
+            {
                 unaCerveza = resultado;
+                unaCerveza.Rango_Ibu = await GetIbuRangeNameAsync(unaCerveza.Ibu);
+                unaCerveza.Rango_Abv = await GetAbvRangeNameAsync(unaCerveza.Abv);
+            }
 
             return unaCerveza;
         }
@@ -200,7 +203,7 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             var coleccionRangosIbu = conexion.GetCollection<RangoIbu>("rangos_ibu");
 
             var builder = Builders<RangoIbu>.Filter;
-            var filtro = builder.Gte("valor_final", ibu) & builder.Lte("valor_inicial", ibu);          
+            var filtro = builder.Gte("valor_final", ibu) & builder.Lte("valor_inicial", ibu);
 
             var resultado = await coleccionRangosIbu
                 .Find(filtro)

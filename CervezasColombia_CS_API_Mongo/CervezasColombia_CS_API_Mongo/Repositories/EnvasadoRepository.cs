@@ -1,9 +1,7 @@
 ﻿using CervezasColombia_CS_API_Mongo.DbContexts;
-using CervezasColombia_CS_API_Mongo.Helpers;
 using CervezasColombia_CS_API_Mongo.Interfaces;
 using CervezasColombia_CS_API_Mongo.Models;
 using MongoDB.Driver;
-using System.Data;
 
 namespace CervezasColombia_CS_API_Mongo.Repositories
 {
@@ -63,14 +61,14 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             return unEnvasado;
         }
 
-        public async Task<int> GetTotalAssociatedBeersAsync(string envasado_id)
+        public async Task<int> GetTotalAssociatedPackagedBeersAsync(string envasado_id)
         {
-            var cervezasAsociadas = await GetAssociatedBeersAsync(envasado_id);
+            var cervezasAsociadas = await GetAssociatedPackagedBeersAsync(envasado_id);
 
             return cervezasAsociadas.Count();
         }
 
-        public async Task<IEnumerable<Cerveza>> GetAssociatedBeersAsync(string envasado_id)
+        public async Task<IEnumerable<EnvasadoCerveza>> GetAssociatedPackagedBeersAsync(string envasado_id)
         {
             Envasado unEvasado = await GetByIdAsync(envasado_id);
             List<Cerveza> lasCervezas = new();
@@ -82,29 +80,8 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
                 .Find(envasado_cerveza => envasado_cerveza.Envasado == unEvasado.Nombre)
                 .SortBy(envasado_cerveza => envasado_cerveza.Cerveza)
                 .ToListAsync();
-
-            //Creamos una lista de cervezas y la llenamos con el detalle de las cervezas
-            if (losEnvasadosCervezas.Any())
-            {
-                var coleccionCervezas = conexion.GetCollection<Cerveza>("cervezas");
-
-                foreach (EnvasadoCerveza unEnvasadoCerveza in losEnvasadosCervezas)
-                {
-                    var builder = Builders<Cerveza>.Filter;
-                    var filtro = builder.And(
-                        builder.Eq(cerveza => cerveza.Nombre, unEnvasadoCerveza.Cerveza),
-                        builder.Eq(cerveza => cerveza.Cerveceria, unEnvasadoCerveza.Cerveceria));
-
-
-                    var unaCerveza = await coleccionCervezas
-                        .Find(filtro)
-                        .FirstOrDefaultAsync();
-
-                    lasCervezas.Add(unaCerveza);
-                }
-            }
-
-            return lasCervezas;
+           
+            return losEnvasadosCervezas;
         }
 
         //TODO: EnvasadoRepository: Obtener envasados asociados

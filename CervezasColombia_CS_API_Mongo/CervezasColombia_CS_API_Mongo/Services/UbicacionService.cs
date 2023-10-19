@@ -75,7 +75,7 @@ namespace CervezasColombia_CS_API_Mongo.Services
             var ubicacionExistente = await _ubicacionRepository
                 .GetByNameAsync(unaUbicacion.Municipio!, unaUbicacion.Departamento!);
 
-            if (string.IsNullOrEmpty(ubicacionExistente.Id)==false)
+            if (string.IsNullOrEmpty(ubicacionExistente.Id) == false)
                 return ubicacionExistente;
 
             try

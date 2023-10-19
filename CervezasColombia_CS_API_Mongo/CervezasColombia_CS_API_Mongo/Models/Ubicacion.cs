@@ -1,5 +1,5 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
-using MongoDB.Bson;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using System.Text.Json.Serialization;
 
 
@@ -29,7 +29,7 @@ namespace CervezasColombia_CS_API_Mongo.Models
 
         [BsonElement("longitud")]
         [JsonPropertyName("longitud")]
-        [BsonRepresentation(BsonType.Double)] 
+        [BsonRepresentation(BsonType.Double)]
         public double Longitud { get; set; } = 0.0d;
         public override bool Equals(object? obj)
         {

@@ -9,7 +9,7 @@ namespace CervezasColombia_CS_API_Mongo.Services
         private readonly IEstiloRepository _estiloRepository;
         private readonly ICervezaRepository _cervezaRepository;
 
-        public EstiloService(IEstiloRepository estiloRepository, 
+        public EstiloService(IEstiloRepository estiloRepository,
                             ICervezaRepository cervezaRepository)
         {
             _estiloRepository = estiloRepository;

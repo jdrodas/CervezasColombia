@@ -1,9 +1,7 @@
 ﻿using CervezasColombia_CS_API_Mongo.DbContexts;
-using CervezasColombia_CS_API_Mongo.Helpers;
 using CervezasColombia_CS_API_Mongo.Interfaces;
 using CervezasColombia_CS_API_Mongo.Models;
 using MongoDB.Driver;
-using System.Data;
 
 namespace CervezasColombia_CS_API_Mongo.Repositories
 {

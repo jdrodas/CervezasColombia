@@ -7,10 +7,13 @@ namespace CervezasColombia_CS_API_Mongo.Services
     public class EnvasadoService
     {
         private readonly IEnvasadoRepository _envasadoRepository;
+        private readonly ICervezaRepository _cervezaRepository;
 
-        public EnvasadoService(IEnvasadoRepository envasadoRepository)
+        public EnvasadoService(IEnvasadoRepository envasadoRepository, 
+                               ICervezaRepository cervezaRepository)
         {
             _envasadoRepository = envasadoRepository;
+            _cervezaRepository = cervezaRepository;
         }
 
         public async Task<IEnumerable<Envasado>> GetAllAsync()
@@ -31,7 +34,7 @@ namespace CervezasColombia_CS_API_Mongo.Services
             return unEnvasado;
         }
 
-        public async Task<IEnumerable<Cerveza>> GetAssociatedBeersAsync(string envasado_id)
+        public async Task<IEnumerable<CervezaEnvasada>> GetAssociatedBeersAsync(string envasado_id)
         {
             //Validamos que el Envasado exista con ese Id
             var unEnvasado = await _envasadoRepository
@@ -42,13 +45,44 @@ namespace CervezasColombia_CS_API_Mongo.Services
 
             //Si la cerveceria existe, validamos que tenga cervezas asociadas
             var cantidadCervezasAsociadas = await _envasadoRepository
-                .GetTotalAssociatedBeersAsync(envasado_id);
+                .GetTotalAssociatedPackagedBeersAsync(envasado_id);
 
             if (cantidadCervezasAsociadas == 0)
                 throw new AppValidationException($"No Existen cervezas asociadas al envasado {unEnvasado.Nombre}");
 
-            return await _envasadoRepository
-                .GetAssociatedBeersAsync(envasado_id);
+            var lasCervezas = await _envasadoRepository
+                .GetAssociatedPackagedBeersAsync(envasado_id);
+
+            //Aqui completamos la información de las cervezas
+            Cerveza unaCerveza;
+            CervezaEnvasada unaCervezaEnvasada;
+            List<CervezaEnvasada> lasCervezasEnvasadas = new();
+
+            foreach (EnvasadoCerveza unEnvasadoCerveza in lasCervezas)
+            {
+                unaCerveza = await _cervezaRepository
+                    .GetByNameAndBreweryAsync(unEnvasadoCerveza.Cerveza, unEnvasadoCerveza.Cerveceria);
+
+                unaCervezaEnvasada = new()
+                {
+                    Id = unaCerveza.Id,
+                    Nombre = unaCerveza.Nombre,
+                    Cerveceria = unEnvasadoCerveza.Cerveceria,
+                    Estilo = unaCerveza.Estilo,
+                    Ibu = unaCerveza.Ibu,
+                    Abv = unaCerveza.Abv,
+                    Rango_Abv = unaCerveza.Rango_Abv,
+                    Rango_Ibu = unaCerveza.Rango_Ibu,
+
+                    Unidad_Volumen = unEnvasadoCerveza.Unidad_Volumen,
+                    Volumen = unEnvasadoCerveza.Volumen,
+                    Envasado = unEnvasadoCerveza.Envasado
+                };
+
+                lasCervezasEnvasadas.Add(unaCervezaEnvasada);                    
+            }
+
+            return lasCervezasEnvasadas;
         }
 
         public async Task<Envasado> CreateAsync(Envasado unEnvasado)
