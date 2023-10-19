@@ -41,23 +41,21 @@ namespace CervezasColombia_CS_API_Mongo.Controllers
             }
         }
 
-        //TODO: EnvasadosController: Obtener Cervezas por envasado
+        [HttpGet("{envasado_id:length(24)}/Cervezas")]
+        public async Task<IActionResult> GetAssociatedBeersAsync(string envasado_id)
+        {
+            try
+            {
+                var lasCervezasPorEnvasado = await _envasadoService
+                    .GetAssociatedBeersAsync(envasado_id);
 
-        //[HttpGet("{envasado_id:int}/Cervezas")]
-        //public async Task<IActionResult> GetAssociatedBeersAsync(int envasado_id)
-        //{
-        //    try
-        //    {
-        //        var lasCervezasPorEnvasado = await _envasadoService
-        //            .GetAssociatedBeersAsync(envasado_id);
-
-        //        return Ok(lasCervezasPorEnvasado);
-        //    }
-        //    catch (AppValidationException error)
-        //    {
-        //        return NotFound(error.Message);
-        //    }
-        //}
+                return Ok(lasCervezasPorEnvasado);
+            }
+            catch (AppValidationException error)
+            {
+                return NotFound(error.Message);
+            }
+        }
 
         [HttpPost]
         public async Task<IActionResult> CreateAsync(Envasado unEnvasado)

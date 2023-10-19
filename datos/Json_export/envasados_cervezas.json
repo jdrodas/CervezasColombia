@@ -1,0 +1,408 @@
+[
+  {
+    "cerveceria": "3 Cordilleras",
+    "cerveza": "Blanca",
+    "envasado": "Botella",
+    "unidad_volumen": "Mililitros",
+    "volumen": 330
+  },
+  {
+    "cerveceria": "3 Cordilleras",
+    "cerveza": "Mona",
+    "envasado": "Botella",
+    "unidad_volumen": "Mililitros",
+    "volumen": 330
+  },
+  {
+    "cerveceria": "3 Cordilleras",
+    "cerveza": "Mulata",
+    "envasado": "Botella",
+    "unidad_volumen": "Mililitros",
+    "volumen": 330
+  },
+  {
+    "cerveceria": "3 Cordilleras",
+    "cerveza": "Mestiza",
+    "envasado": "Botella",
+    "unidad_volumen": "Mililitros",
+    "volumen": 330
+  },
+  {
+    "cerveceria": "3 Cordilleras",
+    "cerveza": "Negra",
+    "envasado": "Botella",
+    "unidad_volumen": "Mililitros",
+    "volumen": 330
+  },
+  {
+    "cerveceria": "3 Cordilleras",
+    "cerveza": "Rose",
+    "envasado": "Botella",
+    "unidad_volumen": "Mililitros",
+    "volumen": 330
+  },
+  {
+    "cerveceria": "20 Mission",
+    "cerveza": "Blonde",
+    "envasado": "Botella",
+    "unidad_volumen": "Mililitros",
+    "volumen": 330
+  },
+  {
+    "cerveceria": "20 Mission",
+    "cerveza": "Witbier",
+    "envasado": "Botella",
+    "unidad_volumen": "Mililitros",
+    "volumen": 330
+  },
+  {
+    "cerveceria": "20 Mission",
+    "cerveza": "Pale Ale",
+    "envasado": "Botella",
+    "unidad_volumen": "Mililitros",
+    "volumen": 330
+  },
+  {
+    "cerveceria": "20 Mission",
+    "cerveza": "Porter",
+    "envasado": "Botella",
+    "unidad_volumen": "Mililitros",
+    "volumen": 330
+  },
+  {
+    "cerveceria": "20 Mission",
+    "cerveza": "IPA",
+    "envasado": "Botella",
+    "unidad_volumen": "Mililitros",
+    "volumen": 330
+  },
+  {
+    "cerveceria": "20 Mission",
+    "cerveza": "Saison",
+    "envasado": "Botella",
+    "unidad_volumen": "Mililitros",
+    "volumen": 330
+  },
+  {
+    "cerveceria": "Rincón del Mar",
+    "cerveza": "Açaí",
+    "envasado": "Botella",
+    "unidad_volumen": "Mililitros",
+    "volumen": 330
+  },
+  {
+    "cerveceria": "Rincón del Mar",
+    "cerveza": "Cacao",
+    "envasado": "Botella",
+    "unidad_volumen": "Mililitros",
+    "volumen": 330
+  },
+  {
+    "cerveceria": "Rincón del Mar",
+    "cerveza": "Canábica",
+    "envasado": "Botella",
+    "unidad_volumen": "Mililitros",
+    "volumen": 330
+  },
+  {
+    "cerveceria": "Rincón del Mar",
+    "cerveza": "Colorada",
+    "envasado": "Botella",
+    "unidad_volumen": "Mililitros",
+    "volumen": 330
+  },
+  {
+    "cerveceria": "Rincón del Mar",
+    "cerveza": "Coca",
+    "envasado": "Botella",
+    "unidad_volumen": "Mililitros",
+    "volumen": 330
+  },
+  {
+    "cerveceria": "Rincón del Mar",
+    "cerveza": "Gringa",
+    "envasado": "Botella",
+    "unidad_volumen": "Mililitros",
+    "volumen": 330
+  },
+  {
+    "cerveceria": "Bruder",
+    "cerveza": "IPA Maracuyá",
+    "envasado": "Botella",
+    "unidad_volumen": "Mililitros",
+    "volumen": 330
+  },
+  {
+    "cerveceria": "Bruder",
+    "cerveza": "Barley Wine",
+    "envasado": "Botella",
+    "unidad_volumen": "Mililitros",
+    "volumen": 330
+  },
+  {
+    "cerveceria": "Bruder",
+    "cerveza": "Dog Lover",
+    "envasado": "Botella",
+    "unidad_volumen": "Mililitros",
+    "volumen": 330
+  },
+  {
+    "cerveceria": "Bruder",
+    "cerveza": "Café",
+    "envasado": "Botella",
+    "unidad_volumen": "Mililitros",
+    "volumen": 330
+  },
+  {
+    "cerveceria": "Bruder",
+    "cerveza": "Pueblito",
+    "envasado": "Botella",
+    "unidad_volumen": "Mililitros",
+    "volumen": 330
+  },
+  {
+    "cerveceria": "Bruder",
+    "cerveza": "Maracuyá",
+    "envasado": "Botella",
+    "unidad_volumen": "Mililitros",
+    "volumen": 330
+  },
+  {
+    "cerveceria": "Bruder",
+    "cerveza": "Roja",
+    "envasado": "Botella",
+    "unidad_volumen": "Mililitros",
+    "volumen": 330
+  },
+  {
+    "cerveceria": "Bruder",
+    "cerveza": "Chocolate",
+    "envasado": "Botella",
+    "unidad_volumen": "Mililitros",
+    "volumen": 330
+  },
+  {
+    "cerveceria": "Bruder",
+    "cerveza": "Rubia",
+    "envasado": "Botella",
+    "unidad_volumen": "Mililitros",
+    "volumen": 330
+  },
+  {
+    "cerveceria": "Bruder",
+    "cerveza": "Imperial Strout",
+    "envasado": "Botella",
+    "unidad_volumen": "Mililitros",
+    "volumen": 330
+  },
+  {
+    "cerveceria": "BBC",
+    "cerveza": "Septimazo",
+    "envasado": "Botella",
+    "unidad_volumen": "Mililitros",
+    "volumen": 330
+  },
+  {
+    "cerveceria": "BBC",
+    "cerveza": "Macondo",
+    "envasado": "Botella",
+    "unidad_volumen": "Mililitros",
+    "volumen": 330
+  },
+  {
+    "cerveceria": "BBC",
+    "cerveza": "Monserrate",
+    "envasado": "Botella",
+    "unidad_volumen": "Mililitros",
+    "volumen": 330
+  },
+  {
+    "cerveceria": "BBC",
+    "cerveza": "Lager",
+    "envasado": "Botella",
+    "unidad_volumen": "Mililitros",
+    "volumen": 330
+  },
+  {
+    "cerveceria": "BBC",
+    "cerveza": "Bacatá",
+    "envasado": "Botella",
+    "unidad_volumen": "Mililitros",
+    "volumen": 330
+  },
+  {
+    "cerveceria": "BBC",
+    "cerveza": "Chapinero",
+    "envasado": "Botella",
+    "unidad_volumen": "Mililitros",
+    "volumen": 330
+  },
+  {
+    "cerveceria": "BBC",
+    "cerveza": "Cajicá",
+    "envasado": "Botella",
+    "unidad_volumen": "Mililitros",
+    "volumen": 330
+  },
+  {
+    "cerveceria": "Fierabrás",
+    "cerveza": "Isabel la Católica",
+    "envasado": "Botella",
+    "unidad_volumen": "Mililitros",
+    "volumen": 330
+  },
+  {
+    "cerveceria": "Fierabrás",
+    "cerveza": "Dulcinea",
+    "envasado": "Botella",
+    "unidad_volumen": "Mililitros",
+    "volumen": 330
+  },
+  {
+    "cerveceria": "Fierabrás",
+    "cerveza": "Juana de Arco",
+    "envasado": "Botella",
+    "unidad_volumen": "Mililitros",
+    "volumen": 330
+  },
+  {
+    "cerveceria": "Fierabrás",
+    "cerveza": "Maria Antonieta",
+    "envasado": "Botella",
+    "unidad_volumen": "Mililitros",
+    "volumen": 330
+  },
+  {
+    "cerveceria": "BBC",
+    "cerveza": "Rubia",
+    "envasado": "Botella",
+    "unidad_volumen": "Mililitros",
+    "volumen": 330
+  },
+  {
+    "cerveceria": "Cervezas Kalima",
+    "cerveza": "Alexa",
+    "envasado": "Botella",
+    "unidad_volumen": "Mililitros",
+    "volumen": 330
+  },
+  {
+    "cerveceria": "Cervezas Kalima",
+    "cerveza": "Más Música Local",
+    "envasado": "Botella",
+    "unidad_volumen": "Mililitros",
+    "volumen": 330
+  },
+  {
+    "cerveceria": "Nevada Cerveceria",
+    "cerveza": "Happy Ayu",
+    "envasado": "Botella",
+    "unidad_volumen": "Mililitros",
+    "volumen": 330
+  },
+  {
+    "cerveceria": "Nevada Cerveceria",
+    "cerveza": "Happy Tucán",
+    "envasado": "Botella",
+    "unidad_volumen": "Mililitros",
+    "volumen": 330
+  },
+  {
+    "cerveceria": "Nevada Cerveceria",
+    "cerveza": "Happy Nebbi",
+    "envasado": "Botella",
+    "unidad_volumen": "Mililitros",
+    "volumen": 330
+  },
+  {
+    "cerveceria": "Nevada Cerveceria",
+    "cerveza": "Happy Pava",
+    "envasado": "Botella",
+    "unidad_volumen": "Mililitros",
+    "volumen": 330
+  },
+  {
+    "cerveceria": "Nevada Cerveceria",
+    "cerveza": "Happy Garceta",
+    "envasado": "Botella",
+    "unidad_volumen": "Mililitros",
+    "volumen": 330
+  },
+  {
+    "cerveceria": "Nevada Cerveceria",
+    "cerveza": "Happy Trepadora",
+    "envasado": "Botella",
+    "unidad_volumen": "Mililitros",
+    "volumen": 330
+  },
+  {
+    "cerveceria": "Bari Cerveza Artesanal",
+    "cerveza": "Eclipse",
+    "envasado": "Botella",
+    "unidad_volumen": "Mililitros",
+    "volumen": 330
+  },
+  {
+    "cerveceria": "Bari Cerveza Artesanal",
+    "cerveza": "Eclipse",
+    "envasado": "Growler",
+    "unidad_volumen": "Litros",
+    "volumen": 2
+  },
+  {
+    "cerveceria": "Cervecería Cartagena",
+    "cerveza": "Golden",
+    "envasado": "Botella",
+    "unidad_volumen": "Mililitros",
+    "volumen": 330
+  },
+  {
+    "cerveceria": "Cervecería Cartagena",
+    "cerveza": "Porter",
+    "envasado": "Botella",
+    "unidad_volumen": "Mililitros",
+    "volumen": 330
+  },
+  {
+    "cerveceria": "Cervecería Cartagena",
+    "cerveza": "Roja",
+    "envasado": "Botella",
+    "unidad_volumen": "Mililitros",
+    "volumen": 330
+  },
+  {
+    "cerveceria": "Lino Brewing Company",
+    "cerveza": "Colaa",
+    "envasado": "Botella",
+    "unidad_volumen": "Mililitros",
+    "volumen": 330
+  },
+  {
+    "cerveceria": "Lino Brewing Company",
+    "cerveza": "Cols",
+    "envasado": "Botella",
+    "unidad_volumen": "Mililitros",
+    "volumen": 330
+  },
+  {
+    "cerveceria": "Lino Brewing Company",
+    "cerveza": "Cols",
+    "envasado": "Botella",
+    "unidad_volumen": "Mililitros",
+    "volumen": 750
+  },
+  {
+    "cerveceria": "Lino Brewing Company",
+    "cerveza": "Colpa",
+    "envasado": "Botella",
+    "unidad_volumen": "Mililitros",
+    "volumen": 330
+  },
+  {
+    "cerveceria": "Lino Brewing Company",
+    "cerveza": "Neipa",
+    "envasado": "Botella",
+    "unidad_volumen": "Mililitros",
+    "volumen": 330
+  }
+]

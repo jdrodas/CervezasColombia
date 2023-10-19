@@ -63,47 +63,49 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             return unEnvasado;
         }
 
-        //TODO: EnvasadoRepository: Obtener total de cervezas asociadas
+        public async Task<int> GetTotalAssociatedBeersAsync(string envasado_id)
+        {
+            var cervezasAsociadas = await GetAssociatedBeersAsync(envasado_id);
 
-        //public async Task<int> GetTotalAssociatedBeersAsync(int envasado_id)
-        //{
-        //    var conexion = contextoDB.CreateConnection();
+            return cervezasAsociadas.Count();
+        }
 
-        //    DynamicParameters parametrosSentencia = new();
-        //    parametrosSentencia.Add("@envasado_id", envasado_id,
-        //                            DbType.Int32, ParameterDirection.Input);
+        public async Task<IEnumerable<Cerveza>> GetAssociatedBeersAsync(string envasado_id)
+        {
+            Envasado unEvasado = await GetByIdAsync(envasado_id);
+            List<Cerveza> lasCervezas = new();
 
-        //    string sentenciaSQL = "SELECT COUNT(cerveza_id) totalCervezas " +
-        //                            "FROM v_info_envasados_cervezas v " +
-        //                            "WHERE envasado_id = @envasado_id ";
+            var conexion = contextoDB.CreateConnection();
+            var coleccionEnvasadosCervezas = conexion.GetCollection<EnvasadoCerveza>("envasados_cervezas");
 
-        //    var totalCervezas = await conexion.QueryFirstAsync<int>(sentenciaSQL,
-        //                            parametrosSentencia);
+            var losEnvasadosCervezas = await coleccionEnvasadosCervezas
+                .Find(envasado_cerveza => envasado_cerveza.Envasado == unEvasado.Nombre)
+                .SortBy(envasado_cerveza => envasado_cerveza.Cerveza)
+                .ToListAsync();
 
-        //    return totalCervezas;
-        //}
+            //Creamos una lista de cervezas y la llenamos con el detalle de las cervezas
+            if (losEnvasadosCervezas.Any())
+            {
+                var coleccionCervezas = conexion.GetCollection<Cerveza>("cervezas");
 
-        //TODO: EnvasadoRepository: Obtener cervezas asociadas
+                foreach (EnvasadoCerveza unEnvasadoCerveza in losEnvasadosCervezas)
+                {
+                    var builder = Builders<Cerveza>.Filter;
+                    var filtro = builder.And(
+                        builder.Eq(cerveza => cerveza.Nombre, unEnvasadoCerveza.Cerveza),
+                        builder.Eq(cerveza => cerveza.Cerveceria, unEnvasadoCerveza.Cerveceria));
 
-        //public async Task<IEnumerable<Cerveza>> GetAssociatedBeersAsync(int envasado_id)
-        //{
-        //    var conexion = contextoDB.CreateConnection();
 
-        //    DynamicParameters parametrosSentencia = new();
-        //    parametrosSentencia.Add("@envasado_id", envasado_id,
-        //                            DbType.Int32, ParameterDirection.Input);
+                    var unaCerveza = await coleccionCervezas
+                        .Find(filtro)
+                        .FirstOrDefaultAsync();
 
-        //    string sentenciaSQL = "SELECT vc.cerveza_id id, vc.cerveza nombre, vc.cerveceria, " +
-        //                            "vc.estilo, vc.ibu, vc.abv, vc.rango_ibu, vc.rango_abv " +
-        //                            "FROM v_info_cervezas vc " +
-        //                            "JOIN v_info_envasados_cervezas ve ON vc.cerveza_id = ve.cerveza_id " +
-        //                            "WHERE ve.envasado_id = @envasado_id " +
-        //                            "ORDER BY vc.cerveza_id DESC";
+                    lasCervezas.Add(unaCerveza);
+                }
+            }
 
-        //    var resultadoCervezas = await conexion.QueryAsync<Cerveza>(sentenciaSQL, parametrosSentencia);
-
-        //    return resultadoCervezas;
-        //}
+            return lasCervezas;
+        }
 
         //TODO: EnvasadoRepository: Obtener envasados asociados
 

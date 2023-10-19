@@ -41,6 +41,7 @@ db.createCollection("rangos_ibu");
 db.createCollection("tipos_ingredientes");
 db.createCollection("ubicaciones");
 db.createCollection("unidades_volumen");
+db.createCollection("envasados_cervezas");
 
 
 -- Creamos las collecciones ... usando un json schema para validación
@@ -278,6 +279,39 @@ db.createCollection("unidades_volumen", {
             abreviatura: {
                bsonType: "string",
                description: "'abreviatura' Debe ser una cadena de caracteres y no puede ser nulo"
+            }
+         }
+      }
+   }
+} );
+
+db.createCollection("envasados_cervezas", {
+   validator: {
+      $jsonSchema: {
+         bsonType: "object",
+         title: "Envasados en los cuales se puede envasar una cerveza",
+         required: [ "cerveceria","cerveza","envasado","unidad_volumen", "volumen"],
+         properties: {
+            cerveceria: {
+               bsonType: "string",
+               description: "'cerveceria' Debe ser una cadena de caracteres y no puede ser nulo"
+            },
+            cerveza: {
+               bsonType: "string",
+               description: "'cerveza' Debe ser una cadena de caracteres y no puede ser nulo"
+            },
+            envasado: {
+               bsonType: "string",
+               description: "'envasado' Debe ser una cadena de caracteres y no puede ser nulo"
+            },
+            unidad_volumen: {
+               bsonType: "string",
+               description: "'unidad_volumen' Debe ser una cadena de caracteres y no puede ser nulo"
+            },
+            volumen: {
+               bsonType: "number",
+               minimum:0,
+               description: "'volumen' Debe ser un numero real mayor que cero"
             }
          }
       }

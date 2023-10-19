@@ -31,27 +31,25 @@ namespace CervezasColombia_CS_API_Mongo.Services
             return unEnvasado;
         }
 
-        //TODO: EnvasadoService: Obtener cervezas asociada
+        public async Task<IEnumerable<Cerveza>> GetAssociatedBeersAsync(string envasado_id)
+        {
+            //Validamos que el Envasado exista con ese Id
+            var unEnvasado = await _envasadoRepository
+                .GetByIdAsync(envasado_id);
 
-        //public async Task<IEnumerable<Cerveza>> GetAssociatedBeersAsync(int envasado_id)
-        //{
-        //    //Validamos que la Cerveceria exista con ese Id
-        //    var unEnvasado = await _envasadoRepository
-        //        .GetByIdAsync(envasado_id);
+            if (string.IsNullOrEmpty(unEnvasado.Id))
+                throw new AppValidationException($"Envasado no encontrado con el id {envasado_id}");
 
-        //    if (unEnvasado.Id == 0)
-        //        throw new AppValidationException($"Envasado no encontrado con el id {envasado_id}");
+            //Si la cerveceria existe, validamos que tenga cervezas asociadas
+            var cantidadCervezasAsociadas = await _envasadoRepository
+                .GetTotalAssociatedBeersAsync(envasado_id);
 
-        //    //Si la cerveceria existe, validamos que tenga cervezas asociadas
-        //    var cantidadCervezasAsociadas = await _envasadoRepository
-        //        .GetTotalAssociatedBeersAsync(envasado_id);
+            if (cantidadCervezasAsociadas == 0)
+                throw new AppValidationException($"No Existen cervezas asociadas al envasado {unEnvasado.Nombre}");
 
-        //    if (cantidadCervezasAsociadas == 0)
-        //        throw new AppValidationException($"No Existen cervezas asociadas al envasado {unEnvasado.Nombre}");
-
-        //    return await _envasadoRepository
-        //        .GetAssociatedBeersAsync(envasado_id);
-        //}
+            return await _envasadoRepository
+                .GetAssociatedBeersAsync(envasado_id);
+        }
 
         public async Task<Envasado> CreateAsync(Envasado unEnvasado)
         {
