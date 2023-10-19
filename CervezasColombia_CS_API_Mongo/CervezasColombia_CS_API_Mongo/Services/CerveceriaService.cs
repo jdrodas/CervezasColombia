@@ -8,12 +8,15 @@ namespace CervezasColombia_CS_API_Mongo.Services
     {
         private readonly ICerveceriaRepository _cerveceriaRepository;
         private readonly IUbicacionRepository _ubicacionRepository;
+        private readonly ICervezaRepository _cervezaRepository;
 
         public CerveceriaService(ICerveceriaRepository cerveceriaRepository,
-                                IUbicacionRepository ubicacionRepository)
+                                IUbicacionRepository ubicacionRepository,
+                                ICervezaRepository cervezaRepository)
         {
             _cerveceriaRepository = cerveceriaRepository;
             _ubicacionRepository = ubicacionRepository;
+            _cervezaRepository = cervezaRepository;
         }
 
         public async Task<IEnumerable<Cerveceria>> GetAllAsync()
@@ -22,7 +25,26 @@ namespace CervezasColombia_CS_API_Mongo.Services
                 .GetAllAsync();
         }
 
-        public async Task<Cerveceria> GetByIdAsync(string cerveceria_id)
+        public async Task<CerveceriaDetallada> GetDetailsByIdAsync(string cerveceria_id)
+        {
+            //Validamos que la Cerveceria exista con ese Id
+            var unaCerveceriaDetallada = await _cerveceriaRepository
+                .GetDetailsByIdAsync(cerveceria_id);
+
+            if (string.IsNullOrEmpty(unaCerveceriaDetallada.Id))
+                throw new AppValidationException($"Cerveceria no encontrada con el id {cerveceria_id}");
+
+            //Colocamos los valores de los rangos a las cervezas
+            foreach (Cerveza unaCerveza in unaCerveceriaDetallada.Cervezas)
+            {
+                unaCerveza.Rango_Ibu = await _cervezaRepository.GetIbuRangeNameAsync(unaCerveza.Ibu);
+                unaCerveza.Rango_Abv = await _cervezaRepository.GetAbvRangeNameAsync(unaCerveza.Abv);
+            }
+
+            return unaCerveceriaDetallada;
+        }
+
+        public async Task<IEnumerable<Cerveza>> GetAssociatedBeersAsync(string cerveceria_id)
         {
             //Validamos que la Cerveceria exista con ese Id
             var unaCerveceria = await _cerveceriaRepository
@@ -31,29 +53,24 @@ namespace CervezasColombia_CS_API_Mongo.Services
             if (string.IsNullOrEmpty(unaCerveceria.Id))
                 throw new AppValidationException($"Cerveceria no encontrada con el id {cerveceria_id}");
 
-            return unaCerveceria;
+            //Si la cerveceria existe, validamos que tenga cervezas asociadas
+            var cantidadCervezasAsociadas = await _cerveceriaRepository
+                .GetTotalAssociatedBeersAsync(cerveceria_id);
+
+            if (cantidadCervezasAsociadas == 0)
+                throw new AppValidationException($"No Existen cervezas asociadas a la cerveceria {unaCerveceria.Nombre}");
+
+            var lasCervezas = await _cerveceriaRepository.GetAssociatedBeersAsync(cerveceria_id);
+
+            //Colocamos los valores de los rangos a las cervezas
+            foreach (Cerveza unaCerveza in lasCervezas)
+            {
+                unaCerveza.Rango_Ibu = await _cervezaRepository.GetIbuRangeNameAsync(unaCerveza.Ibu);
+                unaCerveza.Rango_Abv = await _cervezaRepository.GetAbvRangeNameAsync(unaCerveza.Abv);
+            }
+
+            return lasCervezas;
         }
-
-        //TODO: CerveceriaService: Obtener cervezas asociadas
-
-        //public async Task<IEnumerable<Cerveza>> GetAssociatedBeersAsync(int cerveceria_id)
-        //{
-        //    //Validamos que la Cerveceria exista con ese Id
-        //    var unaCerveceria = await _cerveceriaRepository
-        //        .GetByIdAsync(cerveceria_id);
-
-        //    if (unaCerveceria.Id == 0)
-        //        throw new AppValidationException($"Cerveceria no encontrada con el id {cerveceria_id}");
-
-        //    //Si la cerveceria existe, validamos que tenga cervezas asociadas
-        //    var cantidadCervezasAsociadas = await _cerveceriaRepository
-        //        .GetTotalAssociatedBeersAsync(cerveceria_id);
-
-        //    if (cantidadCervezasAsociadas == 0)
-        //        throw new AppValidationException($"No Existen cervezas asociadas a la cerveceria {unaCerveceria.Nombre}");
-
-        //    return await _cerveceriaRepository.GetAssociatedBeersAsync(cerveceria_id);
-        //}
 
         public async Task<Cerveceria> CreateAsync(Cerveceria unaCerveceria)
         {
@@ -217,17 +234,16 @@ namespace CervezasColombia_CS_API_Mongo.Services
             if (string.IsNullOrEmpty(cerveceriaExistente.Id))
                 throw new AppValidationException($"No existe una cerveceria con el Id {cerveceria_id} que se pueda eliminar");
 
-            //TODO: Validar que no hayan cervezas asociadas a esta cerveria
-            
-            //// Validamos que la cerveceria no tenga asociadas cervezas
-            //var cantidadCervezasAsociadas = await _cerveceriaRepository
-            //    .GetTotalAssociatedBeersAsync(cerveceriaExistente.Id);
 
-            //if (cantidadCervezasAsociadas > 0)
-            //    throw new AppValidationException($"Existen {cantidadCervezasAsociadas} cervezas " +
-            //        $"asociadas a {cerveceriaExistente.Nombre}. No se puede eliminar");
+            // Validamos que la cerveceria no tenga asociadas cervezas
+            var cantidadCervezasAsociadas = await _cerveceriaRepository
+                .GetTotalAssociatedBeersAsync(cerveceriaExistente.Id);
 
-            //Si existe y no tiene cervezas asociadas, se puede eliminar
+            //Si existen, se borran previamente
+            if (cantidadCervezasAsociadas > 0)
+                await _cerveceriaRepository.DeleteAssociatedBeersAsync(cerveceriaExistente.Id);
+
+            //Finalmente se borra la cerveceria
             try
             {
                 bool resultadoAccion = await _cerveceriaRepository

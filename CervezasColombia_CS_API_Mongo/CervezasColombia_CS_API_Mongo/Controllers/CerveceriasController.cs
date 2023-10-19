@@ -26,12 +26,12 @@ namespace CervezasColombia_CS_API_Mongo.Controllers
         }
 
         [HttpGet("{cerveceria_id:length(24)}")]
-        public async Task<IActionResult> GetByIdAsync(string cerveceria_id)
+        public async Task<IActionResult> GetDetailsByIdAsync(string cerveceria_id)
         {
             try
             {
                 var unaCerveceriaDetallada = await _cerveceriaService
-                    .GetByIdAsync(cerveceria_id);
+                    .GetDetailsByIdAsync(cerveceria_id);
 
                 return Ok(unaCerveceriaDetallada);
             }
@@ -41,23 +41,21 @@ namespace CervezasColombia_CS_API_Mongo.Controllers
             }
         }
 
-        //TODO: CerveceriasController: Obtener cervezas asociadas
+        [HttpGet("{cerveceria_id:length(24)}/Cervezas")]
+        public async Task<IActionResult> GetAssociatedBeersAsync(string cerveceria_id)
+        {
+            try
+            {
+                var lasCervezasPorCerveceria = await _cerveceriaService
+                    .GetAssociatedBeersAsync(cerveceria_id);
 
-        //[HttpGet("{cerveceria_id:int}/Cervezas")]
-        //public async Task<IActionResult> GetAssociatedBeersAsync(int cerveceria_id)
-        //{
-        //    try
-        //    {
-        //        var lasCervezasPorCerveceria = await _cerveceriaService
-        //            .GetAssociatedBeersAsync(cerveceria_id);
-
-        //        return Ok(lasCervezasPorCerveceria);
-        //    }
-        //    catch (AppValidationException error)
-        //    {
-        //        return NotFound(error.Message);
-        //    }
-        //}
+                return Ok(lasCervezasPorCerveceria);
+            }
+            catch (AppValidationException error)
+            {
+                return NotFound(error.Message);
+            }
+        }
 
         [HttpPost]
         public async Task<IActionResult> CreateAsync(Cerveceria unaCerveceria)

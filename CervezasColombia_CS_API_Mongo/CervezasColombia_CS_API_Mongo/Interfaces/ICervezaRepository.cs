@@ -12,6 +12,10 @@ namespace CervezasColombia_CS_API_Mongo.Interfaces
         //public Task<int> GetTotalAssociatedPackagingsAsync(int cerveza_id);
         //public Task<IEnumerable<EnvasadoCerveza>> GetAssociatedPackagingsAsync(int cerveza_id);
         //public Task<EnvasadoCerveza> GetPackagedBeerByNameAsync(int cerveza_id, string envasado_nombre, int unidad_volumen_id, float volumen);
+
+        public Task<string> GetAbvRangeNameAsync(double abv);
+        public Task<string> GetIbuRangeNameAsync(double ibu);
+
         public Task<bool> CreateAsync(Cerveza unaCerveza);
         //public Task<bool> CreateBeerPackagingAsync(int cerveza_id, EnvasadoCerveza unEnvasadoCerveza);
         //public Task<bool> CreateBeerIngredientAsync(int cerveza_id, Ingrediente unIngrediente);

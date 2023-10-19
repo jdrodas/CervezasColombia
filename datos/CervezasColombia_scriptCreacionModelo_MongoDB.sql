@@ -53,8 +53,7 @@ db.createCollection("cervecerias", {
       'nombre',
       'sitio_web',
       'instagram',
-      'ubicacion',
-      'version_documento'
+      'ubicacion'
     ],
     properties: {
       nombre: {
@@ -69,9 +68,9 @@ db.createCollection("cervecerias", {
         bsonType: 'string',
         description: '\'instagram\' Debe ser una cadena de caracteres y no puede ser nulo'
       },
-      version_documento: {
-        bsonType: 'int',
-        description: '\'document_version\' Debe ser entero y no puede ser nulo'
+      ubicacion: {
+        bsonType: 'string',
+        description: '\'ubicacion\' Debe ser entero y no puede ser nulo'
       }
     }
   }

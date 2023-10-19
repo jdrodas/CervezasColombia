@@ -26,6 +26,13 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
                 .SortBy(cerveza => cerveza.Nombre)
                 .ToListAsync();
 
+            //Aqui les colocamos los valores de los rangos de Abv y de Ibu
+            foreach (Cerveza unaCerveza in lasCervezas)
+            {
+                unaCerveza.Rango_Ibu = await GetIbuRangeNameAsync(unaCerveza.Ibu);
+                unaCerveza.Rango_Abv = await GetAbvRangeNameAsync(unaCerveza.Abv);
+            }
+
             return lasCervezas;
         }
 
@@ -42,6 +49,9 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
 
             if (resultado is not null)
                 unaCerveza = resultado;
+
+            unaCerveza.Rango_Ibu = await GetIbuRangeNameAsync(unaCerveza.Ibu);
+            unaCerveza.Rango_Abv = await GetAbvRangeNameAsync(unaCerveza.Abv);
 
             return unaCerveza;
         }
@@ -182,9 +192,53 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
         //    return unEnvasadoCerveza;
         //}
 
+        public async Task<string> GetIbuRangeNameAsync(double ibu)
+        {
+            string unRangoIbu = string.Empty;
+
+            var conexion = contextoDB.CreateConnection();
+            var coleccionRangosIbu = conexion.GetCollection<RangoIbu>("rangos_ibu");
+
+            var builder = Builders<RangoIbu>.Filter;
+            var filtro = builder.Gte("valor_final", ibu) & builder.Lte("valor_inicial", ibu);          
+
+            var resultado = await coleccionRangosIbu
+                .Find(filtro)
+                .FirstOrDefaultAsync();
+
+            if (resultado is not null)
+                unRangoIbu = resultado.Nombre;
+
+            return unRangoIbu;
+        }
+
+        public async Task<string> GetAbvRangeNameAsync(double abv)
+        {
+            string unRangoAbv = string.Empty;
+
+            var conexion = contextoDB.CreateConnection();
+            var coleccionRangosAbv = conexion.GetCollection<RangoAbv>("rangos_abv");
+
+            var builder = Builders<RangoAbv>.Filter;
+            var filtro = builder.Gte("valor_final", abv) & builder.Lte("valor_inicial", abv);
+
+            var resultado = await coleccionRangosAbv
+                .Find(filtro)
+                .FirstOrDefaultAsync();
+
+            if (resultado is not null)
+                unRangoAbv = resultado.Nombre;
+
+            return unRangoAbv;
+        }
+
         public async Task<bool> CreateAsync(Cerveza unaCerveza)
         {
             bool resultadoAccion = false;
+
+            //Obtenemos los valores para los rangos Ibu y Abv
+            unaCerveza.Rango_Ibu = await GetIbuRangeNameAsync(unaCerveza.Ibu);
+            unaCerveza.Rango_Abv = await GetAbvRangeNameAsync(unaCerveza.Abv);
 
             var conexion = contextoDB.CreateConnection();
             var coleccionCervezas = conexion.GetCollection<Cerveza>("cervezas");

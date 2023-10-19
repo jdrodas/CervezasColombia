@@ -425,5 +425,20 @@
     "estilo": "French Saison",
     "ibu": 0,
     "abv": 6.5
+  },
+  {
+    "nombre": "Saison",
+    "cerveceria": "Perro Bravo",
+    "estilo": "Saison",
+    "ibu": 30,
+    "abv": 6
+  },
+  {
+    "nombre": "UchuvIPA",
+    "cerveceria": "Perro Bravo",
+    "estilo": "Saison",
+    "ibu": 30,
+    "abv": 6
   }
 ]
+

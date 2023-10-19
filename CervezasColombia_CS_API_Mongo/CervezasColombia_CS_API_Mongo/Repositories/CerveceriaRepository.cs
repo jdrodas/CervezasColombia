@@ -46,37 +46,28 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             return unaCerveceria;
         }
 
-        //TODO: CerveceriaRepository: Obtener detalles cerveceria
+        public async Task<CerveceriaDetallada> GetDetailsByIdAsync(string cerveceria_id)
+        {
+            CerveceriaDetallada unaCerveceriaDetallada = new();
 
-        //public async Task<CerveceriaDetallada> GetDetailsByIdAsync(int cerveceria_id)
-        //{
-        //    CerveceriaDetallada unaCerveceriaDetallada = new();
+            var conexion = contextoDB.CreateConnection();
+            var coleccionCervecerias = conexion.GetCollection<CerveceriaDetallada>("cervecerias");
 
-        //    var conexion = contextoDB.CreateConnection();
+            var resultado = await coleccionCervecerias
+                .Find(cerveceria => cerveceria.Id == cerveceria_id)
+                .FirstOrDefaultAsync();
 
-        //    DynamicParameters parametrosSentencia = new();
-        //    parametrosSentencia.Add("@cerveceria_id", cerveceria_id,
-        //                            DbType.Int32, ParameterDirection.Input);
+            if (resultado is not null)
+            {
+                unaCerveceriaDetallada = resultado;
 
-        //    string sentenciaSQL = "SELECT v.cerveceria_id id, v.cerveceria nombre, v.sitio_web, v.instagram " +
-        //        "FROM v_info_cervecerias v " +
-        //        "WHERE v.cerveceria_id = @cerveceria_id";
+                //Aqui buscamos las cervezas asociadas
+                var cervezasAsociadas = await GetAssociatedBeersAsync(unaCerveceriaDetallada.Id!);
+                unaCerveceriaDetallada.Cervezas = cervezasAsociadas.ToList();
+            }
 
-        //    var resultado = await conexion.QueryAsync<CerveceriaDetallada>(sentenciaSQL,
-        //                        parametrosSentencia);
-
-        //    if (resultado.Any())
-        //    {
-        //        unaCerveceriaDetallada = resultado.First();
-        //        unaCerveceriaDetallada.Ubicacion = await GetAssociatedLocationAsync(unaCerveceriaDetallada.Id);
-
-        //        //Aqui buscamos las cervezas asociadas
-        //        var cervezasAsociadas = await GetAssociatedBeersAsync(unaCerveceriaDetallada.Id);
-        //        unaCerveceriaDetallada.Cervezas = cervezasAsociadas.ToList();
-        //    }
-
-        //    return unaCerveceriaDetallada;
-        //}
+            return unaCerveceriaDetallada;                       
+        }
 
         public async Task<Cerveceria> GetByNameAsync(string cerveceria_nombre)
         {
@@ -129,72 +120,61 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             return unaCerveceria;
         }
 
-        //TODO: CerveceriaRepository: Obtener Total cervezas asociadas
+        public async Task<int> GetTotalAssociatedBeersAsync(string cerveceria_id)
+        {
+            Cerveceria unaCerveceria = await GetByIdAsync(cerveceria_id);
 
-        //public async Task<int> GetTotalAssociatedBeersAsync(int cerveceria_id)
-        //{
-        //    var conexion = contextoDB.CreateConnection();
+            var conexion = contextoDB.CreateConnection();
+            var coleccionCervezas = conexion.GetCollection<Cerveza>("cervezas");
 
-        //    DynamicParameters parametrosSentencia = new();
-        //    parametrosSentencia.Add("@cerveceria_id", cerveceria_id,
-        //                            DbType.Int32, ParameterDirection.Input);
+            var lasCervezas = await coleccionCervezas
+                .Find(cerveza => cerveza.Cerveceria == unaCerveceria.Nombre)
+                .SortBy(cerveza => cerveza.Nombre)
+                .ToListAsync();
 
-        //    string sentenciaSQL = "SELECT COUNT(id) totalCervezas " +
-        //                          "FROM cervezas " +
-        //                          "WHERE cerveceria_id = @cerveceria_id ";
+            return lasCervezas.Count();
+        }
 
+        public async Task<IEnumerable<Cerveza>> GetAssociatedBeersAsync(string cerveceria_id)
+        {
+            Cerveceria unaCerveceria = await GetByIdAsync(cerveceria_id);
 
-        //    var totalCervezas = await conexion.QueryFirstAsync<int>(sentenciaSQL,
-        //                            parametrosSentencia);
+            var conexion = contextoDB.CreateConnection();
+            var coleccionCervezas = conexion.GetCollection<Cerveza>("cervezas");
 
-        //    return totalCervezas;
-        //}
+            var lasCervezas = await coleccionCervezas
+                .Find(cerveza => cerveza.Cerveceria == unaCerveceria.Nombre)
+                .SortBy(cerveza => cerveza.Nombre)
+                .ToListAsync();
 
-        //TODO: CerveceriaRepository: Obtener cervezas asociadas
+            return lasCervezas;
+        }
 
-        //public async Task<IEnumerable<Cerveza>> GetAssociatedBeersAsync(int cerveceria_id)
-        //{
-        //    var conexion = contextoDB.CreateConnection();
+        public async Task<Ubicacion> GetAssociatedLocationAsync(string cerveceria_id)
+        {
+            Cerveceria unaCerveceria = await GetByIdAsync(cerveceria_id);
 
-        //    DynamicParameters parametrosSentencia = new();
-        //    parametrosSentencia.Add("@cerveceria_id", cerveceria_id,
-        //                            DbType.Int32, ParameterDirection.Input);
+            string[] partesUbicacion = unaCerveceria.Ubicacion.Split(',');
 
-        //    string sentenciaSQL = "SELECT cerveza_id id, cerveza nombre, cerveceria_id, cerveceria, estilo_id, " +
-        //                            "estilo, ibu, abv, rango_ibu, rango_abv " +
-        //                            "FROM v_info_cervezas " +
-        //                            "WHERE cerveceria_id = @cerveceria_id " +
-        //                            "ORDER BY id DESC";
+            var conexion = contextoDB.CreateConnection();
+            var coleccionUbicaciones = conexion.GetCollection<Ubicacion>("ubicaciones");
 
-        //    var resultadoCervezas = await conexion.QueryAsync<Cerveza>(sentenciaSQL, parametrosSentencia);
+            var builder = Builders<Ubicacion>.Filter;
+            var filtro = builder.And(
+                builder.Eq(ubicacion => ubicacion.Municipio, partesUbicacion[0].Trim()),
+                builder.Eq(ubicacion => ubicacion.Departamento, partesUbicacion[1].Trim()));
 
-        //    return resultadoCervezas;
-        //}
+            var resultado = await coleccionUbicaciones
+                .Find(filtro)
+                .FirstOrDefaultAsync();
 
-        //TODO: CerveceriaRepository: Obtener Ubicación asociada
+            Ubicacion unaUbicacion = new();
 
-        //public async Task<Ubicacion> GetAssociatedLocationAsync(int cerveceria_id)
-        //{
-        //    Ubicacion unaUbicacion = new();
+            if (resultado is not null)
+                unaUbicacion = resultado;
 
-        //    var conexion = contextoDB.CreateConnection();
-
-        //    DynamicParameters parametrosSentencia = new();
-        //    parametrosSentencia.Add("@cerveceria_id", cerveceria_id,
-        //                            DbType.Int32, ParameterDirection.Input);
-
-        //    string sentenciaSQL = "SELECT u.id, u.municipio, u.departamento, u.latitud, u.longitud " +
-        //                            "FROM ubicaciones u " +
-        //                            "WHERE u.id = (select c.ubicacion_id from cervecerias c where c.id = @cerveceria_id) ";
-
-        //    var resultadoIdUbicacion = await conexion.QueryAsync<Ubicacion>(sentenciaSQL,
-        //                                    parametrosSentencia);
-
-        //    if (resultadoIdUbicacion.Any())
-        //        unaUbicacion = resultadoIdUbicacion.First();
-
-        //    return unaUbicacion;
-        //}
+            return unaUbicacion;
+        }
 
         public async Task<bool> CreateAsync(Cerveceria unaCerveceria)
         {
@@ -238,6 +218,24 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
 
             var resultado = await coleccionCervecerias
                 .DeleteOneAsync(cerveceria => cerveceria.Id == unaCerveceria.Id);
+
+            if (resultado.IsAcknowledged)
+                resultadoAccion = true;
+
+            return resultadoAccion;
+        }
+
+        public async Task<bool> DeleteAssociatedBeersAsync(string cerveceria_id)
+        {
+            bool resultadoAccion = false;
+
+            var unaCerveceria = await GetByIdAsync(cerveceria_id);
+
+            var conexion = contextoDB.CreateConnection();
+            var coleccionCervezas = conexion.GetCollection<Cerveza>("cervezas");
+
+            var resultado = await coleccionCervezas
+                .DeleteManyAsync(cerveza => cerveza.Cerveceria == unaCerveceria.Nombre);
 
             if (resultado.IsAcknowledged)
                 resultadoAccion = true;

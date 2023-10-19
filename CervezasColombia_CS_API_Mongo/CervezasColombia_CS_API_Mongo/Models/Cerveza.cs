@@ -18,8 +18,9 @@ namespace CervezasColombia_CS_API_Mongo.Models
 
         [BsonElement("cerveceria_id")]
         [JsonPropertyName("cerveceria_id")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string? Cerveceria_id { get; set; } = string.Empty;
+        public string? Cerveceria_id { get; set; } = null;
 
         [BsonElement("cerveceria")]
         [JsonPropertyName("cerveceria")]
@@ -28,8 +29,9 @@ namespace CervezasColombia_CS_API_Mongo.Models
 
         [BsonElement("estilo_id")]
         [JsonPropertyName("estilo_id")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string? Estilo_id { get; set; } = string.Empty;
+        public string? Estilo_id { get; set; } = null;
 
         [BsonElement("estilo")]
         [JsonPropertyName("estilo")]
@@ -38,8 +40,9 @@ namespace CervezasColombia_CS_API_Mongo.Models
 
         [BsonElement("rango_ibu")]
         [JsonPropertyName("rango_ibu")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [BsonRepresentation(BsonType.String)]
-        public string Rango_Ibu { get; set; } = string.Empty;
+        public string? Rango_Ibu { get; set; } = null;
 
         [BsonElement("ibu")]
         [JsonPropertyName("ibu")]
@@ -48,8 +51,9 @@ namespace CervezasColombia_CS_API_Mongo.Models
 
         [BsonElement("rango_abv")]
         [JsonPropertyName("rango_abv")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [BsonRepresentation(BsonType.String)]
-        public string Rango_Abv { get; set; } = string.Empty;
+        public string? Rango_Abv { get; set; } = null;
 
         [BsonElement("abv")]
         [JsonPropertyName("abv")]
