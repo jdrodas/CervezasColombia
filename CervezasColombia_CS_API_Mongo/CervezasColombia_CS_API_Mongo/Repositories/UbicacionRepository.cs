@@ -91,48 +91,27 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             return unaUbicacion;
         }
 
-        //TODO: UbicacionRepository: Obtener total cervecerias asociadas
+        public async Task<int> GetTotalAssociatedBreweriesAsync(string ubicacion_id)
+        {
+            var lasCervecerias = await GetAssociatedBreweriesAsync(ubicacion_id);
 
-        //public async Task<int> GetTotalAssociatedBreweriesAsync(int ubicacion_id)
-        //{
-        //    using (var conexion = contextoDB.CreateConnection())
-        //    {
-        //        DynamicParameters parametrosSentencia = new DynamicParameters();
-        //        parametrosSentencia.Add("@ubicacion_id", ubicacion_id,
-        //                                DbType.Int32, ParameterDirection.Input);
+            return lasCervecerias.Count();
+        }
 
-        //        string sentenciaSQL = "SELECT COUNT(id) total_cervecerias " +
-        //                              "FROM cervecerias " +
-        //                              "WHERE ubicacion_id = @ubicacion_id";
+        public async Task<IEnumerable<Cerveceria>> GetAssociatedBreweriesAsync(string ubicacion_id)
+        {
+            var unaUbicacion = await GetByIdAsync(ubicacion_id);
+            string ubicacionConsolidada = unaUbicacion.Municipio + ", " + unaUbicacion.Departamento;
 
+            var conexion = contextoDB.CreateConnection();
+            var coleccionCervecerias = conexion.GetCollection<Cerveceria>("cervecerias");
 
-        //        var totalCervecerias = await conexion.QueryFirstAsync<int>(sentenciaSQL,
-        //                                parametrosSentencia);
+            var lasCervecerias = await coleccionCervecerias
+                .Find(cerveceria => cerveceria.Ubicacion == ubicacionConsolidada)
+                .ToListAsync();
 
-        //        return totalCervecerias;
-        //    }
-        //}
-
-        //TODO: UbicacionRepository: Obtener cervecerias asociadas
-
-        //public async Task<IEnumerable<Cerveceria>> GetAssociatedBreweriesAsync(int ubicacion_id)
-        //{
-        //    using (var conexion = contextoDB.CreateConnection())
-        //    {
-        //        DynamicParameters parametrosSentencia = new DynamicParameters();
-        //        parametrosSentencia.Add("@ubicacion_id", ubicacion_id,
-        //                                DbType.Int32, ParameterDirection.Input);
-
-        //        string sentenciaSQL =   "SELECT v.cervceria_id id, v.cerveceria nombre, v.sitio_web, c.instagram, " +
-        //                                "v.ubicacion, v.ubicacion_id " +
-        //                                "FROM v_info_cervecerias v " +
-        //                                "where v.ubicacion_id = @ubicacion_id";
-
-        //        var resultadoCervecerias = await conexion.QueryAsync<Cerveceria>(sentenciaSQL, parametrosSentencia);
-
-        //        return resultadoCervecerias;
-        //    }
-        //}
+            return lasCervecerias;
+        }
 
         public async Task<bool> CreateAsync(Ubicacion unaUbicacion)
         {
@@ -152,74 +131,35 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             return resultadoAccion;
         }
 
-        //TODO: UbicacionRepository: Actualizar Ubicación
+        public async Task<bool> UpdateAsync(Ubicacion unaUbicacion)
+        {
+            bool resultadoAccion = false;
 
-        //public async Task<bool> UpdateAsync(Ubicacion unaUbicacion)
-        //{
-        //    bool resultadoAccion = false;
+            var conexion = contextoDB.CreateConnection();
+            var coleccionUbicaciones = conexion.GetCollection<Ubicacion>("ubicaciones");
 
-        //    try
-        //    {
-        //        using (var conexion = contextoDB.CreateConnection())
-        //        {
-        //            string procedimiento = "core.p_actualiza_ubicacion";
-        //            var parametros = new
-        //            {
-        //                p_id            = unaUbicacion.Id,
-        //                p_municipio     = unaUbicacion.Municipio,
-        //                p_departamento  = unaUbicacion.Departamento,
-        //                p_latitud       = unaUbicacion.Latitud,
-        //                p_longitud      = unaUbicacion.Longitud
-        //            };
+            var resultado = await coleccionUbicaciones.ReplaceOneAsync(ubicacion => ubicacion.Id == unaUbicacion.Id, unaUbicacion);
 
-        //            var cantidad_filas = await conexion.ExecuteAsync(
-        //                procedimiento,
-        //                parametros,
-        //                commandType: CommandType.StoredProcedure);
+            if (resultado.IsAcknowledged)
+                resultadoAccion = true;
 
-        //            if (cantidad_filas != 0)
-        //                resultadoAccion = true;
-        //        }
-        //    }
-        //    catch (NpgsqlException error)
-        //    {
-        //        throw new DbOperationException(error.Message);
-        //    }
+            return resultadoAccion;
+        }
 
-        //    return resultadoAccion;
-        //}
+        public async Task<bool> DeleteAsync(Ubicacion unaUbicacion)
+        {
+            bool resultadoAccion = false;
 
-        //TODO: UbicacionRepository: Borrar Urbanización
+            var conexion = contextoDB.CreateConnection();
+            var coleccionUbicaciones = conexion.GetCollection<Ubicacion>("ubicaciones");
 
-        //public async Task<bool> DeleteAsync(Ubicacion unaUbicacion)
-        //{
-        //    bool resultadoAccion = false;
+            var resultado = await coleccionUbicaciones
+                .DeleteOneAsync(ubicacion => ubicacion.Id == unaUbicacion.Id);
 
-        //    try
-        //    {
-        //        using (var conexion = contextoDB.CreateConnection())
-        //        {
-        //            string procedimiento = "core.p_elimina_ubicacion";
-        //            var parametros = new
-        //            {
-        //                p_id = unaUbicacion.Id
-        //            };
+            if (resultado.IsAcknowledged)
+                resultadoAccion = true;
 
-        //            var cantidad_filas = await conexion.ExecuteAsync(
-        //                procedimiento,
-        //                parametros,
-        //                commandType: CommandType.StoredProcedure);
-
-        //            if (cantidad_filas != 0)
-        //                resultadoAccion = true;
-        //        }
-        //    }
-        //    catch (NpgsqlException error)
-        //    {
-        //        throw new DbOperationException(error.Message);
-        //    }
-
-        //    return resultadoAccion;
-        //}
+            return resultadoAccion;
+        }
     }
 }

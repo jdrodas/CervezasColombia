@@ -42,6 +42,7 @@ db.createCollection("tipos_ingredientes");
 db.createCollection("ubicaciones");
 db.createCollection("unidades_volumen");
 db.createCollection("envasados_cervezas");
+db.createCollection("ingredientes_cervezas");
 
 
 -- Creamos las collecciones ... usando un json schema para validación
@@ -59,19 +60,19 @@ db.createCollection("cervecerias", {
     properties: {
       nombre: {
         bsonType: 'string',
-        description: '\'nombre\' Debe ser una cadena de caracteres y no puede ser nulo'
+        description: "'nombre' Debe ser una cadena de caracteres y no puede ser nulo"
       },
       sitio_web: {
         bsonType: 'string',
-        description: '\'sitio_web\' Debe ser una cadena de caracteres y no puede ser nulo'
+        description: "'sitio_web' Debe ser una cadena de caracteres y no puede ser nulo"
       },
       instagram: {
         bsonType: 'string',
-        description: '\'instagram\' Debe ser una cadena de caracteres y no puede ser nulo'
+        description: "'instagram' Debe ser una cadena de caracteres y no puede ser nulo"
       },
       ubicacion: {
         bsonType: 'string',
-        description: '\'ubicacion\' Debe ser entero y no puede ser nulo'
+        description: "'ubicacion' Debe ser entero y no puede ser nulo"
       }
     }
   }
@@ -312,6 +313,34 @@ db.createCollection("envasados_cervezas", {
                bsonType: "number",
                minimum:0,
                description: "'volumen' Debe ser un numero real mayor que cero"
+            }
+         }
+      }
+   }
+} );
+
+db.createCollection("ingredientes_cervezas", {
+   validator: {
+      $jsonSchema: {
+         bsonType: "object",
+         title: "Ingredientes de una cerveza",
+         required: [ "cerveceria","cerveza","tipo_ingrediente","ingrediente"],
+         properties: {
+            cerveceria: {
+               bsonType: "string",
+               description: "'cerveceria' Debe ser una cadena de caracteres y no puede ser nulo"
+            },
+            cerveza: {
+               bsonType: "string",
+               description: "'cerveza' Debe ser una cadena de caracteres y no puede ser nulo"
+            },
+            tipo_ingrediente: {
+               bsonType: "string",
+               description: "'tipo_ingrediente' Debe ser una cadena de caracteres y no puede ser nulo"
+            },
+            ingrediente: {
+               bsonType: "string",
+               description: "'ingrediente' Debe ser una cadena de caracteres y no puede ser nulo"
             }
          }
       }

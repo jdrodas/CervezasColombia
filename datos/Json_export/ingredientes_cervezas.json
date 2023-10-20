@@ -1,0 +1,416 @@
+[
+  {
+    "cerveceria": "20 Mission",
+    "cerveza": "Blonde",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "20 Mission",
+    "cerveza": "IPA",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "20 Mission",
+    "cerveza": "Pale Ale",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "20 Mission",
+    "cerveza": "Porter",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "20 Mission",
+    "cerveza": "Saison",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "20 Mission",
+    "cerveza": "Witbier",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "3 Cordilleras",
+    "cerveza": "Blanca",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "3 Cordilleras",
+    "cerveza": "Mestiza",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "3 Cordilleras",
+    "cerveza": "Mona",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "3 Cordilleras",
+    "cerveza": "Mulata",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "3 Cordilleras",
+    "cerveza": "Negra",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "3 Cordilleras",
+    "cerveza": "Rose",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "Bari Cerveza Artesanal",
+    "cerveza": "Eclipse",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "Bari Cerveza Artesanal",
+    "cerveza": "Salazar",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "BBC",
+    "cerveza": "Bacatá",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "BBC",
+    "cerveza": "Cajicá",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "BBC",
+    "cerveza": "Chapinero",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "BBC",
+    "cerveza": "Lager",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "BBC",
+    "cerveza": "Macondo",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "BBC",
+    "cerveza": "Monserrate",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "BBC",
+    "cerveza": "Rubia",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "BBC",
+    "cerveza": "Septimazo",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "Bruder",
+    "cerveza": "Barley Wine",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "Bruder",
+    "cerveza": "Barley Wine",
+    "tipo_ingrediente": "Saborizantes",
+    "ingrediente": "Ciruela"
+  },
+  {
+    "cerveceria": "Bruder",
+    "cerveza": "Café",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "Bruder",
+    "cerveza": "Café",
+    "tipo_ingrediente": "Saborizantes",
+    "ingrediente": "Café"
+  },
+  {
+    "cerveceria": "Bruder",
+    "cerveza": "Chocolate",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "Bruder",
+    "cerveza": "Chocolate",
+    "tipo_ingrediente": "Saborizantes",
+    "ingrediente": "Cacao"
+  },
+  {
+    "cerveceria": "Bruder",
+    "cerveza": "Dog Lover",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "Bruder",
+    "cerveza": "Imperial Strout",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "Bruder",
+    "cerveza": "IPA Maracuyá",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "Bruder",
+    "cerveza": "IPA Maracuyá",
+    "tipo_ingrediente": "Saborizantes",
+    "ingrediente": "Maracuyá"
+  },
+  {
+    "cerveceria": "Bruder",
+    "cerveza": "Maracuyá",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "Bruder",
+    "cerveza": "Maracuyá",
+    "tipo_ingrediente": "Saborizantes",
+    "ingrediente": "Maracuyá"
+  },
+  {
+    "cerveceria": "Bruder",
+    "cerveza": "Pueblito",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "Bruder",
+    "cerveza": "Roja",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "Bruder",
+    "cerveza": "Rubia",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "Cervecería Cartagena",
+    "cerveza": "Golden",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "Cervecería Cartagena",
+    "cerveza": "Porter",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "Cervecería Cartagena",
+    "cerveza": "Roja",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "Cervezas Kalima",
+    "cerveza": "Alexa",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "Cervezas Kalima",
+    "cerveza": "Finca",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "Cervezas Kalima",
+    "cerveza": "Más Música Local",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "Cervezas Kalima",
+    "cerveza": "Vinilo",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "Fierabrás",
+    "cerveza": "Dulcinea",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "Fierabrás",
+    "cerveza": "Isabel la Católica",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "Fierabrás",
+    "cerveza": "Juana de Arco",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "Fierabrás",
+    "cerveza": "Maria Antonieta",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "Lino Brewing Company",
+    "cerveza": "Colaa",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "Lino Brewing Company",
+    "cerveza": "Colpa",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "Lino Brewing Company",
+    "cerveza": "Cols",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "Lino Brewing Company",
+    "cerveza": "Neipa",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "Nevada Cerveceria",
+    "cerveza": "Happy Ayu",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "Nevada Cerveceria",
+    "cerveza": "Happy Colibrí",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "Nevada Cerveceria",
+    "cerveza": "Happy Garceta",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "Nevada Cerveceria",
+    "cerveza": "Happy Nebbi",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "Nevada Cerveceria",
+    "cerveza": "Happy Pava",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "Nevada Cerveceria",
+    "cerveza": "Happy Trepadora",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "Nevada Cerveceria",
+    "cerveza": "Happy Tucán",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "Rincón del Mar",
+    "cerveza": "Açaí",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "Rincón del Mar",
+    "cerveza": "Açaí",
+    "tipo_ingrediente": "Saborizantes",
+    "ingrediente": "Açaí"
+  },
+  {
+    "cerveceria": "Rincón del Mar",
+    "cerveza": "Cacao",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "Rincón del Mar",
+    "cerveza": "Cacao",
+    "tipo_ingrediente": "Saborizantes",
+    "ingrediente": "Cacao"
+  },
+  {
+    "cerveceria": "Rincón del Mar",
+    "cerveza": "Canábica",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "Rincón del Mar",
+    "cerveza": "Canábica",
+    "tipo_ingrediente": "Estimulantes",
+    "ingrediente": "Cannabis"
+  },
+  {
+    "cerveceria": "Rincón del Mar",
+    "cerveza": "Coca",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "Rincón del Mar",
+    "cerveza": "Coca",
+    "tipo_ingrediente": "Estimulantes",
+    "ingrediente": "Coca"
+  },
+  {
+    "cerveceria": "Rincón del Mar",
+    "cerveza": "Colorada",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "Rincón del Mar",
+    "cerveza": "Gringa",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  }
+]

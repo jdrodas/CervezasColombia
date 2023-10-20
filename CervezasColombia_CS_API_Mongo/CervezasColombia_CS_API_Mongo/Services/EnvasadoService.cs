@@ -50,7 +50,7 @@ namespace CervezasColombia_CS_API_Mongo.Services
             if (cantidadCervezasAsociadas == 0)
                 throw new AppValidationException($"No Existen cervezas asociadas al envasado {unEnvasado.Nombre}");
 
-            var lasCervezas = await _envasadoRepository
+            var losEnvasadosCervezas = await _envasadoRepository
                 .GetAssociatedPackagedBeersAsync(envasado_id);
 
             //Aqui completamos la información de las cervezas
@@ -58,7 +58,7 @@ namespace CervezasColombia_CS_API_Mongo.Services
             CervezaEnvasada unaCervezaEnvasada;
             List<CervezaEnvasada> lasCervezasEnvasadas = new();
 
-            foreach (EnvasadoCerveza unEnvasadoCerveza in lasCervezas)
+            foreach (EnvasadoCerveza unEnvasadoCerveza in losEnvasadosCervezas)
             {
                 unaCerveza = await _cervezaRepository
                     .GetByNameAndBreweryAsync(unEnvasadoCerveza.Cerveza, unEnvasadoCerveza.Cerveceria);

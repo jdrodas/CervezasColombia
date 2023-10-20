@@ -84,18 +84,9 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
 
         public async Task<int> GetTotalAssociatedBeersAsync(string estilo_id)
         {
-            var unEstilo = await GetByIdAsync(estilo_id);
+            var lasCervezas = await GetAssociatedBeersAsync(estilo_id);
 
-            var conexion = contextoDB.CreateConnection();
-            var coleccionCervezas = conexion.GetCollection<Cerveza>("cervezas");
-
-            var lasCervezas = await coleccionCervezas
-                .Find(cerveza => cerveza.Estilo == unEstilo.Nombre)
-                .ToListAsync();
-
-            int totalCervezas = lasCervezas.Count();
-
-            return totalCervezas;
+            return lasCervezas.Count();
         }
 
         public async Task<IEnumerable<Cerveza>> GetAssociatedBeersAsync(string estilo_id)

@@ -153,7 +153,6 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             return resultadoAccion;
         }
 
-
         public async Task<bool> DeleteAsync(Envasado unEnvasado)
         {
             bool resultadoAccion = false;

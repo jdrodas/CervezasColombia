@@ -20,7 +20,8 @@ namespace CervezasColombia_CS_API_Mongo.Models
         [BsonElement("tipo_ingrediente_id")]
         [BsonRepresentation(BsonType.ObjectId)]
         [JsonPropertyName("tipo_ingrediente_id")]
-        public string? Tipo_Ingrediente_Id { get; set; } = string.Empty;
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string? Tipo_Ingrediente_Id { get; set; } = null;
 
         [BsonElement("tipo_ingrediente")]
         [JsonPropertyName("tipo_ingrediente")]

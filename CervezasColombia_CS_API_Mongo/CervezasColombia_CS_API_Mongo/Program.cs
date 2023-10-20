@@ -18,6 +18,7 @@ builder.Services.AddScoped<IEstiloRepository, EstiloRepository>();
 builder.Services.AddScoped<IEnvasadoRepository, EnvasadoRepository>();
 builder.Services.AddScoped<ICerveceriaRepository, CerveceriaRepository>();
 builder.Services.AddScoped<ICervezaRepository, CervezaRepository>();
+builder.Services.AddScoped<IIngredienteRepository, IngredienteRepository>();
 
 //Aqui agregamos los servicios asociados para cada EndPoint
 builder.Services.AddScoped<ResumenService>();
@@ -26,7 +27,7 @@ builder.Services.AddScoped<EstiloService>();
 builder.Services.AddScoped<EnvasadoService>();
 builder.Services.AddScoped<CerveceriaService>();
 builder.Services.AddScoped<CervezaService>();
-
+builder.Services.AddScoped<IngredienteService>();
 
 // Add services to the container.
 
