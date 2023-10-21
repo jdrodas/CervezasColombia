@@ -170,13 +170,15 @@ namespace CervezasColombia_CS_API_Mongo.Services
                 throw new AppValidationException($"No existe un envasado con el Id {envasado_id} que se pueda eliminar");
 
             // Validamos que el envasado no tenga asociadas cervezas
-            // TODO: Validar como se puede borrar el envasado de una cerveza
-            //var cantidadCervezasAsociadas = await _envasadoRepository
-            //    .GetTotalAssociatedBeersAsync(envasadoExistente.Id);
+            var cantidadCervezasAsociadas = await _envasadoRepository
+                .GetTotalAssociatedPackagedBeersAsync(envasadoExistente.Id);
 
-            //if (cantidadCervezasAsociadas > 0)
-            //    throw new AppValidationException($"Existen {cantidadCervezasAsociadas} cervezas " +
-            //        $"asociadas al envasado {envasadoExistente.Nombre}. No se puede eliminar");
+            if (cantidadCervezasAsociadas > 0)
+            {
+                //Borrar envasado asociado a esta cerveza
+                await _envasadoRepository
+                    .DeleteAssociatedBeersAsync(envasadoExistente.Id);
+            }
 
             //Si existe y no tiene cervezas asociadas, se puede eliminar
             try

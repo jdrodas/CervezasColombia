@@ -84,39 +84,6 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             return losEnvasadosCervezas;
         }
 
-        //TODO: EnvasadoRepository: Obtener envasados asociados
-
-        //public async Task<EnvasadoCerveza> GetAssociatedBeerPackagingAsync(int cerveza_id, int envasado_id, int unidad_volumen_id, float volumen)
-        //{
-        //    EnvasadoCerveza unEnvasadoCerveza = new();
-
-        //    var conexion = contextoDB.CreateConnection();
-
-        //    DynamicParameters parametrosSentencia = new();
-        //    parametrosSentencia.Add("@cerveza_id", cerveza_id,
-        //                            DbType.Int32, ParameterDirection.Input);
-        //    parametrosSentencia.Add("@envasado_id", envasado_id,
-        //                            DbType.Int32, ParameterDirection.Input);
-        //    parametrosSentencia.Add("@unidad_volumen_id", unidad_volumen_id,
-        //                            DbType.Int32, ParameterDirection.Input);
-        //    parametrosSentencia.Add("@volumen", volumen,
-        //                            DbType.Single, ParameterDirection.Input);
-
-        //    string sentenciaSQL = "SELECT v.envasado_id id, v.envasado nombre, v.unidad_volumen_id, unidad_volumen, volumen " +
-        //                            "FROM v_info_envasados_cervezas v " +
-        //                            "WHERE v.envasado_id = @envasado_id " +
-        //                            "AND v.cerveza_id = @cerveza_id " +
-        //                            "AND v.unidad_volumen_id = @unidad_volumen_id " +
-        //                            "AND v.volumen = @volumen";
-
-        //    var resultado = await conexion.QueryAsync<EnvasadoCerveza>(sentenciaSQL, parametrosSentencia);
-
-        //    if (resultado.Any())
-        //        unEnvasadoCerveza = resultado.First();
-
-        //    return unEnvasadoCerveza;
-        //}
-
         public async Task<bool> CreateAsync(Envasado unEnvasado)
         {
             bool resultadoAccion = false;
@@ -162,6 +129,24 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
 
             var resultado = await coleccionEnvasados
                 .DeleteOneAsync(envasado => envasado.Id == unEnvasado.Id);
+
+            if (resultado.IsAcknowledged)
+                resultadoAccion = true;
+
+            return resultadoAccion;
+        }
+
+        public async Task<bool> DeleteAssociatedBeersAsync(string envasado_id)
+        {
+            bool resultadoAccion = false;
+
+            var unEnvasado = await GetByIdAsync(envasado_id);
+
+            var conexion = contextoDB.CreateConnection();
+            var coleccionEnvasadosCervezas = conexion.GetCollection<EnvasadoCerveza>("envasados_cervezas");
+
+            var resultado = await coleccionEnvasadosCervezas
+                .DeleteManyAsync(envasadoCerveza => envasadoCerveza.Envasado == unEnvasado.Nombre);
 
             if (resultado.IsAcknowledged)
                 resultadoAccion = true;
