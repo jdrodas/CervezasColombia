@@ -252,7 +252,37 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             var resultado = await GetByNameAndBreweryAsync(unaCerveza.Nombre, unaCerveza.Cerveceria);
 
             if (resultado is not null)
+            {
+                //Aqui registramos el envasado predeterminado: Botella de 330 ml
+                EnvasadoCerveza unEnvasadoCerveza = new()
+                {
+                    Cerveceria = unaCerveza.Cerveceria,
+                    Cerveza = unaCerveza.Nombre,
+                    Envasado = "Botella",
+                    Unidad_Volumen = "Mililitros",
+                    Volumen = 330
+                };
+
+                var coleccionEnvasadosCervezas = conexion.GetCollection<EnvasadoCerveza>("envasados_cervezas");
+                await coleccionEnvasadosCervezas
+                    .InsertOneAsync(unEnvasadoCerveza);
+
+                //Aqui registramos el ingrediente preeterminado: Agua - Agua de Manantial
+                IngredienteCerveza unIngredienteCerveza = new()
+                {
+                    Cerveceria = unaCerveza.Cerveceria,
+                    Cerveza = unaCerveza.Nombre,
+                    Tipo_Ingrediente = "Agua",
+                    Ingrediente = "Agua de Manantial"
+                };
+
+                var coleccionIngredientesCervezas = conexion.GetCollection<IngredienteCerveza>("ingredientes_cervezas");
+                await coleccionIngredientesCervezas
+                    .InsertOneAsync(unIngredienteCerveza);
+
                 resultadoAccion = true;
+            }
+                
 
             return resultadoAccion;
         }
