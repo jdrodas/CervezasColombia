@@ -72,6 +72,54 @@
     "ingrediente": "Agua de Manantial"
   },
   {
+    "cerveceria": "4S Cerveza Artesanal",
+    "cerveza": "Blonde Ale",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "4S Cerveza Artesanal",
+    "cerveza": "Porter",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "4S Cerveza Artesanal",
+    "cerveza": "Red Ale",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "4S Cerveza Artesanal",
+    "cerveza": "Saison",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "67 Drink House",
+    "cerveza": "No. 1",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "67 Drink House",
+    "cerveza": "No. 2",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "67 Drink House",
+    "cerveza": "No. 3",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "67 Drink House",
+    "cerveza": "No. 4",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
     "cerveceria": "Bari Cerveza Artesanal",
     "cerveza": "Eclipse",
     "tipo_ingrediente": "Agua",
@@ -240,6 +288,18 @@
     "ingrediente": "Agua de Manantial"
   },
   {
+    "cerveceria": "Cervecería Resolana",
+    "cerveza": "Nuqui",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "Cervecería Resolana",
+    "cerveza": "Tayrona",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
     "cerveceria": "Cervezas Kalima",
     "cerveza": "Alexa",
     "tipo_ingrediente": "Agua",
@@ -354,6 +414,18 @@
     "ingrediente": "Agua de Manantial"
   },
   {
+    "cerveceria": "Perro Bravo",
+    "cerveza": "Saison",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "Perro Bravo",
+    "cerveza": "UchuvIPA",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
     "cerveceria": "Rincón del Mar",
     "cerveza": "Açaí",
     "tipo_ingrediente": "Agua",
@@ -410,6 +482,36 @@
   {
     "cerveceria": "Rincón del Mar",
     "cerveza": "Gringa",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "Torrealta Cervecería",
+    "cerveza": "La Provinciana",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "Waresa Craft Beer",
+    "cerveza": "American Pale Ale",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "Waresa Craft Beer",
+    "cerveza": "Double IPA",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "Waresa Craft Beer",
+    "cerveza": "Scottish Export",
+    "tipo_ingrediente": "Agua",
+    "ingrediente": "Agua de Manantial"
+  },
+  {
+    "cerveceria": "Waresa Craft Beer",
+    "cerveza": "Weissbier",
     "tipo_ingrediente": "Agua",
     "ingrediente": "Agua de Manantial"
   }

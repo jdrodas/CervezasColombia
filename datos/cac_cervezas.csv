@@ -1,64 +1,78 @@
-﻿nombre;cerveceria;estilo;ibu;abv
-Blanca;3 Cordilleras;Wheat Ale;15;4.6
-Mona;3 Cordilleras;Blonde Ale;20;3.9
-Mulata;3 Cordilleras;Amber Ale;27;5.2
-Mestiza;3 Cordilleras;American Pale Ale;29;4.8
-Negra;3 Cordilleras;Sweet Stout;25;6.4
-Rose;3 Cordilleras;Rose;15;3.8
+﻿cerveza;cerveceria;estilo;ibu;abv
 Blonde;20 Mission;Blonde Ale;19;5
-Witbier;20 Mission;Witbier;16;5
+IPA;20 Mission;India Pale Ale (IPA);60;6
 Pale Ale;20 Mission;Pale Ale;30;5
 Porter;20 Mission;Porter;30;5.5
-IPA;20 Mission;India Pale Ale (IPA);60;6
 Saison;20 Mission;Saison;27;6
-Açaí;Rincón del Mar;Irish Red Ale;0;6.7
-Cacao;Rincón del Mar;Irish Red Ale;0;6.2
-Canábica;Rincón del Mar;Irish Red Ale;0;6.7
-Colorada;Rincón del Mar;Irish Red Ale;0;5.5
-Coca;Rincón del Mar;American Pale Ale;0;6.2
-Gringa;Rincón del Mar;American Pale Ale;0;6.3
-IPA Maracuyá;Bruder;India Pale Ale (IPA);45;6.5
-Barley Wine;Bruder;British Ale;45;12
-Dog Lover;Bruder;Vienna Lager;32;4.5
-Café;Bruder;Schwartzbier;30;5
-Pueblito;Bruder;Pilsen Lager;25;4.5
-Maracuyá;Bruder;Belgian Ale;23;5
-Roja;Bruder;Vienna Lager;32;4.5
-Chocolate;Bruder;Chocolate Stout;38;8.5
-Rubia;Bruder;Pilsen Lager;25;4.5
-Imperial Strout;Bruder;Imperial Strout;40;8.5
-Septimazo;BBC;India Pale Ale (IPA);83;6
-Macondo;BBC;Stout;37;5
-Monserrate;BBC;Bitter;37;5
-Lager;BBC;Lager;18;5
-Bacatá;BBC;Witbier;14;4.1
-Chapinero;BBC;Porter;35;5
-Cajicá;BBC;Honey Ale;16;5.3
-Isabel la Católica;Fierabrás;Blonde Ale;0;4.8
-Dulcinea;Fierabrás;Brown Ale;0;5
-Juana de Arco;Fierabrás;Porter;0;5
-Maria Antonieta;Fierabrás;Pale Ale;0;5
-Rubia;BBC;Lager;18;5
-Alexa;Cervezas Kalima;Blonde Ale;18;5.2
-Vinilo;Cervezas Kalima;Stout Ale;30;5.5
-Finca;Cervezas Kalima;India Pale Ale (IPA);50;6
-Más Música Local;Cervezas Kalima;Double IPA;80;8
-Happy Ayu;Nevada Cerveceria;Pale Ale;70;5
-Happy Tucán;Nevada Cerveceria;Irish Red Ale;25;5
-Happy Nebbi;Nevada Cerveceria;Pilsner;50;5
-Happy Colibrí;Nevada Cerveceria;Coffee Stout;30;7
-Happy Pava;Nevada Cerveceria;Pilsner;60;5
-Happy Garceta;Nevada Cerveceria;Kolsch;30;5
-Happy Trepadora;Nevada Cerveceria;Citra IPA;30;4.3
+Witbier;20 Mission;Witbier;16;5
+Blanca;3 Cordilleras;Wheat Ale;15;4.6
+Mestiza;3 Cordilleras;American Pale Ale;29;4.8
+Mona;3 Cordilleras;Blonde Ale;20;3.9
+Mulata;3 Cordilleras;Amber Ale;27;5.2
+Negra;3 Cordilleras;Sweet Stout;25;6.4
+Rose;3 Cordilleras;Rose;15;3.8
+Blonde Ale;4S Cerveza Artesanal;Blonde Ale;0;4.9
+Porter;4S Cerveza Artesanal;Porter;0;6.4
+Red Ale;4S Cerveza Artesanal;Red Ale;0;4.7
+Saison;4S Cerveza Artesanal;Saison;0;8
+No. 1;67 Drink House;Blonde Ale;0;5
+No. 2;67 Drink House;Irish Red Ale;0;5
+No. 3;67 Drink House;Vienna Lager;0;5
+No. 4;67 Drink House;New England IPA (NEIPA);0;5
 Eclipse;Bari Cerveza Artesanal;Witbier;0;5.5
 Salazar;Bari Cerveza Artesanal;Coffee Stout;0;6
+Bacatá;BBC;Witbier;14;4.1
+Cajicá;BBC;Honey Ale;16;5.3
+Chapinero;BBC;Porter;35;5
+Lager;BBC;Lager;18;5
+Macondo;BBC;Stout;37;5
+Monserrate;BBC;Bitter;37;5
+Rubia;BBC;Lager;18;5
+Septimazo;BBC;India Pale Ale (IPA);83;6
+Barley Wine;Bruder;British Ale;45;12
+Café;Bruder;Schwartzbier;30;5
+Chocolate;Bruder;Chocolate Stout;38;8.5
+Dog Lover;Bruder;Vienna Lager;32;4.5
+Imperial Strout;Bruder;Imperial Strout;40;8.5
+IPA Maracuyá;Bruder;India Pale Ale (IPA);45;6.5
+Maracuyá;Bruder;Belgian Ale;23;5
+Pueblito;Bruder;Pilsen Lager;25;4.5
+Roja;Bruder;Vienna Lager;32;4.5
+Rubia;Bruder;Pilsen Lager;25;4.5
 Golden;Cervecería Cartagena;Golden Ale;0;4.5
 Porter;Cervecería Cartagena;Porter;0;5.5
 Roja;Cervecería Cartagena;Irish Red Ale;0;3.5
+Nuqui;Cervecería Resolana;Pale Ale;0;5.5
+Tayrona;Cervecería Resolana;Hoppy Blonde;0;4.5
+Alexa;Cervezas Kalima;Blonde Ale;18;5.2
+Finca;Cervezas Kalima;India Pale Ale (IPA);50;6
+Más Música Local;Cervezas Kalima;Double IPA;80;8
+Vinilo;Cervezas Kalima;Stout Ale;30;5.5
+Dulcinea;Fierabrás;Brown Ale;0;5
+Isabel la Católica;Fierabrás;Blonde Ale;0;4.8
+Juana de Arco;Fierabrás;Porter;0;5
+Maria Antonieta;Fierabrás;Pale Ale;0;5
 Colaa;Lino Brewing Company;Amber Ale;0;5
-Cols;Lino Brewing Company;Stout;0;5
 Colpa;Lino Brewing Company;Pale Ale;0;5
-Neipa;Lino Brewing Company;New England IPA;0;7
-La Provinciana;Torrealta Cervecería;French Saison;0;6.5
+Cols;Lino Brewing Company;Stout;0;5
+Neipa;Lino Brewing Company;New England IPA (NEIPA);0;7
+Happy Ayu;Nevada Cerveceria;Pale Ale;70;5
+Happy Colibrí;Nevada Cerveceria;Coffee Stout;30;7
+Happy Garceta;Nevada Cerveceria;Kolsch;30;5
+Happy Nebbi;Nevada Cerveceria;Pilsner;50;5
+Happy Pava;Nevada Cerveceria;Pilsner;60;5
+Happy Trepadora;Nevada Cerveceria;Citra IPA;30;4.3
+Happy Tucán;Nevada Cerveceria;Irish Red Ale;25;5
 Saison;Perro Bravo;Saison;30;6
 UchuvIPA;Perro Bravo;UchuvIPA;60;6
+Açaí;Rincón del Mar;Irish Red Ale;0;6.7
+Cacao;Rincón del Mar;Irish Red Ale;0;6.2
+Canábica;Rincón del Mar;Irish Red Ale;0;6.7
+Coca;Rincón del Mar;American Pale Ale;0;6.2
+Colorada;Rincón del Mar;Irish Red Ale;0;5.5
+Gringa;Rincón del Mar;American Pale Ale;0;6.3
+La Provinciana;Torrealta Cervecería;French Saison;0;6.5
+American Pale Ale;Waresa Craft Beer;American Pale Ale;35;5
+Double IPA;Waresa Craft Beer;Double IPA;80;8
+Scottish Export;Waresa Craft Beer;Scottish Export;21;5.8
+Weissbier;Waresa Craft Beer;Weissbier;12;5

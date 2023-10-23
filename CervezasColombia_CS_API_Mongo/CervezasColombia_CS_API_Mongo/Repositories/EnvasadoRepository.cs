@@ -84,6 +84,28 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             return losEnvasadosCervezas;
         }
 
+        public async Task<EnvasadoCerveza> GetAssociatedBeerPackagingAsync(EnvasadoCerveza unEnvasadoCerveza)
+        {
+            EnvasadoCerveza unEvasadoCerveza = new();
+
+            var conexion = contextoDB.CreateConnection();
+            var coleccionEnvasadosCervezas = conexion.GetCollection<EnvasadoCerveza>("envasados_cervezas");
+
+            var builder = Builders<EnvasadoCerveza>.Filter;
+            var filtro = builder.And(
+                builder.Eq(envasadoCerveza => envasadoCerveza.Cerveceria, unEnvasadoCerveza.Cerveceria),
+                builder.Eq(envasadoCerveza => envasadoCerveza.Cerveza, unEnvasadoCerveza.Cerveceria),
+                builder.Eq(envasadoCerveza => envasadoCerveza.Unidad_Volumen, unEnvasadoCerveza.Unidad_Volumen),
+                builder.Eq(envasadoCerveza => envasadoCerveza.Volumen, unEnvasadoCerveza.Volumen));
+
+            var losEnvasadosCervezas = await coleccionEnvasadosCervezas
+                .Find(filtro)
+                .SortBy(envasado_cerveza => envasado_cerveza.Cerveza)
+                .ToListAsync();
+
+            return unEvasadoCerveza;
+        }
+
         public async Task<bool> CreateAsync(Envasado unEnvasado)
         {
             bool resultadoAccion = false;

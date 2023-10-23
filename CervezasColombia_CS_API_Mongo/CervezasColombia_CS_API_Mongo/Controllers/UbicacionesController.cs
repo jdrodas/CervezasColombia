@@ -41,8 +41,6 @@ namespace CervezasColombia_CS_API_Mongo.Controllers
             }
         }
 
-        //TODO: UbicacionesController: Obtener Cervecerias por ubicación
-
         [HttpGet("{ubicacion_id:length(24)}/Cervecerias")]
         public async Task<IActionResult> GetAssociatedBreweriesAsync(string ubicacion_id)
         {

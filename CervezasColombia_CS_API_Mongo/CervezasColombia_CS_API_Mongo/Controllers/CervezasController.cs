@@ -26,13 +26,29 @@ namespace CervezasColombia_CS_API_Mongo.Controllers
         }
 
         [HttpGet("{cerveza_id:length(24)}")]
-        public async Task<IActionResult> GetByIdAsync(string cerveza_id)
+        public async Task<IActionResult> GetDetailsByIdAsync(string cerveza_id)
         {
             try
             {
                 var unaCerveza = await _cervezaService
-                    .GetByIdAsync(cerveza_id);
+                    .GetDetailsByIdAsync(cerveza_id);
                 return Ok(unaCerveza);
+            }
+            catch (AppValidationException error)
+            {
+                return NotFound(error.Message);
+            }
+        }       
+
+        [HttpGet("{cerveza_id:length(24)}/Ingredientes")]
+        public async Task<IActionResult> GetAssociatedIngredientsAsync(string cerveza_id)
+        {
+            try
+            {
+                var losIngredientesPorCerveza = await _cervezaService
+                    .GetAssociatedIngredientsAsync(cerveza_id);
+
+                return Ok(losIngredientesPorCerveza);
             }
             catch (AppValidationException error)
             {
@@ -40,41 +56,21 @@ namespace CervezasColombia_CS_API_Mongo.Controllers
             }
         }
 
-        //TODO: CervezasController: Obtener Ingredientes de Cervezas
+        [HttpGet("{cerveza_id:length(24)}/Envasados")]
+        public async Task<IActionResult> GetAssociatedPackagingsAsync(string cerveza_id)
+        {
+            try
+            {
+                var losEnvasadosPorCerveza = await _cervezaService
+                    .GetAssociatedPackagingsAsync(cerveza_id);
 
-        //[HttpGet("{cerveza_id:int}/Ingredientes")]
-        //public async Task<IActionResult> GetAssociatedIngredientsAsync(int cerveza_id)
-        //{
-        //    try
-        //    {
-        //        var losIngredientesPorCerveza = await _cervezaService
-        //            .GetAssociatedIngredientsAsync(cerveza_id);
-
-        //        return Ok(losIngredientesPorCerveza);
-        //    }
-        //    catch (AppValidationException error)
-        //    {
-        //        return NotFound(error.Message);
-        //    }
-        //}
-
-        //TODO: CervezasController: Obtener Envasados de Cervezas
-
-        //[HttpGet("{cerveza_id:int}/Envasados")]
-        //public async Task<IActionResult> GetAssociatedPackagingsAsync(int cerveza_id)
-        //{
-        //    try
-        //    {
-        //        var losEnvasadosPorCerveza = await _cervezaService
-        //            .GetAssociatedPackagingsAsync(cerveza_id);
-
-        //        return Ok(losEnvasadosPorCerveza);
-        //    }
-        //    catch (AppValidationException error)
-        //    {
-        //        return NotFound(error.Message);
-        //    }
-        //}
+                return Ok(losEnvasadosPorCerveza);
+            }
+            catch (AppValidationException error)
+            {
+                return NotFound(error.Message);
+            }
+        }
 
         [HttpPost]
         public async Task<IActionResult> CreateAsync(Cerveza unaCerveza)
@@ -97,27 +93,25 @@ namespace CervezasColombia_CS_API_Mongo.Controllers
         }
 
 
-        //TODO: CervezasController: Crear envasados de Cervezas
+        [HttpPost("{cerveza_id:length(24)}/Envasados")]
+        public async Task<IActionResult> CreateBeerPackagingAsync(string cerveza_id, EnvasadoCerveza unEnvasadoCerveza)
+        {
+            try
+            {
+                var cervezaEnvasada = await _cervezaService
+                    .CreateBeerPackagingAsync(cerveza_id, unEnvasadoCerveza);
 
-        //[HttpPost("{cerveza_id:int}/Envasados")]
-        //public async Task<IActionResult> CreateBeerPackagingAsync(int cerveza_id, EnvasadoCerveza unEnvasadoCerveza)
-        //{
-        //    try
-        //    {
-        //        var cervezaEnvasada = await _cervezaService
-        //            .CreateBeerPackagingAsync(cerveza_id, unEnvasadoCerveza);
-
-        //        return Ok(cervezaEnvasada);
-        //    }
-        //    catch (AppValidationException error)
-        //    {
-        //        return BadRequest($"Error de validación: {error.Message}");
-        //    }
-        //    catch (DbOperationException error)
-        //    {
-        //        return BadRequest($"Error de operacion en DB: {error.Message}");
-        //    }
-        //}
+                return Ok(cervezaEnvasada);
+            }
+            catch (AppValidationException error)
+            {
+                return BadRequest($"Error de validación: {error.Message}");
+            }
+            catch (DbOperationException error)
+            {
+                return BadRequest($"Error de operacion en DB: {error.Message}");
+            }
+        }
 
         //TODO: CervezasController: Crear ingredientes de Cervezas
 
@@ -142,56 +136,52 @@ namespace CervezasColombia_CS_API_Mongo.Controllers
         //}
 
 
-        //TODO: CervezasController: Actualizar Cervezas
+        [HttpPut("{cerveza_id:length(24)}")]
+        public async Task<IActionResult> UpdateAsync(string cerveza_id, Cerveza unaCerveza)
+        {
+            try
+            {
+                var cervezaActualizada = await _cervezaService
+                    .UpdateAsync(cerveza_id, unaCerveza);
 
-        //[HttpPut("{cerveza_id:int}")]
-        //public async Task<IActionResult> UpdateAsync(int cerveza_id, Cerveza unaCerveza)
-        //{
-        //    try
-        //    {
-        //        var cervezaActualizada = await _cervezaService
-        //            .UpdateAsync(cerveza_id, unaCerveza);
+                return Ok(cervezaActualizada);
 
-        //        return Ok(cervezaActualizada);
+            }
+            catch (AppValidationException error)
+            {
+                return BadRequest($"Error de validación: {error.Message}");
+            }
+            catch (DbOperationException error)
+            {
+                return BadRequest($"Error de operacion en DB: {error.Message}");
+            }
+        }
 
-        //    }
-        //    catch (AppValidationException error)
-        //    {
-        //        return BadRequest($"Error de validación: {error.Message}");
-        //    }
-        //    catch (DbOperationException error)
-        //    {
-        //        return BadRequest($"Error de operacion en DB: {error.Message}");
-        //    }
-        //}
+        [HttpDelete("{cerveza_id:length(24)}")]
+        public async Task<IActionResult> DeleteAsync(string cerveza_id)
+        {
+            try
+            {
+                await _cervezaService
+                    .DeleteAsync(cerveza_id);
 
-        //TODO: CervezasController: Borrar Cerveza
+                return Ok($"Cerveza {cerveza_id} fue eliminada");
 
-        //[HttpDelete("{cerveza_id:int}")]
-        //public async Task<IActionResult> DeleteAsync(int cerveza_id)
-        //{
-        //    try
-        //    {
-        //        await _cervezaService
-        //            .DeleteAsync(cerveza_id);
-
-        //        return Ok($"Cerveza {cerveza_id} fue eliminada");
-
-        //    }
-        //    catch (AppValidationException error)
-        //    {
-        //        return BadRequest($"Error de validación: {error.Message}");
-        //    }
-        //    catch (DbOperationException error)
-        //    {
-        //        return BadRequest($"Error de operacion en DB: {error.Message}");
-        //    }
-        //}
+            }
+            catch (AppValidationException error)
+            {
+                return BadRequest($"Error de validación: {error.Message}");
+            }
+            catch (DbOperationException error)
+            {
+                return BadRequest($"Error de operacion en DB: {error.Message}");
+            }
+        }
 
         //TODO: CervezasController: Borrar envasados de Cervezas
 
-        //[HttpDelete("{cerveza_id:int}/Envasados")]
-        //public async Task<IActionResult> DeleteBeerPackagingAsync(int cerveza_id, EnvasadoCerveza unEnvasadoCerveza)
+        //[HttpDelete("{cerveza_id:length(24)}/Envasados")]
+        //public async Task<IActionResult> DeleteBeerPackagingAsync(string cerveza_id, EnvasadoCerveza unEnvasadoCerveza)
         //{
         //    try
         //    {
@@ -212,8 +202,8 @@ namespace CervezasColombia_CS_API_Mongo.Controllers
 
         //TODO: CervezasController: Borrar ingredientes de Cervezas
 
-        //[HttpDelete("{cerveza_id:int}/Ingredientes")]
-        //public async Task<IActionResult> DeleteBeerIngredientAsync(int cerveza_id, Ingrediente unIngrediente)
+        //[HttpDelete("{cerveza_id:length(24)}/Ingredientes")]
+        //public async Task<IActionResult> DeleteBeerIngredientAsync(string cerveza_id, Ingrediente unIngrediente)
         //{
         //    try
         //    {

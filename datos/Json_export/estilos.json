@@ -75,6 +75,9 @@
     "nombre": "Honey Ale"
   },
   {
+    "nombre": "Hoppy Blonde"
+  },
+  {
     "nombre": "Imperial Strout"
   },
   {
@@ -90,7 +93,7 @@
     "nombre": "Lager"
   },
   {
-    "nombre": "New England IPA"
+    "nombre": "New England IPA (NEIPA)"
   },
   {
     "nombre": "Pale Ale"
@@ -105,6 +108,9 @@
     "nombre": "Porter"
   },
   {
+    "nombre": "Red Ale"
+  },
+  {
     "nombre": "Rose"
   },
   {
@@ -115,6 +121,9 @@
   },
   {
     "nombre": "Scotch Ale"
+  },
+  {
+    "nombre": "Scottish Export"
   },
   {
     "nombre": "Sour Ale"
@@ -133,6 +142,9 @@
   },
   {
     "nombre": "Vienna Lager"
+  },
+  {
+    "nombre": "Weissbier"
   },
   {
     "nombre": "Wheat Ale"

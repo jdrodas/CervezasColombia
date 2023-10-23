@@ -11,6 +11,14 @@ cerveceria;cerveza;tipo_ingrediente;ingrediente
 3 Cordilleras;Mulata;Agua;Agua de Manantial
 3 Cordilleras;Negra;Agua;Agua de Manantial
 3 Cordilleras;Rose;Agua;Agua de Manantial
+4S Cerveza Artesanal;Blonde Ale;Agua;Agua de Manantial
+4S Cerveza Artesanal;Porter;Agua;Agua de Manantial
+4S Cerveza Artesanal;Red Ale;Agua;Agua de Manantial
+4S Cerveza Artesanal;Saison;Agua;Agua de Manantial
+67 Drink House;No. 1;Agua;Agua de Manantial
+67 Drink House;No. 2;Agua;Agua de Manantial
+67 Drink House;No. 3;Agua;Agua de Manantial
+67 Drink House;No. 4;Agua;Agua de Manantial
 Bari Cerveza Artesanal;Eclipse;Agua;Agua de Manantial
 Bari Cerveza Artesanal;Salazar;Agua;Agua de Manantial
 BBC;Bacatá;Agua;Agua de Manantial
@@ -39,6 +47,8 @@ Bruder;Rubia;Agua;Agua de Manantial
 Cervecería Cartagena;Golden;Agua;Agua de Manantial
 Cervecería Cartagena;Porter;Agua;Agua de Manantial
 Cervecería Cartagena;Roja;Agua;Agua de Manantial
+Cervecería Resolana;Nuqui;Agua;Agua de Manantial
+Cervecería Resolana;Tayrona;Agua;Agua de Manantial
 Cervezas Kalima;Alexa;Agua;Agua de Manantial
 Cervezas Kalima;Finca;Agua;Agua de Manantial
 Cervezas Kalima;Más Música Local;Agua;Agua de Manantial
@@ -58,6 +68,8 @@ Nevada Cerveceria;Happy Nebbi;Agua;Agua de Manantial
 Nevada Cerveceria;Happy Pava;Agua;Agua de Manantial
 Nevada Cerveceria;Happy Trepadora;Agua;Agua de Manantial
 Nevada Cerveceria;Happy Tucán;Agua;Agua de Manantial
+Perro Bravo;Saison;Agua;Agua de Manantial
+Perro Bravo;UchuvIPA;Agua;Agua de Manantial
 Rincón del Mar;Açaí;Agua;Agua de Manantial
 Rincón del Mar;Açaí;Saborizantes;Açaí
 Rincón del Mar;Cacao;Agua;Agua de Manantial
@@ -68,3 +80,8 @@ Rincón del Mar;Coca;Agua;Agua de Manantial
 Rincón del Mar;Coca;Estimulantes;Coca
 Rincón del Mar;Colorada;Agua;Agua de Manantial
 Rincón del Mar;Gringa;Agua;Agua de Manantial
+Torrealta Cervecería;La Provinciana;Agua;Agua de Manantial
+Waresa Craft Beer;American Pale Ale;Agua;Agua de Manantial
+Waresa Craft Beer;Double IPA;Agua;Agua de Manantial
+Waresa Craft Beer;Scottish Export;Agua;Agua de Manantial
+Waresa Craft Beer;Weissbier;Agua;Agua de Manantial

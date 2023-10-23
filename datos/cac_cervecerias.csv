@@ -1,14 +1,18 @@
-﻿nombre;ubicacion;sitioWeb;instagram
-3 Cordilleras;Medellín, Antioquia;https://3cordilleras.com/;3cordilleras
-20 Mission;Medellín, Antioquia;https://20missioncerveza.com/;20missioncerveza
-Rincón del Mar;Medellín, Antioquia;https://rincondelmar.com.co/;rincondelmarcerveceria
-BBC;Bogotá, Cundinamarca;https://www.bbccerveceria.com/;bbccerveceria
-Bruder;Tunja, Boyacá;https://www.bruder.com.co/;bruder_cerveza
+﻿cerveceria;ubicacion;sitio_web;instagram
 Fierabrás;Barranquilla, Atlántico;https://www.cervezafierabras.com/;cervezafierabras
+BBC;Bogotá, Cundinamarca;https://www.bbccerveceria.com/;bbccerveceria
 Cervezas Kalima;Cali, Valle del Cauca;https://www.cervezaskalima.com/;cervezaskalima
-Nevada Cerveceria;Santa Marta, Magdalena;https://nevadacerveceria.beer;nevadacerveceria
-Bari Cerveza Artesanal;Cúcuta, Norte de Santander;https://www.cervezabari.com/;cervezabari
 Cervecería Cartagena;Cartagena, Bolívar;https://cerveceriacartagena.co/;ctgcraftbeer
-Lino Brewing Company;Funza, Cundinamarca;https://linktr.ee/Linobrewing;lino_brewing
-Torrealta Cervecería;El Retiro, Antioquia;https://www.facebook.com/p/TorreAlta-Brewing-100063982125552;torrealta_cerveceria
+Bari Cerveza Artesanal;Cúcuta, Norte de Santander;https://www.cervezabari.com/;cervezabari
 Perro Bravo;El Retiro, Antioquia;https://www.facebook.com/perrobravo.cerveza/;perrobravo.cerveza
+Torrealta Cervecería;El Retiro, Antioquia;https://www.facebook.com/p/TorreAlta-Brewing-100063982125552;torrealta_cerveceria
+67 Drink House;Envigado, Antioquia;https://www.facebook.com/67drinkhouse/;67drinkhouse
+Waresa Craft Beer;Envigado, Antioquia;https://www.facebook.com/Waresacraftbeer/;waresacraftbeer
+Lino Brewing Company;Funza, Cundinamarca;https://linktr.ee/Linobrewing;lino_brewing
+20 Mission;Medellín, Antioquia;https://20missioncerveza.com/;20missioncerveza
+3 Cordilleras;Medellín, Antioquia;https://3cordilleras.com/;3cordilleras
+4S Cerveza Artesanal;Medellín, Antioquia;https://www.facebook.com/4SMedellin;4smedellin
+Cervecería Resolana;Medellín, Antioquia;https://www.facebook.com/p/Resolana-100070551712123;resolana.cerveceria
+Rincón del Mar;Medellín, Antioquia;https://rincondelmar.com.co/;rincondelmarcerveceria
+Nevada Cerveceria;Santa Marta, Magdalena;https://nevadacerveceria.beer;nevadacerveceria
+Bruder;Tunja, Boyacá;https://www.bruder.com.co/;bruder_cerveza

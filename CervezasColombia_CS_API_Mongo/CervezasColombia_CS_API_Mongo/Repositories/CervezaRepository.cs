@@ -81,119 +81,81 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             return unaCerveza;
         }
 
-        //TODO: CervezaRepository: Obtener Total Ingredientes asociados
+        public async Task<int> GetTotalAssociatedIngredientsAsync(string cerveza_id)
+        {
+            var losIngredientesAsociados = await GetAssociatedIngredientsAsync(cerveza_id);
 
-        //public async Task<int> GetTotalAssociatedIngredientsAsync(int cerveza_id)
-        //{
-        //    var conexion = contextoDB.CreateConnection();
+            return losIngredientesAsociados.Count();               
+        }
 
-        //    DynamicParameters parametrosSentencia = new();
-        //    parametrosSentencia.Add("@cerveza_id", cerveza_id,
-        //                            DbType.Int32, ParameterDirection.Input);
+        public async Task<IEnumerable<IngredienteCerveza>> GetAssociatedIngredientsAsync(string cerveza_id)
+        {
+            Cerveza unaCerveza = await GetByIdAsync(cerveza_id);
+            
+            var conexion = contextoDB.CreateConnection();
+            var coleccionIngredientesCervezas = conexion.GetCollection<IngredienteCerveza>("ingredientes_cervezas");
 
-        //    string sentenciaSQL = "SELECT COUNT(ingrediente_id) totalIngredientes " +
-        //                          "FROM ingredientes_cervezas " +
-        //                          "WHERE cerveza_id = @cerveza_id";
+            var builder = Builders<IngredienteCerveza>.Filter;
+            var filtro = builder.And(
+                builder.Eq(ingredienteCerveza => ingredienteCerveza.Cerveceria, unaCerveza.Cerveceria),
+                builder.Eq(ingredienteCerveza => ingredienteCerveza.Cerveza, unaCerveza.Nombre));
 
+            var losIngredientesCervezas = await coleccionIngredientesCervezas
+                .Find(filtro)
+                .SortBy(ingredienteCerveza => ingredienteCerveza.Ingrediente)
+                .ToListAsync();
 
-        //    var totalIngredientes = await conexion.QueryFirstAsync<int>(sentenciaSQL,
-        //                            parametrosSentencia);
+            return losIngredientesCervezas;
+        }
 
-        //    return totalIngredientes;
-        //}
+        public async Task<int> GetTotalAssociatedPackagingsAsync(string cerveza_id)
+        {
+            var losEnvasadosAsociados = await GetAssociatedPackagingsAsync(cerveza_id);
 
-        //TODO: CervezaRepository: Obtener Ingredientes asociados
+            return losEnvasadosAsociados.Count();
+        }
 
-        //public async Task<IEnumerable<Ingrediente>> GetAssociatedIngredientsAsync(int cerveza_id)
-        //{
-        //    var conexion = contextoDB.CreateConnection();
+        public async Task<IEnumerable<EnvasadoCerveza>> GetAssociatedPackagingsAsync(string cerveza_id)
+        {
+            Cerveza unaCerveza = await GetByIdAsync(cerveza_id);
 
-        //    DynamicParameters parametrosSentencia = new();
-        //    parametrosSentencia.Add("@cerveza_id", cerveza_id,
-        //                            DbType.Int32, ParameterDirection.Input);
+            var conexion = contextoDB.CreateConnection();
+            var coleccionEnvasadosCerveza = conexion.GetCollection<EnvasadoCerveza>("envasados_cervezas");
 
-        //    string sentenciaSQL = "SELECT DISTINCT v.ingrediente_id id, v.ingrediente nombre, v.tipo_ingrediente, v.tipo_ingrediente_id " +
-        //                          "FROM v_info_ingredientes_cervezas v " +
-        //                          "WHERE cerveza_id = @cerveza_id " +
-        //                          "ORDER BY tipo_ingrediente, nombre ";
+            var builder = Builders<EnvasadoCerveza>.Filter;
+            var filtro = builder.And(
+                builder.Eq(envasadoCerveza => envasadoCerveza.Cerveceria, unaCerveza.Cerveceria),
+                builder.Eq(envasadoCerveza => envasadoCerveza.Cerveza, unaCerveza.Nombre));
 
-        //    var resultadoIngredientes = await conexion.QueryAsync<Ingrediente>(sentenciaSQL, parametrosSentencia);
+            var losEnvasadosCervezas = await coleccionEnvasadosCerveza
+                .Find(filtro)
+                .SortBy(envasadoCerveza => envasadoCerveza.Envasado)
+                .ToListAsync();
 
-        //    return resultadoIngredientes;
-        //}
+            return losEnvasadosCervezas;
+        }
 
-        //TODO: CervezaRepository: Obtener Total envasados asociados
+        public async Task<EnvasadoCerveza> GetPackagedBeerByNameAsync(string cerveza_id, string envasado_nombre, string unidad_volumen, double volumen)
+        {
+            Cerveza unaCerveza = await GetByIdAsync(cerveza_id);
 
-        //public async Task<int> GetTotalAssociatedPackagingsAsync(int cerveza_id)
-        //{
-        //    var conexion = contextoDB.CreateConnection();
-        //    DynamicParameters parametrosSentencia = new();
-        //    parametrosSentencia.Add("@cerveza_id", cerveza_id,
-        //                            DbType.Int32, ParameterDirection.Input);
+            var conexion = contextoDB.CreateConnection();
+            var coleccionEnvasadosCerveza = conexion.GetCollection<EnvasadoCerveza>("envasados_cervezas");
 
-        //    string sentenciaSQL = "SELECT COUNT(envasado_id) totalEnvasados " +
-        //                          "FROM envasados_cervezas " +
-        //                          "WHERE cerveza_id = @cerveza_id";
+            var builder = Builders<EnvasadoCerveza>.Filter;
+            var filtro = builder.And(
+                builder.Eq(envasadoCerveza => envasadoCerveza.Cerveceria, unaCerveza.Cerveceria),
+                builder.Eq(envasadoCerveza => envasadoCerveza.Cerveza, unaCerveza.Nombre),
+                builder.Eq(envasadoCerveza => envasadoCerveza.Envasado, envasado_nombre),
+                builder.Eq(envasadoCerveza => envasadoCerveza.Unidad_Volumen, unidad_volumen),
+                builder.Eq(envasadoCerveza => envasadoCerveza.Volumen, volumen)                );
 
+            var unEnvasadoCerveza = await coleccionEnvasadosCerveza
+                .Find(filtro)
+                .FirstOrDefaultAsync();
 
-        //    var totalIngredientes = await conexion.QueryFirstAsync<int>(sentenciaSQL,
-        //                            parametrosSentencia);
-
-        //    return totalIngredientes;
-        //}
-
-        //TODO: CervezaRepository: Obtener  envasados asociados
-
-        //public async Task<IEnumerable<EnvasadoCerveza>> GetAssociatedPackagingsAsync(int cerveza_id)
-        //{
-        //    var conexion = contextoDB.CreateConnection();
-
-        //    DynamicParameters parametrosSentencia = new();
-        //    parametrosSentencia.Add("@cerveza_id", cerveza_id,
-        //                            DbType.Int32, ParameterDirection.Input);
-
-        //    string sentenciaSQL = "SELECT DISTINCT v.envasado_id id, v.envasado nombre, v.unidad_volumen_id, v.unidad_volumen, v.volumen " +
-        //                          "FROM v_info_envasados_cervezas v " +
-        //                          "WHERE cerveza_id = @cerveza_id " +
-        //                          "ORDER BY envasado, unidad_volumen, volumen ";
-
-        //    var resultadoEnvasados = await conexion.QueryAsync<EnvasadoCerveza>(sentenciaSQL, parametrosSentencia);
-        //    return resultadoEnvasados;
-        //}
-
-        //TODO: CervezaRepository: Obtener cerveza envasada por nombre
-
-        //public async Task<EnvasadoCerveza> GetPackagedBeerByNameAsync(int cerveza_id, string envasado_nombre, int unidad_volumen_id, float volumen)
-        //{
-        //    EnvasadoCerveza unEnvasadoCerveza = new();
-
-        //    var conexion = contextoDB.CreateConnection();
-
-        //    DynamicParameters parametrosSentencia = new();
-        //    parametrosSentencia.Add("@cerveza_id", cerveza_id,
-        //                            DbType.Int32, ParameterDirection.Input);
-        //    parametrosSentencia.Add("@envasado_nombre", envasado_nombre,
-        //                            DbType.String, ParameterDirection.Input);
-        //    parametrosSentencia.Add("@unidad_volumen_id", unidad_volumen_id,
-        //                            DbType.Int32, ParameterDirection.Input);
-        //    parametrosSentencia.Add("@volumen", volumen,
-        //                            DbType.Single, ParameterDirection.Input);
-
-        //    string sentenciaSQL = "SELECT v.envasado_id id, v.envasado nombre, v.unidad_volumen_id, unidad_volumen, volumen " +
-        //            "FROM v_info_envasados_cervezas v " +
-        //            "WHERE LOWER(envasado) = LOWER(@envasado_nombre) " +
-        //            "AND v.cerveza_id = @cerveza_id " +
-        //            "AND v.unidad_volumen_id = @unidad_volumen_id " +
-        //            "AND v.volumen = @volumen";
-
-        //    var resultado = await conexion.QueryAsync<EnvasadoCerveza>(sentenciaSQL,
-        //                        parametrosSentencia);
-
-        //    if (resultado.Any())
-        //        unEnvasadoCerveza = resultado.First();
-
-        //    return unEnvasadoCerveza;
-        //}
+            return unEnvasadoCerveza;
+        }
 
         public async Task<string> GetIbuRangeNameAsync(double ibu)
         {
@@ -287,44 +249,35 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             return resultadoAccion;
         }
 
-        //TODO: CervezaRepository: Crear envasado por cerveza
+        public async Task<bool> CreateBeerPackagingAsync(EnvasadoCerveza unEnvasadoCerveza)
+        {
+            bool resultadoAccion = false;
 
-        //public async Task<bool> CreateBeerPackagingAsync(int cerveza_id, EnvasadoCerveza unEnvasadoCerveza)
-        //{
-        //    bool resultadoAccion = false;
+            var unaCerveza = await GetByNameAndBreweryAsync(
+                unEnvasadoCerveza.Cerveza,
+                unEnvasadoCerveza.Cerveceria);
 
-        //    try
-        //    {
-        //        var conexion = contextoDB.CreateConnection();
+            var conexion = contextoDB.CreateConnection();
+            var coleccionCervecerias = conexion.GetCollection<EnvasadoCerveza>("envasados_cervezas");
 
-        //        string procedimiento = "core.p_inserta_envasado_cerveza";
-        //        var parametros = new
-        //        {
-        //            p_cerveza_id = cerveza_id,
-        //            p_envasado_id = unEnvasadoCerveza.Id,
-        //            p_unidad_volumen_id = unEnvasadoCerveza.Unidad_Volumen_Id,
-        //            p_volumen = unEnvasadoCerveza.Volumen
-        //        };
+            await coleccionCervecerias
+                .InsertOneAsync(unEnvasadoCerveza);
 
-        //        var cantidad_filas = await conexion.ExecuteAsync(
-        //            procedimiento,
-        //            parametros,
-        //            commandType: CommandType.StoredProcedure);
+            var resultado = await GetPackagedBeerByNameAsync(unaCerveza.Id!,
+                unEnvasadoCerveza.Envasado,
+                unEnvasadoCerveza.Unidad_Volumen,
+                unEnvasadoCerveza.Volumen);
 
-        //        if (cantidad_filas != 0)
-        //            resultadoAccion = true;
-        //    }
-        //    catch (NpgsqlException error)
-        //    {
-        //        throw new DbOperationException(error.Message);
-        //    }
+            if (resultado is not null)
+                resultadoAccion = true;
 
-        //    return resultadoAccion;
-        //}
+            return resultadoAccion;
+        }
+
 
         //TODO: CervezaRepository: Crear ingrediente por cerveza
 
-        //public async Task<bool> CreateBeerIngredientAsync(int cerveza_id, Ingrediente unIngrediente)
+        //public async Task<bool> CreateBeerIngredientAsync(string cerveza_id, Ingrediente unIngrediente)
         //{
         //    bool resultadoAccion = false;
 
@@ -355,74 +308,63 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
         //    return resultadoAccion;
         //}
 
-        //TODO: CervezaRepository: Actualizar Cerveza
+        public async Task<bool> UpdateAsync(Cerveza unaCerveza)
+        {
+            bool resultadoAccion = false;
 
-        //public async Task<bool> UpdateAsync(Cerveza unaCerveza)
-        //{
-        //    bool resultadoAccion = false;
+            var conexion = contextoDB.CreateConnection();
+            var coleccionEstilos = conexion.GetCollection<Cerveza>("cervezas");
 
-        //    try
-        //    {
-        //        var conexion = contextoDB.CreateConnection();
+            var resultado = await coleccionEstilos
+                .ReplaceOneAsync(cerveza => cerveza.Id == unaCerveza.Id, unaCerveza);
 
-        //        string procedimiento = "core.p_actualiza_cerveza";
-        //        var parametros = new
-        //        {
-        //            p_id = unaCerveza.Id,
-        //            p_nombre = unaCerveza.Nombre,
-        //            p_cervceria_id = unaCerveza.Cerveceria_id,
-        //            p_estilo_id = unaCerveza.Estilo_id,
-        //            p_ibu = unaCerveza.Ibu,
-        //            p_abv = unaCerveza.Abv
-        //        };
+            if (resultado.IsAcknowledged)
+                resultadoAccion = true;
 
-        //        var cantidad_filas = await conexion.ExecuteAsync(
-        //            procedimiento,
-        //            parametros,
-        //            commandType: CommandType.StoredProcedure);
-
-        //        if (cantidad_filas != 0)
-        //            resultadoAccion = true;
-        //    }
-        //    catch (NpgsqlException error)
-        //    {
-        //        throw new DbOperationException(error.Message);
-        //    }
-
-        //    return resultadoAccion;
-        //}
+            return resultadoAccion;
+        }
 
         //TODO: CervezaRepository: Borrar cerveza
 
-        //public async Task<bool> DeleteAsync(Cerveza unaCerveza)
-        //{
-        //    bool resultadoAccion = false;
+        public async Task<bool> DeleteAsync(Cerveza unaCerveza)
+        {
+            bool resultadoAccion = false;
 
-        //    try
-        //    {
-        //        var conexion = contextoDB.CreateConnection();
+            var conexion = contextoDB.CreateConnection();
 
-        //        string procedimiento = "core.p_elimina_cerveza";
-        //        var parametros = new
-        //        {
-        //            p_id = unaCerveza.Id
-        //        };
+            //Aqui borramos los ingredientes asociados a la cerveza
+            var coleccionIngredientesCervezas = conexion.GetCollection<IngredienteCerveza>("ingredientes_cervezas");
+            
+            var builderIngredienteCerveza = Builders<IngredienteCerveza>.Filter;
+            var filtroIngredienteCerveza = builderIngredienteCerveza.And(
+                builderIngredienteCerveza.Eq(ingredienteCerveza => ingredienteCerveza.Cerveza, unaCerveza.Nombre),
+                builderIngredienteCerveza.Eq(ingredienteCerveza => ingredienteCerveza.Cerveceria, unaCerveza.Cerveceria));
 
-        //        var cantidad_filas = await conexion.ExecuteAsync(
-        //            procedimiento,
-        //            parametros,
-        //            commandType: CommandType.StoredProcedure);
+            await coleccionIngredientesCervezas
+                .DeleteManyAsync(filtroIngredienteCerveza);
 
-        //        if (cantidad_filas != 0)
-        //            resultadoAccion = true;
-        //    }
-        //    catch (NpgsqlException error)
-        //    {
-        //        throw new DbOperationException(error.Message);
-        //    }
+            //Aqui borramos los envasados asociados a la cerveza
+            var coleccionEnvasadosCervezas = conexion.GetCollection<EnvasadoCerveza>("envasados_cervezas");
 
-        //    return resultadoAccion;
-        //}
+            var builderEnvasadoCerveza = Builders<EnvasadoCerveza>.Filter;
+            var filtroEnvasadoCerveza = builderEnvasadoCerveza.And(
+                builderEnvasadoCerveza.Eq(envasadoCerveza => envasadoCerveza.Cerveza, unaCerveza.Nombre),
+                builderEnvasadoCerveza.Eq(envasadoCerveza => envasadoCerveza.Cerveceria, unaCerveza.Cerveceria));
+
+            await coleccionEnvasadosCervezas
+                .DeleteManyAsync(filtroEnvasadoCerveza);
+
+            //Aqui Borramos la cerveza
+            var coleccionCervezas = conexion.GetCollection<Cerveza>("cervezas");
+
+            var resultado = await coleccionCervezas
+                .DeleteOneAsync(cerveza => cerveza.Id == unaCerveza.Id);
+
+            if (resultado.IsAcknowledged)
+                resultadoAccion = true;
+
+            return resultadoAccion;
+        }
 
         //TODO: CervezaRepository: Borrar envasado por cerveza
 
