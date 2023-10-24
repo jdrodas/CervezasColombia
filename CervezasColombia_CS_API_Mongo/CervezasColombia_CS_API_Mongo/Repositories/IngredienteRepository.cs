@@ -19,7 +19,7 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
         public async Task<IEnumerable<Ingrediente>> GetAllAsync()
         {
             var conexion = contextoDB.CreateConnection();
-            var coleccionIngredientes = conexion.GetCollection<Ingrediente>("ingredientes");
+            var coleccionIngredientes = conexion.GetCollection<Ingrediente>(contextoDB.configuracionColecciones.ColeccionIngredientes);
 
             var losIngredientes = await coleccionIngredientes
                 .Find(_ => true)
@@ -34,7 +34,7 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             Ingrediente unIngrediente = new();
 
             var conexion = contextoDB.CreateConnection();
-            var coleccionIngredientes = conexion.GetCollection<Ingrediente>("ingredientes");
+            var coleccionIngredientes = conexion.GetCollection<Ingrediente>(contextoDB.configuracionColecciones.ColeccionIngredientes);
 
             var resultado = await coleccionIngredientes
                 .Find(ingrediente => ingrediente.Id == ingrediente_id)
@@ -51,7 +51,7 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             Ingrediente unIngrediente = new();
 
             var conexion = contextoDB.CreateConnection();
-            var coleccionIngredientes = conexion.GetCollection<Ingrediente>("ingredientes");
+            var coleccionIngredientes = conexion.GetCollection<Ingrediente>(contextoDB.configuracionColecciones.ColeccionIngredientes);
 
             var builder = Builders<Ingrediente>.Filter;
             var filtro = builder.And(
@@ -112,7 +112,7 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             Ingrediente ingredienteExistente = new();
 
             var conexion = contextoDB.CreateConnection();
-            var coleccionCervezas = conexion.GetCollection<Cerveza>("cervezas");
+            var coleccionCervezas = conexion.GetCollection<Cerveza>(contextoDB.configuracionColecciones.ColeccionCervezas);
 
             var resultadoCerveza = await coleccionCervezas
                 .Find(cerveza => cerveza.Id == cerveza_id)
@@ -121,7 +121,7 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             if (resultadoCerveza is not null)
                 cervezaExistente = resultadoCerveza;
 
-            var coleccionIngredientes = conexion.GetCollection<Ingrediente>("ingredientes");
+            var coleccionIngredientes = conexion.GetCollection<Ingrediente>(contextoDB.configuracionColecciones.ColeccionIngredientes);
 
             var resultadoIngredientes= await coleccionIngredientes
                 .Find(ingrediente => ingrediente.Id == ingrediente_id)

@@ -155,10 +155,10 @@ comment on table core.ubicaciones is 'Ubicaciones de las Cervecerias';
 comment on column core.ubicaciones.id is 'id de la ubicación';
 comment on column core.ubicaciones.municipio is 'municipio de la ubicación';
 comment on column core.ubicaciones.departamento is 'departamento de la ubicacion';
-comment on column core.unidades_volumen.latitud is 'Componente de latitud de la coordenada geográfica';
-comment on column core.unidades_volumen.longitud is 'Componente de longitud de la coordenada geográfica';
-comment on column core.unidades_volumen.fecha_creacion is 'fecha de creación del registro';
-comment on column core.unidades_volumen.fecha_actualizacion is 'fecha de actualización del registro';
+comment on column core.ubicaciones.latitud is 'Componente de latitud de la coordenada geográfica';
+comment on column core.ubicaciones.longitud is 'Componente de longitud de la coordenada geográfica';
+comment on column core.ubicaciones.fecha_creacion is 'fecha de creación del registro';
+comment on column core.ubicaciones.fecha_actualizacion is 'fecha de actualización del registro';
 
 -- --------------------------
 -- Tabla tipos_ingredientes

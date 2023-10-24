@@ -17,7 +17,7 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
         public async Task<IEnumerable<Estilo>> GetAllAsync()
         {
             var conexion = contextoDB.CreateConnection();
-            var coleccionEstilos = conexion.GetCollection<Estilo>("estilos");
+            var coleccionEstilos = conexion.GetCollection<Estilo>(contextoDB.configuracionColecciones.ColeccionEstilos);
 
             var losEstilos = await coleccionEstilos
                 .Find(_ => true)
@@ -32,7 +32,7 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             Estilo unEstilo = new();
 
             var conexion = contextoDB.CreateConnection();
-            var coleccionEstilos = conexion.GetCollection<Estilo>("estilos");
+            var coleccionEstilos = conexion.GetCollection<Estilo>(contextoDB.configuracionColecciones.ColeccionEstilos);
 
             var resultado = await coleccionEstilos
                 .Find(estilo => estilo.Id == estilo_id)
@@ -70,7 +70,7 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             Estilo unEstilo = new();
 
             var conexion = contextoDB.CreateConnection();
-            var coleccionEstilos = conexion.GetCollection<Estilo>("estilos");
+            var coleccionEstilos = conexion.GetCollection<Estilo>(contextoDB.configuracionColecciones.ColeccionEstilos);
 
             var resultado = await coleccionEstilos
                 .Find(estilo => estilo.Nombre == estilo_nombre)
@@ -94,7 +94,7 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             var unEstilo = await GetByIdAsync(estilo_id);
 
             var conexion = contextoDB.CreateConnection();
-            var coleccionCervezas = conexion.GetCollection<Cerveza>("cervezas");
+            var coleccionCervezas = conexion.GetCollection<Cerveza>(contextoDB.configuracionColecciones.ColeccionCervezas);
 
             var lasCervezas = await coleccionCervezas
                 .Find(cerveza => cerveza.Estilo == unEstilo.Nombre)
@@ -108,7 +108,7 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             bool resultadoAccion = false;
 
             var conexion = contextoDB.CreateConnection();
-            var coleccionEstilos = conexion.GetCollection<Estilo>("estilos");
+            var coleccionEstilos = conexion.GetCollection<Estilo>(contextoDB.configuracionColecciones.ColeccionEstilos);
 
             await coleccionEstilos
                 .InsertOneAsync(unEstilo);
@@ -128,7 +128,7 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             bool resultadoAccion = false;
 
             var conexion = contextoDB.CreateConnection();
-            var coleccionEstilos = conexion.GetCollection<Estilo>("estilos");
+            var coleccionEstilos = conexion.GetCollection<Estilo>(contextoDB.configuracionColecciones.ColeccionEstilos);
 
             var resultado = await coleccionEstilos.ReplaceOneAsync(estilo => estilo.Id == unEstilo.Id, unEstilo);
 
@@ -144,7 +144,7 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             bool resultadoAccion = false;
 
             var conexion = contextoDB.CreateConnection();
-            var coleccionEstilos = conexion.GetCollection<Estilo>("estilos");
+            var coleccionEstilos = conexion.GetCollection<Estilo>(contextoDB.configuracionColecciones.ColeccionEstilos);
 
             var resultado = await coleccionEstilos
                 .DeleteOneAsync(estilo => estilo.Id == unEstilo.Id);

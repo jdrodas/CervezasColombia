@@ -24,5 +24,8 @@ namespace CervezasColombia_CS_API_Mongo.Models
 
         [JsonPropertyName("ingredientes")]
         public long Ingredientes { get; set; } = 0;
+
+        [JsonPropertyName("unidades_volumen")]
+        public long Unidades_Volumen { get; set; } = 0;
     }
 }

@@ -17,7 +17,7 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
         public async Task<IEnumerable<Cerveza>> GetAllAsync()
         {
             var conexion = contextoDB.CreateConnection();
-            var coleccionCervezas = conexion.GetCollection<Cerveza>("cervezas");
+            var coleccionCervezas = conexion.GetCollection<Cerveza>(contextoDB.configuracionColecciones.ColeccionCervezas);
 
             var lasCervezas = await coleccionCervezas
                 .Find(_ => true)
@@ -39,7 +39,7 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             Cerveza unaCerveza = new();
 
             var conexion = contextoDB.CreateConnection();
-            var coleccionCervecerias = conexion.GetCollection<Cerveza>("cervezas");
+            var coleccionCervecerias = conexion.GetCollection<Cerveza>(contextoDB.configuracionColecciones.ColeccionCervezas);
 
             var resultado = await coleccionCervecerias
                 .Find(cerveza => cerveza.Id == cerveza_id)
@@ -60,7 +60,7 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             Cerveza unaCerveza = new();
 
             var conexion = contextoDB.CreateConnection();
-            var coleccionCervezas = conexion.GetCollection<Cerveza>("cervezas");
+            var coleccionCervezas = conexion.GetCollection<Cerveza>(contextoDB.configuracionColecciones.ColeccionCervezas);
 
             var builder = Builders<Cerveza>.Filter;
             var filtro = builder.And(
@@ -206,7 +206,7 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             unaCerveza.Rango_Abv = await GetAbvRangeNameAsync(unaCerveza.Abv);
 
             var conexion = contextoDB.CreateConnection();
-            var coleccionCervezas = conexion.GetCollection<Cerveza>("cervezas");
+            var coleccionCervezas = conexion.GetCollection<Cerveza>(contextoDB.configuracionColecciones.ColeccionCervezas);
 
             await coleccionCervezas
                 .InsertOneAsync(unaCerveza);
@@ -317,7 +317,7 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             bool resultadoAccion = false;
 
             var conexion = contextoDB.CreateConnection();
-            var coleccionEstilos = conexion.GetCollection<Cerveza>("cervezas");
+            var coleccionEstilos = conexion.GetCollection<Cerveza>(contextoDB.configuracionColecciones.ColeccionCervezas);
 
             var resultado = await coleccionEstilos
                 .ReplaceOneAsync(cerveza => cerveza.Id == unaCerveza.Id, unaCerveza);
@@ -357,7 +357,7 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
                 .DeleteManyAsync(filtroEnvasadoCerveza);
 
             //Aqui Borramos la cerveza
-            var coleccionCervezas = conexion.GetCollection<Cerveza>("cervezas");
+            var coleccionCervezas = conexion.GetCollection<Cerveza>(contextoDB.configuracionColecciones.ColeccionCervezas);
 
             var resultado = await coleccionCervezas
                 .DeleteOneAsync(cerveza => cerveza.Id == unaCerveza.Id);

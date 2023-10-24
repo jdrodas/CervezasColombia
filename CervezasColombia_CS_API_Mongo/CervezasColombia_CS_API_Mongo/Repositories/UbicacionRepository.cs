@@ -17,7 +17,7 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
         public async Task<IEnumerable<Ubicacion>> GetAllAsync()
         {
             var conexion = contextoDB.CreateConnection();
-            var coleccionUbicaciones = conexion.GetCollection<Ubicacion>("ubicaciones");
+            var coleccionUbicaciones = conexion.GetCollection<Ubicacion>(contextoDB.configuracionColecciones.ColeccionUbicaciones);
 
             var lasUbicaciones = await coleccionUbicaciones
                 .Find(_ => true)
@@ -33,7 +33,7 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             Ubicacion unaUbicacion = new();
 
             var conexion = contextoDB.CreateConnection();
-            var coleccionUbicaciones = conexion.GetCollection<Ubicacion>("ubicaciones");
+            var coleccionUbicaciones = conexion.GetCollection<Ubicacion>(contextoDB.configuracionColecciones.ColeccionUbicaciones);
 
             var resultado = await coleccionUbicaciones
                 .Find(ubicacion => ubicacion.Id == ubicacion_id)
@@ -50,7 +50,7 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             Ubicacion unaUbicacion = new();
 
             var conexion = contextoDB.CreateConnection();
-            var coleccionUbicaciones = conexion.GetCollection<Ubicacion>("ubicaciones");
+            var coleccionUbicaciones = conexion.GetCollection<Ubicacion>(contextoDB.configuracionColecciones.ColeccionUbicaciones);
 
             var builder = Builders<Ubicacion>.Filter;
             var filtro = builder.And(
@@ -72,7 +72,7 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             Ubicacion unaUbicacion = new();
 
             var conexion = contextoDB.CreateConnection();
-            var coleccionUbicaciones = conexion.GetCollection<Ubicacion>("ubicaciones");
+            var coleccionUbicaciones = conexion.GetCollection<Ubicacion>(contextoDB.configuracionColecciones.ColeccionUbicaciones);
 
             string[] partesUbicacion = ubicacion_nombre.Split(',');
 
@@ -104,7 +104,7 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             string ubicacionConsolidada = unaUbicacion.Municipio + ", " + unaUbicacion.Departamento;
 
             var conexion = contextoDB.CreateConnection();
-            var coleccionCervecerias = conexion.GetCollection<Cerveceria>("cervecerias");
+            var coleccionCervecerias = conexion.GetCollection<Cerveceria>(contextoDB.configuracionColecciones.ColeccionCervecerias);
 
             var lasCervecerias = await coleccionCervecerias
                 .Find(cerveceria => cerveceria.Ubicacion == ubicacionConsolidada)
@@ -118,7 +118,7 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             bool resultadoAccion = false;
 
             var conexion = contextoDB.CreateConnection();
-            var coleccionUbicaciones = conexion.GetCollection<Ubicacion>("ubicaciones");
+            var coleccionUbicaciones = conexion.GetCollection<Ubicacion>(contextoDB.configuracionColecciones.ColeccionUbicaciones);
 
             await coleccionUbicaciones
                 .InsertOneAsync(unaUbicacion);
@@ -136,7 +136,7 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             bool resultadoAccion = false;
 
             var conexion = contextoDB.CreateConnection();
-            var coleccionUbicaciones = conexion.GetCollection<Ubicacion>("ubicaciones");
+            var coleccionUbicaciones = conexion.GetCollection<Ubicacion>(contextoDB.configuracionColecciones.ColeccionUbicaciones);
 
             var resultado = await coleccionUbicaciones.ReplaceOneAsync(ubicacion => ubicacion.Id == unaUbicacion.Id, unaUbicacion);
 
@@ -151,7 +151,7 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             bool resultadoAccion = false;
 
             var conexion = contextoDB.CreateConnection();
-            var coleccionUbicaciones = conexion.GetCollection<Ubicacion>("ubicaciones");
+            var coleccionUbicaciones = conexion.GetCollection<Ubicacion>(contextoDB.configuracionColecciones.ColeccionUbicaciones);
 
             var resultado = await coleccionUbicaciones
                 .DeleteOneAsync(ubicacion => ubicacion.Id == unaUbicacion.Id);

@@ -17,7 +17,7 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
         public async Task<IEnumerable<Cerveceria>> GetAllAsync()
         {
             var conexion = contextoDB.CreateConnection();
-            var coleccionCervecerias = conexion.GetCollection<Cerveceria>("cervecerias");
+            var coleccionCervecerias = conexion.GetCollection<Cerveceria>(contextoDB.configuracionColecciones.ColeccionCervecerias);
 
             var lasCervecerias = await coleccionCervecerias
                 .Find(_ => true)
@@ -32,7 +32,7 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             Cerveceria unaCerveceria = new();
 
             var conexion = contextoDB.CreateConnection();
-            var coleccionCervecerias = conexion.GetCollection<Cerveceria>("cervecerias");
+            var coleccionCervecerias = conexion.GetCollection<Cerveceria>(contextoDB.configuracionColecciones.ColeccionCervecerias);
 
             var resultado = await coleccionCervecerias
                 .Find(cerveceria => cerveceria.Id == cerveceria_id)
@@ -72,7 +72,7 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             Cerveceria unaCerveceria = new();
 
             var conexion = contextoDB.CreateConnection();
-            var coleccionCervecerias = conexion.GetCollection<Cerveceria>("cervecerias");
+            var coleccionCervecerias = conexion.GetCollection<Cerveceria>(contextoDB.configuracionColecciones.ColeccionCervecerias);
 
             var resultado = await coleccionCervecerias
                 .Find(cerveceria => cerveceria.Nombre == cerveceria_nombre)
@@ -89,7 +89,7 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             Cerveceria unaCerveceria = new();
 
             var conexion = contextoDB.CreateConnection();
-            var coleccionCervecerias = conexion.GetCollection<Cerveceria>("cervecerias");
+            var coleccionCervecerias = conexion.GetCollection<Cerveceria>(contextoDB.configuracionColecciones.ColeccionCervecerias);
 
             var resultado = await coleccionCervecerias
                 .Find(cerveceria => cerveceria.Instagram == cerveceria_instagram)
@@ -106,7 +106,7 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             Cerveceria unaCerveceria = new();
 
             var conexion = contextoDB.CreateConnection();
-            var coleccionCervecerias = conexion.GetCollection<Cerveceria>("cervecerias");
+            var coleccionCervecerias = conexion.GetCollection<Cerveceria>(contextoDB.configuracionColecciones.ColeccionCervecerias);
 
             var resultado = await coleccionCervecerias
                 .Find(cerveceria => cerveceria.Sitio_Web == cerveceria_sitio_web)
@@ -130,7 +130,7 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             Cerveceria unaCerveceria = await GetByIdAsync(cerveceria_id);
 
             var conexion = contextoDB.CreateConnection();
-            var coleccionCervezas = conexion.GetCollection<Cerveza>("cervezas");
+            var coleccionCervezas = conexion.GetCollection<Cerveza>(contextoDB.configuracionColecciones.ColeccionCervezas);
 
             var lasCervezas = await coleccionCervezas
                 .Find(cerveza => cerveza.Cerveceria == unaCerveceria.Nombre)
@@ -147,7 +147,7 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             string[] partesUbicacion = unaCerveceria.Ubicacion.Split(',');
 
             var conexion = contextoDB.CreateConnection();
-            var coleccionUbicaciones = conexion.GetCollection<Ubicacion>("ubicaciones");
+            var coleccionUbicaciones = conexion.GetCollection<Ubicacion>(contextoDB.configuracionColecciones.ColeccionUbicaciones);
 
             var builder = Builders<Ubicacion>.Filter;
             var filtro = builder.And(
@@ -171,7 +171,7 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             bool resultadoAccion = false;
 
             var conexion = contextoDB.CreateConnection();
-            var coleccionCervecerias = conexion.GetCollection<Cerveceria>("cervecerias");
+            var coleccionCervecerias = conexion.GetCollection<Cerveceria>(contextoDB.configuracionColecciones.ColeccionCervecerias);
 
             await coleccionCervecerias
                 .InsertOneAsync(unaCerveceria);
@@ -189,7 +189,7 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             bool resultadoAccion = false;
 
             var conexion = contextoDB.CreateConnection();
-            var coleccionCervecerias = conexion.GetCollection<Cerveceria>("cervecerias");
+            var coleccionCervecerias = conexion.GetCollection<Cerveceria>(contextoDB.configuracionColecciones.ColeccionCervecerias);
 
             var resultado = await coleccionCervecerias.ReplaceOneAsync(cerveceria => cerveceria.Id == unaCerveceria.Id, unaCerveceria);
 
@@ -204,7 +204,7 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             bool resultadoAccion = false;
 
             var conexion = contextoDB.CreateConnection();
-            var coleccionCervecerias = conexion.GetCollection<Cerveceria>("cervecerias");
+            var coleccionCervecerias = conexion.GetCollection<Cerveceria>(contextoDB.configuracionColecciones.ColeccionCervecerias);
 
             var resultado = await coleccionCervecerias
                 .DeleteOneAsync(cerveceria => cerveceria.Id == unaCerveceria.Id);
@@ -222,7 +222,7 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             var unaCerveceria = await GetByIdAsync(cerveceria_id);
 
             var conexion = contextoDB.CreateConnection();
-            var coleccionCervezas = conexion.GetCollection<Cerveza>("cervezas");
+            var coleccionCervezas = conexion.GetCollection<Cerveza>(contextoDB.configuracionColecciones.ColeccionCervezas);
 
             var resultado = await coleccionCervezas
                 .DeleteManyAsync(cerveza => cerveza.Cerveceria == unaCerveceria.Nombre);

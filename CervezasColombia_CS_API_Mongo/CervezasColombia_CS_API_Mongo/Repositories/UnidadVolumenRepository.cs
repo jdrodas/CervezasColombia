@@ -19,7 +19,7 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             UnidadVolumen unaUnidadVolumen = new();
 
             var conexion = contextoDB.CreateConnection();
-            var coleccionUnidadesVolumen = conexion.GetCollection<UnidadVolumen>("unidades_volumen");
+            var coleccionUnidadesVolumen = conexion.GetCollection<UnidadVolumen>(contextoDB.configuracionColecciones.ColeccionUnidadesVolumen);
 
             var resultado = await coleccionUnidadesVolumen
                 .Find(unidadVolumen => unidadVolumen.Nombre == unidad_volumen_nombre)

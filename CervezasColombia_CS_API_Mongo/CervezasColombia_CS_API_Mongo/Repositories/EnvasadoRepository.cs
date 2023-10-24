@@ -17,7 +17,7 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
         public async Task<IEnumerable<Envasado>> GetAllAsync()
         {
             var conexion = contextoDB.CreateConnection();
-            var coleccionEnvasados = conexion.GetCollection<Envasado>("envasados");
+            var coleccionEnvasados = conexion.GetCollection<Envasado>(contextoDB.configuracionColecciones.ColeccionEnvasados);
 
             var losEnvasados = await coleccionEnvasados
                 .Find(_ => true)
@@ -32,7 +32,7 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             Envasado unEnvasado = new();
 
             var conexion = contextoDB.CreateConnection();
-            var coleccionEnvasados = conexion.GetCollection<Envasado>("envasados");
+            var coleccionEnvasados = conexion.GetCollection<Envasado>(contextoDB.configuracionColecciones.ColeccionEnvasados);
 
             var resultado = await coleccionEnvasados
                 .Find(envasado => envasado.Id == envasado_id)
@@ -49,7 +49,7 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             Envasado unEnvasado = new();
 
             var conexion = contextoDB.CreateConnection();
-            var coleccionEnvasados = conexion.GetCollection<Envasado>("envasados");
+            var coleccionEnvasados = conexion.GetCollection<Envasado>(contextoDB.configuracionColecciones.ColeccionEnvasados);
 
             var resultado = await coleccionEnvasados
                 .Find(envasado => envasado.Nombre == envasado_nombre)
@@ -111,7 +111,7 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             bool resultadoAccion = false;
 
             var conexion = contextoDB.CreateConnection();
-            var coleccionEnvasados = conexion.GetCollection<Envasado>("envasados");
+            var coleccionEnvasados = conexion.GetCollection<Envasado>(contextoDB.configuracionColecciones.ColeccionEnvasados);
 
             await coleccionEnvasados
                 .InsertOneAsync(unEnvasado);
@@ -131,7 +131,7 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             bool resultadoAccion = false;
 
             var conexion = contextoDB.CreateConnection();
-            var coleccionEnvasados = conexion.GetCollection<Envasado>("envasados");
+            var coleccionEnvasados = conexion.GetCollection<Envasado>(contextoDB.configuracionColecciones.ColeccionEnvasados);
 
             var resultado = await coleccionEnvasados
                 .ReplaceOneAsync(envasado => envasado.Id == unEnvasado.Id, unEnvasado);
@@ -147,7 +147,7 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             bool resultadoAccion = false;
 
             var conexion = contextoDB.CreateConnection();
-            var coleccionEnvasados = conexion.GetCollection<Envasado>("envasados");
+            var coleccionEnvasados = conexion.GetCollection<Envasado>(contextoDB.configuracionColecciones.ColeccionEnvasados);
 
             var resultado = await coleccionEnvasados
                 .DeleteOneAsync(envasado => envasado.Id == unEnvasado.Id);
