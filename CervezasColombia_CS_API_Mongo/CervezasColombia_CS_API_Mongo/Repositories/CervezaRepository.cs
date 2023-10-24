@@ -274,39 +274,43 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             return resultadoAccion;
         }
 
+        public async Task<bool> CreateBeerIngredientAsync(string cerveza_id, Ingrediente unIngrediente)
+        {
+            bool resultadoAccion = false;
 
-        //TODO: CervezaRepository: Crear ingrediente por cerveza
+            var unaCerveza = await GetByIdAsync(cerveza_id);
 
-        //public async Task<bool> CreateBeerIngredientAsync(string cerveza_id, Ingrediente unIngrediente)
-        //{
-        //    bool resultadoAccion = false;
+            IngredienteCerveza unIngredienteCerveza = new()
+            {
+                Cerveza = unaCerveza.Nombre,
+                Cerveceria = unaCerveza.Cerveceria,
+                Ingrediente = unIngrediente.Nombre,
+                Tipo_Ingrediente = unIngrediente.Tipo_Ingrediente
+            };
 
-        //    try
-        //    {
-        //        var conexion = contextoDB.CreateConnection();
+            var conexion = contextoDB.CreateConnection();
+            var coleccionIngredientesCervezas = conexion.GetCollection<IngredienteCerveza>("ingredientes_cervezas");
 
-        //        string procedimiento = "core.p_inserta_ingrediente_cerveza";
-        //        var parametros = new
-        //        {
-        //            p_cerveza_id = cerveza_id,
-        //            p_ingrediente_id = unIngrediente.Id
-        //        };
+            await coleccionIngredientesCervezas
+                .InsertOneAsync(unIngredienteCerveza);
 
-        //        var cantidad_filas = await conexion.ExecuteAsync(
-        //            procedimiento,
-        //            parametros,
-        //            commandType: CommandType.StoredProcedure);
+            //Aqui validamos que la inserción quedó correcta
+            var builder = Builders<IngredienteCerveza>.Filter;
+            var filtroIngredienteCerveza = builder.And(
+                builder.Eq(ingredienteCerveza => ingredienteCerveza.Cerveceria, unIngredienteCerveza.Cerveceria),
+                builder.Eq(ingredienteCerveza => ingredienteCerveza.Cerveza, unIngredienteCerveza.Cerveza),
+                builder.Eq(ingredienteCerveza => ingredienteCerveza.Ingrediente, unIngredienteCerveza.Ingrediente),
+                builder.Eq(ingredienteCerveza => ingredienteCerveza.Tipo_Ingrediente, unIngredienteCerveza.Tipo_Ingrediente));
 
-        //        if (cantidad_filas != 0)
-        //            resultadoAccion = true;
-        //    }
-        //    catch (NpgsqlException error)
-        //    {
-        //        throw new DbOperationException(error.Message);
-        //    }
+            var resultadoIngredienteCerveza = await coleccionIngredientesCervezas
+                .Find(filtroIngredienteCerveza)
+                .FirstOrDefaultAsync();
 
-        //    return resultadoAccion;
-        //}
+            if (resultadoIngredienteCerveza is not null)
+                resultadoAccion = true;
+
+            return resultadoAccion;
+        }
 
         public async Task<bool> UpdateAsync(Cerveza unaCerveza)
         {
@@ -323,8 +327,6 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
 
             return resultadoAccion;
         }
-
-        //TODO: CervezaRepository: Borrar cerveza
 
         public async Task<bool> DeleteAsync(Cerveza unaCerveza)
         {
@@ -366,74 +368,54 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             return resultadoAccion;
         }
 
-        //TODO: CervezaRepository: Borrar envasado por cerveza
+        public async Task<bool> DeleteBeerPackagingAsync(string cerveza_id, EnvasadoCerveza unEnvasadoCerveza)
+        {
+            bool resultadoAccion = false;
 
-        //public async Task<bool> DeleteBeerPackagingAsync(int cerveza_id, EnvasadoCerveza unEnvasadoCerveza)
-        //{
-        //    bool resultadoAccion = false;
+            var conexion = contextoDB.CreateConnection();
+            //Aqui borramos los envasados asociados a la cerveza
+            var coleccionEnvasadosCervezas = conexion.GetCollection<EnvasadoCerveza>("envasados_cervezas");
 
-        //    try
-        //    {
-        //        var conexion = contextoDB.CreateConnection();
+            var builderEnvasadoCerveza = Builders<EnvasadoCerveza>.Filter;
+            var filtroEnvasadoCerveza = builderEnvasadoCerveza.And(
+                builderEnvasadoCerveza.Eq(envasadoCerveza => envasadoCerveza.Cerveza, unEnvasadoCerveza.Cerveza),
+                builderEnvasadoCerveza.Eq(envasadoCerveza => envasadoCerveza.Cerveceria, unEnvasadoCerveza.Cerveceria),
+                builderEnvasadoCerveza.Eq(envasadoCerveza => envasadoCerveza.Envasado, unEnvasadoCerveza.Envasado),
+                builderEnvasadoCerveza.Eq(envasadoCerveza => envasadoCerveza.Unidad_Volumen, unEnvasadoCerveza.Unidad_Volumen),
+                builderEnvasadoCerveza.Eq(envasadoCerveza => envasadoCerveza.Volumen, unEnvasadoCerveza.Volumen));
 
-        //        string procedimiento = "core.p_elimina_envasado_cerveza";
-        //        var parametros = new
-        //        {
-        //            p_cerveza_id = cerveza_id,
-        //            p_envasado_id = unEnvasadoCerveza.Id,
-        //            p_unidad_volumen_id = unEnvasadoCerveza.Unidad_Volumen_Id,
-        //            p_volumen = unEnvasadoCerveza.Volumen
-        //        };
+            var resultado = await coleccionEnvasadosCervezas
+                .DeleteOneAsync(filtroEnvasadoCerveza);
 
-        //        var cantidad_filas = await conexion.ExecuteAsync(
-        //            procedimiento,
-        //            parametros,
-        //            commandType: CommandType.StoredProcedure);
+            if (resultado.IsAcknowledged)
+                resultadoAccion = true;
 
-        //        if (cantidad_filas != 0)
-        //            resultadoAccion = true;
-        //    }
-        //    catch (NpgsqlException error)
-        //    {
-        //        throw new DbOperationException(error.Message);
-        //    }
+            return resultadoAccion;
+        }
 
-        //    return resultadoAccion;
-        //}
+        public async Task<bool> DeleteBeerIngredientAsync(string cerveza_id, Ingrediente unIngrediente)
+        {
+            bool resultadoAccion = false;
 
-        //TODO: CervezaRepository: Borrar ingrediente por cerveza
+            var unaCerveza = await GetByIdAsync(cerveza_id);
 
-        //public async Task<bool> DeleteBeerIngredientAsync(int cerveza_id, Ingrediente unIngrediente)
-        //{
-        //    bool resultadoAccion = false;
+            var conexion = contextoDB.CreateConnection();
+            var coleccionIngredientesCervezas = conexion.GetCollection<IngredienteCerveza>("ingredientes_cervezas");
 
-        //    try
-        //    {
-        //        var conexion = contextoDB.CreateConnection();
+            var builder = Builders<IngredienteCerveza>.Filter;
+            var filtroIngredienteCerveza = builder.And(
+                builder.Eq(ingredienteCerveza => ingredienteCerveza.Cerveceria, unaCerveza.Cerveceria),
+                builder.Eq(ingredienteCerveza => ingredienteCerveza.Cerveza, unaCerveza.Nombre),
+                builder.Eq(ingredienteCerveza => ingredienteCerveza.Ingrediente, unIngrediente.Nombre),
+                builder.Eq(ingredienteCerveza => ingredienteCerveza.Tipo_Ingrediente, unIngrediente.Tipo_Ingrediente));
 
-        //        string procedimiento = "core.p_elimina_ingrediente_cerveza";
-        //        var parametros = new
-        //        {
-        //            p_cerveza_id = cerveza_id,
-        //            p_ingrediente_id = unIngrediente.Id
-        //        };
+            var resultado = await coleccionIngredientesCervezas
+                .DeleteOneAsync(filtroIngredienteCerveza);
 
-        //        var cantidad_filas = await conexion.ExecuteAsync(
-        //            procedimiento,
-        //            parametros,
-        //            commandType: CommandType.StoredProcedure);
+            if (resultado.IsAcknowledged)
+                resultadoAccion = true;
 
-        //        if (cantidad_filas != 0)
-        //            resultadoAccion = true;
-
-
-        //    }
-        //    catch (NpgsqlException error)
-        //    {
-        //        throw new DbOperationException(error.Message);
-        //    }
-
-        //    return resultadoAccion;
-        //}
+            return resultadoAccion;
+        }
     }
 }

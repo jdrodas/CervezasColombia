@@ -46,31 +46,27 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             return unIngrediente;
         }
 
-        //public async Task<Ingrediente> GetByNameAndTypeAsync(string ingrediente_nombre, string ingrediente_tipo)
-        //{
-        //    Ingrediente unIngrediente = new();
+        public async Task<Ingrediente> GetByNameAndTypeAsync(string ingrediente_nombre, string ingrediente_tipo)
+        {
+            Ingrediente unIngrediente = new();
 
-        //    var conexion = contextoDB.CreateConnection();
+            var conexion = contextoDB.CreateConnection();
+            var coleccionIngredientes = conexion.GetCollection<Ingrediente>("ingredientes");
 
-        //    DynamicParameters parametrosSentencia = new();
-        //    parametrosSentencia.Add("@ingrediente_nombre", ingrediente_nombre,
-        //                            DbType.String, ParameterDirection.Input);
-        //    parametrosSentencia.Add("@ingrediente_tipo", ingrediente_tipo,
-        //                            DbType.String, ParameterDirection.Input);
+            var builder = Builders<Ingrediente>.Filter;
+            var filtro = builder.And(
+                builder.Eq(ingrediente => ingrediente.Nombre, ingrediente_nombre),
+                builder.Eq(ingrediente => ingrediente.Tipo_Ingrediente, ingrediente_tipo));
 
-        //    string sentenciaSQL = "SELECT DISTINCT v.ingrediente_id id, v.ingrediente nombre, v.tipo_ingrediente, v.tipo_ingrediente_id " +
-        //                            "FROM v_info_ingredientes v " +
-        //                            "WHERE LOWER(v.ingrediente) = LOWER(@ingrediente_nombre) " +
-        //                            "AND LOWER(v.tipo_ingrediente) = LOWER(@ingrediente_tipo)";
+            var resultado = await coleccionIngredientes
+                .Find(filtro)
+                .FirstOrDefaultAsync();
 
-        //    var resultado = await conexion.QueryAsync<Ingrediente>(sentenciaSQL,
-        //                        parametrosSentencia);
+            if (resultado is not null)
+                unIngrediente = resultado;
 
-        //    if (resultado.Any())
-        //        unIngrediente = resultado.First();
-
-        //    return unIngrediente;
-        //}
+            return unIngrediente;
+        }
 
         //public async Task<int> GetTotalAssociatedBeersAsync(int ingrediente_id)
         //{
@@ -110,31 +106,49 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
         //    return resultadoCervezas;
         //}
 
-        //public async Task<Cerveza> GetAssociatedBeerByIdAsync(int ingrediente_id, int cerveza_id)
-        //{
-        //    Cerveza cervezaExistente = new();
+        public async Task<Cerveza> GetAssociatedBeerByIdAsync(string ingrediente_id, string cerveza_id)
+        {
+            Cerveza cervezaExistente = new();
+            Ingrediente ingredienteExistente = new();
 
-        //    var conexion = contextoDB.CreateConnection();
+            var conexion = contextoDB.CreateConnection();
+            var coleccionCervezas = conexion.GetCollection<Cerveza>("cervezas");
 
-        //    DynamicParameters parametrosSentencia = new();
-        //    parametrosSentencia.Add("@ingrediente_id", ingrediente_id,
-        //                            DbType.Int32, ParameterDirection.Input);
-        //    parametrosSentencia.Add("@cerveza_id", cerveza_id,
-        //                            DbType.Int32, ParameterDirection.Input);
+            var resultadoCerveza = await coleccionCervezas
+                .Find(cerveza => cerveza.Id == cerveza_id)
+                .FirstOrDefaultAsync();
 
-        //    string sentenciaSQL = "SELECT cerveza_id id, cerveza nombre, cerveceria, " +
-        //        "estilo, ibu, abv " +
-        //        "FROM v_info_cervezas " +
-        //        "WHERE cerveza_id in (SELECT cerveza_id FROM ingredientes_cervezas " +
-        //        "WHERE ingrediente_id = @ingrediente_id) AND cerveza_id = @cerveza_id";
+            if (resultadoCerveza is not null)
+                cervezaExistente = resultadoCerveza;
 
-        //    var resultado = await conexion.QueryAsync<Cerveza>(sentenciaSQL, parametrosSentencia);
+            var coleccionIngredientes = conexion.GetCollection<Ingrediente>("ingredientes");
 
-        //    if (resultado.Any())
-        //        cervezaExistente = resultado.First();
+            var resultadoIngredientes= await coleccionIngredientes
+                .Find(ingrediente => ingrediente.Id == ingrediente_id)
+                .FirstOrDefaultAsync();
 
-        //    return cervezaExistente;
-        //}
+            if (resultadoIngredientes is not null)
+                ingredienteExistente = resultadoIngredientes;
+
+            var coleccionIngredientesCervezas = conexion.GetCollection<IngredienteCerveza>("ingredientes_cervezas");
+
+            var builder = Builders<IngredienteCerveza>.Filter;
+            var filtroIngredienteCerveza = builder.And(
+                builder.Eq(ingredienteCerveza => ingredienteCerveza.Cerveceria, cervezaExistente.Cerveceria),
+                builder.Eq(ingredienteCerveza => ingredienteCerveza.Cerveza, cervezaExistente.Nombre),
+                builder.Eq(ingredienteCerveza => ingredienteCerveza.Ingrediente, ingredienteExistente.Nombre),
+                builder.Eq(ingredienteCerveza => ingredienteCerveza.Tipo_Ingrediente, ingredienteExistente.Tipo_Ingrediente));
+
+            var resultadoIngredienteCerveza = await coleccionIngredientesCervezas
+                .Find(filtroIngredienteCerveza)
+                .FirstOrDefaultAsync();
+
+            if (resultadoIngredienteCerveza is not null)
+                return cervezaExistente;
+            else
+                return new Cerveza();
+
+        }
 
 
         //public async Task<int> GetAssociatedIngredientTypeIdAsync(string tipo_ingrediente_nombre)

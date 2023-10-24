@@ -11,14 +11,14 @@ namespace CervezasColombia_CS_API_Mongo.Services
         private readonly IEstiloRepository _estiloRepository;
         private readonly IEnvasadoRepository _envasadoRepository;
         private readonly IUnidadVolumenRepository _unidadVolumenRepository;
-        //private readonly IIngredienteRepository _ingredienteRepository;
+        private readonly IIngredienteRepository _ingredienteRepository;
 
         public CervezaService(ICervezaRepository cervezaRepository
             , ICerveceriaRepository cerveceriaRepository
             , IEstiloRepository estiloRepository
             , IEnvasadoRepository envasadoRepository
             , IUnidadVolumenRepository unidadVolumenRepository
-            //,IIngredienteRepository ingredienteRepository
+            , IIngredienteRepository ingredienteRepository
             )
         {
             _cervezaRepository = cervezaRepository;
@@ -26,7 +26,7 @@ namespace CervezasColombia_CS_API_Mongo.Services
             _estiloRepository = estiloRepository;
             _envasadoRepository = envasadoRepository;
             _unidadVolumenRepository = unidadVolumenRepository;
-            //_ingredienteRepository = ingredienteRepository;
+            _ingredienteRepository = ingredienteRepository;
         }
 
         public async Task<IEnumerable<Cerveza>> GetAllAsync()
@@ -229,55 +229,51 @@ namespace CervezasColombia_CS_API_Mongo.Services
             return envasadoCervezaExistente;
         }
 
-        //TODO: CervezaService: Crear envasados para cervezas 
+        public async Task CreateBeerIngredientAsync(string cerveza_id, Ingrediente unIngrediente)
+        {
+            //Validamos que la cerveza exista con ese Id
+            var cervezaExistente = await _cervezaRepository
+                .GetByIdAsync(cerveza_id);
 
-        //public async Task CreateBeerIngredientAsync(string cerveza_id, Ingrediente unIngrediente)
-        //{
-        //    Validamos que la cerveza exista con ese Id
-        //    var cervezaExistente = await _cervezaRepository
-        //        .GetByIdAsync(cerveza_id);
+            if (string.IsNullOrEmpty(cervezaExistente.Id))
+                throw new AppValidationException($"No existe una cerveza registrada con el id {cerveza_id}");
 
-        //    if (cervezaExistente.Id == 0)
-        //        throw new AppValidationException($"No existe una cerveza registrada con el id {cerveza_id}");
+            //Validamos que el ingrediente tenga nombre
+            if (unIngrediente.Nombre.Length == 0)
+                throw new AppValidationException("No se puede insertar un ingrediente de cerveza con nombre nulo");
 
-        //    Validamos que el ingrediente tenga nombre
-        //    if (unIngrediente.Nombre.Length == 0)
-        //        throw new AppValidationException("No se puede insertar un ingrediente de cerveza con nombre nulo");
+            //Validamos que el tipo de ingrediente tenga nombre
+            if (unIngrediente.Tipo_Ingrediente.Length == 0)
+                throw new AppValidationException("No se puede insertar un ingrediente de cerveza con tipo de ingrediente nulo");
 
-        //    Validamos que el tipo de ingrediente tenga nombre
-        //    if (unIngrediente.Tipo_Ingrediente.Length == 0)
-        //        throw new AppValidationException("No se puede insertar un ingrediente de cerveza con tipo de ingrediente nulo");
+            //Validamos que el ingrediente exista
+            var ingredienteExistente = await _ingredienteRepository
+                .GetByNameAndTypeAsync(unIngrediente.Nombre!, unIngrediente.Tipo_Ingrediente);
 
-        //    Validamos que el ingrediente exista
-        //    var ingredienteExistente = await _ingredienteRepository
-        //        .GetByNameAndTypeAsync(unIngrediente.Nombre!, unIngrediente.Tipo_Ingrediente);
+            if (string.IsNullOrEmpty(ingredienteExistente.Id))
+                throw new AppValidationException($"El ingrediente {unIngrediente.Tipo_Ingrediente} - {unIngrediente.Nombre} no se encuentra registrado.");
 
-        //    if (ingredienteExistente.Id == 0)
-        //        throw new AppValidationException($"El ingrediente {unIngrediente.Tipo_Ingrediente} - {unIngrediente.Nombre} no se encuentra registrado.");
+            //Validamos que este ingrediente no exista para esta cerveza
+            var CervezaConIngredienteExistente = await _ingredienteRepository
+                .GetAssociatedBeerByIdAsync(ingredienteExistente.Id, cervezaExistente.Id);
 
-        //    unIngrediente.Id = ingredienteExistente.Id;
+            if (!string.IsNullOrEmpty(CervezaConIngredienteExistente.Id))
+                throw new AppValidationException($"Ya existe registro para el ingrediente {unIngrediente.Tipo_Ingrediente} " +
+                    $"- {unIngrediente.Nombre} para la cerveza {cervezaExistente.Nombre} ");
 
-        //    Validamos que este ingrediente no exista para esta cerveza
-        //    var CervezaConIngredienteExistente = await _ingredienteRepository
-        //        .GetAssociatedBeerByIdAsync(unIngrediente.Id, cerveza_id);
+            try
+            {
+                bool resultadoAccion = await _cervezaRepository
+                    .CreateBeerIngredientAsync(cerveza_id, unIngrediente);
 
-        //    if (CervezaConIngredienteExistente.Id != 0)
-        //        throw new AppValidationException($"Ya existe registro para el ingrediente {unIngrediente.Tipo_Ingrediente} " +
-        //            $"- {unIngrediente.Nombre} para la cerveza {cervezaExistente.Nombre} ");
-
-        //    try
-        //    {
-        //        bool resultadoAccion = await _cervezaRepository
-        //            .CreateBeerIngredientAsync(cerveza_id, unIngrediente);
-
-        //        if (!resultadoAccion)
-        //            throw new AppValidationException("Operación ejecutada pero no generó cambios en la DB");
-        //    }
-        //    catch (DbOperationException error)
-        //    {
-        //        throw error;
-        //    }
-        //}
+                if (!resultadoAccion)
+                    throw new AppValidationException("Operación ejecutada pero no generó cambios en la DB");
+            }
+            catch (DbOperationException error)
+            {
+                throw error;
+            }
+        }
 
         public async Task<Cerveza> UpdateAsync(string cerveza_id, Cerveza unaCerveza)
         {
@@ -370,117 +366,101 @@ namespace CervezasColombia_CS_API_Mongo.Services
             }
         }
 
-        //TODO: CervezaService: Borrar envasado Cervezas
+        public async Task DeleteBeerPackagingAsync(string cerveza_id, EnvasadoCerveza unEnvasadoCerveza)
+        {
+            //Validamos que la cerveza exista con ese Id
+            var cervezaExistente = await _cervezaRepository
+                .GetByIdAsync(cerveza_id);
 
-        //public async Task DeleteBeerPackagingAsync(int cerveza_id, EnvasadoCerveza unEnvasadoCerveza)
-        //{
-        //    //Validamos que la cerveza exista con ese Id
-        //    var cervezaExistente = await _cervezaRepository
-        //        .GetByIdAsync(cerveza_id);
+            if (string.IsNullOrEmpty(cervezaExistente.Id))
+                throw new AppValidationException($"No existe una cerveza registrada con el id {cerveza_id}");
 
-        //    if (cervezaExistente.Id == 0)
-        //        throw new AppValidationException($"No existe una cerveza registrada con el id {cerveza_id}");
+            //Validamos que el envasado tenga nombre
+            if (unEnvasadoCerveza.Envasado.Length == 0)
+                throw new AppValidationException("No se puede encontrar un envasado de cerveza para eliminar con nombre nulo");
 
-        //    //Validamos que el envasado tenga nombre
-        //    if (unEnvasadoCerveza.Nombre.Length == 0)
-        //        throw new AppValidationException("No se puede encontrar un envasado de cerveza para eliminar con nombre nulo");
+            //Validamos que la unidad de volumen tenga nombre
+            if (unEnvasadoCerveza.Unidad_Volumen.Length == 0)
+                throw new AppValidationException("No se puede encontrar un envasado de cerveza para eliminar con unidad de volumen nula");
 
-        //    //Validamos que la unidad de volumen tenga nombre
-        //    if (unEnvasadoCerveza.Unidad_Volumen.Length == 0)
-        //        throw new AppValidationException("No se puede encontrar un envasado de cerveza para eliminar con unidad de volumen nula");
+            //Validamos que el envasado exista
+            var envasadoExistente = await _envasadoRepository
+                .GetByNameAsync(unEnvasadoCerveza.Envasado!);
 
-        //    //Validamos que el envasado exista
-        //    var envasadoExistente = await _envasadoRepository
-        //        .GetByNameAsync(unEnvasadoCerveza.Nombre!);
+            if (string.IsNullOrEmpty(envasadoExistente.Id))
+                throw new AppValidationException($"El envasado {unEnvasadoCerveza.Envasado} no se encuentra registrado.");
 
-        //    if (envasadoExistente.Id == 0)
-        //        throw new AppValidationException($"El envasado {unEnvasadoCerveza.Nombre} no se encuentra registrado.");
+            unEnvasadoCerveza.Id = envasadoExistente.Id;
 
-        //    unEnvasadoCerveza.Id = envasadoExistente.Id;
+            //Validamos que la unidad de volumen exista
+            var unidadVolumenExistente = await _unidadVolumenRepository
+                .GetByNameAsync(unEnvasadoCerveza.Unidad_Volumen!);
 
-        //    //Validamos que la unidad de volumen exista
-        //    var unidadVolumenExistente = await _unidadVolumenRepository
-        //        .GetByNameAsync(unEnvasadoCerveza.Unidad_Volumen!);
+            if (string.IsNullOrEmpty(unidadVolumenExistente.Id))
+                throw new AppValidationException($"La unidad de Volumen {unEnvasadoCerveza.Unidad_Volumen} no se encuentra registrada.");
 
-        //    if (unidadVolumenExistente.Id == 0)
-        //        throw new AppValidationException($"La unidad de Volumen {unEnvasadoCerveza.Unidad_Volumen} no se encuentra registrada.");
+            if (unEnvasadoCerveza.Volumen <= 0)
+                throw new AppValidationException($"el Volumen {unEnvasadoCerveza.Volumen} no corresponde a un valor válido para un envasado.");
 
-        //    unEnvasadoCerveza.Unidad_Volumen_Id = unidadVolumenExistente.Id;
+            try
+            {
+                bool resultadoAccion = await _cervezaRepository
+                    .DeleteBeerPackagingAsync(cerveza_id, unEnvasadoCerveza);
 
-        //    if (unEnvasadoCerveza.Volumen <= 0)
-        //        throw new AppValidationException($"el Volumen {unEnvasadoCerveza.Volumen} no corresponde a un valor válido para un envasado.");
+                if (!resultadoAccion)
+                    throw new AppValidationException("Operación ejecutada pero no generó cambios en la DB");
 
-        //    //Validamos que este envasado con unidad de volumen y volumen exista para esta cerveza
-        //    var envasadoCervezaExistente = await _envasadoRepository
-        //        .GetAssociatedBeerPackagingAsync(cerveza_id, unEnvasadoCerveza.Id, unEnvasadoCerveza.Unidad_Volumen_Id, unEnvasadoCerveza.Volumen);
+            }
+            catch (DbOperationException error)
+            {
+                throw error;
+            }
+        }
 
-        //    if (!unEnvasadoCerveza.Equals(envasadoCervezaExistente))
-        //        throw new AppValidationException($"Ya existe un envasado {unEnvasadoCerveza.Nombre} de {unEnvasadoCerveza.Volumen} " +
-        //            $"{unEnvasadoCerveza.Unidad_Volumen} para la cerveza {cervezaExistente.Nombre} de {cervezaExistente.Cerveceria}.");
+        public async Task DeleteBeerIngredientAsync(string cerveza_id, Ingrediente unIngrediente)
+        {
+            //Validamos que la cerveza exista con ese Id
+            var cervezaExistente = await _cervezaRepository
+                .GetByIdAsync(cerveza_id);
 
-        //    try
-        //    {
-        //        bool resultadoAccion = await _cervezaRepository
-        //            .DeleteBeerPackagingAsync(cerveza_id, unEnvasadoCerveza);
+            if (string.IsNullOrEmpty(cervezaExistente.Id))
+                throw new AppValidationException($"No existe una cerveza registrada con el id {cerveza_id}");
 
-        //        if (!resultadoAccion)
-        //            throw new AppValidationException("Operación ejecutada pero no generó cambios en la DB");
+            //Validamos que el ingrediente tenga nombre
+            if (unIngrediente.Nombre.Length == 0)
+                throw new AppValidationException("No se puede validar un ingrediente de cerveza con nombre nulo");
 
-        //    }
-        //    catch (DbOperationException error)
-        //    {
-        //        throw error;
-        //    }
-        //}
+            //Validamos que el tipo de ingrediente tenga nombre
+            if (unIngrediente.Tipo_Ingrediente.Length == 0)
+                throw new AppValidationException("No se puede validar un ingrediente de cerveza con tipo de ingrediente nulo");
 
-        //TODO: CervezaService: Borrar Ingredientes de Cervezas
+            //Validamos que el ingrediente exista
+            var ingredienteExistente = await _ingredienteRepository
+                .GetByNameAndTypeAsync(unIngrediente.Nombre!, unIngrediente.Tipo_Ingrediente);
 
-        //public async Task DeleteBeerIngredientAsync(int cerveza_id, Ingrediente unIngrediente)
-        //{
-        //    //Validamos que la cerveza exista con ese Id
-        //    var cervezaExistente = await _cervezaRepository
-        //        .GetByIdAsync(cerveza_id);
+            if (string.IsNullOrEmpty(ingredienteExistente.Id))
+                throw new AppValidationException($"El ingrediente {unIngrediente.Tipo_Ingrediente} - {unIngrediente.Nombre} no se encuentra registrado.");
 
-        //    if (cervezaExistente.Id == 0)
-        //        throw new AppValidationException($"No existe una cerveza registrada con el id {cerveza_id}");
+            //Validamos que este ingrediente no exista para esta cerveza
+            var CervezaConIngredienteExistente = await _ingredienteRepository
+                .GetAssociatedBeerByIdAsync(ingredienteExistente.Id, cerveza_id);
 
-        //    //Validamos que el ingrediente tenga nombre
-        //    if (unIngrediente.Nombre.Length == 0)
-        //        throw new AppValidationException("No se puede validar un ingrediente de cerveza con nombre nulo");
+            if (string.IsNullOrEmpty(CervezaConIngredienteExistente.Id))
+                throw new AppValidationException($"No existe registro para el ingrediente {unIngrediente.Tipo_Ingrediente} " +
+                    $"- {unIngrediente.Nombre} para la cerveza {cervezaExistente.Nombre} ");
 
-        //    //Validamos que el tipo de ingrediente tenga nombre
-        //    if (unIngrediente.Tipo_Ingrediente.Length == 0)
-        //        throw new AppValidationException("No se puede validar un ingrediente de cerveza con tipo de ingrediente nulo");
+            try
+            {
+                bool resultadoAccion = await _cervezaRepository
+                    .DeleteBeerIngredientAsync(cerveza_id, unIngrediente);
 
-        //    //Validamos que el ingrediente exista
-        //    var ingredienteExistente = await _ingredienteRepository
-        //        .GetByNameAndTypeAsync(unIngrediente.Nombre!, unIngrediente.Tipo_Ingrediente);
-
-        //    if (ingredienteExistente.Id == 0)
-        //        throw new AppValidationException($"El ingrediente {unIngrediente.Tipo_Ingrediente} - {unIngrediente.Nombre} no se encuentra registrado.");
-
-        //    unIngrediente.Id = ingredienteExistente.Id;
-
-        //    //Validamos que este ingrediente no exista para esta cerveza
-        //    var CervezaConIngredienteExistente = await _ingredienteRepository
-        //        .GetAssociatedBeerByIdAsync(unIngrediente.Id, cerveza_id);
-
-        //    if (CervezaConIngredienteExistente.Id == 0)
-        //        throw new AppValidationException($"No existe registro para el ingrediente {unIngrediente.Tipo_Ingrediente} " +
-        //            $"- {unIngrediente.Nombre} para la cerveza {cervezaExistente.Nombre} ");
-
-        //    try
-        //    {
-        //        bool resultadoAccion = await _cervezaRepository
-        //            .DeleteBeerIngredientAsync(cerveza_id, unIngrediente);
-
-        //        if (!resultadoAccion)
-        //            throw new AppValidationException("Operación ejecutada pero no generó cambios en la DB");
-        //    }
-        //    catch (DbOperationException error)
-        //    {
-        //        throw error;
-        //    }
-        //}
+                if (!resultadoAccion)
+                    throw new AppValidationException("Operación ejecutada pero no generó cambios en la DB");
+            }
+            catch (DbOperationException error)
+            {
+                throw error;
+            }
+        }
     }
 }
