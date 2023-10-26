@@ -34,16 +34,35 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Services
                 .GetAllAsync();
         }
 
-        public async Task<Cerveza> GetByIdAsync(int cerveza_id)
+        public async Task<CervezaDetallada> GetDetailsByIdAsync(int cerveza_id)
         {
             //Validamos que el estilo exista con ese Id
             var unaCerveza = await _cervezaRepository
                 .GetByIdAsync(cerveza_id);
 
-            if (unaCerveza.Id == 0)
+            if (unaCerveza.Id==0)
                 throw new AppValidationException($"Cerveza no encontrada con el id {cerveza_id}");
 
-            return unaCerveza;
+            //Transformamos unaCerveza en unaCervezaDetallada
+            CervezaDetallada unaCervezaDetallada = new()
+            {
+                Id = unaCerveza.Id,
+                Nombre = unaCerveza.Nombre,
+                Estilo = unaCerveza.Estilo,
+                Cerveceria = unaCerveza.Cerveceria,
+                Abv = unaCerveza.Abv,
+                Ibu = unaCerveza.Ibu,
+                Rango_Abv = unaCerveza.Rango_Abv,
+                Rango_Ibu = unaCerveza.Rango_Ibu,
+            };
+
+            var losIngredientes = await _cervezaRepository.GetAssociatedIngredientsAsync(cerveza_id);
+            var losEnvasados = await _cervezaRepository.GetAssociatedPackagingsAsync(cerveza_id);
+
+            unaCervezaDetallada.Ingredientes = losIngredientes.ToList();
+            unaCervezaDetallada.Envasados = losEnvasados.ToList();
+
+            return unaCervezaDetallada;
         }
 
         public async Task<IEnumerable<Ingrediente>> GetAssociatedIngredientsAsync(int cerveza_id)

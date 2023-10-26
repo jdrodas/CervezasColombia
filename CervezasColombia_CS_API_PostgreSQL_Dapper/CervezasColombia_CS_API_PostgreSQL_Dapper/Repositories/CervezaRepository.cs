@@ -85,21 +85,9 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
 
         public async Task<int> GetTotalAssociatedIngredientsAsync(int cerveza_id)
         {
-            var conexion = contextoDB.CreateConnection();
+            var losIngredientes = await GetAssociatedIngredientsAsync(cerveza_id);
 
-            DynamicParameters parametrosSentencia = new();
-            parametrosSentencia.Add("@cerveza_id", cerveza_id,
-                                    DbType.Int32, ParameterDirection.Input);
-
-            string sentenciaSQL = "SELECT COUNT(ingrediente_id) totalIngredientes " +
-                                  "FROM ingredientes_cervezas " +
-                                  "WHERE cerveza_id = @cerveza_id";
-
-
-            var totalIngredientes = await conexion.QueryFirstAsync<int>(sentenciaSQL,
-                                    parametrosSentencia);
-
-            return totalIngredientes;
+            return losIngredientes.Count();
         }
 
         public async Task<IEnumerable<Ingrediente>> GetAssociatedIngredientsAsync(int cerveza_id)
@@ -122,20 +110,9 @@ namespace CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories
 
         public async Task<int> GetTotalAssociatedPackagingsAsync(int cerveza_id)
         {
-            var conexion = contextoDB.CreateConnection();
-            DynamicParameters parametrosSentencia = new();
-            parametrosSentencia.Add("@cerveza_id", cerveza_id,
-                                    DbType.Int32, ParameterDirection.Input);
+            var losEnvasadosAsociados = await GetAssociatedPackagingsAsync(cerveza_id);
 
-            string sentenciaSQL = "SELECT COUNT(envasado_id) totalEnvasados " +
-                                  "FROM envasados_cervezas " +
-                                  "WHERE cerveza_id = @cerveza_id";
-
-
-            var totalIngredientes = await conexion.QueryFirstAsync<int>(sentenciaSQL,
-                                    parametrosSentencia);
-
-            return totalIngredientes;
+            return losEnvasadosAsociados.Count();
         }
 
         public async Task<IEnumerable<EnvasadoCerveza>> GetAssociatedPackagingsAsync(int cerveza_id)
