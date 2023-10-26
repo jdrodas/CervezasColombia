@@ -68,43 +68,27 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             return unIngrediente;
         }
 
-        //public async Task<int> GetTotalAssociatedBeersAsync(int ingrediente_id)
-        //{
-        //    var conexion = contextoDB.CreateConnection();
+        public async Task<int> GetTotalAssociatedBeersAsync(string ingrediente_id)
+        {
+            var lasCervezasAsociadas = await GetAssociatedBeersAsync(ingrediente_id);
 
-        //    DynamicParameters parametrosSentencia = new();
-        //    parametrosSentencia.Add("@ingrediente_id", ingrediente_id,
-        //                            DbType.Int32, ParameterDirection.Input);
+            return lasCervezasAsociadas.Count();
+        }
 
-        //    string sentenciaSQL = "SELECT COUNT(v.cerveza_id) totalCervezas " +
-        //                            "FROM v_info_ingredientes_cervezas v " +
-        //                            "WHERE v.ingrediente_id = @ingrediente_id ";
+        public async Task<IEnumerable<IngredienteCerveza>> GetAssociatedBeersAsync(string ingrediente_id)
+        {
+            Ingrediente unIngrediente = await GetByIdAsync(ingrediente_id);
 
-        //    var totalCervezas = await conexion.QueryFirstAsync<int>(sentenciaSQL,
-        //                            parametrosSentencia);
+            var conexion = contextoDB.CreateConnection();
+            var coleccionIngredientesCervezas = conexion.GetCollection<IngredienteCerveza>(contextoDB.configuracionColecciones.ColeccionIngredientesCervezas);
 
-        //    return totalCervezas;
-        //}
+            var losIngredientesCervezas = await coleccionIngredientesCervezas
+                .Find(ingrediente_cerveza => ingrediente_cerveza.Ingrediente == unIngrediente.Nombre)
+                .SortBy(ingrediente_cerveza => ingrediente_cerveza.Cerveza)
+                .ToListAsync();
 
-        //public async Task<IEnumerable<Cerveza>> GetAssociatedBeersAsync(int ingrediente_id)
-        //{
-        //    var conexion = contextoDB.CreateConnection();
-
-        //    DynamicParameters parametrosSentencia = new();
-        //    parametrosSentencia.Add("@ingrediente_id", ingrediente_id,
-        //                            DbType.Int32, ParameterDirection.Input);
-
-        //    string sentenciaSQL = "SELECT vc.cerveza_id id, vc.cerveza nombre, vc.cerveceria, vc.cerveceria_id, " +
-        //                            "vc.estilo, vc.estilo_id, vc.ibu, vc.abv, vc.rango_ibu, vc.rango_abv " +
-        //                            "FROM v_info_cervezas vc " +
-        //                            "JOIN v_info_ingredientes_cervezas vi ON vc.cerveza_id = vi.cerveza_id " +
-        //                            "WHERE vi.ingrediente_id = @ingrediente_id " +
-        //                            "ORDER BY vc.cerveza_id DESC ";
-
-        //    var resultadoCervezas = await conexion.QueryAsync<Cerveza>(sentenciaSQL, parametrosSentencia);
-
-        //    return resultadoCervezas;
-        //}
+            return losIngredientesCervezas;
+        }
 
         public async Task<Cerveza> GetAssociatedBeerByIdAsync(string ingrediente_id, string cerveza_id)
         {
@@ -151,120 +135,79 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
         }
 
 
-        //public async Task<int> GetAssociatedIngredientTypeIdAsync(string tipo_ingrediente_nombre)
-        //{
-        //    var conexion = contextoDB.CreateConnection();
+        public async Task<string> GetAssociatedIngredientTypeIdAsync(string tipo_ingrediente_nombre)
+        {
+            TipoIngrediente unTipoIngrediente = new();
 
-        //    DynamicParameters parametrosSentencia = new();
-        //    parametrosSentencia.Add("@tipo_ingrediente", tipo_ingrediente_nombre,
-        //                            DbType.String, ParameterDirection.Input);
+            var conexion = contextoDB.CreateConnection();
+            var coleccionTiposIngredientes = conexion.GetCollection<TipoIngrediente>(contextoDB.configuracionColecciones.ColeccionTiposIngredientes);
 
-        //    string sentenciaSQL = "SELECT id FROM tipos_ingredientes ti " +
-        //                            "WHERE LOWER(ti.nombre) = LOWER(@tipo_ingrediente) ";
+            var resultado = await coleccionTiposIngredientes
+                .Find(tipoIngrediente => tipoIngrediente.Nombre == tipo_ingrediente_nombre)
+                .FirstOrDefaultAsync();
 
-        //    var resultadotipoIngrediente = await conexion.QueryAsync<int>(sentenciaSQL,
-        //                                    parametrosSentencia);
+            if (resultado is not null)
+                unTipoIngrediente = resultado;
 
-        //    if (resultadotipoIngrediente.Any())
-        //        return resultadotipoIngrediente.First();
-        //    else
-        //        return 0;
-        //}
+            return unTipoIngrediente.Id!;
+        }
 
 
-        //public async Task<bool> CreateAsync(Ingrediente unIngrediente)
-        //{
-        //    bool resultadoAccion = false;
+        public async Task<bool> CreateAsync(Ingrediente unIngrediente)
+        {
+            bool resultadoAccion = false;
 
-        //    try
-        //    {
-        //        var conexion = contextoDB.CreateConnection();
+            var conexion = contextoDB.CreateConnection();
+            var coleccionIngredientes = conexion.GetCollection<Ingrediente>(contextoDB.configuracionColecciones.ColeccionIngredientes);
 
-        //        string procedimiento = "core.p_inserta_ingrediente";
-        //        var parametros = new
-        //        {
-        //            p_nombre = unIngrediente.Nombre,
-        //            p_tipo_ingrediente_id = unIngrediente.Tipo_Ingrediente_Id
-        //        };
+            await coleccionIngredientes
+                .InsertOneAsync(unIngrediente);
 
-        //        var cantidad_filas = await conexion.ExecuteAsync(
-        //            procedimiento,
-        //            parametros,
-        //            commandType: CommandType.StoredProcedure);
+            var builder = Builders<Ingrediente>.Filter;
+            var filtro = builder.And(
+                builder.Eq(ingrediente => ingrediente.Nombre, unIngrediente.Nombre),
+                builder.Eq(ingrediente => ingrediente.Tipo_Ingrediente, unIngrediente.Tipo_Ingrediente));
 
-        //        if (cantidad_filas != 0)
-        //            resultadoAccion = true;
-        //    }
-        //    catch (NpgsqlException error)
-        //    {
-        //        throw new DbOperationException(error.Message);
-        //    }
+            var resultado = await coleccionIngredientes
+                .Find(filtro)
+                .FirstOrDefaultAsync();
 
-        //    return resultadoAccion;
-        //}
+            if (resultado is not null)
+                resultadoAccion = true;
 
-        //public async Task<bool> UpdateAsync(Ingrediente unIngrediente)
-        //{
-        //    bool resultadoAccion = false;
+            return resultadoAccion;
+        }
 
-        //    try
-        //    {
-        //        var conexion = contextoDB.CreateConnection();
+        public async Task<bool> UpdateAsync(Ingrediente unIngrediente)
+        {
+            bool resultadoAccion = false;
 
-        //        string procedimiento = "core.p_actualiza_ingrediente";
-        //        var parametros = new
-        //        {
-        //            p_id = unIngrediente.Id,
-        //            p_nombre = unIngrediente.Nombre,
-        //            p_tipo_ingrediente_id = unIngrediente.Tipo_Ingrediente_Id
-        //        };
+            var conexion = contextoDB.CreateConnection();
+            var coleccionIngredientes = conexion.GetCollection<Ingrediente>(contextoDB.configuracionColecciones.ColeccionIngredientes);
 
-        //        var cantidad_filas = await conexion.ExecuteAsync(
-        //            procedimiento,
-        //            parametros,
-        //            commandType: CommandType.StoredProcedure);
+            var resultado = await coleccionIngredientes
+                .ReplaceOneAsync(ingrediente => ingrediente.Id == unIngrediente.Id, unIngrediente);
 
-        //        if (cantidad_filas != 0)
-        //            resultadoAccion = true;
+            if (resultado.IsAcknowledged)
+                resultadoAccion = true;
 
+            return resultadoAccion;
+        }
 
-        //    }
-        //    catch (NpgsqlException error)
-        //    {
-        //        throw new DbOperationException(error.Message);
-        //    }
+        public async Task<bool> DeleteAsync(Ingrediente unIngrediente)
+        {
+            bool resultadoAccion = false;
 
-        //    return resultadoAccion;
-        //}
+            var conexion = contextoDB.CreateConnection();
+            var coleccionIngredientes = conexion.GetCollection<Ingrediente>(contextoDB.configuracionColecciones.ColeccionIngredientes);
 
-        //public async Task<bool> DeleteAsync(Ingrediente unIngrediente)
-        //{
-        //    bool resultadoAccion = false;
+            var resultado = await coleccionIngredientes
+                .DeleteOneAsync(ingrediente => ingrediente.Id == unIngrediente.Id);
 
-        //    try
-        //    {
-        //        var conexion = contextoDB.CreateConnection();
+            if (resultado.IsAcknowledged)
+                resultadoAccion = true;
 
-        //        string procedimiento = "core.p_elimina_ingrediente";
-        //        var parametros = new
-        //        {
-        //            p_id = unIngrediente.Id
-        //        };
-
-        //        var cantidad_filas = await conexion.ExecuteAsync(
-        //            procedimiento,
-        //            parametros,
-        //            commandType: CommandType.StoredProcedure);
-
-        //        if (cantidad_filas != 0)
-        //            resultadoAccion = true;
-        //    }
-        //    catch (NpgsqlException error)
-        //    {
-        //        throw new DbOperationException(error.Message);
-        //    }
-
-        //    return resultadoAccion;
-        //}
+            return resultadoAccion;
+        }
     }
 }

@@ -537,5 +537,33 @@
     "estilo": "Weissbier",
     "ibu": 12,
     "abv": 5
+  },
+  {
+    "nombre": "Nutibara",
+    "cerveceria": "7 Cerros Cervecería Artesanal",
+    "estilo": "Irish Red Ale",
+    "ibu": 0,
+    "abv": 4.6
+  },
+  {
+    "nombre": "Picacho",
+    "cerveceria": "7 Cerros Cervecería Artesanal",
+    "estilo": "Oatmeal Stout",
+    "ibu": 0,
+    "abv": 6
+  },
+  {
+    "nombre": "Asomadera",
+    "cerveceria": "7 Cerros Cervecería Artesanal",
+    "estilo": "Spicy White IPA",
+    "ibu": 0,
+    "abv": 7.5
+  },
+  {
+    "nombre": "Roja",
+    "cerveceria": "Cervecería Panzer",
+    "estilo": "Irish Red Ale",
+    "ibu": 25,
+    "abv": 5
   }
 ]

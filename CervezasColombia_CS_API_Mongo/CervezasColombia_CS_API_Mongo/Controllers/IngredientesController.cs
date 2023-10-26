@@ -41,81 +41,81 @@ namespace CervezasColombia_CS_API_Mongo.Controllers
             }
         }
 
-        //[HttpGet("{ingrediente_id:int}/Cervezas")]
-        //public async Task<IActionResult> GetAssociatedBeersAsync(int ingrediente_id)
-        //{
-        //    try
-        //    {
-        //        var lasCervezasPorIngrediente = await _ingredienteService
-        //            .GetAssociatedBeersAsync(ingrediente_id);
+        [HttpGet("{ingrediente_id:length(24)}/Cervezas")]
+        public async Task<IActionResult> GetAssociatedBeersAsync(string ingrediente_id)
+        {
+            try
+            {
+                var lasCervezasPorIngrediente = await _ingredienteService
+                    .GetAssociatedBeersAsync(ingrediente_id);
 
-        //        return Ok(lasCervezasPorIngrediente);
-        //    }
-        //    catch (AppValidationException error)
-        //    {
-        //        return NotFound(error.Message);
-        //    }
-        //}
+                return Ok(lasCervezasPorIngrediente);
+            }
+            catch (AppValidationException error)
+            {
+                return NotFound(error.Message);
+            }
+        }
 
-        //[HttpPost]
-        //public async Task<IActionResult> CreateAsync(Ingrediente unIngrediente)
-        //{
-        //    try
-        //    {
-        //        var ingredienteCreado = await _ingredienteService
-        //            .CreateAsync(unIngrediente);
+        [HttpPost]
+        public async Task<IActionResult> CreateAsync(Ingrediente unIngrediente)
+        {
+            try
+            {
+                var ingredienteCreado = await _ingredienteService
+                    .CreateAsync(unIngrediente);
 
-        //        return Ok(ingredienteCreado);
-        //    }
-        //    catch (AppValidationException error)
-        //    {
-        //        return BadRequest($"Error de validación: {error.Message}");
-        //    }
-        //    catch (DbOperationException error)
-        //    {
-        //        return BadRequest($"Error de operacion en DB: {error.Message}");
-        //    }
-        //}
+                return Ok(ingredienteCreado);
+            }
+            catch (AppValidationException error)
+            {
+                return BadRequest($"Error de validación: {error.Message}");
+            }
+            catch (DbOperationException error)
+            {
+                return BadRequest($"Error de operacion en DB: {error.Message}");
+            }
+        }
 
-        //[HttpPut("{ingrediente_id:int}")]
-        //public async Task<IActionResult> UpdateAsync(int ingrediente_id, Ingrediente unIngrediente)
-        //{
-        //    try
-        //    {
-        //        var ingredienteActualizado = await _ingredienteService
-        //            .UpdateAsync(ingrediente_id, unIngrediente);
+        [HttpPut("{ingrediente_id:length(24)}")]
+        public async Task<IActionResult> UpdateAsync(string ingrediente_id, Ingrediente unIngrediente)
+        {
+            try
+            {
+                var ingredienteActualizado = await _ingredienteService
+                    .UpdateAsync(ingrediente_id, unIngrediente);
 
-        //        return Ok(ingredienteActualizado);
-        //    }
-        //    catch (AppValidationException error)
-        //    {
-        //        return BadRequest($"Error de validación: {error.Message}");
-        //    }
-        //    catch (DbOperationException error)
-        //    {
-        //        return BadRequest($"Error de operacion en DB: {error.Message}");
-        //    }
-        //}
+                return Ok(ingredienteActualizado);
+            }
+            catch (AppValidationException error)
+            {
+                return BadRequest($"Error de validación: {error.Message}");
+            }
+            catch (DbOperationException error)
+            {
+                return BadRequest($"Error de operacion en DB: {error.Message}");
+            }
+        }
 
-        //[HttpDelete("{ingrediente_id:int}")]
-        //public async Task<IActionResult> DeleteAsync(int ingrediente_id)
-        //{
-        //    try
-        //    {
-        //        await _ingredienteService
-        //            .DeleteAsync(ingrediente_id);
+        [HttpDelete("{ingrediente_id:length(24)}")]
+        public async Task<IActionResult> DeleteAsync(string ingrediente_id)
+        {
+            try
+            {
+                await _ingredienteService
+                    .DeleteAsync(ingrediente_id);
 
-        //        return Ok($"Envasado {ingrediente_id} fue eliminado");
+                return Ok($"Ingrediente {ingrediente_id} fue eliminado");
 
-        //    }
-        //    catch (AppValidationException error)
-        //    {
-        //        return BadRequest($"Error de validación: {error.Message}");
-        //    }
-        //    catch (DbOperationException error)
-        //    {
-        //        return BadRequest($"Error de operacion en DB: {error.Message}");
-        //    }
-        //}
+            }
+            catch (AppValidationException error)
+            {
+                return BadRequest($"Error de validación: {error.Message}");
+            }
+            catch (DbOperationException error)
+            {
+                return BadRequest($"Error de operacion en DB: {error.Message}");
+            }
+        }
     }
 }

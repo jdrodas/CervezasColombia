@@ -100,5 +100,17 @@
     "ubicacion": "Tunja, Boyacá",
     "sitio_web": "https://www.bruder.com.co/",
     "instagram": "bruder_cerveza"
+  },
+  {
+    "nombre": "7 Cerros Cervecería Artesanal",
+    "sitio_web": "https://cerveceria7cerros.com/",
+    "instagram": "cerveceria7cerros",
+    "ubicacion": "Medellín, Antioquia"
+  },
+  {
+    "nombre": "Cervecería Panzer",
+    "sitio_web": "https://cerveceria-panzer.negocio.site/",
+    "instagram": "cerveceriapanzer",
+    "ubicacion": "Medellín, Antioquia"
   }
 ]
