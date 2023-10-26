@@ -49,7 +49,7 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             EstiloDetallado unEstilo = new();
 
             var conexion = contextoDB.CreateConnection();
-            var coleccionEstilos = conexion.GetCollection<EstiloDetallado>("estilos");
+            var coleccionEstilos = conexion.GetCollection<EstiloDetallado>(contextoDB.configuracionColecciones.ColeccionEstilos);
 
             var resultado = await coleccionEstilos
                 .Find(estilo => estilo.Id == estilo_id)

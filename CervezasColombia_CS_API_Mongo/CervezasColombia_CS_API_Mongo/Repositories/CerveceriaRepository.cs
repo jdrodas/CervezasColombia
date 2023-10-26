@@ -49,7 +49,7 @@ namespace CervezasColombia_CS_API_Mongo.Repositories
             CerveceriaDetallada unaCerveceriaDetallada = new();
 
             var conexion = contextoDB.CreateConnection();
-            var coleccionCervecerias = conexion.GetCollection<CerveceriaDetallada>("cervecerias");
+            var coleccionCervecerias = conexion.GetCollection<CerveceriaDetallada>(contextoDB.configuracionColecciones.ColeccionCervecerias);
 
             var resultado = await coleccionCervecerias
                 .Find(cerveceria => cerveceria.Id == cerveceria_id)

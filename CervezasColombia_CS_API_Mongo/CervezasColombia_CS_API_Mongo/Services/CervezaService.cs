@@ -167,9 +167,13 @@ namespace CervezasColombia_CS_API_Mongo.Services
 
         public async Task<EnvasadoCerveza> CreateBeerPackagingAsync(string cerveza_id, EnvasadoCerveza unEnvasadoCerveza)
         {
-            //Validamos que la cerveza exista con ese Id
+            //Validamos que la cerveza referenciada en el EnvasadoCerveza exista
             var cervezaExistente = await _cervezaRepository
-                .GetByIdAsync(cerveza_id);
+                .GetByNameAndBreweryAsync(unEnvasadoCerveza.Cerveza, unEnvasadoCerveza.Cerveceria);
+
+            if (cervezaExistente.Id != cerveza_id)
+                throw new AppValidationException($"Inconsistencia en los parámetros. " +
+                    $"Los Ids de las cervezas no coinciden entre si.");
 
             if (string.IsNullOrEmpty(cervezaExistente.Id))
                 throw new AppValidationException($"No existe una cerveza registrada con el id {cerveza_id}");
@@ -368,12 +372,13 @@ namespace CervezasColombia_CS_API_Mongo.Services
 
         public async Task DeleteBeerPackagingAsync(string cerveza_id, EnvasadoCerveza unEnvasadoCerveza)
         {
-            //Validamos que la cerveza exista con ese Id
+            //Validamos que la cerveza referenciada en el EnvasadoCerveza exista
             var cervezaExistente = await _cervezaRepository
-                .GetByIdAsync(cerveza_id);
+                .GetByNameAndBreweryAsync(unEnvasadoCerveza.Cerveza, unEnvasadoCerveza.Cerveceria);
 
-            if (string.IsNullOrEmpty(cervezaExistente.Id))
-                throw new AppValidationException($"No existe una cerveza registrada con el id {cerveza_id}");
+            if (cervezaExistente.Id != cerveza_id)
+                throw new AppValidationException($"Inconsistencia en los parámetros. " +
+                    $"Los Ids de las cervezas no coinciden entre si.");
 
             //Validamos que el envasado tenga nombre
             if (unEnvasadoCerveza.Envasado.Length == 0)

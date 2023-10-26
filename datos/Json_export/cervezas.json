@@ -565,5 +565,12 @@
     "estilo": "Irish Red Ale",
     "ibu": 25,
     "abv": 5
+  },
+  {
+    "nombre": "Barranquilla",
+    "cerveceria": "Cervecería Festa",
+    "estilo": "Golden Ale",
+    "ibu": 0,
+    "abv": 4.7
   }
 ]
