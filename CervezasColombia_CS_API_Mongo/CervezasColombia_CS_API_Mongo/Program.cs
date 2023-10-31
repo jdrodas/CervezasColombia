@@ -2,6 +2,7 @@ using CervezasColombia_CS_API_Mongo.DbContexts;
 using CervezasColombia_CS_API_Mongo.Interfaces;
 using CervezasColombia_CS_API_Mongo.Repositories;
 using CervezasColombia_CS_API_Mongo.Services;
+using Microsoft.OpenApi.Models;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -35,7 +36,25 @@ builder.Services.AddScoped<IngredienteService>();
 
 builder.Services.AddControllers();
 
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Version = "v1",
+        Title = "Cervezas Artesanales de Colombia - MongoDB Version",
+        Description = "API para la gestión de cervezas artesanales de Colombia"
+    });
+});
+
 var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
 // Configure the HTTP request pipeline.
 
