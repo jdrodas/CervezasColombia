@@ -44,6 +44,53 @@ namespace CervezasColombia_CS_API_Mongo.Services
             return unaCerveceriaDetallada;
         }
 
+        public async Task<CerveceriaDetallada> GetByNameAsync(string cerveceria_name)
+        {
+            //Validamos que la Cerveceria exista con ese nombre
+            var unaCerveceria = await _cerveceriaRepository
+                .GetByNameAsync(cerveceria_name);
+
+            if (string.IsNullOrEmpty(unaCerveceria.Id))
+                throw new AppValidationException($"Cerveceria no encontrada con el nombre {cerveceria_name}");
+
+            //Aqui creamos la cerveceria detallada
+            var unaCervceriaDetallada = await GetDetailedBreweryAsync(unaCerveceria);
+
+            return unaCervceriaDetallada;
+        }
+
+        public async Task<CerveceriaDetallada> GetByInstagramAsync(string cerveceria_Instagram)
+        {
+            //Validamos que la Cerveceria exista con ese nombre
+            var unaCerveceria = await _cerveceriaRepository
+                .GetByInstagramAsync(cerveceria_Instagram);
+
+            if (string.IsNullOrEmpty(unaCerveceria.Id))
+                throw new AppValidationException($"Cerveceria no encontrada con el instagram {cerveceria_Instagram}");
+
+            //Aqui creamos la cerveceria detallada
+            var unaCervceriaDetallada = await GetDetailedBreweryAsync(unaCerveceria);
+
+            return unaCervceriaDetallada;
+        }
+
+        private async Task<CerveceriaDetallada> GetDetailedBreweryAsync(Cerveceria unaCerveceria)
+        {
+            CerveceriaDetallada unaCerveceriaDetallada = new()
+            {
+                Id = unaCerveceria.Id,
+                Nombre = unaCerveceria.Nombre,
+                Instagram = unaCerveceria.Instagram,
+                Sitio_Web = unaCerveceria.Sitio_Web,
+                Ubicacion = unaCerveceria.Ubicacion
+            };
+
+            var lasCervezas = await GetAssociatedBeersAsync(unaCerveceriaDetallada.Id!);
+            unaCerveceriaDetallada.Cervezas = lasCervezas.ToList();
+
+            return unaCerveceriaDetallada;
+        }
+
         public async Task<IEnumerable<Cerveza>> GetAssociatedBeersAsync(string cerveceria_id)
         {
             //Validamos que la Cerveceria exista con ese Id

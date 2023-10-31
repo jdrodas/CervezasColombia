@@ -16,15 +16,6 @@ namespace CervezasColombia_CS_API_Mongo.Controllers
             _cerveceriaService = cerveceriaService;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAllAsync()
-        {
-            var lasCervecerias = await _cerveceriaService
-                .GetAllAsync();
-
-            return Ok(lasCervecerias);
-        }
-
         [HttpGet("{cerveceria_id:length(24)}")]
         public async Task<IActionResult> GetDetailsByIdAsync(string cerveceria_id)
         {
@@ -40,6 +31,57 @@ namespace CervezasColombia_CS_API_Mongo.Controllers
                 return NotFound(error.Message);
             }
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetDetailsByParameterAsync([FromQuery] ConsultaCerveceria parametros)
+        {
+            //Si todos los parameros son nulos, se traen todas las cervecerias
+            if (string.IsNullOrEmpty(parametros.Id) &&
+               string.IsNullOrEmpty(parametros.Nombre) &&
+               string.IsNullOrEmpty(parametros.Instagram))
+            {
+                var lasCervecerias = await _cerveceriaService
+                    .GetAllAsync();
+
+                return Ok(lasCervecerias);
+            }
+            else
+            {
+
+                //De lo contrario, se trae una Cervecería por el resto de parámetros
+                CerveceriaDetallada unaCerveceria = new();
+                try
+                {
+                    // Por Id
+                    if (!string.IsNullOrEmpty(parametros.Id))
+                    {
+                        unaCerveceria = await _cerveceriaService
+                        .GetDetailsByIdAsync(parametros.Id);
+                    }
+
+                    //Por Nombre
+                    if (!string.IsNullOrEmpty(parametros.Nombre))
+                    {
+                        unaCerveceria = await _cerveceriaService
+                        .GetByNameAsync(parametros.Nombre);
+                    }
+
+                    //Por Instagram
+                    if (!string.IsNullOrEmpty(parametros.Instagram))
+                    {
+                        unaCerveceria = await _cerveceriaService
+                        .GetByInstagramAsync(parametros.Instagram);
+                    }
+
+                    return Ok(unaCerveceria);
+                }
+                catch (AppValidationException error)
+                {
+                    return NotFound(error.Message);
+                }
+            }
+        }
+
 
         [HttpGet("{cerveceria_id:length(24)}/Cervezas")]
         public async Task<IActionResult> GetAssociatedBeersAsync(string cerveceria_id)
