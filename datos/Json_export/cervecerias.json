@@ -118,5 +118,11 @@
     "sitio_web": "https://cerveceriafesta.com/",
     "instagram": "cerveceria.festa",
     "ubicacion": "Medellín, Antioquia"
+  },
+  {
+    "nombre": "Antaño Cervecería Artesanal",
+    "sitio_web": "https://cerveceriaantano.com/",
+    "instagram": "antano_ca",
+    "ubicacion": "Cali, Valle del Cauca"
   }
 ]

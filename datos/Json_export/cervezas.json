@@ -572,5 +572,19 @@
     "estilo": "Golden Ale",
     "ibu": 0,
     "abv": 4.7
+  },
+  {
+    "nombre": "Izzy",
+    "cerveceria": "Antaño Cervecería Artesanal",
+    "estilo": "American Pale Ale",
+    "ibu": 0,
+    "abv": 5
+  },
+  {
+    "nombre": "Tejadita",
+    "cerveceria": "Antaño Cervecería Artesanal",
+    "estilo": "Witbier",
+    "ibu": 0,
+    "abv": 5
   }
 ]

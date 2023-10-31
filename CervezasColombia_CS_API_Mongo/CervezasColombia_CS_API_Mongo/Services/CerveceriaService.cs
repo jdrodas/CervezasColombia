@@ -172,7 +172,7 @@ namespace CervezasColombia_CS_API_Mongo.Services
             cerveceriaExistente = await _cerveceriaRepository
                 .GetBySitioWebAsync(unaCerveceria.Sitio_Web);
 
-            if (unaCerveceria.Id != cerveceriaExistente.Id)
+            if (unaCerveceria.Id != cerveceriaExistente.Id && !string.IsNullOrEmpty(cerveceriaExistente.Id))
                 throw new AppValidationException($"Ya existe otra cervecería con el sitio web {unaCerveceria.Sitio_Web}. " +
                     $"No se puede Actualizar");
 
@@ -184,7 +184,7 @@ namespace CervezasColombia_CS_API_Mongo.Services
             cerveceriaExistente = await _cerveceriaRepository
                 .GetByInstagramAsync(unaCerveceria.Instagram);
 
-            if (unaCerveceria.Id != cerveceriaExistente.Id)
+            if (unaCerveceria.Id != cerveceriaExistente.Id && !string.IsNullOrEmpty(cerveceriaExistente.Id))
                 throw new AppValidationException($"Ya existe otra cervecería con el instagram {unaCerveceria.Instagram}. " +
                     $"No se puede Actualizar");
 
