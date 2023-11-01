@@ -16,6 +16,7 @@ namespace CervezasColombia_CS_API_Mongo.Controllers
             _cervezaService = cervezaService;
         }
 
+        [HttpGet]
         public async Task<IActionResult> GetDetailsByParameterAsync([FromQuery] ConsultaCerveza parametros)
         {
             //Si todos los parameros son nulos, se traen todas las cervezas

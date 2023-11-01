@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using System.Text.Json;
 
 namespace CervezasColombia_CS_PoC_Consola
@@ -18,7 +19,7 @@ namespace CervezasColombia_CS_PoC_Consola
             return miConfiguracion["ConnectionString:API"];
         }
 
-        public static async Task<List<Estilo>> ObtieneEstilosCerveza()
+        public static async Task<List<Envasado>> ObtieneEnvasadosCerveza()
         {
             string? cadenaConexion = ObtieneCadenaConexion();
 
@@ -28,29 +29,90 @@ namespace CervezasColombia_CS_PoC_Consola
             miCliente.DefaultRequestHeaders.Accept
                 .Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            var resultado = await miCliente.GetAsync("api/Estilos");
+            var resultado = await miCliente
+                .GetAsync("api/Envasados");
 
-            List<Estilo>? listaEstilos = new();
+            List<Envasado>? listaEnvasados = new();
 
             if (resultado.IsSuccessStatusCode)
             {
                 var contenido = await resultado.Content.ReadAsStringAsync();
-                listaEstilos = JsonSerializer.Deserialize<List<Estilo>>(contenido);
+                listaEnvasados = JsonSerializer.Deserialize<List<Envasado>>(contenido);
             }
 
-            return listaEstilos!;
+            return listaEnvasados!;
         }
 
-        public static async Task<List<string>> ObtieneNombresEstilosCerveza()
+        public static async Task<List<string>> ObtieneNombresEnvasadosCerveza()
         {
-            var listaEstilos = await ObtieneEstilosCerveza();
+            var listaEnvasados = await ObtieneEnvasadosCerveza();
 
-            List<string> listaNombresEstilos = new List<string>();
+            List<string> listaNombreEnvasados = new();
 
-            foreach (Estilo unEstilo in listaEstilos)
-                listaNombresEstilos.Add(unEstilo.Nombre!);
+            foreach (Envasado unEnvasado in listaEnvasados)
+                listaNombreEnvasados.Add(unEnvasado.Nombre!);
 
-            return listaNombresEstilos;
+            return listaNombreEnvasados;
         }
+
+        public static async Task<Envasado> ObtieneEnvasadoCerveza(string nombreEnvasado)
+        {
+            Envasado envasadoExistente = new();
+            var listaEnvasados = await ObtieneEnvasadosCerveza();
+
+            envasadoExistente = listaEnvasados.Find(envasado => envasado.Nombre == nombreEnvasado)!;
+            return envasadoExistente;
+        }
+
+        public static async Task<bool> InsertaEnvasadoCerveza(Envasado unEnvasado)
+        {
+            string? cadenaConexion = ObtieneCadenaConexion();
+
+            HttpClient miCliente = new();
+            miCliente.BaseAddress = new Uri(cadenaConexion!);
+            miCliente.DefaultRequestHeaders.Accept.Clear();
+            miCliente.DefaultRequestHeaders.Accept
+                .Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            var resultado = await miCliente
+                .PostAsJsonAsync("api/Envasados", unEnvasado);
+
+            return resultado.IsSuccessStatusCode;
+        }
+
+        public static async Task<bool> ActualizaEnvasadoCerveza(Envasado unEnvasado)
+        {
+            string? cadenaConexion = ObtieneCadenaConexion();
+
+            HttpClient miCliente = new();
+            miCliente.BaseAddress = new Uri(cadenaConexion!);
+            miCliente.DefaultRequestHeaders.Accept.Clear();
+            miCliente.DefaultRequestHeaders.Accept
+                .Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            var resultado = await miCliente
+                .PutAsJsonAsync($"api/Envasados/{unEnvasado.Id}", unEnvasado);
+
+            return resultado.IsSuccessStatusCode;
+
+        }
+
+        public static async Task<bool> EliminaEnvasadoCerveza(Envasado unEnvasado)
+        {
+            string? cadenaConexion = ObtieneCadenaConexion();
+
+            HttpClient miCliente = new();
+            miCliente.BaseAddress = new Uri(cadenaConexion!);
+            miCliente.DefaultRequestHeaders.Accept.Clear();
+            miCliente.DefaultRequestHeaders.Accept
+                .Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            var resultado = await miCliente
+                .DeleteAsync($"api/Envasados/{unEnvasado.Id}");
+
+            return resultado.IsSuccessStatusCode;
+        }
+
+
     }
 }
