@@ -2,6 +2,7 @@ using CervezasColombia_CS_API_PostgreSQL_Dapper.DbContexts;
 using CervezasColombia_CS_API_PostgreSQL_Dapper.Interfaces;
 using CervezasColombia_CS_API_PostgreSQL_Dapper.Repositories;
 using CervezasColombia_CS_API_PostgreSQL_Dapper.Services;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,7 +35,26 @@ builder.Services.AddControllers()
     .AddJsonOptions(
         options => options.JsonSerializerOptions.PropertyNamingPolicy = null);
 
+
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Version = "v1",
+        Title = "Cervezas Artesanales de Colombia - PostgreSQL Version",
+        Description = "API para la gestión de cervezas artesanales de Colombia"
+    });
+});
+
 var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
 
 // Configure the HTTP request pipeline.
