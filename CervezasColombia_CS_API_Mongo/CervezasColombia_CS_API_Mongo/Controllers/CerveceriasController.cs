@@ -47,33 +47,32 @@ namespace CervezasColombia_CS_API_Mongo.Controllers
             }
             else
             {
-
                 //De lo contrario, se trae una Cervecería por el resto de parámetros
-                CerveceriaDetallada unaCerveceria = new();
+                CerveceriaDetallada unaCerveceriaDetallada = new();
                 try
                 {
                     // Por Id
                     if (!string.IsNullOrEmpty(parametros.Id))
                     {
-                        unaCerveceria = await _cerveceriaService
+                        unaCerveceriaDetallada = await _cerveceriaService
                         .GetDetailsByIdAsync(parametros.Id);
                     }
 
                     //Por Nombre
                     if (!string.IsNullOrEmpty(parametros.Nombre))
                     {
-                        unaCerveceria = await _cerveceriaService
+                        unaCerveceriaDetallada = await _cerveceriaService
                         .GetByNameAsync(parametros.Nombre);
                     }
 
                     //Por Instagram
                     if (!string.IsNullOrEmpty(parametros.Instagram))
                     {
-                        unaCerveceria = await _cerveceriaService
+                        unaCerveceriaDetallada = await _cerveceriaService
                         .GetByInstagramAsync(parametros.Instagram);
                     }
 
-                    return Ok(unaCerveceria);
+                    return Ok(unaCerveceriaDetallada);
                 }
                 catch (AppValidationException error)
                 {

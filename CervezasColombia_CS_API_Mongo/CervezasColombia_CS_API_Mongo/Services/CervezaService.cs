@@ -45,6 +45,29 @@ namespace CervezasColombia_CS_API_Mongo.Services
                 throw new AppValidationException($"Cerveza no encontrada con el id {cerveza_id}");
 
             //Transformamos unaCerveza en unaCervezaDetallada
+            CervezaDetallada unaCervezaDetallada = await GetDetailedBeerAsync(unaCerveza);
+
+            return unaCervezaDetallada;
+        }
+
+        public async Task<CervezaDetallada> GetByNameAndBreweryAsync(string cerveza_nombre, string cerveceria_nombre)
+        {
+            //Validamos que el estilo exista con ese Id
+            var unaCerveza = await _cervezaRepository
+                .GetByNameAndBreweryAsync(cerveza_nombre,cerveceria_nombre);
+
+            if (string.IsNullOrEmpty(unaCerveza.Id))
+                throw new AppValidationException($"Cerveza no encontrada con el nombre {cerveza_nombre} " +
+                    $"de la cervecería {cerveceria_nombre}");
+
+            //Transformamos unaCerveza en unaCervezaDetallada
+            CervezaDetallada unaCervezaDetallada = await GetDetailedBeerAsync(unaCerveza);
+
+            return unaCervezaDetallada;
+        }
+
+        private async Task<CervezaDetallada> GetDetailedBeerAsync(Cerveza unaCerveza)
+        {
             CervezaDetallada unaCervezaDetallada = new()
             {
                 Id = unaCerveza.Id,
@@ -57,8 +80,8 @@ namespace CervezasColombia_CS_API_Mongo.Services
                 Rango_Ibu = unaCerveza.Rango_Ibu,
             };
 
-            var losIngredientes = await _cervezaRepository.GetAssociatedIngredientsAsync(cerveza_id);
-            var losEnvasados = await _cervezaRepository.GetAssociatedPackagingsAsync(cerveza_id);
+            var losIngredientes = await _cervezaRepository.GetAssociatedIngredientsAsync(unaCerveza.Id);
+            var losEnvasados = await _cervezaRepository.GetAssociatedPackagingsAsync(unaCerveza.Id);
 
             unaCervezaDetallada.Ingredientes = losIngredientes.ToList();
             unaCervezaDetallada.Envasados = losEnvasados.ToList();

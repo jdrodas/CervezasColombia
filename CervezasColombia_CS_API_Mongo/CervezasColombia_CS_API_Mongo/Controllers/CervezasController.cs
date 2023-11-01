@@ -16,13 +16,55 @@ namespace CervezasColombia_CS_API_Mongo.Controllers
             _cervezaService = cervezaService;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAllAsync()
+        public async Task<IActionResult> GetDetailsByParameterAsync([FromQuery] ConsultaCerveza parametros)
         {
-            var lasCervezas = await _cervezaService
-                .GetAllAsync();
+            //Si todos los parameros son nulos, se traen todas las cervezas
+            if (string.IsNullOrEmpty(parametros.Id) &&
+               string.IsNullOrEmpty(parametros.Nombre) &&
+               string.IsNullOrEmpty(parametros.Cerveceria))
+            {
+                var lasCervezas = await _cervezaService
+                    .GetAllAsync();
 
-            return Ok(lasCervezas);
+                return Ok(lasCervezas);
+            }
+            else
+            {
+                //De lo contrario, se trae una Cervecería por el resto de parámetros
+                CervezaDetallada unaCervezaDetallada = new();
+                try
+                {
+                    // Por Id
+                    if (!string.IsNullOrEmpty(parametros.Id))
+                    {
+
+                        unaCervezaDetallada = await _cervezaService
+                        .GetDetailsByIdAsync(parametros.Id);                                                
+                    }
+
+                    // Por Nombre Y Cerveceria
+                    if (!string.IsNullOrEmpty(parametros.Nombre) &&
+                        !string.IsNullOrEmpty(parametros.Cerveceria))
+                    {
+
+                        unaCervezaDetallada = await _cervezaService
+                        .GetByNameAndBreweryAsync(parametros.Nombre, parametros.Cerveceria);
+                    }
+                    else
+                    {
+                        var lasCervezas = await _cervezaService
+                            .GetAllAsync();
+
+                        return Ok(lasCervezas);
+                    }
+
+                    return Ok(unaCervezaDetallada);
+                }
+                catch (AppValidationException error)
+                {
+                    return NotFound(error.Message);
+                }
+            }
         }
 
         [HttpGet("{cerveza_id:length(24)}")]
