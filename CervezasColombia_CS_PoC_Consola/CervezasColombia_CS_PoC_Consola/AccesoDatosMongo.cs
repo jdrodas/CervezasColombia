@@ -115,7 +115,7 @@ namespace CervezasColombia_CS_PoC_Consola
         }
 
         public static bool EliminaEstiloCerveza(Estilo unEstilo)
-        { 
+        {
             string? cadenaConexion = ObtieneCadenaConexion();
 
             var clienteDB = new MongoClient(cadenaConexion);

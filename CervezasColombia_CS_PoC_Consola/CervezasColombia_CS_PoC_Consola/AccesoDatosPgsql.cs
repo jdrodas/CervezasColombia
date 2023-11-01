@@ -309,7 +309,7 @@ namespace CervezasColombia_CS_PoC_Consola
 
                     cantidadFilas = cxnDB.Execute(
                         procedimiento,
-                        parametros, 
+                        parametros,
                         commandType: CommandType.StoredProcedure);
 
                     if (cantidadFilas != 0)
@@ -322,7 +322,7 @@ namespace CervezasColombia_CS_PoC_Consola
                 }
                 catch (NpgsqlException elError)
                 {
-                    resultado = false;                    
+                    resultado = false;
                     mensajeEliminacion = $"Error de borrado en la DB. {elError.Message}";
                 }
             }

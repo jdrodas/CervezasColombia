@@ -31,7 +31,7 @@ namespace CervezasColombia_CS_PoC_Consola
 
             var cxnDB = new SQLiteConnection(cadenaConexion);
             string sentenciaSQL = "SELECT nombre FROM estilos ORDER BY nombre";
-            
+
             var resultadoEstilos = cxnDB.Query<string>(sentenciaSQL, new DynamicParameters());
 
             return resultadoEstilos.AsList();
@@ -47,11 +47,11 @@ namespace CervezasColombia_CS_PoC_Consola
 
             var cxnDB = new SQLiteConnection(cadenaConexion);
             string sentenciaSQL = "SELECT id, nombre FROM estilos ORDER BY id";
-            
+
             var resultadoEstilos = cxnDB.Query<Estilo>(sentenciaSQL, new DynamicParameters());
 
             return resultadoEstilos.AsList();
-            
+
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace CervezasColombia_CS_PoC_Consola
 
             //Aqui buscamos el estilo asociado al nombre
             var cxnDB = new SQLiteConnection(cadenaConexion);
-            
+
             DynamicParameters parametrosSentencia = new();
             parametrosSentencia.Add("@nombre_estilo", nombreEstilo,
                                     DbType.String, ParameterDirection.Input);
@@ -128,7 +128,7 @@ namespace CervezasColombia_CS_PoC_Consola
             string? cadenaConexion = ObtieneCadenaConexion();
 
             var cxnDB = new SQLiteConnection(cadenaConexion);
-            
+
             DynamicParameters parametrosSentencia = new DynamicParameters();
             parametrosSentencia.Add("@nombre_estilo", unEstilo.Nombre,
                 DbType.String, ParameterDirection.Input);
@@ -178,9 +178,9 @@ namespace CervezasColombia_CS_PoC_Consola
             int cantidadFilas = 0;
             bool resultado = false;
             string? cadenaConexion = ObtieneCadenaConexion();
-            
+
             var cxnDB = new SQLiteConnection(cadenaConexion);
-            
+
             //Aqui validamos primero que el Estilo previamente existe
 
             DynamicParameters parametrosSentencia = new DynamicParameters();
@@ -231,7 +231,7 @@ namespace CervezasColombia_CS_PoC_Consola
             //Si la actualización fue correcta, devolvemos true
             if (cantidadFilas > 0)
                 resultado = true;
-            
+
             return resultado;
         }
 
@@ -310,7 +310,7 @@ namespace CervezasColombia_CS_PoC_Consola
                 mensajeEliminacion = $"Eliminación Exitosa. " +
                     $"Se eliminó el estilo {unEstilo.Id} - {unEstilo.Nombre}";
             }
-            
+
             return resultado;
         }
 
