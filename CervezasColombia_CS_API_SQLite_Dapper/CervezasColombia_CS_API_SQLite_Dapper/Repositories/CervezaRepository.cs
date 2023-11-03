@@ -489,5 +489,41 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
 
             return resultadoAccion;
         }
+
+        Task<IEnumerable<IngredienteCerveza>> ICervezaRepository.GetAssociatedIngredientsAsync(int cerveza_id)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<EnvasadoCerveza> ICervezaRepository.GetPackagedBeerByNameAsync(int cerveza_id, string envasado_nombre, string unidad_volumen, double volumen)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<string> ICervezaRepository.GetAbvRangeNameAsync(double abv)
+        {
+            DynamicParameters parametrosSentencia = new();
+            parametrosSentencia.Add("@cerveza_abv", abv,
+                                    DbType.Double, ParameterDirection.Input);
+
+            string sentenciaSQL = "SELECT nombre " +
+                                    "FROM rangos_abv " +
+                                    "WHERE @cerveza_abv BETWEEN valor_inicial AND valor_final";
+
+            var resultado = await contextoDB.Conexion.QueryAsync<string>(sentenciaSQL, parametrosSentencia);
+
+
+            return resultadoEnvasados;
+        }
+
+        Task<string> ICervezaRepository.GetIbuRangeNameAsync(double ibu)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<bool> ICervezaRepository.CreateBeerPackagingAsync(EnvasadoCerveza unEnvasadoCerveza)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

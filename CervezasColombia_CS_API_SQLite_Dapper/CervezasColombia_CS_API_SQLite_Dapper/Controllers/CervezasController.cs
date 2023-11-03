@@ -17,12 +17,55 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllAsync()
+        public async Task<IActionResult> GetDetailsByParameterAsync([FromQuery] ConsultaCerveza parametros)
         {
-            var lasCervezas = await _cervezaService
-                .GetAllAsync();
+            //Si todos los parameros son nulos, se traen todas las cervezas
+            if (string.IsNullOrEmpty(parametros.Id) &&
+               string.IsNullOrEmpty(parametros.Nombre) &&
+               string.IsNullOrEmpty(parametros.Cerveceria))
+            {
+                var lasCervezas = await _cervezaService
+                    .GetAllAsync();
 
-            return Ok(lasCervezas);
+                return Ok(lasCervezas);
+            }
+            else
+            {
+                //De lo contrario, se trae una Cervecería por el resto de parámetros
+                CervezaDetallada unaCervezaDetallada;
+                try
+                {
+                    // Por Id
+                    if (!string.IsNullOrEmpty(parametros.Id))
+                    {
+
+                        unaCervezaDetallada = await _cervezaService
+                        .GetDetailsByIdAsync(parametros.Id);
+                    }
+
+                    // Por Nombre Y Cerveceria
+                    if (!string.IsNullOrEmpty(parametros.Nombre) &&
+                        !string.IsNullOrEmpty(parametros.Cerveceria))
+                    {
+
+                        unaCervezaDetallada = await _cervezaService
+                        .GetByNameAndBreweryAsync(parametros.Nombre, parametros.Cerveceria);
+                    }
+                    else
+                    {
+                        var lasCervezas = await _cervezaService
+                            .GetAllAsync();
+
+                        return Ok(lasCervezas);
+                    }
+
+                    return Ok(unaCervezaDetallada);
+                }
+                catch (AppValidationException error)
+                {
+                    return NotFound(error.Message);
+                }
+            }
         }
 
         [HttpGet("{cerveza_id:int}")]
@@ -131,7 +174,6 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
                 return BadRequest($"Error de operacion en DB: {error.Message}");
             }
         }
-
 
         [HttpPut("{cerveza_id:int}")]
         public async Task<IActionResult> UpdateAsync(int cerveza_id, Cerveza unaCerveza)

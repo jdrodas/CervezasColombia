@@ -74,6 +74,33 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
             return unaUbicacion;
         }
 
+        public async Task<Ubicacion> GetByNameAsync(string ubicacion_nombre)
+        {
+            Ubicacion unaUbicacion = new();
+
+            string[] partesUbicacion = ubicacion_nombre.Split(',');
+
+            DynamicParameters parametrosSentencia = new();
+            parametrosSentencia.Add("@ubicacion_municipio", partesUbicacion[0].Trim(),
+                                    DbType.String, ParameterDirection.Input);
+            parametrosSentencia.Add("@ubicacion_departamento", partesUbicacion[1].Trim(),
+                                    DbType.String, ParameterDirection.Input);
+
+            string sentenciaSQL = "SELECT id, municipio, departamento, latitud, longitud " +
+                                  "FROM ubicaciones " +
+                                  "WHERE municipio = @ubicacion_municipio " +
+                                  "AND departamento = @ubicacion_departamento";
+
+            var resultado = await contextoDB.Conexion.QueryAsync<Ubicacion>(sentenciaSQL,
+                parametrosSentencia);
+
+            if (resultado.Any())
+                unaUbicacion = resultado.First();
+
+            return unaUbicacion;
+        }
+
+
         public async Task<int> GetTotalAssociatedBreweriesAsync(int ubicacion_id)
         {
 
@@ -157,7 +184,6 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
             return resultadoAccion;
         }
 
-
         public async Task<bool> DeleteAsync(Ubicacion unaUbicacion)
         {
             bool resultadoAccion = false;
@@ -179,5 +205,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
 
             return resultadoAccion;
         }
+
+
     }
 }

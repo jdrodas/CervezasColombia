@@ -17,12 +17,52 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllAsync()
+        public async Task<IActionResult> GetDetailsByParameterAsync([FromQuery] ConsultaCerveceria parametros)
         {
-            var lasCervecerias = await _cerveceriaService
-                .GetAllAsync();
+            //Si todos los parameros son nulos, se traen todas las cervecerias
+            if ((parametros.Id == 0) &&
+               string.IsNullOrEmpty(parametros.Nombre) &&
+               string.IsNullOrEmpty(parametros.Instagram))
+            {
+                var lasCervecerias = await _cerveceriaService
+                    .GetAllAsync();
 
-            return Ok(lasCervecerias);
+                return Ok(lasCervecerias);
+            }
+            else
+            {
+                //De lo contrario, se trae una Cervecería por el resto de parámetros
+                CerveceriaDetallada unaCerveceriaDetallada = new();
+                try
+                {
+                    // Por Id
+                    if (parametros.Id != 0)
+                    {
+                        unaCerveceriaDetallada = await _cerveceriaService
+                        .GetDetailsByIdAsync(parametros.Id);
+                    }
+
+                    //Por Nombre
+                    if (!string.IsNullOrEmpty(parametros.Nombre))
+                    {
+                        unaCerveceriaDetallada = await _cerveceriaService
+                        .GetByNameAsync(parametros.Nombre);
+                    }
+
+                    //Por Instagram
+                    if (!string.IsNullOrEmpty(parametros.Instagram))
+                    {
+                        unaCerveceriaDetallada = await _cerveceriaService
+                        .GetByInstagramAsync(parametros.Instagram);
+                    }
+
+                    return Ok(unaCerveceriaDetallada);
+                }
+                catch (AppValidationException error)
+                {
+                    return NotFound(error.Message);
+                }
+            }
         }
 
         [HttpGet("{cerveceria_id:int}")]
@@ -30,26 +70,10 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
         {
             try
             {
-                var unaCerveceria = await _cerveceriaService
+                var unaCerveceriaDetallada = await _cerveceriaService
                     .GetDetailsByIdAsync(cerveceria_id);
 
-                return Ok(unaCerveceria);
-            }
-            catch (AppValidationException error)
-            {
-                return NotFound(error.Message);
-            }
-        }
-
-        [HttpGet("{cerveceria_id:int}/Cervezas")]
-        public async Task<IActionResult> GetAssociatedBeersAsync(int cerveceria_id)
-        {
-            try
-            {
-                var lasCervezasPorCerveceria = await _cerveceriaService
-                    .GetAssociatedBeersAsync(cerveceria_id);
-
-                return Ok(lasCervezasPorCerveceria);
+                return Ok(unaCerveceriaDetallada);
             }
             catch (AppValidationException error)
             {

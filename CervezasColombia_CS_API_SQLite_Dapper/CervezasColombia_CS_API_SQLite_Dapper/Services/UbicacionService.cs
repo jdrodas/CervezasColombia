@@ -1,5 +1,4 @@
-﻿using CervezasColombia_CS_API_SQLite_Dapper.Helpers;
-using CervezasColombia_CS_API_SQLite_Dapper.Interfaces;
+﻿using CervezasColombia_CS_API_SQLite_Dapper.Interfaces;
 using CervezasColombia_CS_API_SQLite_Dapper.Models;
 
 namespace CervezasColombia_CS_API_SQLite_Dapper.Services
@@ -25,7 +24,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
             var unaUbicacion = await _ubicacionRepository
                 .GetByIdAsync(ubicacion_id);
 
-            if (unaUbicacion.Id == 0)
+            if (string.IsNullOrEmpty(unaUbicacion.Id))
                 throw new AppValidationException($"Ubicación no encontrada con el id {ubicacion_id}");
 
             return unaUbicacion;
@@ -37,7 +36,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
             var unaUbicacion = await _ubicacionRepository
                 .GetByIdAsync(ubicacion_id);
 
-            if (unaUbicacion.Id == 0)
+            if (string.IsNullOrEmpty(unaUbicacion.Id))
                 throw new AppValidationException($"Ubicación no encontrada con el id {ubicacion_id}");
 
             //Si la ubicacion existe, validamos que tenga cervecerias asociadas
@@ -62,7 +61,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
                 throw new AppValidationException("No se puede insertar una ubicación con Departamento nulo");
 
             //Validamos que la ubicación tenga latitud en su coordenada geográfica y que esta sea válida
-            if (unaUbicacion.Latitud == 0 || unaUbicacion.Latitud < -90 || unaUbicacion.Latitud > 90)
+            if (unaUbicacion.Latitud < -90 || unaUbicacion.Latitud > 90)
                 throw new AppValidationException($"No se puede insertar una ubicación en Colombia con valor de latitud en {unaUbicacion.Latitud} para su coordenada geográfica");
 
             //Validamos que la ubicación tenga longitud en su coordenada geográfica y que esta sea válida
@@ -73,7 +72,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
             var ubicacionExistente = await _ubicacionRepository
                 .GetByNameAsync(unaUbicacion.Municipio!, unaUbicacion.Departamento!);
 
-            if (ubicacionExistente.Id != 0)
+            if (string.IsNullOrEmpty(ubicacionExistente.Id) == false)
                 return ubicacionExistente;
 
             try
@@ -110,7 +109,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
                 throw new AppValidationException("No se puede actualizar una ubicación con Departamento nulo");
 
             //Validamos que la ubicación tenga latitud en su coordenada geográfica y que esta sea válida
-            if (unaUbicacion.Latitud == 0 || unaUbicacion.Latitud < -90 || unaUbicacion.Latitud > 90)
+            if (unaUbicacion.Latitud < -90 || unaUbicacion.Latitud > 90)
                 throw new AppValidationException($"No se puede actualizar una ubicación en Colombia con valor de latitud en {unaUbicacion.Latitud} para su coordenada geográfica");
 
             //Validamos que la ubicación tenga longitud en su coordenada geográfica y que esta sea válida
@@ -128,7 +127,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
             ubicacionExistente = await _ubicacionRepository
                 .GetByIdAsync(unaUbicacion.Id);
 
-            if (ubicacionExistente.Id == 0)
+            if (string.IsNullOrEmpty(ubicacionExistente.Id))
                 throw new AppValidationException($"No existe una ubicación con el Id {unaUbicacion.Id} que se pueda actualizar");
 
             try
@@ -150,14 +149,14 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
             return ubicacionExistente;
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(int ubicacion_id)
         {
             // validamos que la ubicación a eliminar si exista con ese Id
             var ubicacionExistente = await _ubicacionRepository
-                .GetByIdAsync(id);
+                .GetByIdAsync(ubicacion_id);
 
-            if (ubicacionExistente.Id == 0)
-                throw new AppValidationException($"No existe una ubicación con el Id {id} que se pueda eliminar");
+            if (string.IsNullOrEmpty(ubicacionExistente.Id))
+                throw new AppValidationException($"No existe una ubicación con el Id {ubicacion_id} que se pueda eliminar");
 
             // Validamos que la ubicación no tenga asociadas cervecerias
             var cantidadCerveceriasAsociadas = await _ubicacionRepository

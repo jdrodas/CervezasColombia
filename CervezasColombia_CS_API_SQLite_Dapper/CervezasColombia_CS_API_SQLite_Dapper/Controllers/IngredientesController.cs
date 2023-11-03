@@ -105,7 +105,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
                 await _ingredienteService
                     .DeleteAsync(ingrediente_id);
 
-                return Ok($"Envasado {ingrediente_id} fue eliminado");
+                return Ok($"Ingrediente {ingrediente_id} fue eliminado");
 
             }
             catch (AppValidationException error)

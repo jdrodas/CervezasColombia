@@ -219,5 +219,26 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
 
             return resultadoAccion;
         }
+
+        public async Task<IEnumerable<IngredienteCerveza>> GetAssociatedBeersAsync(int ingrediente_id)
+        {
+            DynamicParameters parametrosSentencia = new();
+            parametrosSentencia.Add("@ingrediente_id", ingrediente_id,
+                                    DbType.Int32, ParameterDirection.Input);
+
+            string sentenciaSQL = "SELECT cerveceria, cerveza, tipo_ingrediente, ingrediente " +
+                "FROM v_info_ingredientes_cervezas " +
+                "WHERE ingrediente_id = @ingrediente_id";
+
+            var resultadoIngredientesCerveza = await contextoDB.Conexion.QueryAsync<IngredienteCerveza>(sentenciaSQL,
+                                            parametrosSentencia);
+
+            return resultadoIngredientesCerveza.ToList();
+        }
+
+        public async Task<string> GetAssociatedIngredientTypeIdAsync(string tipo_ingrediente_nombre)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

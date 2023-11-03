@@ -4,19 +4,19 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Models
 {
     public class Ubicacion
     {
-        [JsonPropertyName("id")] 
+        [JsonPropertyName("id")]
         public int Id { get; set; } = 0;
-        
-        [JsonPropertyName("municipio")] 
+
+        [JsonPropertyName("municipio")]
         public string Municipio { get; set; } = string.Empty;
-        
-        [JsonPropertyName("departamento")] 
+
+        [JsonPropertyName("departamento")]
         public string Departamento { get; set; } = string.Empty;
-        
-        [JsonPropertyName("latitud")] 
+
+        [JsonPropertyName("latitud")]
         public float Latitud { get; set; } = 0.0f;
-        
-        [JsonPropertyName("longitud")] 
+
+        [JsonPropertyName("longitud")]
         public float Longitud { get; set; } = 0.0f;
         public override bool Equals(object? obj)
         {

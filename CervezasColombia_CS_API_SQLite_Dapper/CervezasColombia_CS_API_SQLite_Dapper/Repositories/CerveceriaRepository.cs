@@ -157,20 +157,8 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
 
         public async Task<int> GetTotalAssociatedBeersAsync(int cerveceria_id)
         {
-
-            DynamicParameters parametrosSentencia = new();
-            parametrosSentencia.Add("@cerveceria_id", cerveceria_id,
-                                    DbType.Int32, ParameterDirection.Input);
-
-            string sentenciaSQL = "SELECT COUNT(id) totalCervezas " +
-                                  "FROM cervezas " +
-                                  "WHERE cerveceria_id = @cerveceria_id ";
-
-
-            var totalCervezas = await contextoDB.Conexion.QueryFirstAsync<int>(sentenciaSQL,
-                                    parametrosSentencia);
-
-            return totalCervezas;
+            var lasCervezas = await GetAssociatedBeersAsync(cerveceria_id);
+            return lasCervezas.ToList().Count;
         }
 
         public async Task<IEnumerable<Cerveza>> GetAssociatedBeersAsync(int cerveceria_id)
@@ -280,8 +268,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
             return resultadoAccion;
         }
 
-
-        private async Task<Ubicacion> GetBreweryLocation(int cerveceria_id)
+        public async Task<Ubicacion> GetBreweryLocation(int cerveceria_id)
         {
             Ubicacion unaUbicacion = new();
 
@@ -290,8 +277,8 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
                                     DbType.Int32, ParameterDirection.Input);
 
             string sentenciaSQL = "SELECT u.id, u.municipio, u.departamento, u.latitud, u.longitud " +
-                "FROM ubicaciones u " +
-                "WHERE u.id IN (SELECT c.ubicacion_id FROM cervecerias c WHERE c.id = @cerveceria_id)";
+                "FROM ubicaciones u JOIN cervecerias c ON c.ubicacion_id = u.id " +
+                "WHERE c.id = @cerveceria_id";
 
             var resultadoIdUbicacion = await contextoDB.Conexion.QueryAsync<Ubicacion>(sentenciaSQL,
                                             parametrosSentencia);
@@ -300,6 +287,31 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
                 unaUbicacion = resultadoIdUbicacion.First();
 
             return unaUbicacion;
+        }
+
+        public async Task<bool> DeleteAssociatedBeersAsync(int cerveceria_id)
+        {
+            bool resultadoAccion = false;
+
+            try
+            {
+                DynamicParameters parametrosSentencia = new();
+                parametrosSentencia.Add("@cerveceria_id", cerveceria_id,
+                                        DbType.Int32, ParameterDirection.Input);
+
+                string sentenciaSQL = "DELETE FROM cervezas WHERE cerveceria_id = @cerveceria_id";
+
+                int filasAfectadas = await contextoDB.Conexion.ExecuteAsync(sentenciaSQL, parametrosSentencia);
+
+                if (filasAfectadas > 0)
+                    resultadoAccion = true;
+            }
+            catch (SqliteException error)
+            {
+                throw new DbOperationException(error.Message);
+            }
+
+            return resultadoAccion;
         }
     }
 }

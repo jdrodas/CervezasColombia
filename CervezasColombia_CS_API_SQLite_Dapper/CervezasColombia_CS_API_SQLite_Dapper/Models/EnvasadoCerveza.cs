@@ -5,19 +5,24 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Models
     public class EnvasadoCerveza
     {
         [JsonPropertyName("id")]
-        public int Id { get; set; } = 0;
+        public string? Id { get; set; } = string.Empty;
 
-        [JsonPropertyName("nombre")]
-        public string Nombre { get; set; } = string.Empty;
+        [JsonPropertyName("cerveceria")]
+        public string Cerveceria { get; set; } = string.Empty;
 
-        [JsonPropertyName("unidad_volumen_id")]
-        public int Unidad_Volumen_Id { get; set; } = 0;
+        [JsonPropertyName("cerveza")]
+        public string Cerveza { get; set; } = string.Empty;
+
+        [JsonPropertyName("envasado")]
+        public string Envasado { get; set; } = string.Empty;
 
         [JsonPropertyName("unidad_volumen")]
         public string Unidad_Volumen { get; set; } = string.Empty;
 
+        public int Unidad_Volumen_Id { get; set; } = 0;
+
         [JsonPropertyName("volumen")]
-        public float Volumen { get; set; } = 0.0f;
+        public double Volumen { get; set; } = 0.0d;
 
         public override bool Equals(object? obj)
         {
@@ -27,8 +32,9 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Models
             var otroEnvasadoCerveza = (EnvasadoCerveza)obj;
 
             return Id == otroEnvasadoCerveza.Id
-                && Nombre.Equals(otroEnvasadoCerveza.Nombre)
-                && Unidad_Volumen_Id == otroEnvasadoCerveza.Unidad_Volumen_Id
+                && Cerveceria.Equals(otroEnvasadoCerveza.Cerveceria)
+                && Cerveza.Equals(otroEnvasadoCerveza.Cerveza)
+                && Envasado.Equals(otroEnvasadoCerveza.Envasado)
                 && Unidad_Volumen.Equals(otroEnvasadoCerveza.Unidad_Volumen)
                 && Volumen.Equals(otroEnvasadoCerveza.Volumen);
         }
@@ -38,10 +44,11 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Models
             unchecked
             {
                 int hash = 3;
-                hash = hash * 5 + Id.GetHashCode();
-                hash = hash * 5 + (Nombre?.GetHashCode() ?? 0);
+                hash = hash * 5 + (Id?.GetHashCode() ?? 0);
+                hash = hash * 5 + (Cerveceria?.GetHashCode() ?? 0);
+                hash = hash * 5 + (Cerveza?.GetHashCode() ?? 0);
+                hash = hash * 5 + (Envasado?.GetHashCode() ?? 0);
                 hash = hash * 5 + (Unidad_Volumen?.GetHashCode() ?? 0);
-                hash = hash * 5 + Unidad_Volumen_Id.GetHashCode();
                 hash = hash * 5 + Volumen.GetHashCode();
 
                 return hash;
