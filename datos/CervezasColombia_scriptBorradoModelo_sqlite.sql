@@ -41,4 +41,3 @@ drop table cervecerias;
 drop table ubicaciones;
 drop table estilos;
 drop table rangos_abv;
-drop table rangos_ibu;

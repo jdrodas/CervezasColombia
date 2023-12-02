@@ -5,10 +5,9 @@
  las operaciones CRUD de la aplicación
 */
 
-namespace CervezasColombia_CS_API_SQLite_Dapper.Helpers
+namespace CervezasColombia_CS_API_SQLite_Dapper.Exceptions
 {
-    public class DbOperationException : Exception
+    public class DbOperationException(string message) : Exception(message)
     {
-        public DbOperationException(string message) : base(message) { }
     }
 }

@@ -22,12 +22,6 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Models
         [JsonPropertyName("estilo")]
         public string Estilo { get; set; } = string.Empty;
 
-        [JsonPropertyName("rango_ibu")]
-        public string Rango_Ibu { get; set; } = string.Empty;
-
-        [JsonPropertyName("ibu")]
-        public float Ibu { get; set; } = 0f;
-
         [JsonPropertyName("rango_abv")]
         public string Rango_Abv { get; set; } = string.Empty;
 
@@ -47,7 +41,6 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Models
                 && Cerveceria.Equals(otraCerveza.Cerveceria)
                 && Estilo_id == otraCerveza.Estilo_id
                 && Estilo.Equals(otraCerveza.Estilo)
-                && Ibu.Equals(otraCerveza.Ibu)
                 && Abv.Equals(otraCerveza.Abv);
         }
 
@@ -62,7 +55,6 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Models
                 hash = hash * 5 + (Estilo?.GetHashCode() ?? 0);
                 hash = hash * 5 + Cerveceria_id.GetHashCode();
                 hash = hash * 5 + Estilo_id.GetHashCode();
-                hash = hash * 5 + Ibu.GetHashCode();
                 hash = hash * 5 + Abv.GetHashCode();
 
                 return hash;

@@ -6,16 +6,9 @@ using System.Data;
 
 namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
 {
-    public class UnidadVolumenRepository : IUnidadVolumenRepository
+    public class UnidadVolumenRepository(SQLiteDbContext unContexto) : IUnidadVolumenRepository
     {
-        private readonly SQLiteDbContext contextoDB;
-
-        public UnidadVolumenRepository(SQLiteDbContext unContexto)
-        {
-            contextoDB = unContexto;
-        }
-
-
+        private readonly SQLiteDbContext contextoDB = unContexto;
 
         public async Task<UnidadVolumen> GetByNameAsync(string unidad_volumen_nombre)
         {

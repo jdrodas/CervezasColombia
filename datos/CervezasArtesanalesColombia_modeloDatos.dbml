@@ -4,15 +4,13 @@ table ubicaciones{
   id int [pk, increment]
   municipio varchar
   departamento varchar
-  latitud float
-  longitud float
+  coordenada_geografica point
 }
 
 table cervecerias {
   id int [pk, increment]
   nombre varchar
   ubicacion_id int
-  sitio_web varchar
   instagram varchar
 }
 
@@ -30,20 +28,12 @@ table rangos_abv {
   valor_final float
 }
 
-table rangos_ibu {
-  id int [pk, increment]
-  nombre varchar
-  valor_inicial float
-  valor_final float
-}
-
 table cervezas {
   id int [pk, increment]
   nombre varchar
   cerveceria_id int
   estilo_id int
   ibu float
-  abv float
 }
 Ref:cervecerias.id < cervezas.cerveceria_id
 Ref:estilos.id < cervezas.estilo_id

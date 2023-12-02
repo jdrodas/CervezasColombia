@@ -1,5 +1,5 @@
 ﻿using CervezasColombia_CS_API_SQLite_Dapper.DbContexts;
-using CervezasColombia_CS_API_SQLite_Dapper.Helpers;
+using CervezasColombia_CS_API_SQLite_Dapper.Exceptions;
 using CervezasColombia_CS_API_SQLite_Dapper.Interfaces;
 using CervezasColombia_CS_API_SQLite_Dapper.Models;
 using Dapper;
@@ -122,7 +122,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
                                     DbType.Int32, ParameterDirection.Input);
 
             string sentenciaSQL = "SELECT cerveza_id id, cerveza nombre, cerveceria, cerveceria_id, estilo, estilo_id, " +
-                                    "ibu, abv, rango_ibu, rango_abv " +
+                                    "abv, rango_abv " +
                                     "FROM v_info_cervezas " +
                                     "WHERE estilo_id = @estilo_id " +
                                     "ORDER BY cerveza_id DESC";

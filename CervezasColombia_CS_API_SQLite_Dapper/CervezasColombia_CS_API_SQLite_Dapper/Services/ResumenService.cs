@@ -3,14 +3,9 @@ using CervezasColombia_CS_API_SQLite_Dapper.Models;
 
 namespace CervezasColombia_CS_API_SQLite_Dapper.Services
 {
-    public class ResumenService
+    public class ResumenService(IResumenRepository resumenRepository)
     {
-        private readonly IResumenRepository _resumenRepository;
-
-        public ResumenService(IResumenRepository resumenRepository)
-        {
-            _resumenRepository = resumenRepository;
-        }
+        private readonly IResumenRepository _resumenRepository = resumenRepository;
 
         public async Task<Resumen> GetAllAsync()
         {

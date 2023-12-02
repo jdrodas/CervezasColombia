@@ -2,7 +2,7 @@
 {
     public class ConsultaCerveza
     {
-        public string? Id { get; set; }
+        public int Id { get; set; } = 0;
 
         public string? Nombre { get; set; }
 

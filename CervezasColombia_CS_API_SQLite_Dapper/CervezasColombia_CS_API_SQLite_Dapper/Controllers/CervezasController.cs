@@ -1,4 +1,4 @@
-﻿using CervezasColombia_CS_API_SQLite_Dapper.Helpers;
+﻿using CervezasColombia_CS_API_SQLite_Dapper.Exceptions;
 using CervezasColombia_CS_API_SQLite_Dapper.Models;
 using CervezasColombia_CS_API_SQLite_Dapper.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -7,20 +7,15 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CervezasController : Controller
+    public class CervezasController(CervezaService cervezaService) : Controller
     {
-        private readonly CervezaService _cervezaService;
-
-        public CervezasController(CervezaService cervezaService)
-        {
-            _cervezaService = cervezaService;
-        }
+        private readonly CervezaService _cervezaService = cervezaService;
 
         [HttpGet]
         public async Task<IActionResult> GetDetailsByParameterAsync([FromQuery] ConsultaCerveza parametros)
         {
             //Si todos los parameros son nulos, se traen todas las cervezas
-            if (string.IsNullOrEmpty(parametros.Id) &&
+            if ((parametros.Id == 0) &&
                string.IsNullOrEmpty(parametros.Nombre) &&
                string.IsNullOrEmpty(parametros.Cerveceria))
             {
@@ -36,9 +31,8 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
                 try
                 {
                     // Por Id
-                    if (!string.IsNullOrEmpty(parametros.Id))
+                    if ((parametros.Id != 0))
                     {
-
                         unaCervezaDetallada = await _cervezaService
                         .GetDetailsByIdAsync(parametros.Id);
                     }
@@ -225,7 +219,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
                 await _cervezaService
                     .DeleteBeerPackagingAsync(cerveza_id, unEnvasadoCerveza);
 
-                return Ok($"Envasado {unEnvasadoCerveza.Nombre} de {unEnvasadoCerveza.Volumen} {unEnvasadoCerveza.Unidad_Volumen} fue eliminado para esta cerveza");
+                return Ok($"Envasado {unEnvasadoCerveza.Envasado} de {unEnvasadoCerveza.Volumen} {unEnvasadoCerveza.Unidad_Volumen} fue eliminado para esta cerveza");
             }
             catch (AppValidationException error)
             {

@@ -1,4 +1,4 @@
-﻿using CervezasColombia_CS_API_SQLite_Dapper.Helpers;
+﻿using CervezasColombia_CS_API_SQLite_Dapper.Exceptions;
 using CervezasColombia_CS_API_SQLite_Dapper.Models;
 using CervezasColombia_CS_API_SQLite_Dapper.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -7,14 +7,9 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UbicacionesController : Controller
+    public class UbicacionesController(UbicacionService ubicacionService) : Controller
     {
-        private readonly UbicacionService _ubicacionService;
-
-        public UbicacionesController(UbicacionService ubicacionService)
-        {
-            _ubicacionService = ubicacionService;
-        }
+        private readonly UbicacionService _ubicacionService = ubicacionService;
 
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()

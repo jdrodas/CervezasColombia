@@ -1,6 +1,6 @@
 ﻿using CervezasColombia_CS_API_SQLite_Dapper.Interfaces;
 using CervezasColombia_CS_API_SQLite_Dapper.Models;
-
+using CervezasColombia_CS_API_SQLite_Dapper.Exceptions;
 namespace CervezasColombia_CS_API_SQLite_Dapper.Services
 {
     public class EstiloService
@@ -55,10 +55,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
 
             //Colocamos los valores de los rangos a las cervezas
             foreach (Cerveza unaCerveza in lasCervezas)
-            {
-                unaCerveza.Rango_Ibu = await _cervezaRepository.GetIbuRangeNameAsync(unaCerveza.Ibu);
                 unaCerveza.Rango_Abv = await _cervezaRepository.GetAbvRangeNameAsync(unaCerveza.Abv);
-            }
 
             return lasCervezas;
         }

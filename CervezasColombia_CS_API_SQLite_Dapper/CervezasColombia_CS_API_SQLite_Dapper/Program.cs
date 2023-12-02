@@ -13,24 +13,22 @@ builder.Services.AddSingleton<SQLiteDbContext>();
 
 //Los repositorios
 builder.Services.AddScoped<IResumenRepository, ResumenRepository>();
+builder.Services.AddScoped<IUbicacionRepository, UbicacionRepository>();
 builder.Services.AddScoped<ICerveceriaRepository, CerveceriaRepository>();
 builder.Services.AddScoped<ICervezaRepository, CervezaRepository>();
-builder.Services.AddScoped<IUbicacionRepository, UbicacionRepository>();
-
-//builder.Services.AddScoped<IEstiloRepository, EstiloRepository>();
-//builder.Services.AddScoped<IEnvasadoRepository, EnvasadoRepository>();
-//builder.Services.AddScoped<IIngredienteRepository, IngredienteRepository>();
-//builder.Services.AddScoped<IUnidadVolumenRepository, UnidadVolumenRepository>();
+builder.Services.AddScoped<IEstiloRepository, EstiloRepository>();
+builder.Services.AddScoped<IEnvasadoRepository, EnvasadoRepository>();
+builder.Services.AddScoped<IIngredienteRepository, IngredienteRepository>();
+builder.Services.AddScoped<IUnidadVolumenRepository, UnidadVolumenRepository>();
 
 //Aqui agregamos los servicios asociados para cada EndPoint
 builder.Services.AddScoped<ResumenService>();
+builder.Services.AddScoped<UbicacionService>();
 builder.Services.AddScoped<CerveceriaService>();
-
-//builder.Services.AddScoped<EstiloService>();
-//builder.Services.AddScoped<CervezaService>();
-//builder.Services.AddScoped<UbicacionService>();
-//builder.Services.AddScoped<EnvasadoService>();
-//builder.Services.AddScoped<IngredienteService>();
+builder.Services.AddScoped<CervezaService>();
+builder.Services.AddScoped<EstiloService>();
+builder.Services.AddScoped<EnvasadoService>();
+builder.Services.AddScoped<IngredienteService>();
 
 // Add services to the container.
 builder.Services.AddControllers()

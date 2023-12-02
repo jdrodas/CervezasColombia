@@ -19,9 +19,12 @@ cerveceria;cerveza;envasado;unidad_volumen;volumen
 67 Drink House;No. 2;Botella;Mililitros;330
 67 Drink House;No. 3;Botella;Mililitros;330
 67 Drink House;No. 4;Botella;Mililitros;330
-Bari Cerveza Artesanal;Eclipse;Botella;Mililitros;330
-Bari Cerveza Artesanal;Eclipse;Growler;Litros;2
-Bari Cerveza Artesanal;Salazar;Botella;Mililitros;330
+7 Cerros Cervecería Artesanal;Asomadera;Botella;Mililitros;330
+7 Cerros Cervecería Artesanal;Nutibara;Botella;Mililitros;330
+7 Cerros Cervecería Artesanal;Picacho;Botella;Mililitros;330
+7 Cerros Cervecería Artesanal;Sto. Domingo;Botella;Mililitros;330
+Antaño Cervecería Artesanal;Izzy;Botella;Mililitros;330
+Antaño Cervecería Artesanal;Tejadita;Botella;Mililitros;330
 BBC;Bacatá;Botella;Mililitros;330
 BBC;Cajicá;Botella;Mililitros;330
 BBC;Chapinero;Botella;Mililitros;330
@@ -30,12 +33,14 @@ BBC;Macondo;Botella;Mililitros;330
 BBC;Monserrate;Botella;Mililitros;330
 BBC;Rubia;Botella;Mililitros;330
 BBC;Septimazo;Botella;Mililitros;330
+Bari Cerveza Artesanal;Eclipse;Botella;Mililitros;330
+Bari Cerveza Artesanal;Salazar;Botella;Mililitros;330
 Bruder;Barley Wine;Botella;Mililitros;330
 Bruder;Café;Botella;Mililitros;330
 Bruder;Chocolate;Botella;Mililitros;330
 Bruder;Dog Lover;Botella;Mililitros;330
-Bruder;Imperial Strout;Botella;Mililitros;330
 Bruder;IPA Maracuyá;Botella;Mililitros;330
+Bruder;Imperial Strout;Botella;Mililitros;330
 Bruder;Maracuyá;Botella;Mililitros;330
 Bruder;Pueblito;Botella;Mililitros;330
 Bruder;Roja;Botella;Mililitros;330
@@ -43,6 +48,8 @@ Bruder;Rubia;Botella;Mililitros;330
 Cervecería Cartagena;Golden;Botella;Mililitros;330
 Cervecería Cartagena;Porter;Botella;Mililitros;330
 Cervecería Cartagena;Roja;Botella;Mililitros;330
+Cervecería Festa;Barranquilla;Botella;Mililitros;330
+Cervecería Panzer;Roja;Botella;Mililitros;330
 Cervecería Resolana;Nuqui;Botella;Mililitros;330
 Cervecería Resolana;Tayrona;Botella;Mililitros;330
 Cervezas Kalima;Alexa;Botella;Mililitros;330
@@ -56,7 +63,6 @@ Fierabrás;Maria Antonieta;Botella;Mililitros;330
 Lino Brewing Company;Colaa;Botella;Mililitros;330
 Lino Brewing Company;Colpa;Botella;Mililitros;330
 Lino Brewing Company;Cols;Botella;Mililitros;330
-Lino Brewing Company;Cols;Botella;Mililitros;750
 Lino Brewing Company;Neipa;Botella;Mililitros;330
 Nevada Cerveceria;Happy Ayu;Botella;Mililitros;330
 Nevada Cerveceria;Happy Colibrí;Botella;Mililitros;330

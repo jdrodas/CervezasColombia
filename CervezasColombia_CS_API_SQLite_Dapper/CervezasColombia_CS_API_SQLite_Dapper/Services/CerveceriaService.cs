@@ -1,23 +1,16 @@
-﻿using CervezasColombia_CS_API_SQLite_Dapper.Helpers;
+﻿using CervezasColombia_CS_API_SQLite_Dapper.Exceptions;
 using CervezasColombia_CS_API_SQLite_Dapper.Interfaces;
 using CervezasColombia_CS_API_SQLite_Dapper.Models;
 
 namespace CervezasColombia_CS_API_SQLite_Dapper.Services
 {
-    public class CerveceriaService
+    public class CerveceriaService(ICerveceriaRepository cerveceriaRepository,
+                            IUbicacionRepository ubicacionRepository,
+                            ICervezaRepository cervezaRepository)
     {
-        private readonly ICerveceriaRepository _cerveceriaRepository;
-        private readonly IUbicacionRepository _ubicacionRepository;
-        private readonly ICervezaRepository _cervezaRepository;
-
-        public CerveceriaService(ICerveceriaRepository cerveceriaRepository,
-                                IUbicacionRepository ubicacionRepository,
-                                ICervezaRepository cervezaRepository)
-        {
-            _cerveceriaRepository = cerveceriaRepository;
-            _ubicacionRepository = ubicacionRepository;
-            _cervezaRepository = cervezaRepository;
-        }
+        private readonly ICerveceriaRepository _cerveceriaRepository = cerveceriaRepository;
+        private readonly IUbicacionRepository _ubicacionRepository = ubicacionRepository;
+        private readonly ICervezaRepository _cervezaRepository = cervezaRepository;
 
         public async Task<IEnumerable<Cerveceria>> GetAllAsync()
         {
@@ -34,12 +27,9 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
             if (unaCerveceriaDetallada.Id == 0)
                 throw new AppValidationException($"Cerveceria no encontrada con el id {cerveceria_id}");
 
-            //Colocamos los valores de los rangos a las cervezas
+            //Colocamos los valores del rango ABV a las cervezas
             foreach (Cerveza unaCerveza in unaCerveceriaDetallada.Cervezas)
-            {
-                unaCerveza.Rango_Ibu = await _cervezaRepository.GetIbuRangeNameAsync(unaCerveza.Ibu);
                 unaCerveza.Rango_Abv = await _cervezaRepository.GetAbvRangeNameAsync(unaCerveza.Abv);
-            }
 
             return unaCerveceriaDetallada!;
         }
@@ -53,10 +43,14 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
             if (unaCerveceria.Id == 0)
                 throw new AppValidationException($"Cerveceria no encontrada con el nombre {cerveceria_name}");
 
-            //Aqui creamos la cerveceria detallada
-            var unaCervceriaDetallada = await GetDetailedBreweryAsync(unaCerveceria);
+            var unaCerveceriaDetallada = await _cerveceriaRepository
+                .GetDetailsByIdAsync(unaCerveceria.Id);
 
-            return unaCervceriaDetallada!;
+            //Colocamos los valores del rango ABV a las cervezas
+            foreach (Cerveza unaCerveza in unaCerveceriaDetallada.Cervezas)
+                unaCerveza.Rango_Abv = await _cervezaRepository.GetAbvRangeNameAsync(unaCerveza.Abv);
+
+            return unaCerveceriaDetallada!;
         }
 
         public async Task<CerveceriaDetallada> GetByInstagramAsync(string cerveceria_Instagram)
@@ -68,66 +62,21 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
             if (unaCerveceria.Id == 0)
                 throw new AppValidationException($"Cerveceria no encontrada con el instagram {cerveceria_Instagram}");
 
-            //Aqui creamos la cerveceria detallada
-            var unaCervceriaDetallada = await GetDetailedBreweryAsync(unaCerveceria);
+            var unaCerveceriaDetallada = await _cerveceriaRepository
+                .GetDetailsByIdAsync(unaCerveceria.Id);
 
-            return unaCervceriaDetallada!;
-        }
-
-        private async Task<CerveceriaDetallada> GetDetailedBreweryAsync(Cerveceria unaCerveceria)
-        {
-            CerveceriaDetallada unaCerveceriaDetallada = new()
-            {
-                Id = unaCerveceria.Id,
-                Nombre = unaCerveceria.Nombre,
-                Instagram = unaCerveceria.Instagram,
-                Sitio_Web = unaCerveceria.Sitio_Web,
-                Ubicacion = unaCerveceria.Ubicacion
-            };
-
-            var lasCervezas = await GetAssociatedBeersAsync(unaCerveceriaDetallada.Id!);
-            unaCerveceriaDetallada.Cervezas = lasCervezas.ToList();
-
-            return unaCerveceriaDetallada;
-        }
-
-        public async Task<IEnumerable<Cerveza>> GetAssociatedBeersAsync(int cerveceria_id)
-        {
-            //Validamos que la Cerveceria exista con ese Id
-            var unaCerveceria = await _cerveceriaRepository
-                .GetByIdAsync(cerveceria_id);
-
-            if (unaCerveceria.Id == 0)
-                throw new AppValidationException($"Cerveceria no encontrada con el id {cerveceria_id}");
-
-            //Si la cerveceria existe, validamos que tenga cervezas asociadas
-            var cantidadCervezasAsociadas = await _cerveceriaRepository
-                .GetTotalAssociatedBeersAsync(cerveceria_id);
-
-            if (cantidadCervezasAsociadas == 0)
-                throw new AppValidationException($"No Existen cervezas asociadas a la cerveceria {unaCerveceria.Nombre}");
-
-            var lasCervezas = await _cerveceriaRepository.GetAssociatedBeersAsync(cerveceria_id);
-
-            //Colocamos los valores de los rangos a las cervezas
-            foreach (Cerveza unaCerveza in lasCervezas)
-            {
-                unaCerveza.Rango_Ibu = await _cervezaRepository.GetIbuRangeNameAsync(unaCerveza.Ibu);
+            //Colocamos los valores del rango ABV a las cervezas
+            foreach (Cerveza unaCerveza in unaCerveceriaDetallada.Cervezas)
                 unaCerveza.Rango_Abv = await _cervezaRepository.GetAbvRangeNameAsync(unaCerveza.Abv);
-            }
 
-            return lasCervezas;
-        }
+            return unaCerveceriaDetallada!;
+        }        
 
         public async Task<Cerveceria> CreateAsync(Cerveceria unaCerveceria)
         {
             //Validamos que la cerveceria tenga nombre
             if (unaCerveceria.Nombre.Length == 0)
                 throw new AppValidationException("No se puede insertar una cervecería con nombre nulo");
-
-            //Validamos que la cerveceria tenga sitio_web
-            if (unaCerveceria.Sitio_Web.Length == 0)
-                throw new AppValidationException("No se puede insertar una cervecería con Sitio Web nulo");
 
             //Validamos que la cerveceria tenga instagram
             if (unaCerveceria.Instagram.Length == 0)
@@ -145,19 +94,14 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
             if (ubicacionExistente.Id == 0)
                 throw new AppValidationException("No se puede insertar una cervecería sin ubicación conocida");
 
+            unaCerveceria.Ubicacion = ubicacionExistente;
+
             //Validamos que el nombre no exista previamente
             var cerveceriaExistente = await _cerveceriaRepository
                 .GetByNameAsync(unaCerveceria.Nombre);
 
             if (cerveceriaExistente.Id != 0)
                 throw new AppValidationException($"Ya existe una cervecería con el nombre {unaCerveceria.Nombre}");
-
-            //Validamos que el sitio_web no exista previamente
-            cerveceriaExistente = await _cerveceriaRepository
-                .GetBySitioWebAsync(unaCerveceria.Sitio_Web);
-
-            if (cerveceriaExistente.Id != 0)
-                throw new AppValidationException($"Ya existe una cervecería con el sitio web {unaCerveceria.Sitio_Web}");
 
             //Validamos que el instagram no exista previamente
             cerveceriaExistente = await _cerveceriaRepository
@@ -177,9 +121,9 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
                 cerveceriaExistente = await _cerveceriaRepository
                     .GetByNameAsync(unaCerveceria.Nombre!);
             }
-            catch (DbOperationException error)
+            catch (DbOperationException)
             {
-                throw error;
+                throw;
             }
 
             return cerveceriaExistente;
@@ -206,20 +150,8 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
             cerveceriaExistente = await _cerveceriaRepository
                 .GetByNameAsync(unaCerveceria.Nombre);
 
-            if (unaCerveceria.Id != cerveceriaExistente.Id)
+            if (unaCerveceria.Id != cerveceriaExistente.Id && cerveceriaExistente.Id !=0)
                 throw new AppValidationException($"Ya existe otra cervecería con el nombre {unaCerveceria.Nombre}. " +
-                    $"No se puede Actualizar");
-
-            //Validamos que la cerveceria tenga sitio_web
-            if (unaCerveceria.Sitio_Web.Length == 0)
-                throw new AppValidationException("No se puede actualizar una cervecería con Sitio Web nulo");
-
-            //Validamos que el sitio_web no exista previamente en otra cervecería diferente a la que se está actualizando
-            cerveceriaExistente = await _cerveceriaRepository
-                .GetBySitioWebAsync(unaCerveceria.Sitio_Web);
-
-            if (unaCerveceria.Id != cerveceriaExistente.Id && cerveceriaExistente.Id != 0)
-                throw new AppValidationException($"Ya existe otra cervecería con el sitio web {unaCerveceria.Sitio_Web}. " +
                     $"No se puede Actualizar");
 
             //Validamos que la cerveceria tenga instagram
@@ -264,9 +196,9 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
                 cerveceriaExistente = await _cerveceriaRepository
                     .GetByNameAsync(unaCerveceria.Nombre!);
             }
-            catch (DbOperationException error)
+            catch (DbOperationException)
             {
-                throw error;
+                throw;
             }
 
             return cerveceriaExistente;
@@ -300,9 +232,9 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
                 if (!resultadoAccion)
                     throw new AppValidationException("Operación ejecutada pero no generó cambios en la DB");
             }
-            catch (DbOperationException error)
+            catch (DbOperationException)
             {
-                throw error;
+                throw;
             }
         }
     }

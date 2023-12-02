@@ -1,5 +1,5 @@
 ﻿using CervezasColombia_CS_API_SQLite_Dapper.DbContexts;
-using CervezasColombia_CS_API_SQLite_Dapper.Helpers;
+using CervezasColombia_CS_API_SQLite_Dapper.Exceptions;
 using CervezasColombia_CS_API_SQLite_Dapper.Interfaces;
 using CervezasColombia_CS_API_SQLite_Dapper.Models;
 using Dapper;
@@ -8,14 +8,9 @@ using System.Data;
 
 namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
 {
-    public class EnvasadoRepository : IEnvasadoRepository
+    public class EnvasadoRepository(SQLiteDbContext unContexto) : IEnvasadoRepository
     {
-        private readonly SQLiteDbContext contextoDB;
-
-        public EnvasadoRepository(SQLiteDbContext unContexto)
-        {
-            contextoDB = unContexto;
-        }
+        private readonly SQLiteDbContext contextoDB = unContexto;
 
         public async Task<IEnumerable<Envasado>> GetAllAsync()
         {
@@ -94,7 +89,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
                                     DbType.Int32, ParameterDirection.Input);
 
             string sentenciaSQL = "SELECT vc.cerveza_id id, vc.cerveza nombre, vc.cerveceria, " +
-                                    "vc.estilo, vc.ibu, vc.abv, vc.rango_ibu, vc.rango_abv " +
+                                    "vc.estilo, vc.abv, vc.rango_abv " +
                                     "FROM v_info_cervezas vc " +
                                     "JOIN v_info_envasados_cervezas ve ON vc.cerveza_id = ve.cerveza_id " +
                                     "WHERE ve.envasado_id = @envasado_id " +

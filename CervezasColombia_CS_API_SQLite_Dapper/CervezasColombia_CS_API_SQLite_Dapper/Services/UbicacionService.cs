@@ -1,16 +1,12 @@
 ﻿using CervezasColombia_CS_API_SQLite_Dapper.Interfaces;
 using CervezasColombia_CS_API_SQLite_Dapper.Models;
+using CervezasColombia_CS_API_SQLite_Dapper.Exceptions;
 
 namespace CervezasColombia_CS_API_SQLite_Dapper.Services
 {
-    public class UbicacionService
+    public class UbicacionService(IUbicacionRepository ubicacionRepository)
     {
-        private readonly IUbicacionRepository _ubicacionRepository;
-
-        public UbicacionService(IUbicacionRepository ubicacionRepository)
-        {
-            _ubicacionRepository = ubicacionRepository;
-        }
+        private readonly IUbicacionRepository _ubicacionRepository = ubicacionRepository;
 
         public async Task<IEnumerable<Ubicacion>> GetAllAsync()
         {
@@ -24,7 +20,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
             var unaUbicacion = await _ubicacionRepository
                 .GetByIdAsync(ubicacion_id);
 
-            if (string.IsNullOrEmpty(unaUbicacion.Id))
+            if (unaUbicacion.Id==0)
                 throw new AppValidationException($"Ubicación no encontrada con el id {ubicacion_id}");
 
             return unaUbicacion;
@@ -36,7 +32,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
             var unaUbicacion = await _ubicacionRepository
                 .GetByIdAsync(ubicacion_id);
 
-            if (string.IsNullOrEmpty(unaUbicacion.Id))
+            if (unaUbicacion.Id == 0)
                 throw new AppValidationException($"Ubicación no encontrada con el id {ubicacion_id}");
 
             //Si la ubicacion existe, validamos que tenga cervecerias asociadas
@@ -72,7 +68,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
             var ubicacionExistente = await _ubicacionRepository
                 .GetByNameAsync(unaUbicacion.Municipio!, unaUbicacion.Departamento!);
 
-            if (string.IsNullOrEmpty(ubicacionExistente.Id) == false)
+            if (ubicacionExistente.Id != 0)
                 return ubicacionExistente;
 
             try
@@ -86,9 +82,9 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
                 ubicacionExistente = await _ubicacionRepository
                     .GetByNameAsync(unaUbicacion.Municipio!, unaUbicacion.Departamento!);
             }
-            catch (DbOperationException error)
+            catch (AppValidationException )
             {
-                throw error;
+                throw;
             }
 
             return ubicacionExistente;
@@ -99,6 +95,13 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
             //Validamos que los parametros sean consistentes
             if (ubicacion_id != unaUbicacion.Id)
                 throw new AppValidationException($"Inconsistencia en el Id de la ubicación a actualizar. Verifica argumentos");
+
+            //Validamos que exista una ubicación para actualizar con ese Id
+            var ubicacionExistente = await _ubicacionRepository
+                .GetByIdAsync(unaUbicacion.Id);
+
+            if (ubicacionExistente.Id == 0)
+                throw new AppValidationException($"No existe una ubicación con el Id {unaUbicacion.Id} que se pueda actualizar");
 
             //Validamos que la ubicación tenga municipio
             if (unaUbicacion.Municipio.Length == 0)
@@ -117,33 +120,27 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
                 throw new AppValidationException($"No se puede actualizar una ubicación en Colombia con valor de longitud en {unaUbicacion.Longitud} para su coordenada geográfica");
 
             //Validamos que el nuevo municipio,departamento no exista previamente con otro Id
-            var ubicacionExistente = await _ubicacionRepository
+            ubicacionExistente = await _ubicacionRepository
                 .GetByNameAsync(unaUbicacion.Municipio!, unaUbicacion.Departamento!);
 
             if (unaUbicacion.Equals(ubicacionExistente))
                 return ubicacionExistente;
 
-            // validamos que la ubicación a actualizar si exista con ese Id
-            ubicacionExistente = await _ubicacionRepository
-                .GetByIdAsync(unaUbicacion.Id);
-
-            if (string.IsNullOrEmpty(ubicacionExistente.Id))
-                throw new AppValidationException($"No existe una ubicación con el Id {unaUbicacion.Id} que se pueda actualizar");
-
+            //Pasadas las validaciones, ejecutamos la actualización
             try
             {
                 bool resultadoAccion = await _ubicacionRepository
                     .UpdateAsync(unaUbicacion);
 
                 if (!resultadoAccion)
-                    throw new AppValidationException("Operación ejecutada pero no generó cambios en la DB");
+                    throw new DbOperationException("Operación ejecutada pero no generó cambios en la DB");
 
                 ubicacionExistente = await _ubicacionRepository
                     .GetByNameAsync(unaUbicacion.Municipio!, unaUbicacion.Departamento!);
             }
-            catch (DbOperationException error)
+            catch (DbOperationException)
             {
-                throw error;
+                throw;
             }
 
             return ubicacionExistente;
@@ -155,7 +152,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
             var ubicacionExistente = await _ubicacionRepository
                 .GetByIdAsync(ubicacion_id);
 
-            if (string.IsNullOrEmpty(ubicacionExistente.Id))
+            if (ubicacionExistente.Id == 0)
                 throw new AppValidationException($"No existe una ubicación con el Id {ubicacion_id} que se pueda eliminar");
 
             // Validamos que la ubicación no tenga asociadas cervecerias
@@ -173,11 +170,11 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
                     .DeleteAsync(ubicacionExistente);
 
                 if (!resultadoAccion)
-                    throw new AppValidationException("Operación ejecutada pero no generó cambios en la DB");
+                    throw new DbOperationException("Operación ejecutada pero no generó cambios en la DB");
             }
-            catch (DbOperationException error)
+            catch (DbOperationException)
             {
-                throw error;
+                throw;
             }
         }
     }

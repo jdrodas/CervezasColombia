@@ -10,9 +10,6 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Models
         [JsonPropertyName("nombre")]
         public string Nombre { get; set; } = string.Empty;
 
-        [JsonPropertyName("sitio_web")]
-        public string Sitio_Web { get; set; } = string.Empty;
-
         [JsonPropertyName("instagram")]
         public string Instagram { get; set; } = string.Empty;
 
@@ -28,7 +25,6 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Models
 
             return Id == otraCerveceria.Id
                    && Nombre.Equals(otraCerveceria.Nombre)
-                   && Sitio_Web.Equals(otraCerveceria.Sitio_Web)
                    && Instagram.Equals(otraCerveceria.Instagram)
                    && Ubicacion.Equals(otraCerveceria.Ubicacion);
         }
@@ -40,7 +36,6 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Models
                 int hash = 3;
                 hash = hash * 5 + Id.GetHashCode();
                 hash = hash * 5 + (Nombre?.GetHashCode() ?? 0);
-                hash = hash * 5 + (Sitio_Web?.GetHashCode() ?? 0);
                 hash = hash * 5 + (Instagram?.GetHashCode() ?? 0);
                 hash = hash * 5 + Ubicacion.GetHashCode();
 

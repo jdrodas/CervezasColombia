@@ -1,4 +1,4 @@
-﻿using CervezasColombia_CS_API_SQLite_Dapper.Helpers;
+﻿using CervezasColombia_CS_API_SQLite_Dapper.Exceptions;
 using CervezasColombia_CS_API_SQLite_Dapper.Interfaces;
 using CervezasColombia_CS_API_SQLite_Dapper.Models;
 
@@ -68,12 +68,9 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
                     Id = unaCerveza.Id,
                     Nombre = unaCerveza.Nombre,
                     Cerveceria = unEnvasadoCerveza.Cerveceria,
-                    Estilo = unaCerveza.Estilo,
-                    Ibu = unaCerveza.Ibu,
+                    Estilo = unaCerveza.Estilo,                    
                     Abv = unaCerveza.Abv,
                     Rango_Abv = unaCerveza.Rango_Abv,
-                    Rango_Ibu = unaCerveza.Rango_Ibu,
-
                     Unidad_Volumen = unEnvasadoCerveza.Unidad_Volumen,
                     Volumen = unEnvasadoCerveza.Volumen,
                     Envasado = unEnvasadoCerveza.Envasado

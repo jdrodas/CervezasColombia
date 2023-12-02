@@ -5,14 +5,9 @@ using Dapper;
 
 namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
 {
-    public class ResumenRepository : IResumenRepository
+    public class ResumenRepository(SQLiteDbContext unContexto) : IResumenRepository
     {
-        private readonly SQLiteDbContext contextoDB;
-
-        public ResumenRepository(SQLiteDbContext unContexto)
-        {
-            contextoDB = unContexto;
-        }
+        private readonly SQLiteDbContext contextoDB = unContexto;
 
         public async Task<Resumen> GetAllAsync()
         {

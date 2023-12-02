@@ -5,7 +5,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Models
     public class EnvasadoCerveza
     {
         [JsonPropertyName("id")]
-        public string? Id { get; set; } = string.Empty;
+        public int Id { get; set; } = 0;
 
         [JsonPropertyName("cerveceria")]
         public string Cerveceria { get; set; } = string.Empty;
@@ -44,7 +44,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Models
             unchecked
             {
                 int hash = 3;
-                hash = hash * 5 + (Id?.GetHashCode() ?? 0);
+                hash = hash * 5 + Id.GetHashCode();
                 hash = hash * 5 + (Cerveceria?.GetHashCode() ?? 0);
                 hash = hash * 5 + (Cerveza?.GetHashCode() ?? 0);
                 hash = hash * 5 + (Envasado?.GetHashCode() ?? 0);
