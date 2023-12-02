@@ -1,6 +1,6 @@
-﻿using CervezasColombia_CS_API_SQLite_Dapper.Interfaces;
+﻿using CervezasColombia_CS_API_SQLite_Dapper.Exceptions;
+using CervezasColombia_CS_API_SQLite_Dapper.Interfaces;
 using CervezasColombia_CS_API_SQLite_Dapper.Models;
-using CervezasColombia_CS_API_SQLite_Dapper.Exceptions;
 
 namespace CervezasColombia_CS_API_SQLite_Dapper.Services
 {
@@ -20,7 +20,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
             var unaUbicacion = await _ubicacionRepository
                 .GetByIdAsync(ubicacion_id);
 
-            if (unaUbicacion.Id==0)
+            if (unaUbicacion.Id == 0)
                 throw new AppValidationException($"Ubicación no encontrada con el id {ubicacion_id}");
 
             return unaUbicacion;
@@ -82,7 +82,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
                 ubicacionExistente = await _ubicacionRepository
                     .GetByNameAsync(unaUbicacion.Municipio!, unaUbicacion.Departamento!);
             }
-            catch (AppValidationException )
+            catch (AppValidationException)
             {
                 throw;
             }

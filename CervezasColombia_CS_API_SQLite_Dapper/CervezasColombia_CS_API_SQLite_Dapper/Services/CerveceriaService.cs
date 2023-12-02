@@ -70,7 +70,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
                 unaCerveza.Rango_Abv = await _cervezaRepository.GetAbvRangeNameAsync(unaCerveza.Abv);
 
             return unaCerveceriaDetallada!;
-        }        
+        }
 
         public async Task<Cerveceria> CreateAsync(Cerveceria unaCerveceria)
         {
@@ -150,7 +150,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
             cerveceriaExistente = await _cerveceriaRepository
                 .GetByNameAsync(unaCerveceria.Nombre);
 
-            if (unaCerveceria.Id != cerveceriaExistente.Id && cerveceriaExistente.Id !=0)
+            if (unaCerveceria.Id != cerveceriaExistente.Id && cerveceriaExistente.Id != 0)
                 throw new AppValidationException($"Ya existe otra cervecería con el nombre {unaCerveceria.Nombre}. " +
                     $"No se puede Actualizar");
 

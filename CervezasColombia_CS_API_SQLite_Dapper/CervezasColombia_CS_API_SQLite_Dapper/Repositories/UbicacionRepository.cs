@@ -37,7 +37,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
                                   "WHERE id = @ubicacion_id ";
 
             var resultado = await contextoDB.Conexion
-                .QueryAsync<Ubicacion>(sentenciaSQL,parametrosSentencia);
+                .QueryAsync<Ubicacion>(sentenciaSQL, parametrosSentencia);
 
             if (resultado.Any())
                 unaUbicacion = resultado.First();
@@ -127,7 +127,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
             var resultadoCervecerias = await contextoDB.Conexion
                 .QueryAsync<Cerveceria>(sentenciaSQL, parametrosSentencia);
 
-            foreach(Cerveceria unaCerveceria in  resultadoCervecerias)
+            foreach (Cerveceria unaCerveceria in resultadoCervecerias)
             {
                 unaCerveceria.Ubicacion = await GetLocationForBrewery(unaCerveceria.Id);
             }

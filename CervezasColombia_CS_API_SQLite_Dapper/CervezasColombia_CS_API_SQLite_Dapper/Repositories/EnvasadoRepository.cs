@@ -11,14 +11,13 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
     public class EnvasadoRepository(SQLiteDbContext unContexto) : IEnvasadoRepository
     {
         private readonly SQLiteDbContext contextoDB = unContexto;
-
         public async Task<IEnumerable<Envasado>> GetAllAsync()
         {
             string sentenciaSQL = "SELECT DISTINCT  e.id, e.nombre FROM envasados e " +
                                     "ORDER BY e.id DESC ";
 
-            var resultadoEnvasados = await contextoDB.Conexion.QueryAsync<Envasado>(sentenciaSQL,
-                                    new DynamicParameters());
+            var resultadoEnvasados = await contextoDB.Conexion
+                .QueryAsync<Envasado>(sentenciaSQL, new DynamicParameters());
 
             return resultadoEnvasados;
         }
@@ -35,8 +34,8 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
                                     "FROM envasados e " +
                                     "WHERE e.id = @envasado_id ";
 
-            var resultado = await contextoDB.Conexion.QueryAsync<Envasado>(sentenciaSQL,
-                parametrosSentencia);
+            var resultado = await contextoDB.Conexion
+                .QueryAsync<Envasado>(sentenciaSQL, parametrosSentencia);
 
             if (resultado.Any())
                 unEnvasado = resultado.First();
@@ -56,8 +55,8 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
                                   "FROM envasados " +
                                   "WHERE LOWER(nombre) = LOWER(@envasado_nombre) ";
 
-            var resultado = await contextoDB.Conexion.QueryAsync<Envasado>(sentenciaSQL,
-                                parametrosSentencia);
+            var resultado = await contextoDB.Conexion
+                .QueryAsync<Envasado>(sentenciaSQL, parametrosSentencia);
 
             if (resultado.Any())
                 unEnvasado = resultado.First();
@@ -67,22 +66,12 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
 
         public async Task<int> GetTotalAssociatedBeersAsync(int envasado_id)
         {
+            var cervezasAsociadas = await GetAssociatedBeersAsync(envasado_id);
 
-            DynamicParameters parametrosSentencia = new();
-            parametrosSentencia.Add("@envasado_id", envasado_id,
-                                    DbType.Int32, ParameterDirection.Input);
-
-            string sentenciaSQL = "SELECT COUNT(cerveza_id) totalCervezas " +
-                                    "FROM v_info_envasados_cervezas v " +
-                                    "WHERE envasado_id = @envasado_id ";
-
-            var totalCervezas = await contextoDB.Conexion.QueryFirstAsync<int>(sentenciaSQL,
-                                    parametrosSentencia);
-
-            return totalCervezas;
+            return cervezasAsociadas.ToList().Count;
         }
 
-        public async Task<IEnumerable<Cerveza>> GetAssociatedBeersAsync(int envasado_id)
+        public async Task<IEnumerable<EnvasadoCerveza>> GetAssociatedBeersAsync(int envasado_id)
         {
             DynamicParameters parametrosSentencia = new();
             parametrosSentencia.Add("@envasado_id", envasado_id,
@@ -95,12 +84,13 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
                                     "WHERE ve.envasado_id = @envasado_id " +
                                     "ORDER BY vc.cerveza_id DESC";
 
-            var resultadoCervezas = await contextoDB.Conexion.QueryAsync<Cerveza>(sentenciaSQL, parametrosSentencia);
+            var resultadoCervezas = await contextoDB.Conexion
+                .QueryAsync<EnvasadoCerveza>(sentenciaSQL, parametrosSentencia);
 
             return resultadoCervezas;
         }
 
-        public async Task<EnvasadoCerveza> GetAssociatedBeerPackagingAsync(int cerveza_id, int envasado_id, int unidad_volumen_id, float volumen)
+        public async Task<EnvasadoCerveza> GetAssociatedPackagedBeerAsync(int cerveza_id, int envasado_id, int unidad_volumen_id, float volumen)
         {
             EnvasadoCerveza unEnvasadoCerveza = new();
 
@@ -175,7 +165,6 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
             return resultadoAccion;
         }
 
-
         public async Task<bool> DeleteAsync(Envasado unEnvasado)
         {
             bool resultadoAccion = false;
@@ -197,5 +186,11 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Repositories
 
             return resultadoAccion;
         }
+
+        //Task<bool> IEnvasadoRepository.DeleteAssociatedBeersAsync(int envasado_id)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
     }
 }

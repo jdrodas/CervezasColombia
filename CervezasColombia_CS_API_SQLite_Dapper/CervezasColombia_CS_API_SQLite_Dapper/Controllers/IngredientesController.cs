@@ -1,4 +1,4 @@
-﻿using CervezasColombia_CS_API_SQLite_Dapper.Helpers;
+﻿using CervezasColombia_CS_API_SQLite_Dapper.Exceptions;
 using CervezasColombia_CS_API_SQLite_Dapper.Models;
 using CervezasColombia_CS_API_SQLite_Dapper.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -7,14 +7,9 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class IngredientesController : Controller
+    public class IngredientesController(IngredienteService ingredienteService) : Controller
     {
-        private readonly IngredienteService _ingredienteService;
-
-        public IngredientesController(IngredienteService ingredienteService)
-        {
-            _ingredienteService = ingredienteService;
-        }
+        private readonly IngredienteService _ingredienteService = ingredienteService;
 
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()

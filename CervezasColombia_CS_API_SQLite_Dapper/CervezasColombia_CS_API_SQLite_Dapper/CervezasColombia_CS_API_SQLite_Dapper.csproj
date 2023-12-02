@@ -10,6 +10,23 @@
     <Compile Remove="Controllers\EnvasadosController.cs" />
     <Compile Remove="Controllers\EstilosController.cs" />
     <Compile Remove="Controllers\IngredientesController.cs" />
+    <Compile Remove="Interfaces\IEnvasadoRepository.cs" />
+    <Compile Remove="Interfaces\IIngredienteRepository.cs" />
+    <Compile Remove="Interfaces\IUnidadVolumenRepository.cs" />
+    <Compile Remove="Models\CervezaDetallada.cs" />
+    <Compile Remove="Models\CervezaEnvasada.cs" />
+    <Compile Remove="Models\Envasado.cs" />
+    <Compile Remove="Models\EnvasadoCerveza.cs" />
+    <Compile Remove="Models\EstiloDetallado.cs" />
+    <Compile Remove="Models\Ingrediente.cs" />
+    <Compile Remove="Models\IngredienteCerveza.cs" />
+    <Compile Remove="Models\UnidadVolumen.cs" />
+    <Compile Remove="Repositories\EnvasadoRepository.cs" />
+    <Compile Remove="Repositories\IngredienteRepository.cs" />
+    <Compile Remove="Repositories\UnidadVolumenRepository.cs" />
+    <Compile Remove="Services\EnvasadoService.cs" />
+    <Compile Remove="Services\EstiloService.cs" />
+    <Compile Remove="Services\IngredienteService.cs" />
   </ItemGroup>
 
   <ItemGroup>

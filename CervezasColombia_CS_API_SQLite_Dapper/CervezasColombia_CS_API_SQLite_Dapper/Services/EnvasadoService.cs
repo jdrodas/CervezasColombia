@@ -4,17 +4,11 @@ using CervezasColombia_CS_API_SQLite_Dapper.Models;
 
 namespace CervezasColombia_CS_API_SQLite_Dapper.Services
 {
-    public class EnvasadoService
+    public class EnvasadoService(IEnvasadoRepository envasadoRepository,
+                           ICervezaRepository cervezaRepository)
     {
-        private readonly IEnvasadoRepository _envasadoRepository;
-        private readonly ICervezaRepository _cervezaRepository;
-
-        public EnvasadoService(IEnvasadoRepository envasadoRepository,
-                               ICervezaRepository cervezaRepository)
-        {
-            _envasadoRepository = envasadoRepository;
-            _cervezaRepository = cervezaRepository;
-        }
+        private readonly IEnvasadoRepository _envasadoRepository = envasadoRepository;
+        private readonly ICervezaRepository _cervezaRepository = cervezaRepository;
 
         public async Task<IEnumerable<Envasado>> GetAllAsync()
         {
@@ -45,7 +39,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
 
             //Si la cerveceria existe, validamos que tenga cervezas asociadas
             var cantidadCervezasAsociadas = await _envasadoRepository
-                .GetTotalAssociatedPackagedBeersAsync(envasado_id);
+                .GetTotalAssociatedBeersAsync(envasado_id);
 
             if (cantidadCervezasAsociadas == 0)
                 throw new AppValidationException($"No Existen cervezas asociadas al envasado {unEnvasado.Nombre}");
@@ -56,7 +50,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
             //Aqui completamos la información de las cervezas
             Cerveza unaCerveza;
             CervezaEnvasada unaCervezaEnvasada;
-            List<CervezaEnvasada> lasCervezasEnvasadas = new();
+            List<CervezaEnvasada> lasCervezasEnvasadas = [];
 
             foreach (EnvasadoCerveza unEnvasadoCerveza in losEnvasadosCervezas)
             {
@@ -168,7 +162,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
 
             // Validamos que el envasado no tenga asociadas cervezas
             var cantidadCervezasAsociadas = await _envasadoRepository
-                .GetTotalAssociatedPackagedBeersAsync(envasadoExistente.Id);
+                .GetTotalAssociatedBeersAsync(envasadoExistente.Id);
 
             if (cantidadCervezasAsociadas > 0)
             {
