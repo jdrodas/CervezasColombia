@@ -3,17 +3,11 @@ using CervezasColombia_CS_API_SQLite_Dapper.Models;
 using CervezasColombia_CS_API_SQLite_Dapper.Exceptions;
 namespace CervezasColombia_CS_API_SQLite_Dapper.Services
 {
-    public class EstiloService
+    public class EstiloService(IEstiloRepository estiloRepository,
+                        ICervezaRepository cervezaRepository)
     {
-        private readonly IEstiloRepository _estiloRepository;
-        private readonly ICervezaRepository _cervezaRepository;
-
-        public EstiloService(IEstiloRepository estiloRepository,
-                            ICervezaRepository cervezaRepository)
-        {
-            _estiloRepository = estiloRepository;
-            _cervezaRepository = cervezaRepository;
-        }
+        private readonly IEstiloRepository _estiloRepository = estiloRepository;
+        private readonly ICervezaRepository _cervezaRepository = cervezaRepository;
 
         public async Task<IEnumerable<Estilo>> GetAllAsync()
         {
@@ -27,7 +21,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
             var unEstilo = await _estiloRepository
                 .GetDetailsByIdAsync(estilo_id);
 
-            if (string.IsNullOrEmpty(unEstilo.Id))
+            if (unEstilo.Id==0)
                 throw new AppValidationException($"Estilo no encontrado con el id {estilo_id}");
 
             return unEstilo;
@@ -39,7 +33,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
             var unEstilo = await _estiloRepository
                 .GetByIdAsync(estilo_id);
 
-            if (string.IsNullOrEmpty(unEstilo.Id))
+            if (unEstilo.Id==0)
                 throw new AppValidationException($"Estilo no encontrado con el id {estilo_id}");
 
             //Si el estilo existe, validamos que tenga cervezas asociadas
@@ -71,7 +65,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
             var estiloExistente = await _estiloRepository
                 .GetByNameAsync(unEstilo.Nombre!);
 
-            if (!string.IsNullOrEmpty(estiloExistente.Id))
+            if (estiloExistente.Id != 0)
                 throw new AppValidationException($"Ya existe un estilo con el nombre {unEstilo.Nombre}");
 
             try
@@ -107,14 +101,14 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
             var estiloExistente = await _estiloRepository
                 .GetByNameAsync(unEstilo.Nombre!);
 
-            if (!string.IsNullOrEmpty(estiloExistente.Id))
+            if (estiloExistente.Id != 0)
                 throw new AppValidationException($"Ya existe un estilo con el nombre {unEstilo.Nombre}");
 
             // validamos que el estilo a actualizar si exista con ese Id
             estiloExistente = await _estiloRepository
                 .GetByIdAsync(unEstilo.Id);
 
-            if (string.IsNullOrEmpty(estiloExistente.Id))
+            if (estiloExistente.Id == 0)
                 throw new AppValidationException($"No existe un estilo con el Id {unEstilo.Id} que se pueda actualizar");
 
             try
@@ -142,7 +136,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Services
             var estiloExistente = await _estiloRepository
                 .GetByIdAsync(estilo_id);
 
-            if (string.IsNullOrEmpty(estiloExistente.Id))
+            if (estiloExistente.Id==0)
                 throw new AppValidationException($"No existe un estilo con el Id {estilo_id} que se pueda eliminar");
 
             var cantidadCervezasAsociadas = await _estiloRepository
