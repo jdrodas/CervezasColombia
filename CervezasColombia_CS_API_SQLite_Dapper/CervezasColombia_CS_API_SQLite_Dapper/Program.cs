@@ -1,7 +1,9 @@
-using CervezasColombia_CS_API_SQLite_Dapper.DbContexts;
-using CervezasColombia_CS_API_SQLite_Dapper.Interfaces;
-using CervezasColombia_CS_API_SQLite_Dapper.Repositories;
-using CervezasColombia_CS_API_SQLite_Dapper.Services;
+using CervezasColombia_CS_API_SQLite_Dapper;
+using CervezasColombia_CS_API_SQLite_Dapper.Cervecerias;
+using CervezasColombia_CS_API_SQLite_Dapper.Cervezas;
+using CervezasColombia_CS_API_SQLite_Dapper.Estilos;
+using CervezasColombia_CS_API_SQLite_Dapper.Resumen;
+using CervezasColombia_CS_API_SQLite_Dapper.Ubicaciones;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);

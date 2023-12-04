@@ -7,23 +7,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Controllers\EnvasadosController.cs" />
-    <Compile Remove="Controllers\IngredientesController.cs" />
-    <Compile Remove="Interfaces\IEnvasadoRepository.cs" />
-    <Compile Remove="Interfaces\IIngredienteRepository.cs" />
-    <Compile Remove="Interfaces\IUnidadVolumenRepository.cs" />
-    <Compile Remove="Models\CervezaDetallada.cs" />
-    <Compile Remove="Models\CervezaEnvasada.cs" />
-    <Compile Remove="Models\Envasado.cs" />
-    <Compile Remove="Models\EnvasadoCerveza.cs" />
-    <Compile Remove="Models\Ingrediente.cs" />
-    <Compile Remove="Models\IngredienteCerveza.cs" />
-    <Compile Remove="Models\UnidadVolumen.cs" />
-    <Compile Remove="Repositories\EnvasadoRepository.cs" />
-    <Compile Remove="Repositories\IngredienteRepository.cs" />
-    <Compile Remove="Repositories\UnidadVolumenRepository.cs" />
-    <Compile Remove="Services\EnvasadoService.cs" />
-    <Compile Remove="Services\IngredienteService.cs" />
+    <Compile Remove="Cervezas\CervezaDetallada.cs" />
+    <Compile Remove="Cervezas\CervezaEnvasada.cs" />
+    <Compile Remove="Envasados\Envasado.cs" />
+    <Compile Remove="Envasados\EnvasadoCerveza.cs" />
+    <Compile Remove="Envasados\EnvasadoRepository.cs" />
+    <Compile Remove="Envasados\EnvasadoService.cs" />
+    <Compile Remove="Envasados\IEnvasadoRepository.cs" />
+    <Compile Remove="Ingredientes\IIngredienteRepository.cs" />
+    <Compile Remove="Ingredientes\Ingrediente.cs" />
+    <Compile Remove="Ingredientes\IngredienteCerveza.cs" />
+    <Compile Remove="Ingredientes\IngredienteRepository.cs" />
+    <Compile Remove="Ingredientes\IngredienteService.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -41,6 +36,11 @@
     <PackageReference Include="Microsoft.Data.Sqlite" Version="7.0.13" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Envasados\" />
+    <Folder Include="Ingredientes\" />
   </ItemGroup>
 
 </Project>
