@@ -1,6 +1,6 @@
 ﻿namespace CervezasColombia_CS_API_SQLite_Dapper.Cervecerias
 {
-    public class ConsultaCerveceria
+    public class CerveceriaQuery
     {
         public int Id { get; set; } = 0;
 

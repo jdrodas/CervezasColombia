@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace CervezasColombia_CS_API_SQLite_Dapper.Cervecerias
 {
-    public class CerveceriaDetallada : Cerveceria
+    public class CerveceriaResponse : Cerveceria
     {
         [JsonPropertyName("cervezas")]
         public List<Cerveza> Cervezas { get; set; } = [];

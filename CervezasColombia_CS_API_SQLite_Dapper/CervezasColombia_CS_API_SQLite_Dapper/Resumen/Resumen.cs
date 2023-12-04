@@ -24,5 +24,8 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Resumen
 
         [JsonPropertyName("tipos_ingredientes")]
         public int Tipos_Ingredientes { get; set; } = 0;
+
+        [JsonPropertyName("unidades")]
+        public int Unidades { get; set; } = 0;
     }
 }
