@@ -15,8 +15,8 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Estilos
                                   "FROM estilos " +
                                   "ORDER BY id DESC";
 
-            var resultadoEstilos = await contextoDB.Conexion.QueryAsync<Estilo>(sentenciaSQL,
-                                        new DynamicParameters());
+            var resultadoEstilos = await contextoDB.Conexion
+                .QueryAsync<Estilo>(sentenciaSQL, new DynamicParameters());
 
             return resultadoEstilos;
         }
@@ -33,40 +33,14 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Estilos
                                   "FROM estilos " +
                                   "WHERE id = @estilo_id ";
 
-            var resultado = await contextoDB.Conexion.QueryAsync<Estilo>(sentenciaSQL,
-                                parametrosSentencia);
+            var resultado = await contextoDB.Conexion
+                .QueryAsync<Estilo>(sentenciaSQL,parametrosSentencia);
 
             if (resultado.Any())
                 unEstilo = resultado.First();
 
             return unEstilo;
-        }
-
-        public async Task<EstiloDetallado> GetDetailsByIdAsync(int estilo_id)
-        {
-            EstiloDetallado unEstilo = new();
-
-            DynamicParameters parametrosSentencia = new();
-            parametrosSentencia.Add("@estilo_id", estilo_id,
-                                    DbType.Int32, ParameterDirection.Input);
-
-            string sentenciaSQL = "SELECT id, nombre " +
-                                  "FROM estilos " +
-                                  "WHERE id = @estilo_id ";
-
-            var resultado = await contextoDB.Conexion.QueryAsync<EstiloDetallado>(sentenciaSQL,
-                                parametrosSentencia);
-
-            if (resultado.Any())
-            {
-                unEstilo = resultado.First();
-
-                var lasCervezas = await GetAssociatedBeersAsync(unEstilo.Id);
-                unEstilo.Cervezas = lasCervezas.ToList();
-            }
-
-            return unEstilo;
-        }
+        }      
 
         public async Task<Estilo> GetByNameAsync(string estilo_nombre)
         {

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CervezasColombia_CS_API_SQLite_Dapper.Cervecerias;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CervezasColombia_CS_API_SQLite_Dapper.Estilos
 {
@@ -9,21 +10,53 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Estilos
         private readonly EstiloService _estiloService = estiloService;
 
         [HttpGet]
-        public async Task<IActionResult> GetAllAsync()
+        public async Task<IActionResult> GetDetailsByParameterAsync([FromQuery] EstiloQuery estiloQuery)
         {
-            var losEstilos = await _estiloService
-                .GetAllAsync();
+            //Si todos los parameros son nulos, se traen todos los estilos
+            if (estiloQuery.Id == 0 &&
+               string.IsNullOrEmpty(estiloQuery.Nombre))
+            {
+                var losEstilos = await _estiloService
+                    .GetAllAsync();
 
-            return Ok(losEstilos);
+                return Ok(losEstilos);
+            }
+            else
+            {
+                //De lo contrario, se trae un estilo por el resto de parámetros
+                EstiloResponse unEstiloDetallado = new();
+                try
+                {
+                    // Por Id
+                    if (estiloQuery.Id != 0)
+                    {
+                        unEstiloDetallado = await _estiloService
+                            .GetByIdAsync(estiloQuery.Id);
+                    }
+
+                    //Por Nombre
+                    if (!string.IsNullOrEmpty(estiloQuery.Nombre))
+                    {
+                        unEstiloDetallado = await _estiloService
+                            .GetByNameAsync(estiloQuery.Nombre);
+                    }
+
+                    return Ok(unEstiloDetallado);
+                }
+                catch (AppValidationException error)
+                {
+                    return NotFound(error.Message);
+                }
+            }
         }
 
         [HttpGet("{estilo_id:int}")]
-        public async Task<IActionResult> GetDetailsByIdAsync(int estilo_id)
+        public async Task<IActionResult> GetByIdAsync(int estilo_id)
         {
             try
             {
                 var unEstilo = await _estiloService
-                    .GetDetailsByIdAsync(estilo_id);
+                    .GetByIdAsync(estilo_id);
                 return Ok(unEstilo);
             }
             catch (AppValidationException error)

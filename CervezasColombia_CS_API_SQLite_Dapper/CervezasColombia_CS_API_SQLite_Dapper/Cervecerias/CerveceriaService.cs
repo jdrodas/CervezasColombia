@@ -43,17 +43,45 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Cervecerias
             return unaCerveceriaDetallada;
         }
 
-        public async Task<CerveceriaResponse> GetByInstagramAsync(string cerveceria_Instagram)
+        public async Task<CerveceriaResponse> GetByInstagramAsync(string cerveceria_instagram)
         {
             //Validamos que la Cerveceria exista con ese nombre
             var unaCerveceria = await _cerveceriaRepository
-                .GetByInstagramAsync(cerveceria_Instagram);
+                .GetByInstagramAsync(cerveceria_instagram);
 
             if (unaCerveceria.Id == 0)
-                throw new AppValidationException($"Cerveceria no encontrada con el instagram {cerveceria_Instagram}");
+                throw new AppValidationException($"Cerveceria no encontrada con el instagram {cerveceria_instagram}");
 
             var unaCerveceriaDetallada = await BuildCerveceriaResponseAsync(unaCerveceria);
             return unaCerveceriaDetallada;
+        }
+
+        public async Task<IEnumerable<Cerveza>> GetAssociatedBeersAsync(int cerveceria_id)
+        {
+            //Validamos que el estilo exista con ese Id
+            var unaCerveceria = await _cerveceriaRepository
+                .GetByIdAsync(cerveceria_id);
+
+            if (unaCerveceria.Id == 0)
+                throw new AppValidationException($"Estilo no encontrado con el id {cerveceria_id}");
+
+            //Si el estilo existe, validamos que tenga cervezas asociadas
+            // Validamos que el estilo no tenga asociadas cervezas
+            var cantidadCervezasAsociadas = await _cerveceriaRepository
+                .GetTotalAssociatedBeersAsync(cerveceria_id);
+
+            if (cantidadCervezasAsociadas == 0)
+                throw new AppValidationException($"No existen cervezas asociadas al estilo {unaCerveceria.Nombre}");
+
+            var lasCervezas = await _cerveceriaRepository
+                .GetAssociatedBeersAsync(cerveceria_id);
+
+            //Colocamos los valores de los rangos a las cervezas
+            foreach (Cerveza unaCerveza in lasCervezas)
+                unaCerveza.Rango_Abv = await _cervezaRepository
+                    .GetAbvRangeNameAsync(unaCerveza.Abv);
+
+            return lasCervezas;
         }
 
         public async Task<Cerveceria> CreateAsync(Cerveceria cerveceria)
@@ -208,7 +236,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Cervecerias
             return cerveceriaResponse;
         }
 
-        private void ValidateBrewery(Cerveceria cerveceria)
+        private static void ValidateBrewery(Cerveceria cerveceria)
         {
             //Validamos que la cerveceria tenga nombre
             if (cerveceria.Nombre.Length == 0)

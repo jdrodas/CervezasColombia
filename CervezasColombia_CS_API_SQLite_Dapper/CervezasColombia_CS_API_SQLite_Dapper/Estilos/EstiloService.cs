@@ -1,4 +1,5 @@
-﻿using CervezasColombia_CS_API_SQLite_Dapper.Cervezas;
+﻿using CervezasColombia_CS_API_SQLite_Dapper.Cervecerias;
+using CervezasColombia_CS_API_SQLite_Dapper.Cervezas;
 
 namespace CervezasColombia_CS_API_SQLite_Dapper.Estilos
 {
@@ -14,16 +15,30 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Estilos
                 .GetAllAsync();
         }
 
-        public async Task<EstiloDetallado> GetDetailsByIdAsync(int estilo_id)
+        public async Task<EstiloResponse> GetByIdAsync(int estilo_id)
         {
             //Validamos que el estilo exista con ese Id
             var unEstilo = await _estiloRepository
-                .GetDetailsByIdAsync(estilo_id);
+                .GetByIdAsync(estilo_id);
 
             if (unEstilo.Id == 0)
                 throw new AppValidationException($"Estilo no encontrado con el id {estilo_id}");
 
-            return unEstilo;
+            var unEstiloDetallado = await BuildEstiloResponseAsync(unEstilo);
+            return unEstiloDetallado;
+        }
+
+        public async Task<EstiloResponse> GetByNameAsync(string estilo_name)
+        {
+            //Validamos que la Cerveceria exista con ese nombre
+            var unEstilo = await _estiloRepository
+                .GetByNameAsync(estilo_name);
+
+            if (unEstilo.Id == 0)
+                throw new AppValidationException($"Cerveceria no encontrada con el nombre {estilo_name}");
+
+            var unEstiloDetallado = await BuildEstiloResponseAsync(unEstilo);
+            return unEstiloDetallado;
         }
 
         public async Task<IEnumerable<Cerveza>> GetAssociatedBeersAsync(int estilo_id)
@@ -48,11 +63,11 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Estilos
 
             //Colocamos los valores de los rangos a las cervezas
             foreach (Cerveza unaCerveza in lasCervezas)
-                unaCerveza.Rango_Abv = await _cervezaRepository.GetAbvRangeNameAsync(unaCerveza.Abv);
+                unaCerveza.Rango_Abv = await _cervezaRepository
+                    .GetAbvRangeNameAsync(unaCerveza.Abv);
 
             return lasCervezas;
         }
-
 
         public async Task<Estilo> CreateAsync(Estilo unEstilo)
         {
@@ -141,6 +156,8 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Estilos
             var cantidadCervezasAsociadas = await _estiloRepository
                 .GetTotalAssociatedBeersAsync(estiloExistente.Id);
 
+            //Para este caso, el Estilo es considerado atributo secundario.
+            //Si hay cervezas asociadas, no se puede borrar el estilo
             if (cantidadCervezasAsociadas > 0)
                 throw new AppValidationException($"Existen {cantidadCervezasAsociadas} cervezas " +
                     $"asociadas al estilo {estiloExistente.Nombre}. No se puede eliminar");
@@ -158,6 +175,27 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Estilos
             {
                 throw;
             }
+        }
+
+        private async Task<EstiloResponse> BuildEstiloResponseAsync(Estilo estilo)
+        {
+            //TODO: Modificar para implementar patrón decorador
+            EstiloResponse estiloResponse = new()
+            {
+                Id = estilo.Id,
+                Nombre = estilo.Nombre
+            };
+
+            var cervezasAsociadas = await _estiloRepository
+                .GetAssociatedBeersAsync(estilo.Id);
+            estiloResponse.Cervezas = cervezasAsociadas.ToList();
+
+            //Colocamos los valores del rango ABV a las cervezas
+            foreach (Cerveza unaCerveza in estiloResponse.Cervezas)
+                unaCerveza.Rango_Abv = await _cervezaRepository
+                    .GetAbvRangeNameAsync(unaCerveza.Abv);
+
+            return estiloResponse;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CervezasColombia_CS_API_SQLite_Dapper.Estilos;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CervezasColombia_CS_API_SQLite_Dapper.Cervecerias
 {
@@ -58,7 +59,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Cervecerias
         }
 
         [HttpGet("{cerveceria_id:int}")]
-        public async Task<IActionResult> GetDetailsByIdAsync(int cerveceria_id)
+        public async Task<IActionResult> GetByIdAsync(int cerveceria_id)
         {
             try
             {
@@ -66,6 +67,22 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Cervecerias
                     .GetDetailsByIdAsync(cerveceria_id);
 
                 return Ok(unaCerveceriaDetallada);
+            }
+            catch (AppValidationException error)
+            {
+                return NotFound(error.Message);
+            }
+        }
+
+        [HttpGet("{cerveceria_id:int}/Cervezas")]
+        public async Task<IActionResult> GetAssociatedBeersAsync(int cerveceria_id)
+        {
+            try
+            {
+                var lasCervezasPorEstilo = await _cerveceriaService
+                    .GetAssociatedBeersAsync(cerveceria_id);
+
+                return Ok(lasCervezasPorEstilo);
             }
             catch (AppValidationException error)
             {
