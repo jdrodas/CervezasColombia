@@ -56,7 +56,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-// Configure the HTTP request pipeline.
+//Modificamos el encabezado de las peticiones para ocultar el web server utilizado
+app.Use(async (context, next) =>
+{
+    context.Response.Headers.Append("Server", "CraftBeerServer");
+    await next();
+});
 
 app.UseHttpsRedirection();
 

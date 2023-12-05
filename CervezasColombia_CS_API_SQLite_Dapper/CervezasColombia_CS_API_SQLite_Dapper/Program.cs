@@ -50,12 +50,18 @@ builder.Services.AddSwaggerGen(options =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+//Modificamos el encabezado de las peticiones para ocultar el web server utilizado
+app.Use(async (context, next) =>
+{
+    context.Response.Headers.Append("Server", "CraftBeerServer");
+    await next();
+});
 
 app.UseHttpsRedirection();
 
