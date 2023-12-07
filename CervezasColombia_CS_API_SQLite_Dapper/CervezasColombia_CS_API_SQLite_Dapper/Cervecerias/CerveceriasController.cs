@@ -1,5 +1,4 @@
-﻿using CervezasColombia_CS_API_SQLite_Dapper.Estilos;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace CervezasColombia_CS_API_SQLite_Dapper.Cervecerias
 {
@@ -10,43 +9,58 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Cervecerias
         private readonly CerveceriaService _cerveceriaService = cerveceriaService;
 
         [HttpGet]
-        public async Task<IActionResult> GetDetailsByParameterAsync([FromQuery] CerveceriaQuery cerveceriaQuery)
+        public async Task<IActionResult> GetDetailsByParameterAsync([FromQuery] CerveceriaQueryParameters parametrosConsultaCerveceria)
         {
-            //Si todos los parameros son nulos, se traen todas las cervecerias
-            if (cerveceriaQuery.Id == 0 &&
-               string.IsNullOrEmpty(cerveceriaQuery.Nombre) &&
-               string.IsNullOrEmpty(cerveceriaQuery.Instagram))
-            {
-                var lasCervecerias = await _cerveceriaService
-                    .GetAllAsync();
+            //Validamos los parámetros de página y elementos por página
+            if (parametrosConsultaCerveceria.Pagina <= 0)
+                return BadRequest("El número de página debe ser mayor que 0.");
 
-                return Ok(lasCervecerias);
+            if (parametrosConsultaCerveceria.ElementosPorPagina <= 0)
+                return BadRequest("El número de elementos por página debe ser mayor que 0.");
+
+            //Si todos los parameros son nulos, se traen todas las cervecerias
+            if (parametrosConsultaCerveceria.Id == 0 &&
+               string.IsNullOrEmpty(parametrosConsultaCerveceria.Nombre) &&
+               string.IsNullOrEmpty(parametrosConsultaCerveceria.Instagram))
+            {
+                try
+                {
+                    var respuestaCervecerias = await _cerveceriaService
+                        .GetAllAsync(parametrosConsultaCerveceria);
+
+                    return Ok(respuestaCervecerias);
+
+                }
+                catch (AppValidationException error)
+                {
+                    return BadRequest(error.Message);
+                }
             }
             else
             {
                 //De lo contrario, se trae una Cervecería por el resto de parámetros
-                CerveceriaResponse unaCerveceriaDetallada = new();
+                CerveceriaDetallada unaCerveceriaDetallada = new();
                 try
                 {
                     // Por Id
-                    if (cerveceriaQuery.Id != 0)
+                    if (parametrosConsultaCerveceria.Id != 0)
                     {
                         unaCerveceriaDetallada = await _cerveceriaService
-                        .GetDetailsByIdAsync(cerveceriaQuery.Id);
+                        .GetByIdAsync(parametrosConsultaCerveceria.Id);
                     }
 
                     //Por Nombre
-                    if (!string.IsNullOrEmpty(cerveceriaQuery.Nombre))
+                    if (!string.IsNullOrEmpty(parametrosConsultaCerveceria.Nombre))
                     {
                         unaCerveceriaDetallada = await _cerveceriaService
-                        .GetByNameAsync(cerveceriaQuery.Nombre);
+                        .GetByNameAsync(parametrosConsultaCerveceria.Nombre);
                     }
 
                     //Por Instagram
-                    if (!string.IsNullOrEmpty(cerveceriaQuery.Instagram))
+                    if (!string.IsNullOrEmpty(parametrosConsultaCerveceria.Instagram))
                     {
                         unaCerveceriaDetallada = await _cerveceriaService
-                        .GetByInstagramAsync(cerveceriaQuery.Instagram);
+                        .GetByInstagramAsync(parametrosConsultaCerveceria.Instagram);
                     }
 
                     return Ok(unaCerveceriaDetallada);
@@ -64,7 +78,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Cervecerias
             try
             {
                 var unaCerveceriaDetallada = await _cerveceriaService
-                    .GetDetailsByIdAsync(cerveceria_id);
+                    .GetByIdAsync(cerveceria_id);
 
                 return Ok(unaCerveceriaDetallada);
             }
