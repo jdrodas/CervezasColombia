@@ -44,24 +44,18 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Cervecerias
                 {
                     // Por Id
                     if (parametrosConsultaCerveceria.Id != 0)
-                    {
                         unaCerveceriaDetallada = await _cerveceriaService
-                        .GetByIdAsync(parametrosConsultaCerveceria.Id);
-                    }
+                            .GetByAttributeAsync<int>(parametrosConsultaCerveceria.Id, "id");
 
                     //Por Nombre
                     if (!string.IsNullOrEmpty(parametrosConsultaCerveceria.Nombre))
-                    {
                         unaCerveceriaDetallada = await _cerveceriaService
-                        .GetByNameAsync(parametrosConsultaCerveceria.Nombre);
-                    }
+                            .GetByAttributeAsync<string>(parametrosConsultaCerveceria.Nombre, "nombre");
 
                     //Por Instagram
                     if (!string.IsNullOrEmpty(parametrosConsultaCerveceria.Instagram))
-                    {
                         unaCerveceriaDetallada = await _cerveceriaService
-                        .GetByInstagramAsync(parametrosConsultaCerveceria.Instagram);
-                    }
+                            .GetByAttributeAsync<string>(parametrosConsultaCerveceria.Instagram, "instagram");
 
                     return Ok(unaCerveceriaDetallada);
                 }
@@ -78,7 +72,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Cervecerias
             try
             {
                 var unaCerveceriaDetallada = await _cerveceriaService
-                    .GetByIdAsync(cerveceria_id);
+                    .GetByAttributeAsync<int>(cerveceria_id, "id");
 
                 return Ok(unaCerveceriaDetallada);
             }

@@ -6,10 +6,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Cervecerias
     public interface ICerveceriaRepository
     {
         public Task<IEnumerable<Cerveceria>> GetAllAsync();
-        public Task<Cerveceria> GetByIdAsync(int cerveceria_id);
-        public Task<Cerveceria> GetDetailsByIdAsync(int cerveceria_id);
-        public Task<Cerveceria> GetByNameAsync(string cerveceria_nombre);
-        public Task<Cerveceria> GetByInstagramAsync(string cerveceria_instagram);
+        public Task<Cerveceria> GetByAttributeAsync<T>(T atributo_valor, string atributo_nombre);
         public Task<int> GetTotalAssociatedBeersAsync(int cerveceria_id);
         public Task<IEnumerable<Cerveza>> GetAssociatedBeersAsync(int cerveceria_id);
         public Task<Ubicacion> GetBreweryLocation(int cerveceria_id);
