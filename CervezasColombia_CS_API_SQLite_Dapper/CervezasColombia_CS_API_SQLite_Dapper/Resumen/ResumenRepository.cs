@@ -1,4 +1,5 @@
-﻿using Dapper;
+﻿using CervezasColombia_CS_API_SQLite_Dapper.Helpers;
+using Dapper;
 
 namespace CervezasColombia_CS_API_SQLite_Dapper.Resumen
 {

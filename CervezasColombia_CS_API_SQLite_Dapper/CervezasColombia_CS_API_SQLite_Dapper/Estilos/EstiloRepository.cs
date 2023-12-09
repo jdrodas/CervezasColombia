@@ -1,4 +1,5 @@
 ﻿using CervezasColombia_CS_API_SQLite_Dapper.Cervezas;
+using CervezasColombia_CS_API_SQLite_Dapper.Helpers;
 using Dapper;
 using Microsoft.Data.Sqlite;
 using System.Data;
@@ -34,13 +35,13 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Estilos
                                   "WHERE id = @estilo_id ";
 
             var resultado = await contextoDB.Conexion
-                .QueryAsync<Estilo>(sentenciaSQL,parametrosSentencia);
+                .QueryAsync<Estilo>(sentenciaSQL, parametrosSentencia);
 
             if (resultado.Any())
                 unEstilo = resultado.First();
 
             return unEstilo;
-        }      
+        }
 
         public async Task<Estilo> GetByNameAsync(string estilo_nombre)
         {

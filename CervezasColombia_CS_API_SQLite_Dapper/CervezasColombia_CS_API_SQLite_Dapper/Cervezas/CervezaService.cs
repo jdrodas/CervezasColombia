@@ -1,5 +1,6 @@
 ﻿using CervezasColombia_CS_API_SQLite_Dapper.Cervecerias;
 using CervezasColombia_CS_API_SQLite_Dapper.Estilos;
+using CervezasColombia_CS_API_SQLite_Dapper.Helpers;
 namespace CervezasColombia_CS_API_SQLite_Dapper.Cervezas
 {
     public class CervezaService(ICervezaRepository cervezaRepository

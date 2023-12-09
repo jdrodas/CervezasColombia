@@ -1,4 +1,4 @@
-﻿using CervezasColombia_CS_API_SQLite_Dapper.Cervecerias;
+﻿using CervezasColombia_CS_API_SQLite_Dapper.Helpers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CervezasColombia_CS_API_SQLite_Dapper.Estilos
@@ -10,7 +10,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Estilos
         private readonly EstiloService _estiloService = estiloService;
 
         [HttpGet]
-        public async Task<IActionResult> GetDetailsByParameterAsync([FromQuery] EstiloQuery estiloQuery)
+        public async Task<IActionResult> GetDetailsByParameterAsync([FromQuery] EstiloQueryParameters estiloQuery)
         {
             //Si todos los parameros son nulos, se traen todos los estilos
             if (estiloQuery.Id == 0 &&
