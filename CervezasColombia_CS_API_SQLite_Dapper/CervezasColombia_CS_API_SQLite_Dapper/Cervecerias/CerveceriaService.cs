@@ -90,32 +90,6 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Cervecerias
             return unaCerveceriaDetallada;
         }
 
-        public async Task<CerveceriaDetallada> GetByNameAsync(string cerveceria_name)
-        {
-            //Validamos que la Cerveceria exista con ese nombre
-            var unaCerveceria = await _cerveceriaRepository
-                        .GetByAttributeAsync<string>(cerveceria_name, "nombre");
-
-            if (unaCerveceria.Id == 0)
-                throw new AppValidationException($"Cerveceria no encontrada con el nombre {cerveceria_name}");
-
-            var unaCerveceriaDetallada = await BuildDetailedBreweryAsync(unaCerveceria);
-            return unaCerveceriaDetallada;
-        }
-
-        public async Task<CerveceriaDetallada> GetByInstagramAsync(string cerveceria_instagram)
-        {
-            //Validamos que la Cerveceria exista con ese nombre
-            var unaCerveceria = await _cerveceriaRepository
-                        .GetByAttributeAsync<string>(cerveceria_instagram, "instagram");
-
-            if (unaCerveceria.Id == 0)
-                throw new AppValidationException($"Cerveceria no encontrada con el instagram {cerveceria_instagram}");
-
-            var unaCerveceriaDetallada = await BuildDetailedBreweryAsync(unaCerveceria);
-            return unaCerveceriaDetallada;
-        }
-
         public async Task<IEnumerable<Cerveza>> GetAssociatedBeersAsync(int cerveceria_id)
         {
             //Validamos que el estilo exista con ese Id

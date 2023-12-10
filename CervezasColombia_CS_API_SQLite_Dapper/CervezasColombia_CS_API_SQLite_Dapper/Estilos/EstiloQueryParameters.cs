@@ -2,8 +2,8 @@
 
 namespace CervezasColombia_CS_API_SQLite_Dapper.Estilos
 {
-    public class EstiloQueryParameters : QueryParameters
+    public class EstiloQueryParameters : BaseQueryParameters
     {
-        static readonly List<string> criteriosValidos = ["nombre"];
+        private static new readonly List<string> criteriosValidos = ["nombre"];
     }
 }

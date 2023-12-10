@@ -2,9 +2,9 @@
 
 namespace CervezasColombia_CS_API_SQLite_Dapper.Cervecerias
 {
-    public class CerveceriaQueryParameters: QueryParameters
+    public class CerveceriaQueryParameters : BaseQueryParameters
     {
-        static readonly List<string> criteriosValidos =
+        private static new readonly List<string> criteriosValidos =
             ["nombre", "instagram"];
 
         public string? Instagram { get; set; }

@@ -1,8 +1,7 @@
 ﻿namespace CervezasColombia_CS_API_SQLite_Dapper.Helpers
 {
-    public class QueryParameters
+    public class BaseQueryParameters
     {
-
         protected static readonly List<string> criteriosValidos = ["nombre"];
         protected static readonly List<string> ordenesValidos = ["asc", "desc"];
 

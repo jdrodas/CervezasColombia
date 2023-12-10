@@ -10,35 +10,51 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Estilos
         private readonly EstiloService _estiloService = estiloService;
 
         [HttpGet]
-        public async Task<IActionResult> GetDetailsByParameterAsync([FromQuery] EstiloQueryParameters estiloQuery)
+        public async Task<IActionResult> GetDetailsByParameterAsync([FromQuery] EstiloQueryParameters parametrosConsultaEstilo)
         {
-            //Si todos los parameros son nulos, se traen todos los estilos
-            if (estiloQuery.Id == 0 &&
-               string.IsNullOrEmpty(estiloQuery.Nombre))
-            {
-                var losEstilos = await _estiloService
-                    .GetAllAsync();
+            //Validamos los parámetros de página y elementos por página
+            if (parametrosConsultaEstilo.Pagina <= 0)
+                return BadRequest("El número de página debe ser mayor que 0.");
 
-                return Ok(losEstilos);
+            if (parametrosConsultaEstilo.ElementosPorPagina <= 0)
+                return BadRequest("El número de elementos por página debe ser mayor que 0.");
+
+            //Si todos los parameros son nulos, se traen todos los estilos
+            if (parametrosConsultaEstilo.Id == 0 &&
+               string.IsNullOrEmpty(parametrosConsultaEstilo.Nombre))
+            {
+                try
+                {
+                    var respuestaEstilos = await _estiloService
+                        .GetAllAsync(parametrosConsultaEstilo);
+
+                    return Ok(respuestaEstilos);
+
+                }
+                catch (AppValidationException error)
+                {
+                    return BadRequest(error.Message);
+                }
+
             }
             else
             {
                 //De lo contrario, se trae un estilo por el resto de parámetros
-                EstiloResponse unEstiloDetallado = new();
+                EstiloDetallado unEstiloDetallado = new();
                 try
                 {
                     // Por Id
-                    if (estiloQuery.Id != 0)
+                    if (parametrosConsultaEstilo.Id != 0)
                     {
                         unEstiloDetallado = await _estiloService
-                            .GetByIdAsync(estiloQuery.Id);
+                            .GetByAttributeAsync<int>(parametrosConsultaEstilo.Id, "id");
                     }
 
                     //Por Nombre
-                    if (!string.IsNullOrEmpty(estiloQuery.Nombre))
+                    if (!string.IsNullOrEmpty(parametrosConsultaEstilo.Nombre))
                     {
                         unEstiloDetallado = await _estiloService
-                            .GetByNameAsync(estiloQuery.Nombre);
+                            .GetByAttributeAsync<string>(parametrosConsultaEstilo.Nombre, "nombre");
                     }
 
                     return Ok(unEstiloDetallado);
@@ -56,7 +72,8 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Estilos
             try
             {
                 var unEstilo = await _estiloService
-                    .GetByIdAsync(estilo_id);
+                    .GetByAttributeAsync<int>(estilo_id, "id");
+
                 return Ok(unEstilo);
             }
             catch (AppValidationException error)

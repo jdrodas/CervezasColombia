@@ -74,7 +74,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Cervezas
 
             //Validamos que el estilo exista
             var estiloExistente = await _estiloRepository
-                .GetByNameAsync(unaCerveza.Estilo!);
+                .GetByAttributeAsync<string>(unaCerveza.Estilo, "nombre");
 
             if (estiloExistente.Id == 0)
                 throw new AppValidationException($"El estilo {unaCerveza.Estilo} no se encuentra registrado");
