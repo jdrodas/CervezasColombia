@@ -1,7 +1,8 @@
 ﻿namespace CervezasColombia_CS_API_SQLite_Dapper.Unidades
 {
-    public interface IUnidadVolumenRepository
+    public interface IUnidadRepository
     {
-        public Task<Unidad> GetByNameAsync(string unidad_nombre);
+        public Task<IEnumerable<Unidad>> GetAllAsync();
+        public Task<Unidad> GetByAttributeAsync<T>(T atributo_valor, string atributo_nombre);
     }
 }

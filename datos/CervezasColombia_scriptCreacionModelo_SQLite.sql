@@ -62,23 +62,23 @@ create table envasados
 	constraint envasados_nombre_uk unique (nombre)	
 );
 
-create table unidades_volumen
+create table unidades
 (
-    id                  integer constraint unidades_volumen_pk  primary key autoincrement,
+    id                  integer constraint unidades_pk  primary key autoincrement,
     nombre              text not null,
     abreviatura         text not null,
-	constraint unidades_volumen_uk unique (nombre,abreviatura),
-	constraint unidades_volumen_nombre_uk unique (nombre),	
-	constraint unidades_volumen_abreviatura_uk unique (abreviatura)
+	constraint unidades_uk unique (nombre,abreviatura),
+	constraint unidades_nombre_uk unique (nombre),	
+	constraint unidades_abreviatura_uk unique (abreviatura)
 );
 
 create table envasados_cervezas
 (
     cerveza_id          integer not null constraint envasados_cervezas_cerveza_fk references cervezas,
     envasado_id         integer not null constraint envasados_cervezas_envasado_fk references envasados,
-    unidad_volumen_id   integer not null constraint envasados_cervezas_unidad_volumen_fk references unidades_volumen,
+    unidad_id   integer not null constraint envasados_cervezas_unidad_fk references unidades,
     volumen             integer not null,
-    constraint envasados_cervezas_pk primary key (cerveza_id, envasado_id, unidad_volumen_id, volumen)
+    constraint envasados_cervezas_pk primary key (cerveza_id, envasado_id, unidad_id, volumen)
 );
 
 create table tipos_ingredientes
@@ -140,14 +140,18 @@ select
     c.nombre cerveza,
     ec.envasado_id,
     e.nombre envasado,
-    ec.unidad_volumen_id,
+    ec.unidad_id,
     uv.nombre unidad_volumen,
-    ec.volumen
+    el.id estilo_id,
+    el.nombre estilo,
+    ec.volumen,
+    c.abv
 from envasados_cervezas ec
     join cervezas c on ec.cerveza_id = c.id
     join cervecerias cr on c.cerveceria_id = cr.id
     join envasados e on ec.envasado_id = e.id
-    join unidades_volumen uv on ec.unidad_volumen_id = uv.id;
+    join unidades uv on ec.unidad_id = uv.id
+    join estilos el on c.estilo_id = el.id;
 
 create view v_info_ingredientes as
 select
@@ -227,9 +231,9 @@ from tmp_cervezas tmp
 
 -- TMP_ENVASADOS_CERVEZAS
 create table tmp_envasados_cervezas
-(cerveceria text, cerveza text, envasado text, unidad_volumen text, volumen real);
+(cerveceria text, cerveza text, envasado text, unidad text, volumen real);
 
-insert into envasados_cervezas (cerveza_id, envasado_id, unidad_volumen_id, volumen)
+insert into envasados_cervezas (cerveza_id, envasado_id, unidad_id, volumen)
 select
     c.id cerveza_id,
     e.id envasado_id,
@@ -243,9 +247,9 @@ join envasados e on tmp.envasado = e.nombre
 join unidades_volumen uv on tmp.unidad_volumen = uv.nombre;
 
 -- Para insertar el valor predeterminado de envasado: botella de 330 ml
-insert into envasados_cervezas (cerveza_id, envasado_id, unidad_volumen_id, volumen)
-select distinct c.id cerveza_id, e.id envasado_id, uv.id unidad_volumen_id, 330 volumen
-from cervezas c, envasados e, unidades_volumen uv
+insert into envasados_cervezas (cerveza_id, envasado_id, unidad_id, volumen)
+select distinct c.id cerveza_id, e.id envasado_id, uv.id unidad_id, 330 volumen
+from cervezas c, envasados e, unidades uv
 where e.nombre = 'Botella'
 and uv.nombre = 'Mililitros'
 order by c.id;

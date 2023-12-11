@@ -4,29 +4,58 @@ using System.Data;
 
 namespace CervezasColombia_CS_API_SQLite_Dapper.Unidades
 {
-    public class UnidadVolumenRepository(SQLiteDbContext unContexto) : IUnidadVolumenRepository
+    public class UnidadRepository(SQLiteDbContext unContexto) : IUnidadRepository
     {
         private readonly SQLiteDbContext contextoDB = unContexto;
 
-        public async Task<Unidad> GetByNameAsync(string unidad_nombre)
+        public async Task<IEnumerable<Unidad>> GetAllAsync()
         {
-            Unidad unaUnidadVolumen = new();
+            string sentenciaSQL = "SELECT id, nombre, abreviatura " +
+                                  "FROM unidades ";
 
+            var resultadoUnidades = await contextoDB.Conexion
+                .QueryAsync<Unidad>(sentenciaSQL, new DynamicParameters());
+
+            return resultadoUnidades;
+        }
+
+        public async Task<Unidad> GetByAttributeAsync<T>(T atributo_valor, string atributo_nombre)
+        {
+            Unidad unaUnidad = new();
             DynamicParameters parametrosSentencia = new();
-            parametrosSentencia.Add("@nombre", unidad_nombre,
-                                    DbType.String, ParameterDirection.Input);
 
             string sentenciaSQL = "SELECT id, nombre, abreviatura " +
-                                  "FROM unidades_volumen " +
-                                  "WHERE nombre = @nombre ";
+                                  "FROM unidades ";
 
-            var resultado = await contextoDB.Conexion.QueryAsync<Unidad>(sentenciaSQL,
-                parametrosSentencia);
+            switch (atributo_nombre.ToLower())
+            {
+                case "id":
+                    sentenciaSQL += "WHERE id = @unidad_id ";
+                    parametrosSentencia.Add("@unidad_id", atributo_valor,
+                        DbType.Int32, ParameterDirection.Input);
+                    break;
+
+                case "nombre":
+                    sentenciaSQL += "WHERE LOWER(nombre) = LOWER(@unidad_nombre) ";
+                    parametrosSentencia.Add("@unidad_nombre", atributo_valor,
+                        DbType.String, ParameterDirection.Input);
+                    break;
+
+                case "abreviatura":
+                    sentenciaSQL += "WHERE LOWER(abreviatura) = LOWER(@unidad_abreviatura) ";
+                    parametrosSentencia.Add("@unidad_abreviatura", atributo_valor,
+                        DbType.String, ParameterDirection.Input);
+                    break;
+
+            }
+
+            var resultado = await contextoDB.Conexion
+                .QueryAsync<Unidad>(sentenciaSQL, parametrosSentencia);
 
             if (resultado.Any())
-                unaUnidadVolumen = resultado.First();
+                unaUnidad = resultado.First();
 
-            return unaUnidadVolumen;
+            return unaUnidad;
         }
     }
 }

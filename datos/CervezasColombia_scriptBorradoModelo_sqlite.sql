@@ -33,7 +33,7 @@ drop table tipos_ingredientes;
 drop table ingredientes;
 
 drop table envasados;
-drop table unidades_volumen;
+drop table unidades;
 
 drop table cervezas;
 drop table cervecerias;
