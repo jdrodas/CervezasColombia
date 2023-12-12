@@ -10,12 +10,61 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Ubicaciones
         private readonly UbicacionService _ubicacionService = ubicacionService;
 
         [HttpGet]
-        public async Task<IActionResult> GetAllAsync()
+        public async Task<IActionResult> GetDetailsByParameterAsync([FromQuery] UbicacionQueryParameters parametrosConsultaUbicacion)
         {
-            var lasUbicaciones = await _ubicacionService
-                .GetAllAsync();
+            //Validamos los parámetros de página y elementos por página
+            if (parametrosConsultaUbicacion.Pagina <= 0)
+                return BadRequest("El número de página debe ser mayor que 0.");
 
-            return Ok(lasUbicaciones);
+            if (parametrosConsultaUbicacion.ElementosPorPagina <= 0)
+                return BadRequest("El número de elementos por página debe ser mayor que 0.");
+
+            //Si todos los parameros son nulos, se traen todos los estilos
+            if (parametrosConsultaUbicacion.Id == 0 &&
+               string.IsNullOrEmpty(parametrosConsultaUbicacion.Nombre))
+            {
+                try
+                {
+                    var respuestaUbicaciones = await _ubicacionService
+                        .GetAllAsync(parametrosConsultaUbicacion);
+
+                    return Ok(respuestaUbicaciones);
+
+                }
+                catch (AppValidationException error)
+                {
+                    return BadRequest(error.Message);
+                }
+
+            }
+            else
+            {
+                //De lo contrario, se trae un estilo por el resto de parámetros
+                UbicacionDetallada unaUbicacionDetallada = new();
+                try
+                {
+                    // Por Id
+                    if (parametrosConsultaUbicacion.Id != 0)
+                    {
+                        unaUbicacionDetallada = await _ubicacionService
+                            .GetByAttributeAsync<int>(parametrosConsultaUbicacion.Id, "id");
+                    }
+
+                    //Por Nombre, compuesto de "municipio, departamento"
+                    if (!string.IsNullOrEmpty(parametrosConsultaUbicacion.Nombre))
+                    {
+                        unaUbicacionDetallada = await _ubicacionService
+                            .GetByAttributeAsync<string>(parametrosConsultaUbicacion.Nombre, "nombre");
+                    }
+
+
+                    return Ok(unaUbicacionDetallada);
+                }
+                catch (AppValidationException error)
+                {
+                    return NotFound(error.Message);
+                }
+            }
         }
 
         [HttpGet("{ubicacion_id:int}")]
@@ -24,7 +73,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Ubicaciones
             try
             {
                 var unaUbicacion = await _ubicacionService
-                    .GetByIdAsync(ubicacion_id);
+                            .GetByAttributeAsync<int>(ubicacion_id, "id");
 
                 return Ok(unaUbicacion);
             }

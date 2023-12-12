@@ -22,17 +22,33 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Ubicaciones
             return resultadoUbicaciones;
         }
 
-        public async Task<Ubicacion> GetByIdAsync(int ubicacion_id)
+        public async Task<Ubicacion> GetByAttributeAsync<T>(T atributo_valor, string atributo_nombre)
         {
             Ubicacion unaUbicacion = new();
-
             DynamicParameters parametrosSentencia = new();
-            parametrosSentencia.Add("@ubicacion_id", ubicacion_id,
-                                    DbType.Int32, ParameterDirection.Input);
 
             string sentenciaSQL = "SELECT id, municipio, departamento, latitud, longitud " +
-                                  "FROM ubicaciones " +
-                                  "WHERE id = @ubicacion_id ";
+                                  "FROM ubicaciones u ";
+
+            switch (atributo_nombre.ToLower())
+            {
+                case "id":
+                    sentenciaSQL += "WHERE u.id = @ubicacion_id ";
+                    parametrosSentencia.Add("@ubicacion_id", atributo_valor,
+                        DbType.Int32, ParameterDirection.Input);
+                    break;
+
+                case "nombre":
+                    sentenciaSQL += "WHERE municipio = @ubicacion_municipio " +
+                        "AND departamento = @ubicacion_departamento";
+
+                    string[] partesUbicacion = atributo_valor!.ToString()!.Split(',');
+                    parametrosSentencia.Add("@ubicacion_municipio", partesUbicacion[0].Trim(),
+                                            DbType.String, ParameterDirection.Input);
+                    parametrosSentencia.Add("@ubicacion_departamento", partesUbicacion[1].Trim(),
+                                            DbType.String, ParameterDirection.Input);
+                    break;
+            }
 
             var resultado = await contextoDB.Conexion
                 .QueryAsync<Ubicacion>(sentenciaSQL, parametrosSentencia);
@@ -45,25 +61,9 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Ubicaciones
 
         public async Task<Ubicacion> GetByNameAsync(string ubicacion_municipio, string ubicacion_departamento)
         {
-            Ubicacion unaUbicacion = new();
+            string nombreUbicacionConcatenada = ubicacion_municipio + ", " + ubicacion_departamento;
 
-            DynamicParameters parametrosSentencia = new();
-            parametrosSentencia.Add("@ubicacion_municipio", ubicacion_municipio,
-                                    DbType.String, ParameterDirection.Input);
-            parametrosSentencia.Add("@ubicacion_departamento", ubicacion_departamento,
-                                    DbType.String, ParameterDirection.Input);
-
-            string sentenciaSQL = "SELECT id, municipio, departamento, latitud, longitud " +
-                                  "FROM ubicaciones " +
-                                  "WHERE municipio = @ubicacion_municipio " +
-                                  "AND departamento = @ubicacion_departamento";
-
-            var resultado = await contextoDB.Conexion
-                .QueryAsync<Ubicacion>(sentenciaSQL, parametrosSentencia);
-
-            if (resultado.Any())
-                unaUbicacion = resultado.First();
-
+            var unaUbicacion = await GetByAttributeAsync<string>(nombreUbicacionConcatenada, "nombre");            
             return unaUbicacion;
         }
 

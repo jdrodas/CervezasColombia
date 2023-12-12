@@ -121,7 +121,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Cervecerias
         public async Task<Cerveceria> CreateAsync(Cerveceria cerveceria)
         {
             ValidateBrewery(cerveceria);
-            await ValidateBreweryLocation(cerveceria);
+            await ValidateBreweryLocationAsync(cerveceria);
 
             //Validamos que el nombre no exista previamente
             var cerveceriaExistente = await _cerveceriaRepository
@@ -188,7 +188,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Cervecerias
                     $"No se puede Actualizar");
 
             //Validamos que la cerveceria tenga ubicación válida
-            await ValidateBreweryLocation(cerveceria);
+            await ValidateBreweryLocationAsync(cerveceria);
 
             //Validamos que haya al menos un cambio en las propiedades
             if (cerveceria.Equals(cerveceriaExistente))
@@ -269,7 +269,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Cervecerias
             return cerveceriaDetallada;
         }
 
-        private async Task ValidateBreweryLocation(Cerveceria cerveceria)
+        private async Task ValidateBreweryLocationAsync(Cerveceria cerveceria)
         {
             //Validamos que la cerveceria tenga ubicación válida
             var unaUbicacion = await _ubicacionRepository

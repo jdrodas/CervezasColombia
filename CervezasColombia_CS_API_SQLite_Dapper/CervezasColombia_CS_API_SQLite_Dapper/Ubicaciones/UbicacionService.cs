@@ -7,29 +7,84 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Ubicaciones
     {
         private readonly IUbicacionRepository _ubicacionRepository = ubicacionRepository;
 
-        public async Task<IEnumerable<Ubicacion>> GetAllAsync()
+        public async Task<UbicacionResponse> GetAllAsync(UbicacionQueryParameters parametrosConsultaUbicacion)
         {
-            return await _ubicacionRepository
+            var lasUbicaciones = await _ubicacionRepository
                 .GetAllAsync();
+
+            // Calculamos items totales y cantidad de páginas
+            var totalElementos = lasUbicaciones.Count();
+            var totalPaginas = (int)Math.Ceiling((double)totalElementos / parametrosConsultaUbicacion.ElementosPorPagina);
+
+            //Validamos que la página solicitada está dentro del rango permitido
+            if (parametrosConsultaUbicacion.Pagina > totalPaginas && totalPaginas > 0)
+                throw new AppValidationException($"La página solicitada No. {parametrosConsultaUbicacion.Pagina} excede el número total de página de {totalPaginas}");
+
+            //Aplicamos el ordenamiento
+            switch (parametrosConsultaUbicacion.Criterio)
+            {
+                case "municipio":
+                    lasUbicaciones = ApplyOrder(
+                        lasUbicaciones,
+                        p => p.Municipio,
+                        parametrosConsultaUbicacion.Orden);
+                    break;
+
+                case "departamento":
+                    lasUbicaciones = ApplyOrder(
+                        lasUbicaciones,
+                        p => p.Departamento,
+                        parametrosConsultaUbicacion.Orden);
+                    break;
+            }
+
+            //Aplicamos la paginación
+            lasUbicaciones = lasUbicaciones
+                .Skip((parametrosConsultaUbicacion.Pagina - 1) * parametrosConsultaUbicacion.ElementosPorPagina)
+                .Take(parametrosConsultaUbicacion.ElementosPorPagina);
+
+            var respuestaUbicaciones = new UbicacionResponse
+            {
+                Tipo = "Ubicacion",
+                TotalElementos = totalElementos,
+                PaginaActual = parametrosConsultaUbicacion.Pagina,
+                ElementosPorPagina = parametrosConsultaUbicacion.ElementosPorPagina, // PageSize
+                TotalPaginas = totalPaginas,
+                Data = lasUbicaciones.ToList()
+            };
+
+            return respuestaUbicaciones;
         }
 
-        public async Task<Ubicacion> GetByIdAsync(int ubicacion_id)
+        public async Task<UbicacionDetallada> GetByAttributeAsync<T>(T atributo_valor, string atributo_nombre)
         {
-            //Validamos que la ubicación exista con ese Id
-            var unaUbicacion = await _ubicacionRepository
-                .GetByIdAsync(ubicacion_id);
+            Ubicacion unaUbicacion = new();
+
+            switch (atributo_nombre.ToLower())
+            {
+                case "id":
+                    unaUbicacion = await _ubicacionRepository
+                        .GetByAttributeAsync<T>(atributo_valor, "id");
+                    break;
+
+                case "nombre":
+                    unaUbicacion = await _ubicacionRepository
+                        .GetByAttributeAsync<T>(atributo_valor, "nombre");
+                    break;
+            }
 
             if (unaUbicacion.Id == 0)
-                throw new AppValidationException($"Ubicación no encontrada con el id {ubicacion_id}");
+                throw new AppValidationException($"Cerveceria no encontrada con el atributo {atributo_nombre} {atributo_valor}");
 
-            return unaUbicacion;
+            var unaUbicacionDetallada = await BuildDetailedLocationAsync(unaUbicacion);
+            return unaUbicacionDetallada;
         }
 
         public async Task<IEnumerable<Cerveceria>> GetAssociatedBreweriesAsync(int ubicacion_id)
         {
             //Validamos que la ubicacion exista con ese Id
             var unaUbicacion = await _ubicacionRepository
-                .GetByIdAsync(ubicacion_id);
+                .GetByAttributeAsync<int>(ubicacion_id, "id");
 
             if (unaUbicacion.Id == 0)
                 throw new AppValidationException($"Ubicación no encontrada con el id {ubicacion_id}");
@@ -97,7 +152,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Ubicaciones
 
             //Validamos que exista una ubicación para actualizar con ese Id
             var ubicacionExistente = await _ubicacionRepository
-                .GetByIdAsync(unaUbicacion.Id);
+                .GetByAttributeAsync<int>(unaUbicacion.Id, "id");
 
             if (ubicacionExistente.Id == 0)
                 throw new AppValidationException($"No existe una ubicación con el Id {unaUbicacion.Id} que se pueda actualizar");
@@ -149,7 +204,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Ubicaciones
         {
             // validamos que la ubicación a eliminar si exista con ese Id
             var ubicacionExistente = await _ubicacionRepository
-                .GetByIdAsync(ubicacion_id);
+                .GetByAttributeAsync<int>(ubicacion_id, "id");
 
             if (ubicacionExistente.Id == 0)
                 throw new AppValidationException($"No existe una ubicación con el Id {ubicacion_id} que se pueda eliminar");
@@ -175,6 +230,32 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Ubicaciones
             {
                 throw;
             }
+        }
+
+        private async Task<UbicacionDetallada> BuildDetailedLocationAsync(Ubicacion ubicacion)
+        {
+            UbicacionDetallada ubicacionDetallada = new()
+            {
+                Id = ubicacion.Id,
+                Municipio = ubicacion.Municipio,
+                Departamento = ubicacion.Departamento,
+                Latitud = ubicacion.Latitud,
+                Longitud = ubicacion.Longitud
+            };
+
+            var cerveceriasAsociadas = await _ubicacionRepository
+                .GetAssociatedBreweriesAsync(ubicacion.Id);
+            ubicacionDetallada.Cervecerias = cerveceriasAsociadas.ToList();
+
+            return ubicacionDetallada;
+        }
+
+        private static IEnumerable<Ubicacion> ApplyOrder<T>(IEnumerable<Ubicacion> cervecerias, Func<Ubicacion, T> criterio, string orden)
+        {
+            if (orden.ToLower().Equals("desc"))
+                return cervecerias.OrderByDescending(criterio);
+            else
+                return cervecerias.OrderBy(criterio);
         }
     }
 }
