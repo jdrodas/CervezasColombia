@@ -5,6 +5,7 @@ using CervezasColombia_CS_API_SQLite_Dapper.Helpers;
 using CervezasColombia_CS_API_SQLite_Dapper.Resumen;
 using CervezasColombia_CS_API_SQLite_Dapper.Ubicaciones;
 using CervezasColombia_CS_API_SQLite_Dapper.Unidades;
+using CervezasColombia_CS_API_SQLite_Dapper.Ingredientes;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,9 +21,9 @@ builder.Services.AddScoped<IUbicacionRepository, UbicacionRepository>();
 builder.Services.AddScoped<ICerveceriaRepository, CerveceriaRepository>();
 builder.Services.AddScoped<ICervezaRepository, CervezaRepository>();
 builder.Services.AddScoped<IEstiloRepository, EstiloRepository>();
-//builder.Services.AddScoped<IEnvasadoRepository, EnvasadoRepository>();
-//builder.Services.AddScoped<IIngredienteRepository, IngredienteRepository>();
+builder.Services.AddScoped<IIngredienteRepository, IngredienteRepository>();
 builder.Services.AddScoped<IUnidadRepository, UnidadRepository>();
+//builder.Services.AddScoped<IEnvasadoRepository, EnvasadoRepository>();
 
 //Aqui agregamos los servicios asociados para cada EndPoint
 builder.Services.AddScoped<ResumenService>();
@@ -31,8 +32,9 @@ builder.Services.AddScoped<CerveceriaService>();
 builder.Services.AddScoped<CervezaService>();
 builder.Services.AddScoped<EstiloService>();
 builder.Services.AddScoped<UnidadService>();
+builder.Services.AddScoped<IngredienteService>();
 //builder.Services.AddScoped<EnvasadoService>();
-//builder.Services.AddScoped<IngredienteService>();
+
 
 // Add services to the container.
 builder.Services.AddControllers()

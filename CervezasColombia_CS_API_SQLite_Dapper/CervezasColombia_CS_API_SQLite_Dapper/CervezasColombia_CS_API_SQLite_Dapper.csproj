@@ -14,11 +14,7 @@
     <Compile Remove="Envasados\EnvasadoRepository.cs" />
     <Compile Remove="Envasados\EnvasadoService.cs" />
     <Compile Remove="Envasados\IEnvasadoRepository.cs" />
-    <Compile Remove="Ingredientes\IIngredienteRepository.cs" />
-    <Compile Remove="Ingredientes\Ingrediente.cs" />
     <Compile Remove="Ingredientes\IngredienteCerveza.cs" />
-    <Compile Remove="Ingredientes\IngredienteRepository.cs" />
-    <Compile Remove="Ingredientes\IngredienteService.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -40,7 +36,6 @@
 
   <ItemGroup>
     <Folder Include="Envasados\" />
-    <Folder Include="Ingredientes\" />
   </ItemGroup>
 
 </Project>

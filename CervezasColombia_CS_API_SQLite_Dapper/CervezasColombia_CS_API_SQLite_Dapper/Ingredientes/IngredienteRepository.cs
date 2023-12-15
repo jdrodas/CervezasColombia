@@ -1,4 +1,6 @@
 ﻿using CervezasColombia_CS_API_SQLite_Dapper.Cervezas;
+using CervezasColombia_CS_API_SQLite_Dapper.Estilos;
+using CervezasColombia_CS_API_SQLite_Dapper.Helpers;
 using Dapper;
 using Microsoft.Data.Sqlite;
 using System.Data;
@@ -21,17 +23,28 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Ingredientes
             return resultadoEnvasados;
         }
 
-        public async Task<Ingrediente> GetByIdAsync(int ingrediente_id)
+        public async Task<Ingrediente> GetByAttributeAsync<T>(T atributo_valor, string atributo_nombre)
         {
             Ingrediente unIngrediente = new();
-
             DynamicParameters parametrosSentencia = new();
-            parametrosSentencia.Add("@ingrediente_id", ingrediente_id,
-                                    DbType.Int32, ParameterDirection.Input);
 
             string sentenciaSQL = "SELECT DISTINCT v.ingrediente_id id, v.ingrediente nombre, v.tipo_ingrediente, v.tipo_ingrediente_id " +
-                                    "FROM v_info_ingredientes v " +
-                                    "WHERE v.ingrediente_id = @ingrediente_id ";
+                                    "FROM v_info_ingredientes v ";
+
+            switch (atributo_nombre.ToLower())
+            {
+                case "id":
+                    sentenciaSQL += "WHERE v.ingrediente_id = @ingrediente_id ";
+                    parametrosSentencia.Add("@ingrediente_id", atributo_valor,
+                        DbType.Int32, ParameterDirection.Input);
+                    break;
+
+                case "nombre":
+                    sentenciaSQL += "WHERE LOWER(v.ingrediente) = LOWER(@ingrediente_nombre) ";
+                    parametrosSentencia.Add("@ingrediente_nombre", atributo_valor,
+                        DbType.String, ParameterDirection.Input);
+                    break;
+            }
 
             var resultado = await contextoDB.Conexion
                 .QueryAsync<Ingrediente>(sentenciaSQL, parametrosSentencia);
@@ -89,31 +102,6 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Ingredientes
                 .QueryAsync<Cerveza>(sentenciaSQL, parametrosSentencia);
 
             return resultadoCervezas;
-        }
-
-        public async Task<Cerveza> GetAssociatedBeerByIdAsync(int ingrediente_id, int cerveza_id)
-        {
-            Cerveza cervezaExistente = new();
-
-            DynamicParameters parametrosSentencia = new();
-            parametrosSentencia.Add("@ingrediente_id", ingrediente_id,
-                                    DbType.Int32, ParameterDirection.Input);
-            parametrosSentencia.Add("@cerveza_id", cerveza_id,
-                                    DbType.Int32, ParameterDirection.Input);
-
-            string sentenciaSQL = "SELECT cerveza_id id, cerveza nombre, cerveceria, " +
-                "estilo, abv " +
-                "FROM v_info_cervezas " +
-                "WHERE cerveza_id in (SELECT cerveza_id FROM ingredientes_cervezas " +
-                "WHERE ingrediente_id = @ingrediente_id) AND cerveza_id = @cerveza_id";
-
-            var resultado = await contextoDB.Conexion
-                .QueryAsync<Cerveza>(sentenciaSQL, parametrosSentencia);
-
-            if (resultado.Any())
-                cervezaExistente = resultado.First();
-
-            return cervezaExistente;
         }
 
         public async Task<int> GetAssociatedIngredientTypeIdAsync(string tipo_ingrediente_nombre)
@@ -200,22 +188,6 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Ingredientes
             }
 
             return resultadoAccion;
-        }
-
-        public async Task<IEnumerable<IngredienteCerveza>> GetAssociatedBeerIngredientsAsync(int ingrediente_id)
-        {
-            DynamicParameters parametrosSentencia = new();
-            parametrosSentencia.Add("@ingrediente_id", ingrediente_id,
-                                    DbType.Int32, ParameterDirection.Input);
-
-            string sentenciaSQL = "SELECT cerveceria, cerveza, tipo_ingrediente, ingrediente " +
-                "FROM v_info_ingredientes_cervezas " +
-                "WHERE ingrediente_id = @ingrediente_id";
-
-            var resultadoIngredientesCerveza = await contextoDB.Conexion
-                .QueryAsync<IngredienteCerveza>(sentenciaSQL, parametrosSentencia);
-
-            return resultadoIngredientesCerveza.ToList();
         }
     }
 }

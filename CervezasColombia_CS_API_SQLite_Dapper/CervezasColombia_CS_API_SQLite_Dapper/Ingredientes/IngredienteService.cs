@@ -1,4 +1,6 @@
 ﻿using CervezasColombia_CS_API_SQLite_Dapper.Cervezas;
+using CervezasColombia_CS_API_SQLite_Dapper.Estilos;
+using CervezasColombia_CS_API_SQLite_Dapper.Helpers;
 
 namespace CervezasColombia_CS_API_SQLite_Dapper.Ingredientes
 {
@@ -8,31 +10,87 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Ingredientes
         private readonly IIngredienteRepository _ingredienteRepository = ingredienteRepository;
         private readonly ICervezaRepository _cervezaRepository = cervezaRepository;
 
-        public async Task<IEnumerable<Ingrediente>> GetAllAsync()
+        public async Task<IngredienteResponse> GetAllAsync(IngredienteQueryParameters parametrosConsultaIngrediente)
         {
-            return await _ingredienteRepository
+            var losIngredientes = await _ingredienteRepository
                 .GetAllAsync();
+
+            // Calculamos items totales y cantidad de páginas
+            var totalElementos = losIngredientes.Count();
+            var totalPaginas = (int)Math.Ceiling((double)totalElementos / parametrosConsultaIngrediente.ElementosPorPagina);
+
+            //Validamos que la página solicitada está dentro del rango permitido
+            if (parametrosConsultaIngrediente.Pagina > totalPaginas && totalPaginas > 0)
+                throw new AppValidationException($"La página solicitada No. {parametrosConsultaIngrediente.Pagina} excede el número total de página de {totalPaginas}");
+
+            //Aplicamos el ordenamiento
+            switch (parametrosConsultaIngrediente.Criterio)
+            {
+                case "nombre":
+                    losIngredientes = ApplyOrder(
+                        losIngredientes,
+                        p => p.Nombre,
+                        parametrosConsultaIngrediente.Orden);
+                    break;
+
+                case "tipo_ingrediente":
+                    losIngredientes = ApplyOrder(
+                        losIngredientes,
+                        p => p.Tipo_Ingrediente,
+                        parametrosConsultaIngrediente.Orden);
+                    break;
+            }
+
+            //Aplicamos la paginación
+            losIngredientes = losIngredientes
+                .Skip((parametrosConsultaIngrediente.Pagina - 1) * parametrosConsultaIngrediente.ElementosPorPagina)
+                .Take(parametrosConsultaIngrediente.ElementosPorPagina);
+
+            var respuestaIngredientes = new IngredienteResponse
+            {
+                Tipo = "Ingrediente",
+                TotalElementos = totalElementos,
+                PaginaActual = parametrosConsultaIngrediente.Pagina,
+                ElementosPorPagina = parametrosConsultaIngrediente.ElementosPorPagina, // PageSize
+                TotalPaginas = totalPaginas,
+                Data = losIngredientes.ToList()
+            };
+
+            return respuestaIngredientes;
         }
 
-        public async Task<Ingrediente> GetByIdAsync(int ingrediente_id)
+        public async Task<IngredienteDetallado> GetByAttributeAsync<T>(T atributo_valor, string atributo_nombre)
         {
-            //Validamos que el ingrediente exista con ese Id
-            var unIngrediente = await _ingredienteRepository
-                .GetByIdAsync(ingrediente_id);
+            Ingrediente unIngrediente = new();
 
-            if (string.IsNullOrEmpty(unIngrediente.Id))
-                throw new AppValidationException($"Ingrediente no encontrado con el id {ingrediente_id}");
+            switch (atributo_nombre.ToLower())
+            {
+                case "id":
+                    unIngrediente = await _ingredienteRepository
+                        .GetByAttributeAsync<T>(atributo_valor, "id");
+                    break;
 
-            return unIngrediente;
+                case "nombre":
+                    unIngrediente = await _ingredienteRepository
+                        .GetByAttributeAsync<T>(atributo_valor, "nombre");
+                    break;
+            }
+
+            if (unIngrediente.Id == 0)
+                throw new AppValidationException($"Estilo no encontrado con el atributo {atributo_nombre} {atributo_valor}");
+
+            var unIngredienteDetallado = await BuildDetailedIngredientAsync(unIngrediente);
+            return unIngredienteDetallado;
         }
+
 
         public async Task<IEnumerable<Cerveza>> GetAssociatedBeersAsync(int ingrediente_id)
         {
             //Validamos que el ingrediente exista con ese Id
             var unIngrediente = await _ingredienteRepository
-                .GetByIdAsync(ingrediente_id);
+                .GetByAttributeAsync<int>(ingrediente_id, "id");
 
-            if (string.IsNullOrEmpty(unIngrediente.Id))
+            if (unIngrediente.Id == 0)
                 throw new AppValidationException($"Ingrediente no encontrado con el id {ingrediente_id}");
 
             //Si la ingrediente existe, validamos que tenga cervezas asociadas
@@ -42,19 +100,8 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Ingredientes
             if (cantidadCervezasAsociadas == 0)
                 throw new AppValidationException($"No Existen cervezas asociadas al ingrediente {unIngrediente.Nombre}");
 
-            var losIngredientesCervezas = await _ingredienteRepository
+            var lasCervezas = await _ingredienteRepository
                 .GetAssociatedBeersAsync(ingrediente_id);
-
-            //Aqui completamos la información de las cervezas
-            Cerveza unaCerveza;
-            List<Cerveza> lasCervezas = [];
-
-            foreach (IngredienteCerveza unIngredienteCerveza in losIngredientesCervezas)
-            {
-                unaCerveza = await _cervezaRepository
-                    .GetByNameAndBreweryAsync(unIngredienteCerveza.Cerveza, unIngredienteCerveza.Cerveceria);
-                lasCervezas.Add(unaCerveza);
-            }
 
             return lasCervezas;
         }
@@ -73,14 +120,14 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Ingredientes
             var ingredienteExistente = await _ingredienteRepository
                 .GetByNameAndTypeAsync(unIngrediente.Nombre!, unIngrediente.Tipo_Ingrediente!);
 
-            if (string.IsNullOrEmpty(ingredienteExistente.Id) == false)
+            if (ingredienteExistente.Id != 0)
                 throw new AppValidationException($"Ya existe un ingrediente con el nombre {unIngrediente.Nombre}");
 
             // Validamos que el tipo de ingrediente exista
             var idTipoIngredienteExistente = await _ingredienteRepository
                 .GetAssociatedIngredientTypeIdAsync(unIngrediente.Tipo_Ingrediente);
 
-            if (string.IsNullOrEmpty(idTipoIngredienteExistente))
+            if (idTipoIngredienteExistente ==0)
                 throw new AppValidationException($"No existe un tipo de ingrediente con el nombre {unIngrediente.Tipo_Ingrediente}");
 
             unIngrediente.Tipo_Ingrediente_Id = idTipoIngredienteExistente;
@@ -96,9 +143,9 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Ingredientes
                 ingredienteExistente = await _ingredienteRepository
                     .GetByNameAndTypeAsync(unIngrediente.Nombre!, unIngrediente.Tipo_Ingrediente!);
             }
-            catch (DbOperationException error)
+            catch (DbOperationException)
             {
-                throw error;
+                throw;
             }
 
             return ingredienteExistente;
@@ -122,21 +169,22 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Ingredientes
             var ingredienteExistente = await _ingredienteRepository
                 .GetByNameAndTypeAsync(unIngrediente.Nombre!, unIngrediente.Tipo_Ingrediente!);
 
-            if (string.IsNullOrEmpty(ingredienteExistente.Id) == false)
+            if (ingredienteExistente.Id!=0)
                 throw new AppValidationException($"Ya existe un ingrediente con el nombre {unIngrediente.Nombre} y el tipo {unIngrediente.Tipo_Ingrediente}");
 
             // validamos que el ingrediente a actualizar si exista con ese Id
             ingredienteExistente = await _ingredienteRepository
-                .GetByIdAsync(unIngrediente.Id);
+                .GetByAttributeAsync<int>(unIngrediente.Id, "id");
 
-            if (string.IsNullOrEmpty(ingredienteExistente.Id))
+
+            if (ingredienteExistente.Id==0)
                 throw new AppValidationException($"No existe un ingrediente con el Id {unIngrediente.Id} que se pueda actualizar");
 
             // Validamos que el tipo de ingrediente exista
             var idTipoIngredienteExistente = await _ingredienteRepository
                 .GetAssociatedIngredientTypeIdAsync(unIngrediente.Tipo_Ingrediente);
 
-            if (string.IsNullOrEmpty(idTipoIngredienteExistente))
+            if (idTipoIngredienteExistente==0)
                 throw new AppValidationException($"No existe un tipo de ingrediente con el nombre {unIngrediente.Tipo_Ingrediente}");
 
             unIngrediente.Tipo_Ingrediente_Id = idTipoIngredienteExistente;
@@ -156,9 +204,9 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Ingredientes
                 ingredienteExistente = await _ingredienteRepository
                     .GetByNameAndTypeAsync(unIngrediente.Nombre!, unIngrediente.Tipo_Ingrediente!);
             }
-            catch (DbOperationException error)
+            catch (DbOperationException)
             {
-                throw error;
+                throw;
             }
 
             return ingredienteExistente;
@@ -168,9 +216,9 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Ingredientes
         {
             // validamos que el ingrediente a eliminar si exista con ese Id
             var ingredienteExistente = await _ingredienteRepository
-                .GetByIdAsync(ingrediente_id);
+                .GetByAttributeAsync<int>(ingrediente_id, "id");
 
-            if (string.IsNullOrEmpty(ingredienteExistente.Id))
+            if (ingredienteExistente.Id ==0)
                 throw new AppValidationException($"No existe un ingrediente con el Id {ingrediente_id} que se pueda eliminar");
 
             // Validamos que el ingrediente no tenga asociadas cervezas
@@ -190,10 +238,40 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Ingredientes
                 if (!resultadoAccion)
                     throw new AppValidationException("Operación ejecutada pero no generó cambios en la DB");
             }
-            catch (DbOperationException error)
+            catch (DbOperationException)
             {
-                throw error;
+                throw;
             }
+        }
+
+        private async Task<IngredienteDetallado> BuildDetailedIngredientAsync(Ingrediente ingrediente)
+        {
+            IngredienteDetallado unIngredienteDetallado = new()
+            {
+                Id = ingrediente.Id,
+                Nombre = ingrediente.Nombre,
+                Tipo_Ingrediente_Id = ingrediente.Tipo_Ingrediente_Id,
+                Tipo_Ingrediente = ingrediente.Tipo_Ingrediente
+            };
+
+            var cervezasAsociadas = await _ingredienteRepository
+                .GetAssociatedBeersAsync(ingrediente.Id);
+            unIngredienteDetallado.Cervezas = cervezasAsociadas.ToList();
+
+            //Colocamos los valores del rango ABV a las cervezas
+            foreach (Cerveza unaCerveza in unIngredienteDetallado.Cervezas)
+                unaCerveza.Rango_Abv = await _cervezaRepository
+                    .GetAbvRangeNameAsync(unaCerveza.Abv);
+
+            return unIngredienteDetallado;
+        }
+
+        private static IEnumerable<Ingrediente> ApplyOrder<T>(IEnumerable<Ingrediente> estilos, Func<Ingrediente, T> criterio, string orden)
+        {
+            if (orden.ToLower().Equals("desc"))
+                return estilos.OrderByDescending(criterio);
+            else
+                return estilos.OrderBy(criterio);
         }
     }
 }
