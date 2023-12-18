@@ -1,6 +1,7 @@
 ﻿using CervezasColombia_CS_API_SQLite_Dapper.Cervecerias;
 using CervezasColombia_CS_API_SQLite_Dapper.Estilos;
 using CervezasColombia_CS_API_SQLite_Dapper.Helpers;
+
 namespace CervezasColombia_CS_API_SQLite_Dapper.Cervezas
 {
     public class CervezaService(ICervezaRepository cervezaRepository
@@ -18,22 +19,77 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Cervezas
         //private readonly IUnidadVolumenRepository _unidadVolumenRepository = unidadVolumenRepository;
         //private readonly IIngredienteRepository _ingredienteRepository = ingredienteRepository;
 
-        public async Task<IEnumerable<Cerveza>> GetAllAsync()
+        public async Task<CervezaResponse> GetAllAsync(CervezaQueryParameters parametrosConsultaCerveza)
         {
-            return await _cervezaRepository
+            var lasCervezas = await _cervezaRepository
                 .GetAllAsync();
+
+            // Calculamos items totales y cantidad de páginas
+            var totalElementos = lasCervezas.Count();
+            var totalPaginas = (int)Math.Ceiling((double)totalElementos / parametrosConsultaCerveza.ElementosPorPagina);
+
+            //Validamos que la página solicitada está dentro del rango permitido
+            if (parametrosConsultaCerveza.Pagina > totalPaginas && totalPaginas > 0)
+                throw new AppValidationException($"La página solicitada No. {parametrosConsultaCerveza.Pagina} excede el número total de página de {totalPaginas}");
+
+            //Aplicamos el ordenamiento
+            switch (parametrosConsultaCerveza.Criterio)
+            {
+                case "nombre":
+                    lasCervezas = ApplyOrder(
+                        lasCervezas,
+                        p => p.Nombre,
+                        parametrosConsultaCerveza.Orden);
+                    break;
+
+                case "cerveceria":
+                    lasCervezas = ApplyOrder(
+                        lasCervezas,
+                        p => p.Cerveceria,
+                        parametrosConsultaCerveza.Orden);
+                    break;
+            }
+
+            //Aplicamos la paginación
+            lasCervezas = lasCervezas
+                .Skip((parametrosConsultaCerveza.Pagina - 1) * parametrosConsultaCerveza.ElementosPorPagina)
+                .Take(parametrosConsultaCerveza.ElementosPorPagina);
+
+            var respuestaCervezas = new CervezaResponse
+            {
+                Tipo = "Cerveza",
+                TotalElementos = totalElementos,
+                PaginaActual = parametrosConsultaCerveza.Pagina,
+                ElementosPorPagina = parametrosConsultaCerveza.ElementosPorPagina, // PageSize
+                TotalPaginas = totalPaginas,
+                Data = lasCervezas.ToList()
+            };
+
+            return respuestaCervezas;
         }
 
-        public async Task<Cerveza> GetByIdAsync(int cerveza_id)
+        public async Task<CervezaDetallada> GetByAttributeAsync<T>(T atributo_valor, string atributo_nombre)
         {
-            //Validamos que el estilo exista con ese Id
-            var unaCerveza = await _cervezaRepository
-                .GetByIdAsync(cerveza_id);
+            Cerveza unaCerveza = new();
+
+            switch (atributo_nombre.ToLower())
+            {
+                case "id":
+                    unaCerveza = await _cervezaRepository
+                        .GetByAttributeAsync<T>(atributo_valor, "id");
+                    break;
+
+                case "nombre":
+                    unaCerveza = await _cervezaRepository
+                        .GetByAttributeAsync<T>(atributo_valor, "nombre");
+                    break;
+            }
 
             if (unaCerveza.Id == 0)
-                throw new AppValidationException($"Cerveza no encontrada con el id {cerveza_id}");
+                throw new AppValidationException($"Cerveza no encontrada con el atributo {atributo_nombre} {atributo_valor}");
 
-            return unaCerveza;
+            var unaCervezaDetallada = await BuildDetailedBeerAsync(unaCerveza);
+            return unaCervezaDetallada;
         }
 
         public async Task<Cerveza> GetByNameAndBreweryAsync(string cerveza_nombre, string cerveceria_nombre)
@@ -410,5 +466,35 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Cervezas
         //        throw;
         //    }
         //}
+
+        private async Task<CervezaDetallada> BuildDetailedBeerAsync(Cerveza cerveza)
+        {
+            CervezaDetallada cervezaDetallada = new()
+            {
+                Id = cerveza.Id,
+                Nombre = cerveza.Nombre,
+                Cerveceria = cerveza.Cerveceria,
+                Cerveceria_id = cerveza.Cerveceria_id,
+                Estilo = cerveza.Estilo,
+                Estilo_id = cerveza.Estilo_id,
+                Abv = cerveza.Abv
+            };
+
+            var ingredientesAsociados = await _cervezaRepository
+                .GetAssociatedIngredientsAsync(cerveza.Id);
+
+            cervezaDetallada.Ingredientes = ingredientesAsociados.ToList();
+
+            return cervezaDetallada;
+        }
+
+
+        private static IEnumerable<Cerveza> ApplyOrder<T>(IEnumerable<Cerveza> cervezas, Func<Cerveza, T> criterio, string orden)
+        {
+            if (orden.ToLower().Equals("desc"))
+                return cervezas.OrderByDescending(criterio);
+            else
+                return cervezas.OrderBy(criterio);
+        }
     }
 }

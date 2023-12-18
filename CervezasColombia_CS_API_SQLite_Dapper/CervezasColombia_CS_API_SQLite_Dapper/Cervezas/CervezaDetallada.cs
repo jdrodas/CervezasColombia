@@ -1,13 +1,12 @@
-﻿using System.Text.Json.Serialization;
+﻿using CervezasColombia_CS_API_SQLite_Dapper.Ingredientes;
+using System.Text.Json.Serialization;
 
-namespace CervezasColombia_CS_API_SQLite_Dapper.Models
+namespace CervezasColombia_CS_API_SQLite_Dapper.Cervezas
 {
     public class CervezaDetallada : Cerveza
     {
-        [JsonPropertyName("envasados")]
-        public List<EnvasadoCerveza> Envasados { get; set; } = new List<EnvasadoCerveza>();
 
         [JsonPropertyName("ingredientes")]
-        public List<Ingrediente> Ingredientes { get; set; } = new List<Ingrediente>();
+        public List<Ingrediente> Ingredientes { get; set; } = [];
     }
 }

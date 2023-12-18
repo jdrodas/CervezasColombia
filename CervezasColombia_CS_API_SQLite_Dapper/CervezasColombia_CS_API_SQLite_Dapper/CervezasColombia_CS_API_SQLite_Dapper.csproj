@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Cervezas\CervezaDetallada.cs" />
     <Compile Remove="Cervezas\CervezaEnvasada.cs" />
     <Compile Remove="Envasados\Envasado.cs" />
     <Compile Remove="Envasados\EnvasadoCerveza.cs" />

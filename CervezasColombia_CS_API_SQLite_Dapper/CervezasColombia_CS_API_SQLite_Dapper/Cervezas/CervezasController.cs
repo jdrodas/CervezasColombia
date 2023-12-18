@@ -10,15 +10,15 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Cervezas
         private readonly CervezaService _cervezaService = cervezaService;
 
         [HttpGet]
-        public async Task<IActionResult> GetDetailsByParameterAsync([FromQuery] ConsultaCerveza parametros)
+        public async Task<IActionResult> GetDetailsByParameterAsync([FromQuery] CervezaQueryParameters parametrosConsultaCerveza)
         {
             //Si todos los parameros son nulos, se traen todas las cervezas
-            if (parametros.Id == 0 &&
-               string.IsNullOrEmpty(parametros.Nombre) &&
-               string.IsNullOrEmpty(parametros.Cerveceria))
+            if (parametrosConsultaCerveza.Id == 0 &&
+               string.IsNullOrEmpty(parametrosConsultaCerveza.Nombre) &&
+               string.IsNullOrEmpty(parametrosConsultaCerveza.Cerveceria))
             {
                 var lasCervezas = await _cervezaService
-                    .GetAllAsync();
+                    .GetAllAsync(parametrosConsultaCerveza);
 
                 return Ok(lasCervezas);
             }
@@ -29,20 +29,20 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Cervezas
                 try
                 {
                     // Por Id
-                    if (parametros.Id != 0)
+                    if (parametrosConsultaCerveza.Id != 0)
                     {
                         unaCerveza = await _cervezaService
-                        .GetByIdAsync(parametros.Id);
+                        .GetByAttributeAsync<int>(parametrosConsultaCerveza.Id,"id");
                     }
                     else
                     {
                         // Por Nombre Y Cerveceria
-                        if (!string.IsNullOrEmpty(parametros.Nombre) &&
-                            !string.IsNullOrEmpty(parametros.Cerveceria))
+                        if (!string.IsNullOrEmpty(parametrosConsultaCerveza.Nombre) &&
+                            !string.IsNullOrEmpty(parametrosConsultaCerveza.Cerveceria))
                         {
 
                             unaCerveza = await _cervezaService
-                            .GetByNameAndBreweryAsync(parametros.Nombre, parametros.Cerveceria);
+                            .GetByNameAndBreweryAsync(parametrosConsultaCerveza.Nombre, parametrosConsultaCerveza.Cerveceria);
                         }
                         else
                         {
@@ -65,7 +65,8 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Cervezas
             try
             {
                 var unaCerveza = await _cervezaService
-                    .GetByIdAsync(cerveza_id);
+                        .GetByAttributeAsync<int>(cerveza_id, "id");
+
                 return Ok(unaCerveza);
             }
             catch (AppValidationException error)
@@ -106,25 +107,25 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Cervezas
         //    }
         //}
 
-        [HttpPost]
-        public async Task<IActionResult> CreateAsync(Cerveza unaCerveza)
-        {
-            try
-            {
-                var cervezaCreada = await _cervezaService
-                    .CreateAsync(unaCerveza);
+        //[HttpPost]
+        //public async Task<IActionResult> CreateAsync(Cerveza unaCerveza)
+        //{
+        //    try
+        //    {
+        //        var cervezaCreada = await _cervezaService
+        //            .CreateAsync(unaCerveza);
 
-                return Ok(cervezaCreada);
-            }
-            catch (AppValidationException error)
-            {
-                return BadRequest($"Error de validación: {error.Message}");
-            }
-            catch (DbOperationException error)
-            {
-                return BadRequest($"Error de operacion en DB: {error.Message}");
-            }
-        }
+        //        return Ok(cervezaCreada);
+        //    }
+        //    catch (AppValidationException error)
+        //    {
+        //        return BadRequest($"Error de validación: {error.Message}");
+        //    }
+        //    catch (DbOperationException error)
+        //    {
+        //        return BadRequest($"Error de operacion en DB: {error.Message}");
+        //    }
+        //}
 
         //[HttpPost("{cerveza_id:int}/Envasados")]
         //public async Task<IActionResult> CreateBeerPackagingAsync(int cerveza_id, EnvasadoCerveza unEnvasadoCerveza)

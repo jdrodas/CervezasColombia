@@ -1,5 +1,4 @@
 ﻿using CervezasColombia_CS_API_SQLite_Dapper.Cervezas;
-using CervezasColombia_CS_API_SQLite_Dapper.Estilos;
 using CervezasColombia_CS_API_SQLite_Dapper.Helpers;
 
 namespace CervezasColombia_CS_API_SQLite_Dapper.Ingredientes
@@ -127,7 +126,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Ingredientes
             var idTipoIngredienteExistente = await _ingredienteRepository
                 .GetAssociatedIngredientTypeIdAsync(unIngrediente.Tipo_Ingrediente);
 
-            if (idTipoIngredienteExistente ==0)
+            if (idTipoIngredienteExistente == 0)
                 throw new AppValidationException($"No existe un tipo de ingrediente con el nombre {unIngrediente.Tipo_Ingrediente}");
 
             unIngrediente.Tipo_Ingrediente_Id = idTipoIngredienteExistente;
@@ -169,7 +168,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Ingredientes
             var ingredienteExistente = await _ingredienteRepository
                 .GetByNameAndTypeAsync(unIngrediente.Nombre!, unIngrediente.Tipo_Ingrediente!);
 
-            if (ingredienteExistente.Id!=0)
+            if (ingredienteExistente.Id != 0)
                 throw new AppValidationException($"Ya existe un ingrediente con el nombre {unIngrediente.Nombre} y el tipo {unIngrediente.Tipo_Ingrediente}");
 
             // validamos que el ingrediente a actualizar si exista con ese Id
@@ -177,14 +176,14 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Ingredientes
                 .GetByAttributeAsync<int>(unIngrediente.Id, "id");
 
 
-            if (ingredienteExistente.Id==0)
+            if (ingredienteExistente.Id == 0)
                 throw new AppValidationException($"No existe un ingrediente con el Id {unIngrediente.Id} que se pueda actualizar");
 
             // Validamos que el tipo de ingrediente exista
             var idTipoIngredienteExistente = await _ingredienteRepository
                 .GetAssociatedIngredientTypeIdAsync(unIngrediente.Tipo_Ingrediente);
 
-            if (idTipoIngredienteExistente==0)
+            if (idTipoIngredienteExistente == 0)
                 throw new AppValidationException($"No existe un tipo de ingrediente con el nombre {unIngrediente.Tipo_Ingrediente}");
 
             unIngrediente.Tipo_Ingrediente_Id = idTipoIngredienteExistente;
@@ -218,7 +217,7 @@ namespace CervezasColombia_CS_API_SQLite_Dapper.Ingredientes
             var ingredienteExistente = await _ingredienteRepository
                 .GetByAttributeAsync<int>(ingrediente_id, "id");
 
-            if (ingredienteExistente.Id ==0)
+            if (ingredienteExistente.Id == 0)
                 throw new AppValidationException($"No existe un ingrediente con el Id {ingrediente_id} que se pueda eliminar");
 
             // Validamos que el ingrediente no tenga asociadas cervezas
